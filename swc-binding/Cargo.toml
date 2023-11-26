@@ -1,0 +1,27 @@
+[package]
+name = "swc-binding"
+version = "0.1.0"
+edition = "2021"
+
+[features]
+# default = ["serde-impl"]
+# plugin = [
+#   "swc_core/plugin_transform_host_native",
+#   "swc_core/plugin_transform_host_native_filesystem_cache",
+# ]
+# swc_v1 = ["swc_core/bundler_node_v1"]
+
+[dependencies]
+anyhow = "1.0.75"
+jni = "0.21.1"
+jni_fn = "0.1.2"
+swc_core = "0.86.79"
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["unbounded_depth"] }
+swc = "0.269.70"
+swc_common = "0.33.9"
+swc_ecma_ast = { version ="0.110.10", features = ["serde-impl"] }
+
+[lib]
+crate_type = ["cdylib"]
+path = "src/main/rust/lib.rs"
