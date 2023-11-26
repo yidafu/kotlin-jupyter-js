@@ -14,10 +14,13 @@ plugin-jupyter = { module = "org.jetbrains.kotlin:kotlin-jupyter-api-gradle-plug
 ksp-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
 
 dokka-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version = "1.8.20"}
+ktlint-plugin = { module = "org.jlleitschuh.gradle:ktlint-gradle", version = "11.6.1" }
+
 [bundles]
 allGradlePlugins = [
     "plugin-kotlinJvm",
     "plugin-jupyter",
     "kotlin-publish-plugin",
     "dokka-plugin",
+    "ktlint-plugin",
 ]

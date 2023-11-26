@@ -21,7 +21,6 @@ tasks.test {
     useJUnitPlatform()
 }
 
-
 tasks.create("generateJniHeaders") {
     group = "build"
     dependsOn(tasks.getByName("compileKotlin"))

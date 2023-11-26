@@ -1,8 +1,6 @@
 package dev.yidafu.swc
 
-import dev.yidafu.swc.types.Union
 import java.util.Optional
-
 
 class SwcNative {
     init {
@@ -16,12 +14,10 @@ class SwcNative {
 
     external fun parseFileSync(filepath: String, options: String): Optional<String>
 
-
     external fun transformSync(code: String, isModule: Boolean, options: String): Optional<String>
 
     external fun transformFileSync(filepath: String, isModule: Boolean, options: String): Optional<String>
 }
-
 
 var a = "".replace(Regex.fromLiteral(":\\s+(\\w+)?")) { it ->
 

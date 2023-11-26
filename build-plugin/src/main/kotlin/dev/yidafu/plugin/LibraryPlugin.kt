@@ -20,6 +20,7 @@ class LibraryPlugin : Plugin<Project> {
             apply("org.jetbrains.kotlin.jupyter.api")
             apply("org.jetbrains.kotlin.libs.publisher")
             apply("org.jetbrains.dokka")
+            apply("org.jlleitschuh.gradle.ktlint")
         }
     }
 }
