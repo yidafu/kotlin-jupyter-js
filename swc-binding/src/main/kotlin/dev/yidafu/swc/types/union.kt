@@ -1,11 +1,14 @@
 package dev.yidafu.swc.types
 
+import kotlinx.serialization.Serializable
+
 /**
  * see https://github.com/renatoathaydes/kunion/blob/master/src/main/kotlin/com/athaydes/kunion/kunion.kt
  */
 /**
  * A type union between 2 or more types.
  */
+@Serializable
 sealed class Union {
     /**
      * An instance of an union type.
@@ -56,6 +59,7 @@ sealed class Union {
     /**
      * Union of 2 types.
      */
+    @Serializable
     sealed class U2<out A, out B> : Union() {
         companion object {
             /**
@@ -110,6 +114,7 @@ sealed class Union {
     /**
      * Union of 3 types.
      */
+    @Serializable
     sealed class U3<out A, out B, out C> : Union() {
         companion object {
             /**
@@ -177,6 +182,7 @@ sealed class Union {
     /**
      * Union of 4 types.
      */
+    @Serializable
     sealed class U4<out A, out B, out C, out D> : Union() {
         companion object {
             /**

@@ -1,37 +1,40 @@
 package dev.yidafu.swc
 
-import java.util.Optional
+import dev.yidafu.swc.types.ParseOptions
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 class SwcNative {
     init {
         // TODO: load from resource dir
         System.loadLibrary("swc_binding")
+//        System.load("/Users/dovyih/gitlab/kotlin-notebook-js/swc-binding/target/debug/libswc_binding.dylib")
+    }
+
+    @OptIn(ExperimentalSerializationApi::class)
+    private val json = Json {
+        encodeDefaults = true
+        explicitNulls = false
     }
 
     external fun sayHello(input: String): String
 
-    external fun parseSync(code: String, options: String, filename: String?): Optional<String>
+    external fun parseSync(code: String, options: String, filename: String?): String
 
-    external fun parseFileSync(filepath: String, options: String): Optional<String>
+    external fun parseFileSync(filepath: String, options: String): String
 
-    external fun transformSync(code: String, isModule: Boolean, options: String): Optional<String>
+    external fun transformSync(code: String, isModule: Boolean, options: String): String
 
-    external fun transformFileSync(filepath: String, isModule: Boolean, options: String): Optional<String>
-}
+    external fun transformFileSync(filepath: String, isModule: Boolean, options: String): String
 
-var a = "".replace(Regex.fromLiteral(":\\s+(\\w+)?")) { it ->
-
-    ": ${it.value}? = null"
-}
-
-var b = "var compress: dynamic /* dev.yidafu.swc.TerserCompressOptions? | Boolean? */"
-    .replace(":\\s+(dynamic)\\s+\\/\\*([^\\*]+)\\*\\/".toRegex()) {
-        val commonts = it.groups[1]?.value?.split("|") ?: emptyList()
-        if (commonts.size == 2) {
-            ": Union.U2<${commonts[0]}, ${commonts[1]}>"
-        } else if (commonts.size == 3) {
-            ": Union.U3<${commonts[0]}, ${commonts[1]}, ${commonts[2]}>"
-        } else {
-            ": Node? = null"
-        }
+    fun transformSync(code: String, isModule: Boolean, options: ParseOptions): String {
+        val optionStr =  json.encodeToString(options)
+        println(optionStr)
+        return transformSync(code,isModule, optionStr)
     }
+
+    fun transformFileSync(filepath: String, isModule: Boolean, options: ParseOptions): String {
+        return transformFileSync(filepath, isModule, json.encodeToString(options))
+    }
+}

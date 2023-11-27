@@ -1,3 +1,4 @@
+
 import org.gradle.internal.jvm.Jvm
 import java.io.ByteArrayOutputStream
 
@@ -8,13 +9,14 @@ plugins {
 group = "dev.yidafu.visjs"
 version = "unspecified"
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
+    testImplementation(kotlin("test"))
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+
+    implementation(libs.kotlin.serialization.json)
+//    println(versionCatalogs.getVersion("kotlin-serialization-json"))
+//    implementation(getVersion("kotlin-serialization-json"))
 }
 
 tasks.test {

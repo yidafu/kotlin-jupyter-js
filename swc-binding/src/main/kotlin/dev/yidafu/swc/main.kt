@@ -1,4 +1,6 @@
-package dev.yidafu.swc // ktlint-disable filename
+package dev.yidafu.swc
+
+import dev.yidafu.swc.types.ParserConfig
 
 fun main() {
     val n = SwcNative()
@@ -11,7 +13,7 @@ fun main() {
         class Bar extends Foo { }
         """.trimIndent(),
         true,
-        ""
+        ParserConfig()
     )
     println("transform result ==>")
     println(res)
