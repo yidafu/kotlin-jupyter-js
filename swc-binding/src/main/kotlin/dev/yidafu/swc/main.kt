@@ -4,7 +4,7 @@ import dev.yidafu.swc.types.ParserConfig
 
 fun main() {
     val n = SwcNative()
-    println(n.sayHello("kotlin"))
+    // println(n.sayHello("kotlin"))
     val res = n.transformSync(
         """
         import x from './test.js';

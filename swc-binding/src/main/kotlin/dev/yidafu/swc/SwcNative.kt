@@ -18,20 +18,26 @@ class SwcNative {
         explicitNulls = false
     }
 
-    external fun sayHello(input: String): String
-
     external fun parseSync(code: String, options: String, filename: String?): String
 
     external fun parseFileSync(filepath: String, options: String): String
+
+    fun parseSync(code: String, options: ParseOptions, filename: String?): String {
+        return parseSync(code, json.encodeToString(options), filename)
+    }
+
+    fun parseFileSync(filepath: String, options: ParseOptions): String {
+        return parseFileSync(filepath, json.encodeToString(options))
+    }
 
     external fun transformSync(code: String, isModule: Boolean, options: String): String
 
     external fun transformFileSync(filepath: String, isModule: Boolean, options: String): String
 
     fun transformSync(code: String, isModule: Boolean, options: ParseOptions): String {
-        val optionStr =  json.encodeToString(options)
+        val optionStr = json.encodeToString(options)
         println(optionStr)
-        return transformSync(code,isModule, optionStr)
+        return transformSync(code, isModule, optionStr)
     }
 
     fun transformFileSync(filepath: String, isModule: Boolean, options: ParseOptions): String {
