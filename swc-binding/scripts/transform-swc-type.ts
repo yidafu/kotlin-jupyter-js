@@ -1,31 +1,9 @@
-import { ArrayTypeNode, BooleanLiteral, IndexSignatureDeclaration, InterfaceDeclaration, IntersectionTypeNode, LiteralLikeNode, LiteralTypeNode, ObjectFlags, ParenthesizedTypeNode, Project, PropertySignature, TupleTypeNode, Type, TypeFormatFlags, TypeLiteralNode, TypeNode, TypeReferenceNode, UnionTypeNode, ts } from 'ts-morph'
+import {
+  ArrayTypeNode, BooleanLiteral, Identifier, IndexSignatureDeclaration, InterfaceDeclaration, IntersectionTypeNode, LiteralLikeNode, LiteralTypeNode, ObjectFlags, ParenthesizedTypeNode, Project, PropertySignature, StringLiteral, TupleTypeNode, Type, TypeAliasDeclaration, TypeFormatFlags, TypeLiteralNode, TypeNode, TypeReferenceNode, UnionTypeNode, ts, NumericLiteral
+} from 'ts-morph'
 import fs from 'fs/promises';
-
-const project = new Project({
-  tsConfigFilePath: "./tsconfig.json"
-})
-
-const InputPath = [
-  "./node_modules/@swc/types/index.d.ts",
-  '../src/main/kotlin/dev/yidafu/swc/types/types.kt',
-  '../src/main/kotlin/dev/yidafu/swc/types/NodeSerializer.kt',
-  // "./test.ts",
-  // './ouptput.kt',
-  // './NodeSerializer.kt',
-]
-const swcTypeFile = project.addSourceFileAtPath(InputPath[0]);
-// const swcTypeFile = project.addSourceFileAtPath("./test.ts");
-
-const kotlinTypes = [
-  'package dev.yidafu.swc.types',
-  '',
-  'import dev.yidafu.swc.types.Union',
-  'import kotlinx.serialization.*',
-  '',
-  'typealias Record<T, S> = Map<T, String>',
-  '',
-]
-
+import { TrueLiteral } from 'ts-morph';
+import { FalseLiteral } from 'ts-morph';
 
 /**
  * https://www.javatpoint.com/typescript-operators
@@ -39,6 +17,44 @@ const kotlinTypes = [
 //     const name = t.slice(0, t.indexOf('(')).replaceAll(/\s(\w)/g, (_, w) => w.toUpperCase()).trim()
 //     return `["${operator}", "${name}"]`
 //   }).join(',\n')
+
+const project = new Project({
+  tsConfigFilePath: "./tsconfig.json"
+})
+
+const InputPath = [
+  "./node_modules/@swc/types/index.d.ts",
+  '../src/main/kotlin/dev/yidafu/swc/types/types.kt',
+  '../src/main/kotlin/dev/yidafu/swc/types/NodeSerializer.kt',
+  '../src/main/kotlin/dev/yidafu/swc/dsl/dsl.kt',
+  "./test.ts",
+  './ouptput.kt',
+  './NodeSerializer.kt',
+  './dsl.kt',
+]
+const swcTypeFile = project.addSourceFileAtPath(InputPath[0]);
+
+/* ======================= 全局常量开始 ======================= */
+
+const kotlinTypes = [
+  'package dev.yidafu.swc.types',
+  '',
+  'import dev.yidafu.swc.types.Union',
+  'import kotlinx.serialization.*',
+  '',
+  '@SwcDslMarker',
+  'annotation class SwcDslMarker',
+  'typealias Record<T, S> = Map<T, String>',
+  '',
+]
+
+const kotlinDsl = [
+  'package dev.yidafu.swc.dsl',
+  '',
+  'import dev.yidafu.swc.types.*',
+  '',
+]
+
 
 const Literal_Name_Map = new Map([
   ["+", "Addition"],
@@ -92,11 +108,7 @@ const Literal_Name_Map = new Map([
   [">>>", "UnsignedRightShift"],
   [">>>=", "UnsignedRightShiftAssignment"]
 ])
-
-const LiteralObjects = [];
-
-const mergeTypeMap = new Map<string, string[]>()
-const canMergeInterface = ['ParserConfig', 'ModuleConfig']
+const canMergeInterface = ['ModuleConfig', 'ParserConfig']
 
 const jsKotlinTypeMap = new Map([
   ["number", "Int"],
@@ -115,13 +127,17 @@ const KeepInterface = [
   "ClassPropertyBase",
   "PatternBase",
   "ClassMethodBase"
+  // "Program",
+  // "ModuleItem",
+  // "ModuleDeclaration",
+  // "Statement",
+  // "Pattern",
 ]
 const skipMergeClassProperties = ['ClassExpression']
 const sealedInterface = ["Node"]
 
 const kotlinKeyword = ['object', 'inline', 'in',]
 const toSnakeCaseInterface = ['JsFormatOptions']
-const typeAliasMap = new Map<string, string>()
 
 const propTypeRewrite = new Map<string, string>([
   ['global_defs', 'Map<String, String>'],
@@ -132,85 +148,256 @@ const propTypeRewrite = new Map<string, string>([
   ['targets', "Union.U2<String, Map<String, String>>"]
 ])
 
+const mayDuplicate = ['var type:', 'var syntax:']
+/* ======================= 全局常量结束 ======================= */
+
+/* ======================= 全局变量开始 ======================= */
+
+const LiteralObjects = [];
+
+const mergeTypeMap = new Map<string, string[]>()
+
+const typeAliasMap = new Map<string, string>()
+
+
+const refTypeAliasMappingList: Array<[/* 子类型 */string, /* 父类型 */string]> = []
 
 const nodeExtendsList: string[][] = []
 
-for (const typeAlias of swcTypeFile.getTypeAliases()) {
-  const uType = typeAlias.getType()
-  const typeNode = typeAlias.getTypeNode()
-  const typeName = typeNode?.getKindName()
 
-  if (uType.isUnion()) {
-    const types = uType.getUnionTypes()
-    const isAllInterface = types.every(t => t.isInterface()) && canMergeInterface.includes(typeAlias.getName())
-    const isAllLiteral = types.every(t => t.isLiteral())
-    const onlyLiteralType = types.every(t => t.isLiteral() || t.isBoolean() || t.isString() || t.isNumber())
-    if (isAllLiteral) {
+/* ======================= 全局变量结束 ======================= */
 
-      let primaryType = "String"
-      const objectBody = types.map(t => {
-        const value = t.getLiteralValue() ?? t.getText()
-        if (t.isBooleanLiteral()) {
-          primaryType = "Boolean";
-          return `  const val BOOL_${value.toString().toUpperCase()} = ${value}`
-        } else if (t.isNumberLiteral()) {
-          primaryType = "Int";
-          return `  const val NUMBER_${value} = ${value}`
-        }
+/* ======================= 工具函数开始 ======================= */
 
-        const varName = Literal_Name_Map.has(value as any)
-          ? Literal_Name_Map.get(value as any)
-          : value?.toString().toUpperCase()
-
-        return `  const val ${varName} = "${value}"`
-      }).join('\n')
-      LiteralObjects.push(typeAlias.getName())
-
-      primaryType += `/* ${typeAlias.getTypeNode()?.print()} */`
-      typeAliasMap.set(typeAlias.getName(), primaryType)
-      kotlinTypes.push(`
-        object ${typeAlias.getName()} {
-        ${objectBody}
-        }
-      `.replaceAll('        ', ''))
-    } else if (onlyLiteralType) {
-      // console.log(typeAlias.getName(), types.length)
-      // types.forEach(t => console.log(t.isString(), t.isBoolean(), t.isNumber()))
-      const count = types
-        .filter(t => !t.isLiteral())
-        .map(t => {
-          if (t.isBoolean()) return 'Boolean'
-          if (t.isNumber()) return 'Int'
-          if (t.isString()) return 'String'
-        })
-
-      kotlinTypes.push(`typealias ${typeAlias.getName()} = Union.U${count.length}<${count.join(', ')}>`)
-    } else if (isAllInterface) {
-
-      const list = typeAlias.getTypeNode()?.forEachChildAsArray().map(t => t.print()) ?? []
-      // console.log(typeAlias.getName() as any, list)
-      mergeTypeMap.set(typeAlias.getName() as any, list);
-    } else {
-      kotlinTypes.push(`typealias ${typeAlias.getName()} = ${getType(typeAlias.getTypeNode()!!).replace("Any", "Node")}`)
+function toFunName(str: string) {
+  return str[0].toLowerCase() + str.slice(1)
+}
+function filterByKey(key: string) {
+  return refTypeAliasMappingList.filter(p => p[0] === key)
+}
+function filterByValue(value: string) {
+  return refTypeAliasMappingList.filter(p => p[1] === value)
+}
+function literalUnionToObjectProps(u: UnionTypeNode) {
+  return u.getTypeNodes().map(l => {
+    if (l instanceof LiteralTypeNode) {
+      const n = l.getLiteral()
+      const value = l.getText()
+      if (n instanceof StringLiteral) {
+        const name = value.toUpperCase().replaceAll('"', '')
+        return `  const val ${Literal_Name_Map.has(name) ? Literal_Name_Map.get(name) : name} = ${value}`
+      } else if (n instanceof TrueLiteral || n instanceof FalseLiteral) {
+        return `  const val BOOL_${value.toString().toUpperCase()} = ${value}`
+      } else if (n instanceof NumericLiteral) {
+        return `  const val NUMBER_${value.toString().toUpperCase()} = ${value}`
+      }
+      throw Error('不是级别的类型')
     }
-  }
+    throw Error('不是字面量')
+  })
+}
+
+function isInterface(interfaceName: string) {
+  return !!swcTypeFile.getInterface(interfaceName)
+}
+
+function isUnionType(typeName: string) {
+  return swcTypeFile.getTypeAlias(typeName) instanceof UnionTypeNode
+}
+
+function isTypeAlias(typeName: string) {
+  return !!swcTypeFile.getTypeAlias(typeName)
 }
 
 function unique(arr: string[]) {
   const uniqueMap = new Map<string, string>()
-  arr.forEach(s => {
-    const key = s.slice(s.indexOf('var'), s.indexOf(':'))
+  arr.filter(s => s.length > 0 && !s.match(/^\s*$/))
+    .forEach(s => {
+      if (isComment(s)) {
+        uniqueMap.set(s, s)
+      } else {
+        const key = s.slice(s.indexOf('var'), s.indexOf(':'))
 
-    if (!uniqueMap.has(key)) {
-      uniqueMap.set(key, s);
-    }
-  })
+        if (!uniqueMap.has(key)) {
+          uniqueMap.set(key, s);
+        }
+      }
+    })
   return Array.from(uniqueMap.values())
 }
-const mayDuplicate = ['var type:', 'var syntax:']
+
+
+function removeComment(str: string) {
+  return str.replace(/\/\*(.|\r\n|\n)*?\*\//, '')
+}
+
+function isComment(str: string) {
+  return str.match(/^\s*\/\*/)
+}
+
+function getKey(str: string) {
+  return str.slice(str.indexOf('var'), str.indexOf(':'))
+}
+/* ======================= 工具函数结束 ======================= */
+
+
+/* ======================= 处理 type alias 开始 ======================= */
+
+/*
+  处理 type T = "foo" | "bar"
+*/
+swcTypeFile.getTypeAliases()
+  .filter(typeAlias => typeAlias.getTypeNode() instanceof UnionTypeNode)
+  .filter(typeAlias =>
+    typeAlias.getType().getUnionTypes().every(t =>
+      t.isLiteral() // || t.isBoolean() || t.isString() || t.isNumber()
+    )
+  )
+  .filter(typeAlias => {
+    const typeNode = typeAlias.getTypeNode() as UnionTypeNode
+    const childTypes = typeNode.getTypeNodes().map(n => getType(n))
+    const firstType = removeComment(childTypes[0])
+    const isAllChildTypeTheSame = childTypes.every(t => removeComment(t) === firstType)
+    return isAllChildTypeTheSame
+  })
+  .forEach(typeAlias => {
+    const tName = typeAlias.getName()
+
+    const typeNode = typeAlias.getTypeNode() as UnionTypeNode
+    const childTypes = typeNode.getTypeNodes().map(n => getType(n))
+
+    const firstType = removeComment(childTypes[0])
+    let primaryType = firstType
+    LiteralObjects.push(tName)
+    typeAliasMap.set(tName, primaryType)
+    kotlinTypes.push([
+      '/**',
+      '  * ' + typeAlias.getTypeNode()?.print(),
+      '  */',
+      `object ${tName} {`,
+      ...literalUnionToObjectProps(typeNode),
+      `}`].join('\n'))
+  })
+
+/*
+  处理 type T = 1234 | 'str' | number | string
+*/
+swcTypeFile.getTypeAliases()
+  .filter(typeAlias => typeAlias.getTypeNode() instanceof UnionTypeNode)
+  .filter(typeAlias =>
+    typeAlias.getType().getUnionTypes().every(t =>
+      t.isLiteral() || t.isBoolean() || t.isString() || t.isNumber()
+    )
+  )
+  .filter(typeAlias => {
+    const typeNode = typeAlias.getTypeNode() as UnionTypeNode
+    const childTypes = typeNode.getTypeNodes().map(n => getType(n))
+    const firstType = removeComment(childTypes[0])
+    const notAllChildTypeTheSame = childTypes.some(t => removeComment(t) !== firstType)
+    return notAllChildTypeTheSame
+  })
+  .forEach(typeAlias => {
+    const tName = typeAlias.getName()
+    const typeNode = typeAlias.getTypeNode() as UnionTypeNode
+    const childTypes = typeNode.getTypeNodes().map(n => getType(n))
+
+    
+    const uniqueType = Array.from(new Set(childTypes.map(t => removeComment(t))))
+    console.log(typeAlias.getName(), uniqueType)
+
+    if (uniqueType.length > 0) {
+      kotlinTypes.push(`typealias ${tName
+        } = Union.U${uniqueType.length}<${uniqueType.join(', ')}>`)
+    } else {
+      kotlinTypes.push(`typealias ${tName} = ${uniqueType[0]}`)
+    }
+  })
+
+/*
+处理 type T = S & { foo: string }
+*/
+swcTypeFile.getTypeAliases()
+  .filter(typeAlias => typeAlias.getTypeNode() instanceof IntersectionTypeNode)
+  .forEach((typeAlias) => {
+    // const t = typeAlias as IntersectionTypeNode
+    const uType = typeAlias.getType()
+    const typeNode = typeAlias.getTypeNode() as IntersectionTypeNode
+    const kindName = typeNode?.getKindName()
+    const tName = typeAlias.getName()
+    const nodes = typeNode.getTypeNodes()
+    if (nodes[0] instanceof TypeReferenceNode && nodes[1] instanceof TypeLiteralNode) {
+      const p = nodes[0] as TypeReferenceNode
+      const t = nodes[1] as TypeLiteralNode
+      kotlinTypes.push([
+        `@SwcDslMarker\n@Serializable`,
+        `class ${tName} : ${p.getTypeName().print()}() {`,
+        ...typeLiteralGetProps(t),
+        `}`, ''
+      ].join('\n'))
+    }
+  })
+
+
+const interfaceExtraExtendMap = new Map<string, Set<string>>()
+const typeAliasExtraExtendMap = new Map<string, Set<string>>()
+const typeAliasExtensionFunMap = new Map<string, string[]>()
+/*
+处理 type T = S | E
+*/
+swcTypeFile.getTypeAliases()
+  .filter(typeAlias => typeAlias.getTypeNode() instanceof UnionTypeNode)
+  .filter(typeAlias => {
+    const typeNode = typeAlias.getTypeNode() as UnionTypeNode
+    const isAllRefType = typeNode?.forEachChildAsArray().every(cNode => cNode instanceof TypeReferenceNode)
+    return isAllRefType
+  }).forEach(typeAlias => {
+    const tName = typeAlias.getName()
+    const typeNode = typeAlias.getTypeNode() as UnionTypeNode
+    const childTypes = typeNode.getTypeNodes().map(n => getType(n))
+
+    if (canMergeInterface.includes(tName)) {
+      const list = typeAlias.getTypeNode()?.forEachChildAsArray().map(t => t.print()) ?? []
+      mergeTypeMap.set(tName as any, list);
+    } else {
+      typeAliasExtensionFunMap.set(tName, childTypes)
+
+      childTypes
+        .filter(n => isInterface(n))
+        .forEach(n => {
+          const extraExtend = interfaceExtraExtendMap.get(n)! ?? new Set()
+          extraExtend.add(tName)
+          interfaceExtraExtendMap.set(n, extraExtend)
+
+      childTypes
+        .filter(n => isTypeAlias(n))
+        .forEach(n => {
+          const extraExtend = typeAliasExtraExtendMap.get(n) ?? new Set()
+          extraExtend.add(tName)
+          typeAliasExtraExtendMap.set(n, extraExtend)
+        })
+      })
+    }
+  })
+
+Array.from(typeAliasExtensionFunMap.keys()).forEach(n => {
+  if (typeAliasExtraExtendMap.has(n)) {
+    const pTypes = typeAliasExtraExtendMap.get(n)!!
+    let comment = Array.from(pTypes).join('], [')
+    comment = `/**\n  * sub types: [${comment}]\n  */`
+
+    kotlinTypes.push(`${comment}\ninterface ${n} : ${Array.from(pTypes).join(',')}`)
+  } else {
+    kotlinTypes.push(`interface ${n} : Node`)
+  }
+})
+
+
+/* ======================= 处理 type alias 结束 ======================= */
+
+/* ======================= 处理 interface 开始 ======================= */
+
+const skipInterfaces = Array.from(mergeTypeMap.values()).flat()
 for (const [typeName, interfaces] of mergeTypeMap) {
-  // merge interface
-  // const oInterface = createInterface(i1)
   const iList = interfaces.map(iName => {
     const i = swcTypeFile.getInterface(iName)!!
     return createInterface(i)
@@ -219,29 +406,29 @@ for (const [typeName, interfaces] of mergeTypeMap) {
   let iList2: string[] = iList.filter(s => !mayDuplicate.some(p => s.includes(p)))
 
   mayDuplicate.forEach(i => {
-    // iList2 = iList.filter(i => !i.includes(i))
-    const types = iList.filter(i => i.includes(i))
-    const comments = "/**" + types.map(t => t.slice(t.indexOf('='))).join(', ') + '*/'
     iList2.push(
-      comments,
       `  ${i} String? = null`
     )
   })
 
   const result = [
-    `@Serializable\nclass ${typeName} {`,
+    `@SwcDslMarker\n@Serializable\nopen class ${typeName} {`,
     ...unique(iList2),
     '}',
   ]
 
-  kotlinTypes.push(result.join('\n'))
+  kotlinTypes.push(result.join('\n').replaceAll(/\*\/\s+\/\*\*/g, ', '))
 }
 
+function typeLiteralGetProps(t: TypeLiteralNode) {
+  return t.getMembers().map(m => {
+    const p = m as PropertySignature
+    return ` var ${p.getName()}: ${getType(p.getTypeNode()!!)}? = null`
+  })
+}
 
 function getType(typeNode: TypeNode<ts.TypeNode>): string {
   const typeName = typeNode?.getKindName();
-  // console.log()
-  // console.log(typeName)
   switch (typeName) {
     case "UnionType": {
 
@@ -256,13 +443,15 @@ function getType(typeNode: TypeNode<ts.TypeNode>): string {
       } else if (uniqueTypes.length > 1 && uniqueTypes.length < 5) {
         const isAllLiteral = typeNode?.forEachChildAsArray().every(cNode => cNode.getKindName() === 'LiteralType')
         if (isAllLiteral) {
-          const comment = '/* ' + typeNode?.forEachChildAsArray().map(c => c.getText()).join(",") + ' */';
+          const comment = '  /** literal is: ' + typeNode?.forEachChildAsArray().map(c => c.getText()).join(",") + ' */';
           const type = comment.includes('"') ? "String" : "Int"
           return `${comment}${type}`
         }
         return `Union.U${uniqueTypes.length}<${uniqueTypes.join(', ')}>`
       } else {
-        return "Any"
+        const tName = (typeNode.getParent() as TypeAliasDeclaration).getName()
+        console.log(tName)
+        throw new Error('不支持获取的类型')
       }
     }
 
@@ -284,12 +473,8 @@ function getType(typeNode: TypeNode<ts.TypeNode>): string {
       }
       const newTypeName = `${pName.slice(0, pName.indexOf('?')).replace(/^\w/, (m) => m.toUpperCase())}Literal`
       kotlinTypes.push([
-        `@Serializable\nclass ${newTypeName} {`,
-        ...t.getMembers().map(m => {
-
-          const p = m as PropertySignature
-          return ` var ${p.getName()}: ${getType(p.getTypeNode()!!)}? = null`
-        }),
+        `@SwcDslMarker\n@Serializable\nclass ${newTypeName} {`,
+        ...typeLiteralGetProps(t),
         '}'
       ].join('\n'))
       return newTypeName
@@ -317,7 +502,7 @@ function getType(typeNode: TypeNode<ts.TypeNode>): string {
           if (type == 'Record<string, string>') {
             return 'Map<String, String>'
           }
-          if (typeAliasMap.has(type)) return typeAliasMap.get(type)!!
+          if (typeAliasMap.has(type)) return `\t/**\n  * [${type}]\n */` + typeAliasMap.get(type)!!
           return type
         }
       }
@@ -344,7 +529,7 @@ function getType(typeNode: TypeNode<ts.TypeNode>): string {
       return `Array<${getType(arrNode.getElementTypeNode())}>`
     }
     case "LiteralType": {
-      const comment = '/* ' + typeNode?.forEachChildAsArray().map(c => c.getText()).join(",") + '*/';
+      const comment = '/**\n   *literal is: ' + typeNode?.forEachChildAsArray().map(c => c.getText()).join(",") + '\n   */';
       const type = comment.includes('"') ? "String" : "Int"
       return `${comment}${type}`
       // return `String = ${typeNode.getChildAtIndex(0).getText()}`
@@ -353,10 +538,8 @@ function getType(typeNode: TypeNode<ts.TypeNode>): string {
   }
 }
 
-function getKey(str: string) {
-  return str.slice(str.indexOf('var'), str.indexOf(':'))
-}
 function getInterfaceProperties(i: InterfaceDeclaration, isClass: boolean = false) {
+  if (!i) return []
   const interfaceName = i.getName();
 
   const properties = i.getProperties()
@@ -370,9 +553,17 @@ function getInterfaceProperties(i: InterfaceDeclaration, isClass: boolean = fals
       ...p.getLeadingCommentRanges().map(c => c.getText()),
     )
     const typeName = kotlinKeyword.includes(p.getName()) ? '`' + p.getName() + '`' : p.getName()
+
     let value = p.getTypeNode()?.getText()
     value = value?.includes('"') && !value.includes('|') ? value : ""
     let type = getType(p.getTypeNode()!!)
+
+    if (type.match(/^\s*\/\*[^\/]+\*\//)) {
+      Array.from(type.matchAll(/\/\*[^\/]+\*\//g)).forEach(m => {
+        result.push(m[0])
+      })
+      type = type.replaceAll(/\/\*[^\/]+\*\//g, '')
+    }
     if (propTypeRewrite.has(typeName)) {
       type = propTypeRewrite.get(typeName)!!
     }
@@ -386,7 +577,7 @@ function getInterfaceProperties(i: InterfaceDeclaration, isClass: boolean = fals
     const overrideList = pI
       .map(p => { return p.getTypeNodes().map(t => t.print()) })
       .flat()
-      .filter(iName => KeepInterface.includes(iName))
+      .filter(iName => iName.match(/^\s*\/\*/) || KeepInterface.includes(iName))
       .map(iName => getInterfaceProperties(swcTypeFile.getInterface(iName)!!, isClass))
       .flat()
     overrideProps = Array.from(new Set(overrideList))
@@ -394,6 +585,8 @@ function getInterfaceProperties(i: InterfaceDeclaration, isClass: boolean = fals
     // .map(s => s.includes('override') ? s : s.replace('var', 'override var') + ' = null')
     const overrideKeys = overrideProps.map(p => getKey(p))
     result = result.map(s => {
+      if (s.includes('/*')) return s
+
       if (overrideKeys.includes(getKey(s))) {
         const s2 = s.replace('var', 'override var')
         if (s2.includes('=')) {
@@ -408,7 +601,8 @@ function getInterfaceProperties(i: InterfaceDeclaration, isClass: boolean = fals
     if (!skipMergeClassProperties.includes(interfaceName)) {
       const existKeys = result.map(s => getKey(s))
       result.push(
-        ...overrideProps.filter(s => !existKeys.includes(s)).map(s => {
+        ...overrideProps.filter(s => s.match(/^\s*\/\*/) || !existKeys.includes(s)).map(s => {
+          if (s.includes('/*')) return s
           if (!s.includes('override')) {
             const s2 = s.replace('var', 'override var')
             if (s2.includes('=')) {
@@ -420,9 +614,8 @@ function getInterfaceProperties(i: InterfaceDeclaration, isClass: boolean = fals
         })
       )
     }
-
-    // result.push(...overrideProps)
   }
+
   if (toSnakeCaseInterface.includes(interfaceName)) {
     const snakeProps = result
       .map(s => [getKey(s), s])
@@ -438,9 +631,6 @@ function getInterfaceProperties(i: InterfaceDeclaration, isClass: boolean = fals
   }
   return unique(result)
 }
-
-
-const skipInterfaces = Array.from(mergeTypeMap.values()).flat()
 
 function createInterface(i: InterfaceDeclaration) {
 
@@ -458,12 +648,15 @@ function createInterface(i: InterfaceDeclaration) {
       return `${c}()`
     }
   })
-
+  const pair = Array.from(interfaceExtraExtendMap.get(interfaceName) ?? [])
+  if (pair.length) {
+    parents.push(...pair);
+  }
   nodeExtendsList.push(...parents.map(p => [p, interfaceName]));
   const ext = parents.length > 0 ? `: ${parents.join(', ')} ` : ''
-  let modifier = KeepInterface.includes(interfaceName) ? 'interface' : '@Serializable\nopen class';
+  let modifier = isI ? 'interface' : '@SwcDslMarker\n@Serializable\nopen class';
   if (sealedInterface.includes(interfaceName)) {
-    modifier = "@Serializable(NodeSerializer::class)\nsealed " + modifier
+    modifier = "@SwcDslMarker\n@Serializable(NodeSerializer::class)\nsealed " + modifier
   }
 
   const result = [
@@ -474,35 +667,38 @@ function createInterface(i: InterfaceDeclaration) {
   result.push(...getInterfaceProperties(i, !isI))
 
   result.push('}');
-  result.push('')
   return result
 }
+
+// 遍历 interface
 for (const i of swcTypeFile.getInterfaces()) {
   const interfaceName = i.getName();
   if (skipInterfaces.includes(interfaceName)) continue;
 
   kotlinTypes.push(
-    createInterface(i).join('\n'),
+    createInterface(i).join('\n').replaceAll(/\*\/\s+\/\*\*/g, ', '),
   )
 }
 
-fs.writeFile(InputPath[1], kotlinTypes.join('\n'));
+fs.writeFile(InputPath[1], kotlinTypes.join('\n\n'));
 
 const classNameList: string[] = []
-function filterParent(key: string) {
-  const parent = Array.from(new Set(nodeExtendsList.filter(p => p[0] === key).map(p => p[1])))
+function filterChildren(key: string) {
+  const child = Array.from(new Set(nodeExtendsList.filter(p => p[0] === key).map(p => p[1])))
 
-  parent.forEach(p => {
+  child.forEach(p => {
     const grand = nodeExtendsList.filter(c => c[0] === p).map(p => p[1])
     if (grand.length > 0) {
-      filterParent(p)
+      filterChildren(p)
     } else {
       classNameList.push(p)
     }
   })
 }
 
-filterParent('Node')
+filterChildren('Node')
+
+
 
 const NodeNodeSerializer = `
 package dev.yidafu.swc.types
@@ -529,5 +725,37 @@ object NodeSerializer : JsonContentPolymorphicSerializer<Node>(Node::class) {
     }
 }`
 fs.writeFile(InputPath[2], NodeNodeSerializer);
+
+
+/* ======================= 处理 生成 dsl 开始 ======================= */
+
+typeAliasExtensionFunMap.forEach((_, key) => {
+  const extensionFunSet = new Set<string>()
+  function genDsl(oKey: string, key: string) {
+    const iList = typeAliasExtensionFunMap.get(key) ?? []
+    iList.forEach(iName => {
+      if (isInterface(iName)) {
+        if (!KeepInterface.includes(iName)) {
+          extensionFunSet.add(iName)
+        }
+      } else if (isTypeAlias(iName)) {
+        genDsl(oKey, iName)
+      }
+    })
+  }
+
+  genDsl(key, key)
+
+  extensionFunSet.forEach(iName => {
+    kotlinDsl.push([
+      `fun ${key}.${toFunName(iName)}(block: ${iName}.() -> Unit): ${iName} {`,
+      `  return ${iName}().apply(block)`,
+      `}`,
+    ].join('\n'))
+  })
+})
+/* ======================= 处理 生成 dsl 结束 ======================= */
+
+fs.writeFile(InputPath[3], kotlinDsl.join('\n\n'));
 
 
