@@ -1,5 +1,6 @@
 package dev.yidafu.swc
 
+import dev.yidafu.swc.types.Options
 import dev.yidafu.swc.types.ParseOptions
 import dev.yidafu.swc.types.ParserConfig
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -9,8 +10,7 @@ import kotlinx.serialization.json.Json
 class SwcNative {
     init {
         // TODO: load from resource dir
-        System.loadLibrary("swc_binding")
-//        System.load("/Users/dovyih/gitlab/kotlin-notebook-js/swc-binding/target/debug/libswc_binding.dylib")
+       System.loadLibrary("swc_binding")
     }
 
     @OptIn(ExperimentalSerializationApi::class)
@@ -23,11 +23,11 @@ class SwcNative {
 
     external fun parseFileSync(filepath: String, options: String): String
 
-    fun parseSync(code: String, options: ParseOptions, filename: String?): String {
+    fun parseSync(code: String, options: ParserConfig, filename: String?): String {
         return parseSync(code, json.encodeToString(options), filename)
     }
 
-    fun parseFileSync(filepath: String, options: ParseOptions): String {
+    fun parseFileSync(filepath: String, options: ParserConfig): String {
         return parseFileSync(filepath, json.encodeToString(options))
     }
 
@@ -35,13 +35,14 @@ class SwcNative {
 
     external fun transformFileSync(filepath: String, isModule: Boolean, options: String): String
 
-    fun transformSync(code: String, isModule: Boolean, options: ParserConfig): String {
+    fun transformSync(code: String, isModule: Boolean, options: Options): String {
         val optionStr = json.encodeToString(options)
         println(optionStr)
         return transformSync(code, isModule, optionStr)
     }
 
-    fun transformFileSync(filepath: String, isModule: Boolean, options: ParserConfig): String {
+    fun transformFileSync(filepath: String, isModule: Boolean, options: Options): String {
+        println(json.encodeToString(options))
         return transformFileSync(filepath, isModule, json.encodeToString(options))
     }
 }
