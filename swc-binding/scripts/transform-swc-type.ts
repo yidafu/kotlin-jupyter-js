@@ -164,7 +164,7 @@ const refTypeAliasMappingList: Array<[/* 子类型 */string, /* 父类型 */stri
 
 const nodeExtendsList: string[][] = []
 
-
+const classRefPropertiesMap = new Map<string, Set<string>>()
 /* ======================= 全局变量结束 ======================= */
 
 /* ======================= 工具函数开始 ======================= */
@@ -201,6 +201,15 @@ function isInterface(interfaceName: string) {
   return !!swcTypeFile.getInterface(interfaceName)
 }
 
+function isInterfaceOrTypeAliasArray(interfaceName: string) {
+  if (!interfaceName.includes('Array<')) return ''
+  // const node = swcTypeFile(interfaceName)!!.getTypeNode()
+  const name = interfaceName.match(/Array<(\w*)>/)?.[1]
+  if(name && (isInterface(name) || isTypeAlias(name))) {
+     return name
+    }
+  return ''
+}
 function isUnionType(typeName: string) {
   return swcTypeFile.getTypeAlias(typeName) instanceof UnionTypeNode
 }
@@ -213,7 +222,7 @@ function unique(arr: string[]) {
   const uniqueMap = new Map<string, string>()
   arr.filter(s => s.length > 0 && !s.match(/^\s*$/))
     .forEach(s => {
-      if (isComment(s)) {
+        if (s.includes('fun')  || isComment(s)) {
         uniqueMap.set(s, s)
       } else {
         const key = s.slice(s.indexOf('var'), s.indexOf(':'))
@@ -303,7 +312,6 @@ swcTypeFile.getTypeAliases()
 
     
     const uniqueType = Array.from(new Set(childTypes.map(t => removeComment(t))))
-    console.log(typeAlias.getName(), uniqueType)
 
     if (uniqueType.length > 0) {
       kotlinTypes.push(`typealias ${tName
@@ -340,7 +348,7 @@ swcTypeFile.getTypeAliases()
 
 const interfaceExtraExtendMap = new Map<string, Set<string>>()
 const typeAliasExtraExtendMap = new Map<string, Set<string>>()
-const typeAliasExtensionFunMap = new Map<string, string[]>()
+const typeAliasExtensionFunMap = new Map<string, Set<string>>()
 /*
 处理 type T = S | E
 */
@@ -359,7 +367,7 @@ swcTypeFile.getTypeAliases()
       const list = typeAlias.getTypeNode()?.forEachChildAsArray().map(t => t.print()) ?? []
       mergeTypeMap.set(tName as any, list);
     } else {
-      typeAliasExtensionFunMap.set(tName, childTypes)
+      typeAliasExtensionFunMap.set(tName, new Set(childTypes))
 
       childTypes
         .filter(n => isInterface(n))
@@ -390,7 +398,6 @@ Array.from(typeAliasExtensionFunMap.keys()).forEach(n => {
     kotlinTypes.push(`interface ${n} : Node`)
   }
 })
-
 
 /* ======================= 处理 type alias 结束 ======================= */
 
@@ -553,11 +560,19 @@ function getInterfaceProperties(i: InterfaceDeclaration, isClass: boolean = fals
       ...p.getLeadingCommentRanges().map(c => c.getText()),
     )
     const typeName = kotlinKeyword.includes(p.getName()) ? '`' + p.getName() + '`' : p.getName()
-
+    
     let value = p.getTypeNode()?.getText()
     value = value?.includes('"') && !value.includes('|') ? value : ""
     let type = getType(p.getTypeNode()!!)
+    // if (isTypeAlias(type)) {
+      // const typeExtSet = typeAliasExtensionFunMap.get(type) ?? new Set()
+      // typeExtSet.add(type)
+      // typeAliasExtensionFunMap.set(interfaceName, typeExtSet)
 
+      // result.push(
+      //   ...createExtensionFunList(type)
+      // )
+    // }
     if (type.match(/^\s*\/\*[^\/]+\*\//)) {
       Array.from(type.matchAll(/\/\*[^\/]+\*\//g)).forEach(m => {
         result.push(m[0])
@@ -586,7 +601,7 @@ function getInterfaceProperties(i: InterfaceDeclaration, isClass: boolean = fals
     const overrideKeys = overrideProps.map(p => getKey(p))
     result = result.map(s => {
       if (s.includes('/*')) return s
-
+      if (s.includes('fun')) return s
       if (overrideKeys.includes(getKey(s))) {
         const s2 = s.replace('var', 'override var')
         if (s2.includes('=')) {
@@ -603,6 +618,8 @@ function getInterfaceProperties(i: InterfaceDeclaration, isClass: boolean = fals
       result.push(
         ...overrideProps.filter(s => s.match(/^\s*\/\*/) || !existKeys.includes(s)).map(s => {
           if (s.includes('/*')) return s
+          if (s.includes('fun')) return s
+
           if (!s.includes('override')) {
             const s2 = s.replace('var', 'override var')
             if (s2.includes('=')) {
@@ -615,7 +632,24 @@ function getInterfaceProperties(i: InterfaceDeclaration, isClass: boolean = fals
       )
     }
   }
-
+  if (!isI) {
+    if (interfaceName == "Module") console.log(interfaceName, result, result
+      .filter(s => s.includes('var '))
+      .map(s => s.slice(s.indexOf(':'), s.indexOf('=')))
+      .map(s => removeComment(s))//.map(s => isInterfaceOrTypeAliasArray(s))
+      )
+    result
+      .filter(s => s.includes('var '))
+      .map(s => s.slice(s.indexOf(':'), s.indexOf('=')))
+      .map(s => removeComment(s))
+      .filter(s => isInterface(s) || isTypeAlias(s) || isInterfaceOrTypeAliasArray(s))
+      .forEach(s => {
+        const props = classRefPropertiesMap.get(interfaceName) ?? new Set()
+        s.startsWith('Array<') ? props.add(s) : props.add(isInterfaceOrTypeAliasArray(s))
+        classRefPropertiesMap.set(interfaceName, props)
+      })
+    // classRefPropertiesMap
+  }
   if (toSnakeCaseInterface.includes(interfaceName)) {
     const snakeProps = result
       .map(s => [getKey(s), s])
@@ -652,7 +686,27 @@ function createInterface(i: InterfaceDeclaration) {
   if (pair.length) {
     parents.push(...pair);
   }
-  nodeExtendsList.push(...parents.map(p => [p, interfaceName]));
+  function addParent(name: string) {
+    const iList = interfaceExtraExtendMap.get(name)
+    iList?.forEach(iName => {
+      if (isInterface(iName)) {
+        parents.push(iName)
+      } else if (isTypeAlias(iName)) {
+        addParent(iName)
+        // typeAliasExtraExtendMap.get(name)?.forEach(tName => {
+        //   addParent(tName)
+        // })
+      }
+    })
+
+    // ?.forEach(iName => {
+    //   if (isInterface(iName)) {
+    //     parents.add(iName)
+    //   }
+    // })
+  }
+  addParent(interfaceName)
+  nodeExtendsList.push(...Array.from(new Set(parents)).map(p => [p, interfaceName]));
   const ext = parents.length > 0 ? `: ${parents.join(', ')} ` : ''
   let modifier = isI ? 'interface' : '@SwcDslMarker\n@Serializable\nopen class';
   if (sealedInterface.includes(interfaceName)) {
@@ -727,33 +781,73 @@ object NodeSerializer : JsonContentPolymorphicSerializer<Node>(Node::class) {
 fs.writeFile(InputPath[2], NodeNodeSerializer);
 
 
-/* ======================= 处理 生成 dsl 开始 ======================= */
 
-typeAliasExtensionFunMap.forEach((_, key) => {
-  const extensionFunSet = new Set<string>()
+/* ======================= 处理 生成 dsl 开始 ======================= */
+const extensionFunMap = new Map<string, Set<string>>()
+function createExtensionFunList(key: string) {
+  // const extensionFunSet = new Set<string>()
+  const visitedSet = new Set<string>()
   function genDsl(oKey: string, key: string) {
+    if (visitedSet.has(key)) {
+      return
+    }
+    visitedSet.add(key)
     const iList = typeAliasExtensionFunMap.get(key) ?? []
     iList.forEach(iName => {
-      if (isInterface(iName)) {
-        if (!KeepInterface.includes(iName)) {
-          extensionFunSet.add(iName)
+      if (oKey != iName) {
+        if (isInterface(iName)) {
+          if (!KeepInterface.includes(iName)) {
+            const set = (extensionFunMap.get(oKey) ?? new Set())
+            set.add(iName)
+            extensionFunMap.set(oKey, set)
+            // extensionFunMap.add([oKey, iName].join('#'))
+          }
+        } else if (isTypeAlias(iName)) {
+          genDsl(oKey, iName)
         }
-      } else if (isTypeAlias(iName)) {
-        genDsl(oKey, iName)
       }
     })
   }
 
   genDsl(key, key)
 
-  extensionFunSet.forEach(iName => {
-    kotlinDsl.push([
-      `fun ${key}.${toFunName(iName)}(block: ${iName}.() -> Unit): ${iName} {`,
-      `  return ${iName}().apply(block)`,
-      `}`,
-    ].join('\n'))
-  })
+  // return
+}
+
+typeAliasExtensionFunMap.forEach((_, key) => {
+  createExtensionFunList(key)
+  // kotlinDsl.push(
+  //   ...
+  // )
 })
+classRefPropertiesMap.forEach((refProps, key) => {
+  refProps.forEach(prop => {
+    if (isInterface(prop)) {
+      extensionFunMap.set(key, (extensionFunMap.get(key) ?? new Set()).add(prop))
+    } else if (isTypeAlias(prop)) {
+      const exts = extensionFunMap.get(prop)
+      const oExts = extensionFunMap.get(key) ?? new Set()
+      exts?.forEach(e => oExts.add(e))
+
+      extensionFunMap.set(key, oExts)
+    }
+  })
+  // if (isTypeAlias(key)) {
+  //   refProps.forEach(p => {
+  //     extensionFunMap.get(key)!!.add()
+  //   })
+  // }
+})
+
+// console.log(extensionFunMap.get("Module"))
+extensionFunMap.forEach((iNameList, key) => {
+  iNameList.forEach(iName => kotlinDsl.push([
+    `fun ${key}.${toFunName(iName)}(block: ${iName}.() -> Unit): ${iName} {`,
+    `  return ${iName}().apply(block)`,
+    `}`,
+  ].join('\n')))
+}
+)
 /* ======================= 处理 生成 dsl 结束 ======================= */
 
 fs.writeFile(InputPath[3], kotlinDsl.join('\n\n'));
