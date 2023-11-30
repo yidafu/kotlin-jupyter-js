@@ -136,7 +136,12 @@ const KeepInterface = [
 const skipMergeClassProperties = ['ClassExpression']
 const sealedInterface = ["Node"]
 
-const kotlinKeyword = ['object', 'inline', 'in',]
+const kotlinKeywordMap = new Map<string, string>([
+  ['object', 'jsObject'],
+  ['inline', 'jsInline'],
+  ['in', 'jsIn'],
+  ['super', 'jsSuper']
+])
 const toSnakeCaseInterface = ['JsFormatOptions']
 
 const propTypeRewrite = new Map<string, string>([
@@ -170,7 +175,9 @@ const classRefPropertiesMap = new Map<string, Set<string>>()
 /* ======================= 工具函数开始 ======================= */
 
 function toFunName(str: string) {
-  return str[0].toLowerCase() + str.slice(1)
+  const name = str[0].toLowerCase() + str.slice(1)
+  if (kotlinKeywordMap.has(name)) return  kotlinKeywordMap.get(name)
+  return name
 }
 function filterByKey(key: string) {
   return refTypeAliasMappingList.filter(p => p[0] === key)
@@ -211,7 +218,7 @@ function isInterfaceOrTypeAliasArray(interfaceName: string) {
   return ''
 }
 function isUnionType(typeName: string) {
-  return swcTypeFile.getTypeAlias(typeName) instanceof UnionTypeNode
+  return swcTypeFile.getTypeAlias(typeName)?.getTypeNode() instanceof UnionTypeNode
 }
 
 function isTypeAlias(typeName: string) {
@@ -234,7 +241,6 @@ function unique(arr: string[]) {
     })
   return Array.from(uniqueMap.values())
 }
-
 
 function removeComment(str: string) {
   return str.replace(/\/\*(.|\r\n|\n)*?\*\//, '')
@@ -327,10 +333,7 @@ swcTypeFile.getTypeAliases()
 swcTypeFile.getTypeAliases()
   .filter(typeAlias => typeAlias.getTypeNode() instanceof IntersectionTypeNode)
   .forEach((typeAlias) => {
-    // const t = typeAlias as IntersectionTypeNode
-    const uType = typeAlias.getType()
     const typeNode = typeAlias.getTypeNode() as IntersectionTypeNode
-    const kindName = typeNode?.getKindName()
     const tName = typeAlias.getName()
     const nodes = typeNode.getTypeNodes()
     if (nodes[0] instanceof TypeReferenceNode && nodes[1] instanceof TypeLiteralNode) {
@@ -345,10 +348,10 @@ swcTypeFile.getTypeAliases()
     }
   })
 
-
-const interfaceExtraExtendMap = new Map<string, Set<string>>()
-const typeAliasExtraExtendMap = new Map<string, Set<string>>()
+const interfaceExtraExtendMap = new Map</* 子类 */string, /* 父类 */Set<string>>()
+const typeAliasExtraExtendMap = new Map</* 子类 */string, /* 父类 */Set<string>>()
 const typeAliasExtensionFunMap = new Map<string, Set<string>>()
+
 /*
 处理 type T = S | E
 */
@@ -365,7 +368,7 @@ swcTypeFile.getTypeAliases()
 
     if (canMergeInterface.includes(tName)) {
       const list = typeAlias.getTypeNode()?.forEachChildAsArray().map(t => t.print()) ?? []
-      mergeTypeMap.set(tName as any, list);
+      mergeTypeMap.set(tName, list);
     } else {
       typeAliasExtensionFunMap.set(tName, new Set(childTypes))
 
@@ -375,15 +378,20 @@ swcTypeFile.getTypeAliases()
           const extraExtend = interfaceExtraExtendMap.get(n)! ?? new Set()
           extraExtend.add(tName)
           interfaceExtraExtendMap.set(n, extraExtend)
+      })
 
+      // childTypes
+      //   .filter(n => isUnionType(n))
+      //   .forEach(n => {
+      //     typeAliasExtensionFunMap.get(n, )
+      //   })
       childTypes
-        .filter(n => isTypeAlias(n))
+        .filter(n => isTypeAlias(n) || isUnionType(n))
         .forEach(n => {
           const extraExtend = typeAliasExtraExtendMap.get(n) ?? new Set()
           extraExtend.add(tName)
           typeAliasExtraExtendMap.set(n, extraExtend)
         })
-      })
     }
   })
 
@@ -559,20 +567,28 @@ function getInterfaceProperties(i: InterfaceDeclaration, isClass: boolean = fals
     result.push(
       ...p.getLeadingCommentRanges().map(c => c.getText()),
     )
-    const typeName = kotlinKeyword.includes(p.getName()) ? '`' + p.getName() + '`' : p.getName()
+    const typeName = kotlinKeywordMap.has(p.getName()) ? kotlinKeywordMap.get(p.getName())! : p.getName()
     
     let value = p.getTypeNode()?.getText()
     value = value?.includes('"') && !value.includes('|') ? value : ""
     let type = getType(p.getTypeNode()!!)
-    // if (isTypeAlias(type)) {
-      // const typeExtSet = typeAliasExtensionFunMap.get(type) ?? new Set()
-      // typeExtSet.add(type)
-      // typeAliasExtensionFunMap.set(interfaceName, typeExtSet)
+    if (isTypeAlias(type)) {
+      const typeExtSet = typeAliasExtensionFunMap.get(type) ?? new Set()
+      typeExtSet.add(type)
+      
+      const extFunSet = typeAliasExtensionFunMap.get(interfaceName) ?? new Set()
+      typeExtSet.forEach(t => extFunSet.add(t))
+      typeAliasExtensionFunMap.set(interfaceName, extFunSet)
 
       // result.push(
       //   ...createExtensionFunList(type)
       // )
-    // }
+    }
+    if (isInterface(type)) {
+      const typeExtSet = typeAliasExtensionFunMap.get(interfaceName) ?? new Set()
+      typeExtSet.add(type)
+      typeAliasExtensionFunMap.set(interfaceName, typeExtSet)
+    }
     if (type.match(/^\s*\/\*[^\/]+\*\//)) {
       Array.from(type.matchAll(/\/\*[^\/]+\*\//g)).forEach(m => {
         result.push(m[0])
@@ -636,7 +652,7 @@ function getInterfaceProperties(i: InterfaceDeclaration, isClass: boolean = fals
     if (interfaceName == "Module") console.log(interfaceName, result, result
       .filter(s => s.includes('var '))
       .map(s => s.slice(s.indexOf(':'), s.indexOf('=')))
-      .map(s => removeComment(s))//.map(s => isInterfaceOrTypeAliasArray(s))
+      .map(s => removeComment(s))
       )
     result
       .filter(s => s.includes('var '))
@@ -648,7 +664,6 @@ function getInterfaceProperties(i: InterfaceDeclaration, isClass: boolean = fals
         s.startsWith('Array<') ? props.add(s) : props.add(isInterfaceOrTypeAliasArray(s))
         classRefPropertiesMap.set(interfaceName, props)
       })
-    // classRefPropertiesMap
   }
   if (toSnakeCaseInterface.includes(interfaceName)) {
     const snakeProps = result
@@ -693,17 +708,8 @@ function createInterface(i: InterfaceDeclaration) {
         parents.push(iName)
       } else if (isTypeAlias(iName)) {
         addParent(iName)
-        // typeAliasExtraExtendMap.get(name)?.forEach(tName => {
-        //   addParent(tName)
-        // })
       }
     })
-
-    // ?.forEach(iName => {
-    //   if (isInterface(iName)) {
-    //     parents.add(iName)
-    //   }
-    // })
   }
   addParent(interfaceName)
   nodeExtendsList.push(...Array.from(new Set(parents)).map(p => [p, interfaceName]));
@@ -752,8 +758,6 @@ function filterChildren(key: string) {
 
 filterChildren('Node')
 
-
-
 const NodeNodeSerializer = `
 package dev.yidafu.swc.types
 
@@ -767,8 +771,7 @@ object NodeSerializer : JsonContentPolymorphicSerializer<Node>(Node::class) {
             "type" in element.jsonObject -> {
                 val nodeType = element.jsonObject["type"]?.jsonPrimitive?.contentOrNull
                 when (nodeType) {
-                  ${classNameList.map(c => `
-                    "${c}" -> ${c}.serializer()`).join('\n')}
+                  ${classNameList.map(c => `\n"${c}" -> ${c}.serializer()`).join('\n')}
                     else -> throw SerializationException("$nodeType Not Ast Node Type")
                 }
             }
@@ -816,9 +819,6 @@ function createExtensionFunList(key: string) {
 
 typeAliasExtensionFunMap.forEach((_, key) => {
   createExtensionFunList(key)
-  // kotlinDsl.push(
-  //   ...
-  // )
 })
 classRefPropertiesMap.forEach((refProps, key) => {
   refProps.forEach(prop => {
@@ -839,7 +839,7 @@ classRefPropertiesMap.forEach((refProps, key) => {
   // }
 })
 
-// console.log(extensionFunMap.get("Module"))
+// console.log(extensionFunMap.get("ImportDeclaration"))
 extensionFunMap.forEach((iNameList, key) => {
   iNameList.forEach(iName => kotlinDsl.push([
     `fun ${key}.${toFunName(iName)}(block: ${iName}.() -> Unit): ${iName} {`,
