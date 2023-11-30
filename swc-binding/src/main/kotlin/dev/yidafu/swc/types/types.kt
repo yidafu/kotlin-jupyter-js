@@ -8,7 +8,7 @@ import kotlinx.serialization.*
 
 
 
-//@SwcDslMarker
+@SwcDslMarker
 
 annotation class SwcDslMarker
 
@@ -1289,8 +1289,9 @@ open class ClassMethod : ClassMethodBase, ClassMember {
    */
   override var type: String? = "ClassMethod"
   var key: PropertyName? =  null
-  override var function: Fn?  = null
-/**
+  var function: Fn? = null
+
+  /**
   * [MethodKind]
  */
   override var kind: 	String?  = null
@@ -1313,8 +1314,9 @@ open class PrivateMethod : ClassMethodBase, ClassMember {
    */
   override var type: String? = "PrivateMethod"
   var key: PrivateName? =  null
-  override var function: Fn?  = null
-/**
+  override var function: Fn? = null
+
+  /**
   * [MethodKind]
  */
   override var kind: 	String?  = null
@@ -1357,7 +1359,7 @@ open class FunctionDeclaration : Fn, Declaration {
 /**
    *literal is: "FunctionDeclaration"
    */
-  var type: String? = "FunctionDeclaration"
+override var type: String? = "FunctionDeclaration"
   var identifier: Identifier? =  null
   var declare: Boolean? =  null
   override var params: Array<Param>?  = null
