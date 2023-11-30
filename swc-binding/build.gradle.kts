@@ -54,7 +54,7 @@ publishing {
 
                 name.set("SWC JVM Binding")
                 description.set("swc jvm binding by kotlin")
-                url.set("https://github.com/yidafu/kotlin-notebook-js")
+                url.set("https://github.com/yidafu/kotlin-jupyter-js/tree/main/swc-binding#readme")
 //                properties.set(mapOf(
 //                    "myProp" to "value",
 //                    "prop.with.dots" to "anotherValue"
@@ -85,7 +85,7 @@ publishing {
                 scm {
                     connection.set("scm:git:git://github.com:yidafu/kotlin-notebook-js.git")
                     developerConnection.set("scm:git:ssh://github.com:yidafu/kotlin-notebook-js.git")
-                    url.set("https://github.com:yidafu/kotlin-notebook-js/")
+                    url.set("https://github.com/yidafu/kotlin-jupyter-js/tree/main/swc-binding#readme")
                 }
             }
         }
