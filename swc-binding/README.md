@@ -17,28 +17,6 @@ implementation("dev.yidafu.swc:swc-binding:$latest-version")
 
 # Usage
 
-
-## transform code
-```kt
-val swc = SwcNative()
-val res = swc.transformSync(
-    """
-     import x from './test.js';
-     class Foo {
-       bar: string
-     }
-    """.trimIndent(),
-    false,
-    Options().apply {
-        jsc  = jscConfig {
-            parser = ParserConfig().apply {
-                syntax = "ecmascript"
-            }
-        }
-    }
-)
-```
-
 ## transform code
 ```kt
 val swc = SwcNative()
