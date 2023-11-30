@@ -1,6 +1,7 @@
 package dev.yidafu.swc
 
 import dev.yidafu.swc.types.ParseOptions
+import dev.yidafu.swc.types.ParserConfig
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -34,13 +35,13 @@ class SwcNative {
 
     external fun transformFileSync(filepath: String, isModule: Boolean, options: String): String
 
-    fun transformSync(code: String, isModule: Boolean, options: ParseOptions): String {
+    fun transformSync(code: String, isModule: Boolean, options: ParserConfig): String {
         val optionStr = json.encodeToString(options)
         println(optionStr)
         return transformSync(code, isModule, optionStr)
     }
 
-    fun transformFileSync(filepath: String, isModule: Boolean, options: ParseOptions): String {
+    fun transformFileSync(filepath: String, isModule: Boolean, options: ParserConfig): String {
         return transformFileSync(filepath, isModule, json.encodeToString(options))
     }
 }

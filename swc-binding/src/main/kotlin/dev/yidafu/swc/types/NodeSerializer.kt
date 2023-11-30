@@ -3,7 +3,7 @@ package dev.yidafu.swc.types
 
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.SerializationException
-import kotlinx.serialization.json.*
+import kotlinx.serialization.json.* // ktlint-disable no-wildcard-imports
 
 object NodeSerializer : JsonContentPolymorphicSerializer<Node>(Node::class) {
     override fun selectDeserializer(element: JsonElement): DeserializationStrategy<Node> {
@@ -11,7 +11,6 @@ object NodeSerializer : JsonContentPolymorphicSerializer<Node>(Node::class) {
             "type" in element.jsonObject -> {
                 val nodeType = element.jsonObject["type"]?.jsonPrimitive?.contentOrNull
                 when (nodeType) {
-                  
                     "ClassProperty" -> ClassProperty.serializer()
 
                     "PrivateProperty" -> PrivateProperty.serializer()
