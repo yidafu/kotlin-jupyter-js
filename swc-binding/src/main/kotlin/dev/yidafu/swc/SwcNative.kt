@@ -1,7 +1,6 @@
 package dev.yidafu.swc
 
 import dev.yidafu.swc.types.Options
-import dev.yidafu.swc.types.ParseOptions
 import dev.yidafu.swc.types.ParserConfig
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
@@ -9,8 +8,13 @@ import kotlinx.serialization.json.Json
 
 class SwcNative {
     init {
-        // TODO: load from resource dir
-       System.loadLibrary("swc_binding")
+        try {
+            // 加载 DLL 文件
+            System.loadLibrary("swc_binding")
+        } catch (e: UnsatisfiedLinkError) {
+            val dllPath = DllLoader.copyDll2Temp("swc_binding")
+            System.load(dllPath)
+        }
     }
 
     @OptIn(ExperimentalSerializationApi::class)
