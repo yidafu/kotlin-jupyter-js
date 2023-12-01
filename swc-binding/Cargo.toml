@@ -1,5 +1,5 @@
 [package]
-name = "swc-binding"
+name = "swc-jni"
 version = "0.1.0"
 edition = "2021"
 
