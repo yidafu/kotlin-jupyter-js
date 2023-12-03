@@ -1,5 +1,5 @@
 [package]
-name = "swc-jni"
+name = "swc_jni"
 version = "0.1.0"
 edition = "2021"
 
@@ -21,10 +21,12 @@ serde_json = { version = "1", features = ["unbounded_depth"] }
 swc = "0.269.70"
 swc_common = "0.33.9"
 swc_ecma_ast = { version ="0.110.10", features = ["serde-impl"] }
-combine = "4.6.6"
 swc_ecma_transforms = "0.226.59"
 swc_ecma_transforms_base = "0.134.46"
 swc_ecma_visit = "0.96.10"
+tracing = "0.1.40"
+swc_ecma_codegen = "0.146.39"
+thiserror = "1.0.50"
 
 [lib]
 crate_type = ["cdylib"]
