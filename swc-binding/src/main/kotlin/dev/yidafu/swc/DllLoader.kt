@@ -8,8 +8,19 @@ object DllLoader {
 
     sealed class Platform {
         object Linux : Platform() {
+            val cpuArch by lazy {
+                System.getProperty("os.arch")
+            }
             override fun toString(): String {
                 return "Linux"
+            }
+
+            fun isArm(): Boolean {
+                return cpuArch.contains("arm")
+            }
+
+            fun isIntel(): Boolean {
+                return cpuArch.startsWith("x")
             }
         }
 
@@ -45,7 +56,7 @@ object DllLoader {
             }
         }
 
-        object FreeBSD :Platform() {
+        object FreeBSD : Platform() {
             override fun toString(): String {
                 return "FreeBSD"
             }
@@ -59,7 +70,7 @@ object DllLoader {
                     osName.startsWith("Linux") -> Linux
                     osName.startsWith("Mac") || osName.startsWith("Darwin") -> Mac
                     osName.startsWith("Windows") -> Windows
-                    osName.startsWith("Solaris") || osName.startsWith("SunOS")-> Solaris
+                    osName.startsWith("Solaris") || osName.startsWith("SunOS") -> Solaris
                     osName.startsWith("FreeBSD") -> FreeBSD
                     else -> { throw UnsatisfiedLinkError("Unsupported OS: $osName") }
                 }
@@ -69,7 +80,7 @@ object DllLoader {
 
     fun copyDll2Temp(libName: String): String {
         val jarPath = when (val p = Platform.current) {
-            is Platform.Linux -> "linux-x64-musl/lib$libName.so"
+            is Platform.Linux -> (if (p.isArm()) "linux-arm-gnueabihf" else "linux-x64-musl") + "/lib$libName.so"
             is Platform.Mac -> (if (p.isIntel()) "darwin-x64" else "darwin-arm64") + "/lib$libName.dylib"
             is Platform.Windows -> "win32-x64-msvc/$libName.dll"
 //            Platform.SOLARIS -> TODO()
