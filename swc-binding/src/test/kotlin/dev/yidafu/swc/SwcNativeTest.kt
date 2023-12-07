@@ -1,9 +1,7 @@
 package dev.yidafu.swc
 
-import dev.yidafu.swc.dsl.jscConfig
-import dev.yidafu.swc.types.Options
-import dev.yidafu.swc.types.ParseOptions
-import dev.yidafu.swc.types.ParserConfig
+import dev.yidafu.swc.dsl.*
+import dev.yidafu.swc.types.*
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -16,7 +14,7 @@ class SwcNativeTest {
             ParseOptions().apply { syntax = "typescript" },
             "temp.js"
         )
-        assertNotNull(ast) { "ast string can't be null "}
+        assertNotNull(ast) { "ast string can't be null " }
     }
 
     @Test
@@ -25,9 +23,8 @@ class SwcNativeTest {
             SwcNativeTest::class.java.classLoader.getResource("test.js").file,
             ParseOptions().apply { syntax = "typescript" }
         )
-        assertNotNull(ast) { "ast string can't be null "}
+        assertNotNull(ast) { "ast string can't be null " }
     }
-
 
     @Test
     fun `transform js code to ast str`() {
@@ -35,31 +32,31 @@ class SwcNativeTest {
             "function add(a, b) {return a + b;}; add(1,2)",
 
             true,
-            Options().apply {
-                jsc  = jscConfig {
-                    parser = ParserConfig().apply {
+            options {
+                jsc = jscConfig {
+                    parser = parseOptions {
                         syntax = "typescript"
                     }
                 }
             }
         )
-        assertNotNull(ast) { "transform result can't be null "}
+        assertNotNull(ast) { "transform result can't be null " }
     }
 
     @Test
     fun `transform js file to ast str`() {
         val ast = SwcNative().transformFileSync(
             SwcNativeTest::class.java.classLoader.getResource("test.js").file,
-    false,
-            Options().apply {
-                jsc  = jscConfig {
-                    parser = ParserConfig().apply {
+            false,
+            options {
+                jsc = jscConfig {
+                    parser = parseOptions {
                         syntax = "ecmascript"
                     }
                 }
             }
         )
-        assertNotNull(ast) { "transform result can't be null "}
+        assertNotNull(ast) { "transform result can't be null " }
     }
 
     @Test
@@ -67,21 +64,24 @@ class SwcNativeTest {
         val ast = SwcNative().transformFileSync(
             SwcNativeTest::class.java.classLoader.getResource("test.ts").file,
             false,
-            Options().apply {
-                jsc  = jscConfig {
-                    parser = ParserConfig().apply {
+            options {
+                jsc = jscConfig {
+                    parser = parseOptions {
                         syntax = "typescript"
                     }
                 }
             }
         )
 
-        assertEquals(ast.trim(), """
+        assertEquals(
+            ast.code.trim(),
+            """
             function add(a, b) {
                 return a + b;
             }
             add(1, 2);
-        """.trimIndent())
+            """.trimIndent()
+        )
     }
 
 //    @Test
@@ -89,15 +89,174 @@ class SwcNativeTest {
 //        val ast = SwcNative().transformFileSync(
 //            SwcNativeTest::class.java.classLoader.getResource("ast.json").readText(),
 //            true,
-////            Options().apply {
-////                jsc  = jscConfig {
-////                    parser = ParserConfig().apply {
-////                        syntax = "ecmascript"
-////                    }
-////                }
-////            }
+// //            Options().apply {
+// //                jsc  = jscConfig {
+// //                    parser = ParserConfig().apply {
+// //                        syntax = "ecmascript"
+// //                    }
+// //                }
+// //            }
 //            Options()
 //        )
 //        assertNotNull(ast) { "transform result can't be null "}
 //    }
+
+    @Test
+    fun `native print ast dsl`() {
+        val res = SwcNative().printSync(
+            """
+            {
+              "type": "Module",
+              "span": {
+                "start": 104,
+                "end": 171,
+                "ctxt": 0
+              },
+              "body": [{
+                "type": "ImportDeclaration",
+                "span": {
+                  "start": 104,
+                  "end": 130,
+                  "ctxt": 0
+                },
+                "specifiers": [{
+                  "type": "ImportDefaultSpecifier",
+                  "span": {
+                    "start": 111,
+                    "end": 112,
+                    "ctxt": 0
+                  },
+                  "local": {
+                    "type": "Identifier",
+                    "span": {
+                      "start": 111,
+                      "end": 112,
+                      "ctxt": 2
+                    },
+                    "value": "x",
+                    "optional": false
+                  }
+                }],
+                "source": {
+                  "type": "StringLiteral",
+                  "span": {
+                    "start": 118,
+                    "end": 129,
+                    "ctxt": 0
+                  },
+                  "value": "./test.js",
+                  "raw": "'./test.js'"
+                },
+                "typeOnly": false,
+                "with": null
+              }, {
+                "type": "ClassDeclaration",
+                "identifier": {
+                  "type": "Identifier",
+                  "span": {
+                    "start": 137,
+                    "end": 140,
+                    "ctxt": 2
+                  },
+                  "value": "Foo",
+                  "optional": false
+                },
+                "declare": false,
+                "span": {
+                  "start": 131,
+                  "end": 144,
+                  "ctxt": 0
+                },
+                "decorators": [],
+                "body": [],
+                "superClass": null,
+                "isAbstract": false,
+                "typeParams": null,
+                "superTypeParams": null,
+                "implements": []
+              }, {
+                "type": "ClassDeclaration",
+                "identifier": {
+                  "type": "Identifier",
+                  "span": {
+                    "start": 152,
+                    "end": 155,
+                    "ctxt": 2
+                  },
+                  "value": "Bar",
+                  "optional": false
+                },
+                "declare": false,
+                "span": {
+                  "start": 146,
+                  "end": 171,
+                  "ctxt": 0
+                },
+                "decorators": [],
+                "body": [],
+                "superClass": {
+                  "type": "Identifier",
+                  "span": {
+                    "start": 164,
+                    "end": 167,
+                    "ctxt": 2
+                  },
+                  "value": "Foo",
+                  "optional": false
+                },
+                "isAbstract": false,
+                "typeParams": null,
+                "superTypeParams": null,
+                "implements": []
+              }],
+              "interpreter": null
+            }
+            """.trimIndent(),
+            "{}"
+        )
+
+        println(res)
+    }
+
+    @Test
+    fun `wrapper printSync method`() {
+        val output = SwcNative().printSync(
+            module {
+                span = span {
+                    start = 0
+                    end = 17
+                }
+                body = arrayOf(
+                    variableDeclaration {
+                        span = span {
+                            start = 5
+                            end = 17
+                        }
+                        kind = VariableDeclarationKind.CONST
+                        declarations = arrayOf(
+                            variableDeclarator {
+                                id = identifier {
+                                    value = "a"
+                                    span = span {
+                                        start = 5
+                                        end = 6
+                                    }
+                                }
+                                init = stringLiteral {
+                                    value = "String"
+                                    span = span {
+                                        start = 9
+                                        end = 17
+                                    }
+                                }
+                            }
+                        )
+                    }
+                )
+            },
+            options { }
+        )
+
+        println(output.code)
+    }
 }
