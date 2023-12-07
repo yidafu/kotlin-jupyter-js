@@ -1,157 +1,13 @@
 package dev.yidafu.swc.types
 
-import kotlinx.serialization.* // ktlint-disable no-wildcard-imports
+import kotlinx.serialization.*
+import kotlinx.serialization.json.JsonClassDiscriminator
 
 @SwcDslMarker
+
 annotation class SwcDslMarker
 
 typealias Record<T, S> = Map<T, String>
-
-/**
- * "es3" | "es5" | "es2015" | "es2016" | "es2017" | "es2018" | "es2019" | "es2020" | "es2021" | "es2022" | "esnext"
- */
-object JscTarget {
-    const val ES3 = "es3"
-    const val ES5 = "es5"
-    const val ES2015 = "es2015"
-    const val ES2016 = "es2016"
-    const val ES2017 = "es2017"
-    const val ES2018 = "es2018"
-    const val ES2019 = "es2019"
-    const val ES2020 = "es2020"
-    const val ES2021 = "es2021"
-    const val ES2022 = "es2022"
-    const val ESNEXT = "esnext"
-}
-
-/**
- * "method" | "getter" | "setter"
- */
-object MethodKind {
-    const val METHOD = "method"
-    const val GETTER = "getter"
-    const val SETTER = "setter"
-}
-
-/**
- * "var" | "let" | "const"
- */
-object VariableDeclarationKind {
-    const val VAR = "var"
-    const val LET = "let"
-    const val CONST = "const"
-}
-
-/**
- * "==" | "!=" | "===" | "!==" | "<" | "<=" | ">" | ">=" | "<<" | ">>" | ">>>" | "+" | "-" | "*" | "/" | "%" | "|" | "^" | "&" | "||" | "&&" | "in" | "instanceof" | "**" | "??"
- */
-object BinaryOperator {
-    const val Equality = "=="
-    const val Inequality = "!="
-    const val StrictEquality = "==="
-    const val StrictInequality = "!=="
-    const val LessThan = "<"
-    const val LessThanOrEqual = "<="
-    const val GreaterThan = ">"
-    const val GreaterThanOrEqual = ">="
-    const val LeftShift = "<<"
-    const val RightShift = ">>"
-    const val UnsignedRightShift = ">>>"
-    const val UnaryPlus = "+"
-    const val UnaryNegation = "-"
-    const val Multiplication = "*"
-    const val Division = "/"
-    const val Remainder = "%"
-    const val BitwiseOR = "|"
-    const val BitwiseXOR = "^"
-    const val BitwiseAND = "&"
-    const val LogicalOR = "||"
-    const val LogicalAND = "&&"
-    const val IN = "in"
-    const val INSTANCEOF = "instanceof"
-    const val Exponentiation = "**"
-    const val NullishCoalescingOperator = "??"
-}
-
-/**
- * "=" | "+=" | "-=" | "*=" | "/=" | "%=" | "<<=" | ">>=" | ">>>=" | "|=" | "^=" | "&=" | "**=" | "&&=" | "||=" | "??="
- */
-object AssignmentOperator {
-    const val Assignment = "="
-    const val AdditionAssignment = "+="
-    const val SubtractionAssignment = "-="
-    const val MultiplicationAssignment = "*="
-    const val DivisionAssignment = "/="
-    const val RemainderAssignment = "%="
-    const val LeftShiftAssignment = "<<="
-    const val RightShiftAssignment = ">>="
-    const val UnsignedRightShiftAssignment = ">>>="
-    const val BitwiseORAssignment = "|="
-    const val BitwiseXORAssignment = "^="
-    const val BitwiseANDAssignment = "&="
-    const val ExponentiationAssignment = "**="
-    const val LogicalANDAssignment = "&&="
-    const val LogicalORAssignment = "||="
-    const val NullishCoalescingAssignment = "??="
-}
-
-/**
- * "++" | "--"
- */
-object UpdateOperator {
-    const val Increment = "++"
-    const val Decrement = "--"
-}
-
-/**
- * "-" | "+" | "!" | "~" | "typeof" | "void" | "delete"
- */
-object UnaryOperator {
-    const val UnaryNegation = "-"
-    const val UnaryPlus = "+"
-    const val LogicalNOT = "!"
-    const val BitwiseNOT = "~"
-    const val TYPEOF = "typeof"
-    const val VOID = "void"
-    const val DELETE = "delete"
-}
-
-/**
- * "any" | "unknown" | "number" | "object" | "boolean" | "bigint" | "string" | "symbol" | "void" | "undefined" | "null" | "never" | "intrinsic"
- */
-object TsKeywordTypeKind {
-    const val ANY = "any"
-    const val UNKNOWN = "unknown"
-    const val NUMBER = "number"
-    const val OBJECT = "object"
-    const val BOOLEAN = "boolean"
-    const val BIGINT = "bigint"
-    const val STRING = "string"
-    const val SYMBOL = "symbol"
-    const val VOID = "void"
-    const val UNDEFINED = "undefined"
-    const val NULL = "null"
-    const val NEVER = "never"
-    const val INTRINSIC = "intrinsic"
-}
-
-/**
- * "keyof" | "unique" | "readonly"
- */
-object TsTypeOperatorOp {
-    const val KEYOF = "keyof"
-    const val UNIQUE = "unique"
-    const val READONLY = "readonly"
-}
-
-/**
- * "public" | "protected" | "private"
- */
-object Accessibility {
-    const val PUBLIC = "public"
-    const val PROTECTED = "protected"
-    const val PRIVATE = "private"
-}
 
 typealias TerserEcmaVersion = Union.U2<Int, String>
 
@@ -159,644 +15,7 @@ typealias TruePlusMinus = Union.U2<Int, String>
 
 @SwcDslMarker
 @Serializable
-class ParseOptions : ParserConfig() {
-    var comments: Boolean? = null
-    var script: Boolean? = null
-    var target: /**
-     * [JscTarget]
-     */String? = null
-}
-
-interface ClassMember : Node
-
-/**
- * sub types: [Statement]
- */
-interface Declaration : Statement
-
-/**
- * sub types: [JSXExpression], [Pattern]
- */
-interface Expression : JSXExpression, Pattern
-
-interface JSXObject : Node
-
-interface JSXExpression : Node
-
-interface JSXElementName : Node
-
-interface JSXAttributeOrSpread : Node
-
-interface JSXAttributeName : Node
-
-interface JSXAttrValue : Node
-
-interface JSXElementChild : Node
-
-/**
- * sub types: [Expression], [JSXAttrValue]
- */
-interface Literal : Expression, JSXAttrValue
-
-/**
- * sub types: [ModuleItem]
- */
-interface ModuleDeclaration : ModuleItem
-
-interface DefaultDecl : Node
-
-interface ImportSpecifier : Node
-
-interface ModuleExportName : Node
-
-interface ExportSpecifier : Node
-
-interface Program : Node
-
-interface ModuleItem : Node
-
-interface Pattern : Node
-
-interface ObjectPatternProperty : Node
-
-interface Property : Node
-
-interface PropertyName : Node
-
-/**
- * sub types: [ModuleItem]
- */
-interface Statement : ModuleItem
-
-interface TsParameterPropertyParameter : Node
-
-/**
- * sub types: [TsTypeQueryExpr], [TsModuleReference]
- */
-interface TsEntityName : TsTypeQueryExpr, TsModuleReference
-
-interface TsTypeElement : Node
-
-interface TsType : Node
-
-/**
- * sub types: [TsType]
- */
-interface TsFnOrConstructorType : TsType
-
-interface TsFnParameter : Node
-
-interface TsThisTypeOrIdent : Node
-
-interface TsTypeQueryExpr : Node
-
-/**
- * sub types: [TsType]
- */
-interface TsUnionOrIntersectionType : TsType
-
-interface TsLiteral : Node
-
-interface TsEnumMemberId : Node
-
-interface TsNamespaceBody : Node
-
-interface TsModuleName : Node
-
-interface TsModuleReference : Node
-
-@SwcDslMarker
-@Serializable
-open class ParserConfig {
-/**
-     *literal is: "typescript", * Defaults to `false`.
-     */
-    var tsx: Boolean? = null
-    var decorators: Boolean? = null
-
-/**
-     * Defaults to `false`
-     */
-    var dynamicImport: Boolean? = null
-
-/**
-     *literal is: "ecmascript", * Defaults to false.
-     */
-    var jsx: Boolean? = null
-
-/**
-     * @deprecated Always true because it's in ecmascript spec.
-     */
-    var numericSeparator: Boolean? = null
-    var privateMethod: Boolean? = null
-    var functionBind: Boolean? = null
-    var decoratorsBeforeExport: Boolean? = null
-    var exportDefaultFrom: Boolean? = null
-    var exportNamespaceFrom: Boolean? = null
-    var nullishCoalescing: Boolean? = null
-    var optionalChaining: Boolean? = null
-    var importMeta: Boolean? = null
-    var topLevelAwait: Boolean? = null
-    var importAssertions: Boolean? = null
-    var type: String? = null
-    var syntax: String? = null
-}
-
-@SwcDslMarker
-@Serializable
-open class ModuleConfig {
-/**
-     *literal is: "es6", *literal is: "commonjs", *literal is: "umd"
-     */
-    var globals: Map<String, String>? = null
-
-/**
-     *literal is: "amd"
-     */
-    var moduleId: String? = null
-
-/**
-     *literal is: "nodenext", *literal is: "systemjs"
-     */
-    var allowTopLevelThis: Boolean? = null
-    var type: String? = null
-    var syntax: String? = null
-}
-
-@SwcDslMarker
-@Serializable
-open class Plugin
-
-@SwcDslMarker
-@Serializable
-open class JsMinifyOptions {
-    var compress: Union.U2<TerserCompressOptions, Boolean>? = null
-    var format: JsFormatOptions? = null
-    var mangle: Union.U2<TerserMangleOptions, Boolean>? = null
-    var ecma: TerserEcmaVersion? = null
-    var keep_classnames: Boolean? = null
-    var keep_fnames: Boolean? = null
-    var module: Boolean? = null
-    var safari10: Boolean? = null
-    var toplevel: Union.U2<String, Boolean>? = null
-    var sourceMap: Boolean? = null
-    var outputPath: String? = null
-    var inlineSourcesContent: Boolean? = null
-}
-
-/**
- * These properties are mostly not implemented yet,
- * but it exists to support passing terser config to swc minify
- * without modification.
- */
-@SwcDslMarker
-@Serializable
-open class JsFormatOptions {
-/**
-     * Currently noop.
-     * @default false
-     * @alias ascii_only
-     */
-    var asciiOnly: Boolean? = null
-
-/**
-     * Currently noop.
-     * @default false
-     */
-    var beautify: Boolean? = null
-    var braces: Boolean? = null
-
-/**
-     * - `false`: removes all comments
-     * - `'some'`: preserves some comments
-     * - `'all'`: preserves all comments
-     * @default false
-     ,  literal is: false,"some","all" */
-    var comments: String? = null
-
-/**
-     * Currently noop.
-     * @default 5
-     */
-    var ecma: TerserEcmaVersion? = null
-
-/**
-     * Currently noop.
-     * @alias indent_level
-     */
-    var indentLevel: Int? = null
-
-/**
-     * Currently noop.
-     * @alias indent_start
-     */
-    var indentStart: Int? = null
-
-/**
-     * Currently noop.
-     * @alias inline_script
-     */
-    var inlineScript: Int? = null
-
-/**
-     * Currently noop.
-     * @alias keep_numbers
-     */
-    var keepNumbers: Int? = null
-
-/**
-     * Currently noop.
-     * @alias keep_quoted_props
-     */
-    var keepQuotedProps: Boolean? = null
-
-/**
-     * Currently noop.
-     * @alias max_line_len
-     */
-    var maxLineLen: Union.U2<Int, /**
-         *literal is: false
-         */Int>? = null
-
-/**
-     * Currently noop.
-     */
-    var preamble: String? = null
-
-/**
-     * Currently noop.
-     * @alias quote_keys
-     */
-    var quoteKeys: Boolean? = null
-
-/**
-     * Currently noop.
-     * @alias quote_style
-     */
-    var quoteStyle: Boolean? = null
-
-/**
-     * Currently noop.
-     * @alias preserve_annotations
-     */
-    var preserveAnnotations: Boolean? = null
-    var safari10: Boolean? = null
-    var semicolons: Boolean? = null
-    var shebang: Boolean? = null
-    var webkit: Boolean? = null
-
-/**
-     * Currently noop.
-     * @alias wrap_iife
-     */
-    var wrapIife: Boolean? = null
-
-/**
-     * Currently noop.
-     * @alias wrap_func_args
-     */
-    var wrapFuncArgs: Boolean? = null
-    var ascii_only: Boolean? = null
-    var indent_level: Int? = null
-    var indent_start: Int? = null
-    var inline_script: Int? = null
-    var keep_numbers: Int? = null
-    var keep_quoted_props: Boolean? = null
-    var max_line_len: Union.U2<Int, /**
-         *literal is: false
-         */Int>? = null
-    var quote_keys: Boolean? = null
-    var quote_style: Boolean? = null
-    var preserve_annotations: Boolean? = null
-    var wrap_iife: Boolean? = null
-    var wrap_func_args: Boolean? = null
-}
-
-@SwcDslMarker
-@Serializable
-open class TerserCompressOptions {
-    var arguments: Boolean? = null
-    var arrows: Boolean? = null
-    var booleans: Boolean? = null
-    var booleans_as_integers: Boolean? = null
-    var collapse_vars: Boolean? = null
-    var comparisons: Boolean? = null
-    var computed_props: Boolean? = null
-    var conditionals: Boolean? = null
-    var dead_code: Boolean? = null
-    var defaults: Boolean? = null
-    var directives: Boolean? = null
-    var drop_console: Boolean? = null
-    var drop_debugger: Boolean? = null
-    var ecma: TerserEcmaVersion? = null
-    var evaluate: Boolean? = null
-    var expression: Boolean? = null
-    var global_defs: Map<String, String>? = null
-    var hoist_funs: Boolean? = null
-    var hoist_props: Boolean? = null
-    var hoist_vars: Boolean? = null
-    var ie8: Boolean? = null
-    var if_return: Boolean? = null
-
-/** literal is: 0,1,2,3 */
-    var jsInline: Int? = null
-    var join_vars: Boolean? = null
-    var keep_classnames: Boolean? = null
-    var keep_fargs: Boolean? = null
-    var keep_fnames: Boolean? = null
-    var keep_infinity: Boolean? = null
-    var loops: Boolean? = null
-    var negate_iife: Boolean? = null
-    var passes: Int? = null
-    var properties: Boolean? = null
-    var pure_getters: Union.U2<String, Boolean>? = null
-    var pure_funcs: Array<String>? = null
-    var reduce_funcs: Boolean? = null
-    var reduce_vars: Boolean? = null
-    var sequences: Boolean? = null
-    var side_effects: Boolean? = null
-    var switches: Boolean? = null
-    var top_retain: Union.U2<String, Array<String>>? = null
-    var toplevel: Union.U2<String, Boolean>? = null
-    var typeofs: Boolean? = null
-    var unsafe: Boolean? = null
-    var unsafe_passes: Boolean? = null
-    var unsafe_arrows: Boolean? = null
-    var unsafe_comps: Boolean? = null
-    var unsafe_function: Boolean? = null
-    var unsafe_math: Boolean? = null
-    var unsafe_symbols: Boolean? = null
-    var unsafe_methods: Boolean? = null
-    var unsafe_proto: Boolean? = null
-    var unsafe_regexp: Boolean? = null
-    var unsafe_undefined: Boolean? = null
-    var unused: Boolean? = null
-    var const_to_let: Boolean? = null
-    var module: Boolean? = null
-}
-
-@SwcDslMarker
-@Serializable
-open class TerserMangleOptions {
-    var props: TerserManglePropertiesOptions? = null
-    var toplevel: Union.U2<String, Boolean>? = null
-    var keep_classnames: Boolean? = null
-    var keep_fnames: Boolean? = null
-    var keep_private_props: Boolean? = null
-    var ie8: Boolean? = null
-    var safari10: Boolean? = null
-    var reserved: Array<String>? = null
-}
-
-@SwcDslMarker
-@Serializable
-open class TerserManglePropertiesOptions
-
-/**
- * Programmatic options.
- */
-@SwcDslMarker
-@Serializable
-open class Options : Config() {
-/**
-     * If true, a file is parsed as a script instead of module.
-     */
-    var script: Boolean? = null
-
-/**
-     * The working directory that all paths in the programmatic
-     * options will be resolved relative to.
-     *
-     * Defaults to `process.cwd()`.
-     */
-    var cwd: String? = null
-    var caller: CallerOptions? = null
-
-/** The filename associated with the code currently being compiled,
-     * if there is one. The filename is optional, but not all of Swc's
-     * functionality is available when the filename is unknown, because a
-     * subset of options rely on the filename for their functionality.
-     *
-     * The three primary cases users could run into are:
-     *
-     * - The filename is exposed to plugins. Some plugins may require the
-     * presence of the filename.
-     * - Options like "test", "exclude", and "ignore" require the filename
-     * for string/RegExp matching.
-     * - .swcrc files are loaded relative to the file being compiled.
-     * If this option is omitted, Swc will behave as if swcrc: false has been set.
-     */
-    var filename: String? = null
-
-/**
-     * The initial path that will be processed based on the "rootMode" to
-     * determine the conceptual root folder for the current Swc project.
-     * This is used in two primary cases:
-     *
-     * - The base directory when checking for the default "configFile" value
-     * - The default value for "swcrcRoots".
-     *
-     * Defaults to `opts.cwd`
-     */
-    var root: String? = null
-
-/**
-     * This option, combined with the "root" value, defines how Swc chooses
-     * its project root. The different modes define different ways that Swc
-     * can process the "root" value to get the final project root.
-     *
-     * "root" - Passes the "root" value through as unchanged.
-     * "upward" - Walks upward from the "root" directory, looking for a directory
-     * containing a swc.config.js file, and throws an error if a swc.config.js
-     * is not found.
-     * "upward-optional" - Walk upward from the "root" directory, looking for
-     * a directory containing a swc.config.js file, and falls back to "root"
-     *  if a swc.config.js is not found.
-     *
-     *
-     * "root" is the default mode because it avoids the risk that Swc
-     * will accidentally load a swc.config.js that is entirely outside
-     * of the current project folder. If you use "upward-optional",
-     * be aware that it will walk up the directory structure all the
-     * way to the filesystem root, and it is always possible that someone
-     * will have a forgotten swc.config.js in their home directory,
-     * which could cause unexpected errors in your builds.
-     *
-     *
-     * Users with monorepo project structures that run builds/tests on a
-     * per-package basis may well want to use "upward" since monorepos
-     * often have a swc.config.js in the project root. Running Swc
-     * in a monorepo subdirectory without "upward", will cause Swc
-     * to skip loading any swc.config.js files in the project root,
-     * which can lead to unexpected errors and compilation failure.
-     ,  literal is: "root","upward","upward-optional" */
-    var rootMode: String? = null
-
-/**
-     * The current active environment used during configuration loading.
-     * This value is used as the key when resolving "env" configs,
-     * and is also available inside configuration functions, plugins,
-     * and presets, via the api.env() function.
-     *
-     * Defaults to `process.env.SWC_ENV || process.env.NODE_ENV || "development"`
-     */
-    var envName: String? = null
-
-/**
-     * Defaults to searching for a default `.swcrc` file, but can
-     * be passed the path of any JS or JSON5 config file.
-     *
-     *
-     * NOTE: This option does not affect loading of .swcrc files,
-     * so while it may be tempting to do configFile: "./foo/.swcrc",
-     * it is not recommended. If the given .swcrc is loaded via the
-     * standard file-relative logic, you'll end up loading the same
-     * config file twice, merging it with itself. If you are linking
-     * a specific config file, it is recommended to stick with a
-     * naming scheme that is independent of the "swcrc" name.
-     *
-     * Defaults to `path.resolve(opts.root, ".swcrc")`
-     */
-    var configFile: Union.U2<String, Boolean>? = null
-
-/**
-     * true will enable searching for configuration files relative to the "filename" provided to Swc.
-     *
-     * A swcrc value passed in the programmatic options will override one set within a configuration file.
-     *
-     * Note: .swcrc files are only loaded if the current "filename" is inside of
-     *  a package that matches one of the "swcrcRoots" packages.
-     *
-     *
-     * Defaults to true as long as the filename option has been specified
-     */
-    var swcrc: Boolean? = null
-
-/**
-     * By default, Babel will only search for .babelrc files within the "root" package
-     *  because otherwise Babel cannot know if a given .babelrc is meant to be loaded,
-     *  or if it's "plugins" and "presets" have even been installed, since the file
-     *  being compiled could be inside node_modules, or have been symlinked into the project.
-     *
-     *
-     * This option allows users to provide a list of other packages that should be
-     * considered "root" packages when considering whether to load .babelrc files.
-     *
-     *
-     * For example, a monorepo setup that wishes to allow individual packages
-     * to have their own configs might want to do
-     *
-     *
-     *
-     * Defaults to `opts.root`
-     */
-    var swcrcRoots: Union.U3<Boolean, MatchPattern, Array<MatchPattern>>? = null
-
-/**
-     * `true` will attempt to load an input sourcemap from the file itself, if it
-     * contains a //# sourceMappingURL=... comment. If no map is found, or the
-     * map fails to load and parse, it will be silently discarded.
-     *
-     *  If an object is provided, it will be treated as the source map object itself.
-     *
-     * Defaults to `true`.
-     */
-    var inputSourceMap: Union.U2<Boolean, String>? = null
-
-/**
-     * The name to use for the file inside the source map object.
-     *
-     * Defaults to `path.basename(opts.filenameRelative)` when available, or `"unknown"`.
-     */
-    var sourceFileName: String? = null
-
-/**
-     * The sourceRoot fields to set in the generated source map, if one is desired.
-     */
-    var sourceRoot: String? = null
-    var plugin: Plugin? = null
-    var isModule: Union.U2<Boolean, /**
-         *literal is: "unknown"
-         */String>? = null
-
-/**
-     * Destination path. Note that this value is used only to fix source path
-     * of source map files and swc does not write output to this path.
-     */
-    var outputPath: String? = null
-}
-
-@SwcDslMarker
-@Serializable
-open class CallerOptions {
-    var name: String? = null
-}
-
-/**
- * .swcrc
- */
-@SwcDslMarker
-@Serializable
-open class Config {
-/**
-     * Note: The type is string because it follows rust's regex syntax.
-     */
-    var test: Union.U2<String, Array<String>>? = null
-    var exclude: Union.U2<String, Array<String>>? = null
-    var env: EnvConfig? = null
-    var jsc: JscConfig? = null
-    var module: ModuleConfig? = null
-    var minify: Boolean? = null
-
-/**
-     * - true to generate a sourcemap for the code and include it in the result object.
-     * - "inline" to generate a sourcemap and append it as a data URL to the end of the code, but not include it in the result object.
-     *
-     * `swc-cli` overloads some of these to also affect how maps are written to disk:
-     *
-     * - true will write the map to a .map file on disk
-     * - "inline" will write the file directly, so it will have a data: containing the map
-     * - Note: These options are bit weird, so it may make the most sense to just use true
-     *  and handle the rest in your own code, depending on your use case.
-     */
-    var sourceMaps: Union.U2<Boolean, /**
-         *literal is: "inline"
-         */String>? = null
-    var inlineSourcesContent: Boolean? = null
-}
-
-/**
- * Configuration ported from babel-preset-env
- */
-@SwcDslMarker
-@Serializable
-open class EnvConfig {
-/** literal is: "usage","entry" */
-    var mode: String? = null
-    var debug: Boolean? = null
-    var dynamicImport: Boolean? = null
-    var loose: Boolean? = null
-    var skip: Array<String>? = null
-    var include: Array<String>? = null
-    var exclude: Array<String>? = null
-
-/**
-     * The version of the used core js.
-     *
-     */
-    var coreJs: String? = null
-    var targets: Union.U2<String, Map<String, String>>? = null
-    var path: String? = null
-    var shippedProposals: Boolean? = null
-
-/**
-     * Enable all transforms
-     */
-    var forceAllTransforms: Boolean? = null
-}
-
-@SwcDslMarker
-@Serializable
+@SerialName("ExperimentalLiteral")
 class ExperimentalLiteral {
     var optimizeHygiene: Boolean? = null
     var keepImportAttributes: Boolean? = null
@@ -808,33 +27,87 @@ class ExperimentalLiteral {
 
 @SwcDslMarker
 @Serializable
+@SerialName("JsonifyLiteral")
+class JsonifyLiteral {
+    var minCost: Int? = null
+}
+
+@SwcDslMarker
+@Serializable
+open class ParseOptions : ParserConfig(), BaseParseOptions {
+//    override var comments: Boolean? = null
+//    override var script: Boolean? = null
+
+    /**
+     * [JscTarget]
+     */
+//    override var target: String? = null
+}
+
+/**
+ * subtypes: [BaseParseOptions]
+ */
+@Serializable
+open class ParserConfig : BaseParseOptions {
+    override var comments: Boolean? = null
+    override var script: Boolean? = null
+
+    /**
+     * [JscTarget]
+     */
+    override var target: String? = null
+}
+
+/**
+ * Programmatic options.
+ */
+@Serializable
+open class Options : Config() {
+    var script: Boolean? = null
+    var cwd: String? = null
+    var caller: CallerOptions? = null
+    var filename: String? = null
+    var root: String? = null
+    var rootMode: String? = null
+    var envName: String? = null
+    var configFile: Union.U2<String, Boolean>? = null
+    var swcrc: Boolean? = null
+    var swcrcRoots: Union.U3<Boolean, MatchPattern, Array<MatchPattern>>? = null
+    var inputSourceMap: Union.U2<Boolean, String>? = null
+    var sourceFileName: String? = null
+    var sourceRoot: String? = null
+    var plugin: Plugin? = null
+    var isModule: Union.U2<Boolean, /**
+         *literal is: "unknown"
+         */String>? = null
+    var outputPath: String? = null
+}
+
+/**
+ * .swcrc
+ */
+@Serializable
+open class Config {
+    var test: Union.U2<String, Array<String>>? = null
+    var exclude: Union.U2<String, Array<String>>? = null
+    var env: EnvConfig? = null
+    var jsc: JscConfig? = null
+    var module: ModuleConfig? = null
+    var minify: Boolean? = null
+    var sourceMaps: Union.U2<Boolean, /**
+         *literal is: "inline"
+         */String>? = null
+    var inlineSourcesContent: Boolean? = null
+}
+
+@Serializable
 open class JscConfig {
     var loose: Boolean? = null
-
-/**
-     * Defaults to EsParserConfig
-     */
-    var parser: ParserConfig? = null
+    var parser: TsParserConfig? = null
     var transform: TransformConfig? = null
-
-/**
-     * Use `@swc/helpers` instead of inline helpers.
-     */
     var externalHelpers: Boolean? = null
-
-/**
-     * Defaults to `es3` (which enabled **all** pass)., * [JscTarget]
-     */
     var target: String? = null
-
-/**
-     * Keep class names.
-     */
     var keepClassNames: Boolean? = null
-
-/**
-     * This is experimental, and can be removed without a major version bump.
-     */
     var experimental: ExperimentalLiteral? = null
     var baseUrl: String? = null
     var paths: Map<String, Array<String>>? = null
@@ -842,52 +115,886 @@ open class JscConfig {
     var preserveAllComments: Boolean? = null
 }
 
-/**
- * Options for transform.
- */
-@SwcDslMarker
 @Serializable
-open class TransformConfig {
-/**
-     * Effective only if `syntax` supports ƒ.
-     */
-    var react: ReactConfig? = null
-    var constModules: ConstModulesConfig? = null
+open class TsParserConfig : ParserConfig() {
+    // conflict with @SerialName
+    var syntax: String? = "typescript"
+    var tsx: Boolean? = null
+    var decorators: Boolean? = null
+    var dynamicImport: Boolean? = null
+}
+
+open class EsParserConfig : ParserConfig() {
+    // conflict with @SerialName
+    var syntax: String? = "ecmascript"
+    var jsx: Boolean? = null
+    var numericSeparator: Boolean? = null
+    var classPrivateProperty: Boolean? = null
+    var privateMethod: Boolean? = null
+    var classProperty: Boolean? = null
+    var functionBind: Boolean? = null
+    var decorators: Boolean? = null
+    var decoratorsBeforeExport: Boolean? = null
+    var exportDefaultFrom: Boolean? = null
+    var exportNamespaceFrom: Boolean? = null
+    var dynamicImport: Boolean? = null
+    var nullishCoalescing: Boolean? = null
+    var optionalChaining: Boolean? = null
+    var importMeta: Boolean? = null
+    var topLevelAwait: Boolean? = null
+    var importAssertions: Boolean? = null
+}
+
+open class BaseModuleConfig {
+    var strict: Boolean? = null
+    var strictMode: Boolean? = null
+    var lazy: Union.U2<Boolean, Array<String>>? = null
+    var noInterop: Boolean? = null
+    var importInterop: String? = null
+    var exportInteropAnnotation: Boolean? = null
+    var ignoreDynamic: Boolean? = null
+    var allowTopLevelThis: Boolean? = null
+    var preserveImportMeta: Boolean? = null
+}
+
+open class Es6Config : BaseModuleConfig(), ModuleConfig {
+    // conflict with @SerialName
+    //   var type : String? = null
+}
+
+open class NodeNextConfig : BaseModuleConfig(), ModuleConfig {
+    // conflict with @SerialName
+    //   var type : String? = null
+}
+
+open class CommonJsConfig : BaseModuleConfig(), ModuleConfig {
+    // conflict with @SerialName
+    //   var type : String? = null
+}
+
+open class UmdConfig : BaseModuleConfig(), ModuleConfig {
+    // conflict with @SerialName
+    //   var type : String? = null
+    var globals: Map<String, String>? = null
+}
+
+open class AmdConfig : BaseModuleConfig(), ModuleConfig {
+    // conflict with @SerialName
+    //   var type : String? = null
+    var moduleId: String? = null
+}
 
 /**
-     * Defaults to null, which skips optimizer pass.
-     */
-    var optimizer: OptimizerConfig? = null
+ * "es3" | "es5" | "es2015" | "es2016" | "es2017" | "es2018" | "es2019" | "es2020" | "es2021" | "es2022" | "esnext"
+ */
+object JscTarget {
+    var ES3 = "es3"
+    var ES5 = "es5"
+    var ES2015 = "es2015"
+    var ES2016 = "es2016"
+    var ES2017 = "es2017"
+    var ES2018 = "es2018"
+    var ES2019 = "es2019"
+    var ES2020 = "es2020"
+    var ES2021 = "es2021"
+    var ES2022 = "es2022"
+    var ESNEXT = "esnext"
+}
 
 /**
-     * https://swc.rs/docs/configuring-swc.html#jsctransformlegacydecorator
-     */
-    var legacyDecorator: Boolean? = null
+ * "method" | "getter" | "setter"
+ */
+object MethodKind {
+    var METHOD = "method"
+    var GETTER = "getter"
+    var SETTER = "setter"
+}
 
 /**
-     * https://swc.rs/docs/configuring-swc.html#jsctransformdecoratormetadata
-     */
-    var decoratorMetadata: Boolean? = null
-    var treatConstEnumAsEnum: Boolean? = null
-    var useDefineForClassFields: Boolean? = null
+ * "var" | "let" | "const"
+ */
+object VariableDeclarationKind {
+    var VAR = "var"
+    var LET = "let"
+    var CONST = "const"
+}
+
+/**
+ * "==" | "!=" | "===" | "!==" | "<" | "<=" | ">" | ">=" | "<<" | ">>" | ">>>" | "+" | "-" | "*" | "/" | "%" | "|" | "^" | "&" | "||" | "&&" | "in" | "instanceof" | "**" | "??"
+ */
+object BinaryOperator {
+    var Equality = "=="
+    var Inequality = "!="
+    var StrictEquality = "==="
+    var StrictInequality = "!=="
+    var LessThan = "<"
+    var LessThanOrEqual = "<="
+    var GreaterThan = ">"
+    var GreaterThanOrEqual = ">="
+    var LeftShift = "<<"
+    var RightShift = ">>"
+    var UnsignedRightShift = ">>>"
+    var UnaryPlus = "+"
+    var UnaryNegation = "-"
+    var Multiplication = "*"
+    var Division = "/"
+    var Remainder = "%"
+    var BitwiseOR = "|"
+    var BitwiseXOR = "^"
+    var BitwiseAND = "&"
+    var LogicalOR = "||"
+    var LogicalAND = "&&"
+    var IN = "in"
+    var INSTANCEOF = "instanceof"
+    var Exponentiation = "**"
+    var NullishCoalescingOperator = "??"
+}
+
+/**
+ * "=" | "+=" | "-=" | "*=" | "/=" | "%=" | "<<=" | ">>=" | ">>>=" | "|=" | "^=" | "&=" | "**=" | "&&=" | "||=" | "??="
+ */
+object AssignmentOperator {
+    var Assignment = "="
+    var AdditionAssignment = "+="
+    var SubtractionAssignment = "-="
+    var MultiplicationAssignment = "*="
+    var DivisionAssignment = "/="
+    var RemainderAssignment = "%="
+    var LeftShiftAssignment = "<<="
+    var RightShiftAssignment = ">>="
+    var UnsignedRightShiftAssignment = ">>>="
+    var BitwiseORAssignment = "|="
+    var BitwiseXORAssignment = "^="
+    var BitwiseANDAssignment = "&="
+    var ExponentiationAssignment = "**="
+    var LogicalANDAssignment = "&&="
+    var LogicalORAssignment = "||="
+    var NullishCoalescingAssignment = "??="
+}
+
+/**
+ * "++" | "--"
+ */
+object UpdateOperator {
+    var Increment = "++"
+    var Decrement = "--"
+}
+
+/**
+ * "-" | "+" | "!" | "~" | "typeof" | "void" | "delete"
+ */
+object UnaryOperator {
+    var UnaryNegation = "-"
+    var UnaryPlus = "+"
+    var LogicalNOT = "!"
+    var BitwiseNOT = "~"
+    var TYPEOF = "typeof"
+    var VOID = "void"
+    var DELETE = "delete"
+}
+
+/**
+ * "any" | "unknown" | "number" | "object" | "boolean" | "bigint" | "string" | "symbol" | "void" | "undefined" | "null" | "never" | "intrinsic"
+ */
+object TsKeywordTypeKind {
+    var ANY = "any"
+    var UNKNOWN = "unknown"
+    var NUMBER = "number"
+    var OBJECT = "object"
+    var BOOLEAN = "boolean"
+    var BIGINT = "bigint"
+    var STRING = "string"
+    var SYMBOL = "symbol"
+    var VOID = "void"
+    var UNDEFINED = "undefined"
+    var NULL = "null"
+    var NEVER = "never"
+    var INTRINSIC = "intrinsic"
+}
+
+/**
+ * "keyof" | "unique" | "readonly"
+ */
+object TsTypeOperatorOp {
+    var KEYOF = "keyof"
+    var UNIQUE = "unique"
+    var READONLY = "readonly"
+}
+
+/**
+ * "public" | "protected" | "private"
+ */
+object Accessibility {
+    var PUBLIC = "public"
+    var PROTECTED = "protected"
+    var PRIVATE = "private"
 }
 
 @SwcDslMarker
 @Serializable
-open class ReactConfig {
+sealed interface BaseParseOptions {
+    var comments: Boolean?
+    var script: Boolean?
+    var target: /**
+     * [JscTarget]
+     */String?
+}
+
+@SwcDslMarker
+@Serializable
+sealed interface ModuleConfig
+
+@SwcDslMarker
+@Serializable
+sealed interface ClassMember
+
+/**
+ * subtypes: [Statement]
+ */
+interface Declaration : Statement
+
+/**
+ * subtypes: [JSXExpression], [Pattern]
+ */
+interface Expression : JSXExpression, Pattern
+
+@SwcDslMarker
+@Serializable
+sealed interface JSXObject
+
+@SwcDslMarker
+@Serializable
+sealed interface JSXExpression
+
+@SwcDslMarker
+@Serializable
+sealed interface JSXElementName
+
+@SwcDslMarker
+@Serializable
+sealed interface JSXAttributeOrSpread
+
+@SwcDslMarker
+@Serializable
+sealed interface JSXAttributeName
+
+@SwcDslMarker
+@Serializable
+sealed interface JSXAttrValue
+
+@SwcDslMarker
+@Serializable
+sealed interface JSXElementChild
+
+/**
+ * subtypes: [Expression], [JSXAttrValue]
+ */
+interface Literal : Expression, JSXAttrValue
+
+/**
+ * subtypes: [ModuleItem]
+ */
+interface ModuleDeclaration : ModuleItem
+
+@SwcDslMarker
+@Serializable
+sealed interface DefaultDecl
+
+@SwcDslMarker
+@Serializable
+sealed interface ImportSpecifier
+
+@SwcDslMarker
+@Serializable
+sealed interface ModuleExportName
+
+@SwcDslMarker
+@Serializable
+sealed interface ExportSpecifier
+
+@SwcDslMarker
+@Serializable
+sealed interface Program
+
+@SwcDslMarker
+@Serializable
+sealed interface ModuleItem
+
+@SwcDslMarker
+@Serializable
+sealed interface Pattern
+
+@SwcDslMarker
+@Serializable
+sealed interface ObjectPatternProperty
+
+@SwcDslMarker
+@Serializable
+sealed interface Property
+
+@SwcDslMarker
+@Serializable
+sealed interface PropertyName
+
+/**
+ * subtypes: [ModuleItem]
+ */
+interface Statement : ModuleItem
+
+@SwcDslMarker
+@Serializable
+sealed interface TsParameterPropertyParameter
+
+/**
+ * subtypes: [TsTypeQueryExpr], [TsModuleReference]
+ */
+interface TsEntityName : TsTypeQueryExpr, TsModuleReference
+
+@SwcDslMarker
+@Serializable
+sealed interface TsTypeElement
+
+@SwcDslMarker
+@Serializable
+sealed interface TsType
+
+/**
+ * subtypes: [TsType]
+ */
+interface TsFnOrConstructorType : TsType
+
+@SwcDslMarker
+@Serializable
+sealed interface TsFnParameter
+
+@SwcDslMarker
+@Serializable
+sealed interface TsThisTypeOrIdent
+
+@SwcDslMarker
+@Serializable
+sealed interface TsTypeQueryExpr
+
+/**
+ * subtypes: [TsType]
+ */
+interface TsUnionOrIntersectionType : TsType
+
+@SwcDslMarker
+@Serializable
+sealed interface TsLiteral
+
+@SwcDslMarker
+@Serializable
+sealed interface TsEnumMemberId
+
+@SwcDslMarker
+@Serializable
+sealed interface TsNamespaceBody
+
+@SwcDslMarker
+@Serializable
+sealed interface TsModuleName
+
+@SwcDslMarker
+@Serializable
+sealed interface TsModuleReference
+
+interface Plugin
+
+@OptIn(ExperimentalSerializationApi::class)
+@SwcDslMarker
+@Serializable
+@JsonClassDiscriminator("type")
+@SerialName("Plugin")
+class PluginImpl : Plugin
+
+interface JsMinifyOptions {
+    var compress: Union.U2<TerserCompressOptions, Boolean>?
+    var format: JsFormatOptions?
+    var mangle: Union.U2<TerserMangleOptions, Boolean>?
+    var ecma: TerserEcmaVersion?
+    var keep_classnames: Boolean?
+    var keep_fnames: Boolean?
+    var module: Boolean?
+    var safari10: Boolean?
+    var toplevel: Union.U2<String, Boolean>?
+    var sourceMap: Boolean?
+    var outputPath: String?
+    var inlineSourcesContent: Boolean?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+@SwcDslMarker
+@Serializable
+@JsonClassDiscriminator("type")
+@SerialName("JsMinifyOptions")
+class JsMinifyOptionsImpl : JsMinifyOptions {
+    override var compress: Union.U2<TerserCompressOptions, Boolean>? = null
+    override var format: JsFormatOptions? = null
+    override var mangle: Union.U2<TerserMangleOptions, Boolean>? = null
+    override var ecma: TerserEcmaVersion? = null
+    override var keep_classnames: Boolean? = null
+    override var keep_fnames: Boolean? = null
+    override var module: Boolean? = null
+    override var safari10: Boolean? = null
+    override var toplevel: Union.U2<String, Boolean>? = null
+    override var sourceMap: Boolean? = null
+    override var outputPath: String? = null
+    override var inlineSourcesContent: Boolean? = null
+}
+
+/**
+ * These properties are mostly not implemented yet,
+ * but it exists to support passing terser config to swc minify
+ * without modification.
+ */
+interface JsFormatOptions {
+/**
+     * Currently noop.
+     * @default false
+     * @alias ascii_only
+     */
+    var asciiOnly: Boolean?
+
+/**
+     * Currently noop.
+     * @default false
+     */
+    var beautify: Boolean?
+
+/**
+     * Currently noop.
+     * @default false
+     */
+    var braces: Boolean?
+
+/**
+     * - `false`: removes all comments
+     * - `'some'`: preserves some comments
+     * - `'all'`: preserves all comments
+     * @default false
+     */
+    var comments: String?
+
+/**
+     * Currently noop.
+     * @default 5
+     */
+    var ecma: TerserEcmaVersion?
+
+/**
+     * Currently noop.
+     * @alias indent_level
+     */
+    var indentLevel: Int?
+
+/**
+     * Currently noop.
+     * @alias indent_start
+     */
+    var indentStart: Int?
+
+/**
+     * Currently noop.
+     * @alias inline_script
+     */
+    var inlineScript: Int?
+
+/**
+     * Currently noop.
+     * @alias keep_numbers
+     */
+    var keepNumbers: Int?
+
+/**
+     * Currently noop.
+     * @alias keep_quoted_props
+     */
+    var keepQuotedProps: Boolean?
+
+/**
+     * Currently noop.
+     * @alias max_line_len
+     */
+    var maxLineLen: Union.U2<Int, /**
+         *literal is: false
+         */Int>?
+
+/**
+     * Currently noop.
+     */
+    var preamble: String?
+
+/**
+     * Currently noop.
+     * @alias quote_keys
+     */
+    var quoteKeys: Boolean?
+
+/**
+     * Currently noop.
+     * @alias quote_style
+     */
+    var quoteStyle: Boolean?
+
+/**
+     * Currently noop.
+     * @alias preserve_annotations
+     */
+    var preserveAnnotations: Boolean?
+
+/**
+     * Currently noop.
+     */
+    var safari10: Boolean?
+
+/**
+     * Currently noop.
+     */
+    var semicolons: Boolean?
+
+/**
+     * Currently noop.
+     */
+    var shebang: Boolean?
+
+/**
+     * Currently noop.
+     */
+    var webkit: Boolean?
+
+/**
+     * Currently noop.
+     * @alias wrap_iife
+     */
+    var wrapIife: Boolean?
+
+/**
+     * Currently noop.
+     * @alias wrap_func_args
+     */
+    var wrapFuncArgs: Boolean?
+}
+
+/**
+ * These properties are mostly not implemented yet,
+ * but it exists to support passing terser config to swc minify
+ * without modification.
+ */
+@OptIn(ExperimentalSerializationApi::class)
+@SwcDslMarker
+@Serializable
+@JsonClassDiscriminator("type")
+@SerialName("JsFormatOptions")
+class JsFormatOptionsImpl : JsFormatOptions {
+    override var asciiOnly: Boolean? = null
+    override var beautify: Boolean? = null
+    override var braces: Boolean? = null
+    override var comments: String? = null
+    override var ecma: TerserEcmaVersion? = null
+    override var indentLevel: Int? = null
+    override var indentStart: Int? = null
+    override var inlineScript: Int? = null
+    override var keepNumbers: Int? = null
+    override var keepQuotedProps: Boolean? = null
+    override var maxLineLen: Union.U2<Int, /**
+         *literal is: false
+         */Int>? = null
+    override var preamble: String? = null
+    override var quoteKeys: Boolean? = null
+    override var quoteStyle: Boolean? = null
+    override var preserveAnnotations: Boolean? = null
+    override var safari10: Boolean? = null
+    override var semicolons: Boolean? = null
+    override var shebang: Boolean? = null
+    override var webkit: Boolean? = null
+    override var wrapIife: Boolean? = null
+    override var wrapFuncArgs: Boolean? = null
+}
+
+interface TerserCompressOptions {
+    var arguments: Boolean?
+    var arrows: Boolean?
+    var booleans: Boolean?
+    var booleans_as_integers: Boolean?
+    var collapse_vars: Boolean?
+    var comparisons: Boolean?
+    var computed_props: Boolean?
+    var conditionals: Boolean?
+    var dead_code: Boolean?
+    var defaults: Boolean?
+    var directives: Boolean?
+    var drop_console: Boolean?
+    var drop_debugger: Boolean?
+    var ecma: TerserEcmaVersion?
+    var evaluate: Boolean?
+    var expression: Boolean?
+    var global_defs: Map<String, String>?
+    var hoist_funs: Boolean?
+    var hoist_props: Boolean?
+    var hoist_vars: Boolean?
+    var ie8: Boolean?
+    var if_return: Boolean?
+    var jsInline: Int?
+    var join_vars: Boolean?
+    var keep_classnames: Boolean?
+    var keep_fargs: Boolean?
+    var keep_fnames: Boolean?
+    var keep_infinity: Boolean?
+    var loops: Boolean?
+    var negate_iife: Boolean?
+    var passes: Int?
+    var properties: Boolean?
+    var pure_getters: Union.U2<String, Boolean>?
+    var pure_funcs: Array<String>?
+    var reduce_funcs: Boolean?
+    var reduce_vars: Boolean?
+    var sequences: Boolean?
+    var side_effects: Boolean?
+    var switches: Boolean?
+    var top_retain: Union.U2<String, Array<String>>?
+    var toplevel: Union.U2<String, Boolean>?
+    var typeofs: Boolean?
+    var unsafe: Boolean?
+    var unsafe_passes: Boolean?
+    var unsafe_arrows: Boolean?
+    var unsafe_comps: Boolean?
+    var unsafe_function: Boolean?
+    var unsafe_math: Boolean?
+    var unsafe_symbols: Boolean?
+    var unsafe_methods: Boolean?
+    var unsafe_proto: Boolean?
+    var unsafe_regexp: Boolean?
+    var unsafe_undefined: Boolean?
+    var unused: Boolean?
+    var const_to_let: Boolean?
+    var module: Boolean?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+@SwcDslMarker
+@Serializable
+@JsonClassDiscriminator("type")
+@SerialName("TerserCompressOptions")
+class TerserCompressOptionsImpl : TerserCompressOptions {
+    override var arguments: Boolean? = null
+    override var arrows: Boolean? = null
+    override var booleans: Boolean? = null
+    override var booleans_as_integers: Boolean? = null
+    override var collapse_vars: Boolean? = null
+    override var comparisons: Boolean? = null
+    override var computed_props: Boolean? = null
+    override var conditionals: Boolean? = null
+    override var dead_code: Boolean? = null
+    override var defaults: Boolean? = null
+    override var directives: Boolean? = null
+    override var drop_console: Boolean? = null
+    override var drop_debugger: Boolean? = null
+    override var ecma: TerserEcmaVersion? = null
+    override var evaluate: Boolean? = null
+    override var expression: Boolean? = null
+    override var global_defs: Map<String, String>? = null
+    override var hoist_funs: Boolean? = null
+    override var hoist_props: Boolean? = null
+    override var hoist_vars: Boolean? = null
+    override var ie8: Boolean? = null
+    override var if_return: Boolean? = null
+    override var jsInline: Int? = null
+    override var join_vars: Boolean? = null
+    override var keep_classnames: Boolean? = null
+    override var keep_fargs: Boolean? = null
+    override var keep_fnames: Boolean? = null
+    override var keep_infinity: Boolean? = null
+    override var loops: Boolean? = null
+    override var negate_iife: Boolean? = null
+    override var passes: Int? = null
+    override var properties: Boolean? = null
+    override var pure_getters: Union.U2<String, Boolean>? = null
+    override var pure_funcs: Array<String>? = null
+    override var reduce_funcs: Boolean? = null
+    override var reduce_vars: Boolean? = null
+    override var sequences: Boolean? = null
+    override var side_effects: Boolean? = null
+    override var switches: Boolean? = null
+    override var top_retain: Union.U2<String, Array<String>>? = null
+    override var toplevel: Union.U2<String, Boolean>? = null
+    override var typeofs: Boolean? = null
+    override var unsafe: Boolean? = null
+    override var unsafe_passes: Boolean? = null
+    override var unsafe_arrows: Boolean? = null
+    override var unsafe_comps: Boolean? = null
+    override var unsafe_function: Boolean? = null
+    override var unsafe_math: Boolean? = null
+    override var unsafe_symbols: Boolean? = null
+    override var unsafe_methods: Boolean? = null
+    override var unsafe_proto: Boolean? = null
+    override var unsafe_regexp: Boolean? = null
+    override var unsafe_undefined: Boolean? = null
+    override var unused: Boolean? = null
+    override var const_to_let: Boolean? = null
+    override var module: Boolean? = null
+}
+
+interface TerserMangleOptions {
+    var props: TerserManglePropertiesOptions?
+    var toplevel: Union.U2<String, Boolean>?
+    var keep_classnames: Boolean?
+    var keep_fnames: Boolean?
+    var keep_private_props: Boolean?
+    var ie8: Boolean?
+    var safari10: Boolean?
+    var reserved: Array<String>?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+@SwcDslMarker
+@Serializable
+@JsonClassDiscriminator("type")
+@SerialName("TerserMangleOptions")
+class TerserMangleOptionsImpl : TerserMangleOptions {
+    override var props: TerserManglePropertiesOptions? = null
+    override var toplevel: Union.U2<String, Boolean>? = null
+    override var keep_classnames: Boolean? = null
+    override var keep_fnames: Boolean? = null
+    override var keep_private_props: Boolean? = null
+    override var ie8: Boolean? = null
+    override var safari10: Boolean? = null
+    override var reserved: Array<String>? = null
+}
+
+interface TerserManglePropertiesOptions
+
+@OptIn(ExperimentalSerializationApi::class)
+@SwcDslMarker
+@Serializable
+@JsonClassDiscriminator("type")
+@SerialName("TerserManglePropertiesOptions")
+class TerserManglePropertiesOptionsImpl : TerserManglePropertiesOptions
+
+interface CallerOptions {
+    var name: String?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+@SwcDslMarker
+@Serializable
+@JsonClassDiscriminator("type")
+@SerialName("CallerOptions")
+class CallerOptionsImpl : CallerOptions {
+    override var name: String? = null
+}
+
+/**
+ * Configuration ported from babel-preset-env
+ */
+interface EnvConfig {
+    var mode: String?
+    var debug: Boolean?
+    var dynamicImport: Boolean?
+    var loose: Boolean?
+    var skip: Array<String>?
+    var include: Array<String>?
+    var exclude: Array<String>?
+
+/**
+     * The version of the used core js.
+     *
+     */
+    var coreJs: String?
+    var targets: Union.U2<String, Map<String, String>>?
+    var path: String?
+    var shippedProposals: Boolean?
+
+/**
+     * Enable all transforms
+     */
+    var forceAllTransforms: Boolean?
+}
+
+/**
+ * Configuration ported from babel-preset-env
+ */
+@OptIn(ExperimentalSerializationApi::class)
+@SwcDslMarker
+@Serializable
+@JsonClassDiscriminator("type")
+@SerialName("EnvConfig")
+class EnvConfigImpl : EnvConfig {
+    override var mode: String? = null
+    override var debug: Boolean? = null
+    override var dynamicImport: Boolean? = null
+    override var loose: Boolean? = null
+    override var skip: Array<String>? = null
+    override var include: Array<String>? = null
+    override var exclude: Array<String>? = null
+    override var coreJs: String? = null
+    override var targets: Union.U2<String, Map<String, String>>? = null
+    override var path: String? = null
+    override var shippedProposals: Boolean? = null
+    override var forceAllTransforms: Boolean? = null
+}
+
+/**
+ * Options for transform.
+ */
+interface TransformConfig {
+/**
+     * Effective only if `syntax` supports ƒ.
+     */
+    var react: ReactConfig?
+    var constModules: ConstModulesConfig?
+
+/**
+     * Defaults to null, which skips optimizer pass.
+     */
+    var optimizer: OptimizerConfig?
+
+/**
+     * https://swc.rs/docs/configuring-swc.html#jsctransformlegacydecorator
+     */
+    var legacyDecorator: Boolean?
+
+/**
+     * https://swc.rs/docs/configuring-swc.html#jsctransformdecoratormetadata
+     */
+    var decoratorMetadata: Boolean?
+    var treatConstEnumAsEnum: Boolean?
+    var useDefineForClassFields: Boolean?
+}
+
+/**
+ * Options for transform.
+ */
+@OptIn(ExperimentalSerializationApi::class)
+@SwcDslMarker
+@Serializable
+@JsonClassDiscriminator("type")
+@SerialName("TransformConfig")
+class TransformConfigImpl : TransformConfig {
+    override var react: ReactConfig? = null
+    override var constModules: ConstModulesConfig? = null
+    override var optimizer: OptimizerConfig? = null
+    override var legacyDecorator: Boolean? = null
+    override var decoratorMetadata: Boolean? = null
+    override var treatConstEnumAsEnum: Boolean? = null
+    override var useDefineForClassFields: Boolean? = null
+}
+
+interface ReactConfig {
 /**
      * Replace the function used when compiling JSX expressions.
      *
      * Defaults to `React.createElement`.
      */
-    var pragma: String? = null
+    var pragma: String?
 
 /**
      * Replace the component used when compiling JSX fragments.
      *
      * Defaults to `React.Fragment`
      */
-    var pragmaFrag: String? = null
+    var pragmaFrag: String?
 
 /**
      * Toggles whether or not to throw an error if a XML namespaced tag name is used. For example:
@@ -897,7 +1004,7 @@ open class ReactConfig {
      * JSX does not currently have support for it.
      *
      */
-    var throwIfNamespace: Boolean? = null
+    var throwIfNamespace: Boolean?
 
 /**
      * Toggles plugins that aid in development, such as @swc/plugin-transform-react-jsx-self
@@ -906,28 +1013,44 @@ open class ReactConfig {
      * Defaults to `false`,
      *
      */
-    var development: Boolean? = null
+    var development: Boolean?
 
 /**
      * Use `Object.assign()` instead of `_extends`. Defaults to false.
      * @deprecated
      */
-    var useBuiltins: Boolean? = null
+    var useBuiltins: Boolean?
 
 /**
      * Enable fast refresh feature for React app
      */
-    var refresh: Boolean? = null
+    var refresh: Boolean?
 
 /**
      * jsx runtime
-     ,  literal is: "automatic","classic" */
-    var runtime: String? = null
+     */
+    var runtime: String?
 
 /**
      * Declares the module specifier to be used for importing the `jsx` and `jsxs` factory functions when using `runtime` 'automatic'
      */
-    var importSource: String? = null
+    var importSource: String?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+@SwcDslMarker
+@Serializable
+@JsonClassDiscriminator("type")
+@SerialName("ReactConfig")
+class ReactConfigImpl : ReactConfig {
+    override var pragma: String? = null
+    override var pragmaFrag: String? = null
+    override var throwIfNamespace: Boolean? = null
+    override var development: Boolean? = null
+    override var useBuiltins: Boolean? = null
+    override var refresh: Boolean? = null
+    override var runtime: String? = null
+    override var importSource: String? = null
 }
 
 /**
@@ -936,261 +1059,142 @@ open class ReactConfig {
  *
  * See: https://github.com/swc-project/swc/issues/18#issuecomment-466272558
  */
-@SwcDslMarker
-@Serializable
-open class ConstModulesConfig {
-    var globals: Map<String, Map<String, String>>? = null
+interface ConstModulesConfig {
+    var globals: Map<String, Map<String, String>>?
 }
 
+/**
+ *  - `import { DEBUG } from '@ember/env-flags';`
+ *  - `import { FEATURE_A, FEATURE_B } from '@ember/features';`
+ *
+ * See: https://github.com/swc-project/swc/issues/18#issuecomment-466272558
+ */
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-class JsonifyLiteral {
-    var minCost: Int? = null
+@JsonClassDiscriminator("type")
+@SerialName("ConstModulesConfig")
+class ConstModulesConfigImpl : ConstModulesConfig {
+    override var globals: Map<String, Map<String, String>>? = null
 }
 
+interface OptimizerConfig {
+    var simplify: Boolean?
+    var globals: GlobalPassOption?
+    var jsonify: JsonifyLiteral?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class OptimizerConfig {
-    var simplify: Boolean? = null
-    var globals: GlobalPassOption? = null
-    var jsonify: JsonifyLiteral? = null
+@JsonClassDiscriminator("type")
+@SerialName("OptimizerConfig")
+class OptimizerConfigImpl : OptimizerConfig {
+    override var simplify: Boolean? = null
+    override var globals: GlobalPassOption? = null
+    override var jsonify: JsonifyLiteral? = null
 }
 
 /**
  * Options for inline-global pass.
  */
-@SwcDslMarker
-@Serializable
-open class GlobalPassOption {
+interface GlobalPassOption {
 /**
      * Global variables that should be inlined with passed value.
      *
      * e.g. `{ __DEBUG__: true }`
      */
-    var vars: Record<String, String>? = null
+    var vars: Record<String, String>?
 
 /**
      * Names of environment variables that should be inlined with the value of corresponding env during build.
      *
      * Defaults to `["NODE_ENV", "SWC_ENV"]`
      */
-    var envs: Array<String>? = null
+    var envs: Array<String>?
 
 /**
      * Replaces typeof calls for passed variables with corresponding value
      *
      * e.g. `{ window: 'object' }`
      */
-    var typeofs: Record<String, String>? = null
+    var typeofs: Record<String, String>?
 }
 
+/**
+ * Options for inline-global pass.
+ */
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class BaseModuleConfig {
-/**
-     * By default, when using exports with babel a non-enumerable `__esModule`
-     * property is exported. In some cases this property is used to determine
-     * if the import is the default export or if it contains the default export.
-     *
-     * In order to prevent the __esModule property from being exported, you
-     *  can set the strict option to true.
-     *
-     * Defaults to `false`.
-     */
-    var strict: Boolean? = null
-
-/**
-     * Emits 'use strict' directive.
-     *
-     * Defaults to `true`.
-     */
-    var strictMode: Boolean? = null
-
-/**
-     * Changes Babel's compiled import statements to be lazily evaluated when their imported bindings are used for the first time.
-     *
-     * This can improve initial load time of your module because evaluating dependencies up
-     *  front is sometimes entirely un-necessary. This is especially the case when implementing
-     *  a library module.
-     *
-     *
-     * The value of `lazy` has a few possible effects:
-     *
-     *  - `false` - No lazy initialization of any imported module.
-     *  - `true` - Do not lazy-initialize local `./foo` imports, but lazy-init `foo` dependencies.
-     *
-     * Local paths are much more likely to have circular dependencies, which may break if loaded lazily,
-     * so they are not lazy by default, whereas dependencies between independent modules are rarely cyclical.
-     *
-     *  - `Array<string>` - Lazy-initialize all imports with source matching one of the given strings.
-     *
-     * -----
-     *
-     * The two cases where imports can never be lazy are:
-     *
-     *  - `import "foo";`
-     *
-     * Side-effect imports are automatically non-lazy since their very existence means
-     *  that there is no binding to later kick off initialization.
-     *
-     *  - `export * from "foo"`
-     *
-     * Re-exporting all names requires up-front execution because otherwise there is no
-     * way to know what names need to be exported.
-     *
-     * Defaults to `false`.
-     */
-    var lazy: Union.U2<Boolean, Array<String>>? = null
-
-/**
-     * @deprecated Use the `importInterop` option instead.
-     *
-     * By default, when using exports with swc a non-enumerable __esModule property is exported.
-     * This property is then used to determine if the import is the default export or if
-     *  it contains the default export.
-     *
-     * In cases where the auto-unwrapping of default is not needed, you can set the noInterop option
-     *  to true to avoid the usage of the interopRequireDefault helper (shown in inline form above).
-     *
-     * Defaults to `false`.
-     */
-    var noInterop: Boolean? = null
-
-/**
-     * Defaults to `swc`.
-     *
-     * CommonJS modules and ECMAScript modules are not fully compatible.
-     * However, compilers, bundlers and JavaScript runtimes developed different strategies
-     * to make them work together as well as possible.
-     *
-     * - `swc` (alias: `babel`)
-     *
-     * When using exports with `swc` a non-enumerable `__esModule` property is exported
-     * This property is then used to determine if the import is the default export
-     * or if it contains the default export.
-     *
-     * ```javascript
-     * import foo from "foo";
-     * import { bar } from "bar";
-     * foo;
-     * bar;
-     *
-     * // Is compiled to ...
-     *
-     * "use strict";
-     *
-     * function _interop_require_default(obj) {
-     *   return obj && obj.__esModule ? obj : { default: obj };
-     * }
-     *
-     * var _foo = _interop_require_default(require("foo"));
-     * var _bar = require("bar");
-     *
-     * _foo.default;
-     * _bar.bar;
-     * ```
-     *
-     * When this import interop is used, if both the imported and the importer module are compiled
-     * with swc they behave as if none of them was compiled.
-     *
-     * This is the default behavior.
-     *
-     * - `node`
-     *
-     * When importing CommonJS files (either directly written in CommonJS, or generated with a compiler)
-     * Node.js always binds the `default` export to the value of `module.exports`.
-     *
-     * ```javascript
-     * import foo from "foo";
-     * import { bar } from "bar";
-     * foo;
-     * bar;
-     *
-     * // Is compiled to ...
-     *
-     * "use strict";
-     *
-     * var _foo = require("foo");
-     * var _bar = require("bar");
-     *
-     * _foo;
-     * _bar.bar;
-     * ```
-     * This is not exactly the same as what Node.js does since swc allows accessing any property of `module.exports`
-     * as a named export, while Node.js only allows importing statically analyzable properties of `module.exports`.
-     * However, any import working in Node.js will also work when compiled with swc using `importInterop: "node"`.
-     *
-     * - `none`
-     *
-     * If you know that the imported file has been transformed with a compiler that stores the `default` export on
-     * `exports.default` (such as swc or Babel), you can safely omit the `_interop_require_default` helper.
-     *
-     * ```javascript
-     * import foo from "foo";
-     * import { bar } from "bar";
-     * foo;
-     * bar;
-     *
-     * // Is compiled to ...
-     *
-     * "use strict";
-     *
-     * var _foo = require("foo");
-     * var _bar = require("bar");
-     *
-     * _foo.default;
-     * _bar.bar;
-     * ```
-     ,  literal is: "swc","babel","node","none" */
-    var importInterop: String? = null
-
-/**
-     * Emits `cjs-module-lexer` annotation
-     * `cjs-module-lexer` is used in Node.js core for detecting the named exports available when importing a CJS module into ESM.
-     * swc will emit `cjs-module-lexer` detectable annotation with this option enabled.
-     *
-     * Defaults to `true` if import_interop is Node, else `false`
-     */
-    var exportInteropAnnotation: Boolean? = null
-
-/**
-     * If set to true, dynamic imports will be preserved.
-     */
-    var ignoreDynamic: Boolean? = null
-    var allowTopLevelThis: Boolean? = null
-    var preserveImportMeta: Boolean? = null
+@JsonClassDiscriminator("type")
+@SerialName("GlobalPassOption")
+class GlobalPassOptionImpl : GlobalPassOption {
+    override var vars: Record<String, String>? = null
+    override var envs: Array<String>? = null
+    override var typeofs: Record<String, String>? = null
 }
 
+interface SystemjsConfig : ModuleConfig {
+    // conflict with @SerialName
+    //  var type: String?
+    var allowTopLevelThis: Boolean?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class Output {
+@JsonClassDiscriminator("type")
+@SerialName("systemjs")
+class SystemjsConfigImpl : SystemjsConfig {
+    // conflict with @SerialName
+    //  override var type : String? = "systemjs"
+    override var allowTopLevelThis: Boolean? = null
+}
+
+interface Output {
 /**
      * Transformed code
      */
-    var code: String? = null
+    var code: String?
 
 /**
      * Sourcemap (**not** base64 encoded)
      */
-    var map: String? = null
+    var map: String?
 }
 
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class MatchPattern
+@JsonClassDiscriminator("type")
+@SerialName("Output")
+class OutputImpl : Output {
+    override var code: String? = null
+    override var map: String? = null
+}
+
+interface MatchPattern
+
+@OptIn(ExperimentalSerializationApi::class)
+@SwcDslMarker
+@Serializable
+@JsonClassDiscriminator("type")
+@SerialName("MatchPattern")
+class MatchPatternImpl : MatchPattern
 
 @SwcDslMarker
 @Serializable
-open class Span {
+@SerialName("Span")
+class Span {
     var start: Int? = null
     var end: Int? = null
     var ctxt: Int? = null
 }
 
-@SwcDslMarker
-@Serializable(NodeSerializer::class)
 sealed interface Node {
-    var type: String?
+    // conflict with @SerialName
+    //  var type: String?
 }
 
 interface HasSpan {
@@ -1201,15 +1205,29 @@ interface HasDecorator {
     var decorators: Array<Decorator>?
 }
 
+interface Class : HasSpan, HasDecorator {
+    var body: Array<ClassMember>?
+    var superClass: Expression?
+    var isAbstract: Boolean?
+    var typeParams: TsTypeParameterDeclaration?
+    var superTypeParams: TsTypeParameterInstantiation?
+    var implements: Array<TsExpressionWithTypeArguments>?
+    override var span: Span?
+    override var decorators: Array<Decorator>?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class Class : HasSpan, HasDecorator {
-    var body: Array<ClassMember>? = null
-    var superClass: Expression? = null
-    var isAbstract: Boolean? = null
-    var typeParams: TsTypeParameterDeclaration? = null
-    var superTypeParams: TsTypeParameterInstantiation? = null
-    var implements: Array<TsExpressionWithTypeArguments>? = null
+@JsonClassDiscriminator("type")
+@SerialName("Class")
+class ClassImpl : Class {
+    override var body: Array<ClassMember>? = null
+    override var superClass: Expression? = null
+    override var isAbstract: Boolean? = null
+    override var typeParams: TsTypeParameterDeclaration? = null
+    override var superTypeParams: TsTypeParameterInstantiation? = null
+    override var implements: Array<TsExpressionWithTypeArguments>? = null
     override var span: Span? = null
     override var decorators: Array<Decorator>? = null
 }
@@ -1218,34 +1236,50 @@ interface ClassPropertyBase : Node, HasSpan, HasDecorator {
     var value: Expression?
     var typeAnnotation: TsTypeAnnotation?
     var isStatic: Boolean?
-
-    /**
-     * [Accessibility]
-     */
     var accessibility: String?
     var isOptional: Boolean?
     var isOverride: Boolean?
     var readonly: Boolean?
     var definite: Boolean?
+
+    // conflict with @SerialName
+    //  override var type: String?
+    override var span: Span?
+    override var decorators: Array<Decorator>?
 }
 
+interface ClassProperty : ClassPropertyBase, ClassMember {
+    // conflict with @SerialName
+    //  var type: String?
+    var key: PropertyName?
+    var isAbstract: Boolean?
+    var declare: Boolean?
+    override var value: Expression?
+    override var typeAnnotation: TsTypeAnnotation?
+    override var isStatic: Boolean?
+    override var accessibility: String?
+    override var isOptional: Boolean?
+    override var isOverride: Boolean?
+    override var readonly: Boolean?
+    override var definite: Boolean?
+    override var span: Span?
+    override var decorators: Array<Decorator>?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class ClassProperty : ClassPropertyBase, ClassMember {
-/**
-     *literal is: "ClassProperty"
-     */
-    override var type: String? = "ClassProperty"
-    var key: PropertyName? = null
-    var isAbstract: Boolean? = null
-    var declare: Boolean? = null
+@JsonClassDiscriminator("type")
+@SerialName("ClassProperty")
+class ClassPropertyImpl : ClassProperty {
+    // conflict with @SerialName
+    //  override var type : String? = "ClassProperty"
+    override var key: PropertyName? = null
+    override var isAbstract: Boolean? = null
+    override var declare: Boolean? = null
     override var value: Expression? = null
     override var typeAnnotation: TsTypeAnnotation? = null
     override var isStatic: Boolean? = null
-
-/**
-     * [Accessibility]
-     */
     override var accessibility: String? = null
     override var isOptional: Boolean? = null
     override var isOverride: Boolean? = null
@@ -1255,21 +1289,34 @@ open class ClassProperty : ClassPropertyBase, ClassMember {
     override var decorators: Array<Decorator>? = null
 }
 
+interface PrivateProperty : ClassPropertyBase, ClassMember {
+    // conflict with @SerialName
+    //  var type: String?
+    var key: PrivateName?
+    override var value: Expression?
+    override var typeAnnotation: TsTypeAnnotation?
+    override var isStatic: Boolean?
+    override var accessibility: String?
+    override var isOptional: Boolean?
+    override var isOverride: Boolean?
+    override var readonly: Boolean?
+    override var definite: Boolean?
+    override var span: Span?
+    override var decorators: Array<Decorator>?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class PrivateProperty : ClassPropertyBase, ClassMember {
-/**
-     *literal is: "PrivateProperty"
-     */
-    override var type: String? = "PrivateProperty"
-    var key: PrivateName? = null
+@JsonClassDiscriminator("type")
+@SerialName("PrivateProperty")
+class PrivatePropertyImpl : PrivateProperty {
+    // conflict with @SerialName
+    //  override var type : String? = "PrivateProperty"
+    override var key: PrivateName? = null
     override var value: Expression? = null
     override var typeAnnotation: TsTypeAnnotation? = null
     override var isStatic: Boolean? = null
-
-/**
-     * [Accessibility]
-     */
     override var accessibility: String? = null
     override var isOptional: Boolean? = null
     override var isOverride: Boolean? = null
@@ -1279,74 +1326,94 @@ open class PrivateProperty : ClassPropertyBase, ClassMember {
     override var decorators: Array<Decorator>? = null
 }
 
+interface Param : Node, HasSpan, HasDecorator {
+    // conflict with @SerialName
+    //  var type: String?
+    var pat: Pattern?
+    override var span: Span?
+    override var decorators: Array<Decorator>?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class Param : Node, HasSpan, HasDecorator {
-/**
-     *literal is: "Parameter"
-     */
-    override var type: String? = "Parameter"
-    var pat: Pattern? = null
+@JsonClassDiscriminator("type")
+@SerialName("Parameter")
+class ParamImpl : Param {
+    // conflict with @SerialName
+    //  override var type : String? = "Parameter"
+    override var pat: Pattern? = null
     override var span: Span? = null
     override var decorators: Array<Decorator>? = null
 }
 
+interface Constructor : Node, HasSpan, ClassMember {
+    // conflict with @SerialName
+    //  var type: String?
+    var key: PropertyName?
+    var params: Array<Union.U2<TsParameterProperty, Param>>?
+    var body: BlockStatement?
+    var accessibility: String?
+    var isOptional: Boolean?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class Constructor : Node, HasSpan, ClassMember {
-/**
-     *literal is: "Constructor"
-     */
-    override var type: String? = "Constructor"
-    var key: PropertyName? = null
-    var params: Array<Union.U2<TsParameterProperty, Param>>? = null
-    var body: BlockStatement? = null
-
-/**
-     * [Accessibility]
-     */
-    var accessibility: String? = null
-    var isOptional: Boolean? = null
+@JsonClassDiscriminator("type")
+@SerialName("Constructor")
+class ConstructorImpl : Constructor {
+    // conflict with @SerialName
+    //  override var type : String? = "Constructor"
+    override var key: PropertyName? = null
+    override var params: Array<Union.U2<TsParameterProperty, Param>>? = null
+    override var body: BlockStatement? = null
+    override var accessibility: String? = null
+    override var isOptional: Boolean? = null
     override var span: Span? = null
 }
 
 interface ClassMethodBase : Node, HasSpan {
     var function: Fn?
-
-    /**
-     * [MethodKind]
-     */
     var kind: String?
     var isStatic: Boolean?
-
-    /**
-     * [Accessibility]
-     */
     var accessibility: String?
     var isAbstract: Boolean?
     var isOptional: Boolean?
     var isOverride: Boolean?
+
+    // conflict with @SerialName
+    //  override var type: String?
+    override var span: Span?
 }
 
+interface ClassMethod : ClassMethodBase, ClassMember {
+    // conflict with @SerialName
+    //  var type: String?
+    var key: PropertyName?
+    override var function: Fn?
+    override var kind: String?
+    override var isStatic: Boolean?
+    override var accessibility: String?
+    override var isAbstract: Boolean?
+    override var isOptional: Boolean?
+    override var isOverride: Boolean?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class ClassMethod : ClassMethodBase, ClassMember {
-/**
-     *literal is: "ClassMethod"
-     */
-    override var type: String? = "ClassMethod"
-    var key: PropertyName? = null
+@JsonClassDiscriminator("type")
+@SerialName("ClassMethod")
+class ClassMethodImpl : ClassMethod {
+    // conflict with @SerialName
+    //  override var type : String? = "ClassMethod"
+    override var key: PropertyName? = null
     override var function: Fn? = null
-
-    /**
-     * [MethodKind]
-     */
     override var kind: String? = null
     override var isStatic: Boolean? = null
-
-/**
-     * [Accessibility]
-     */
     override var accessibility: String? = null
     override var isAbstract: Boolean? = null
     override var isOptional: Boolean? = null
@@ -1354,25 +1421,32 @@ open class ClassMethod : ClassMethodBase, ClassMember {
     override var span: Span? = null
 }
 
+interface PrivateMethod : ClassMethodBase, ClassMember {
+    // conflict with @SerialName
+    //  var type: String?
+    var key: PrivateName?
+    override var function: Fn?
+    override var kind: String?
+    override var isStatic: Boolean?
+    override var accessibility: String?
+    override var isAbstract: Boolean?
+    override var isOptional: Boolean?
+    override var isOverride: Boolean?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class PrivateMethod : ClassMethodBase, ClassMember {
-/**
-     *literal is: "PrivateMethod"
-     */
-    override var type: String? = "PrivateMethod"
-    var key: PrivateName? = null
+@JsonClassDiscriminator("type")
+@SerialName("PrivateMethod")
+class PrivateMethodImpl : PrivateMethod {
+    // conflict with @SerialName
+    //  override var type : String? = "PrivateMethod"
+    override var key: PrivateName? = null
     override var function: Fn? = null
-
-    /**
-     * [MethodKind]
-     */
     override var kind: String? = null
     override var isStatic: Boolean? = null
-
-/**
-     * [Accessibility]
-     */
     override var accessibility: String? = null
     override var isAbstract: Boolean? = null
     override var isOptional: Boolean? = null
@@ -1380,37 +1454,69 @@ open class PrivateMethod : ClassMethodBase, ClassMember {
     override var span: Span? = null
 }
 
+interface StaticBlock : Node, HasSpan, ClassMember {
+    // conflict with @SerialName
+    //  var type: String?
+    var body: BlockStatement?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class StaticBlock : Node, HasSpan, ClassMember {
-/**
-     *literal is: "StaticBlock"
-     */
-    override var type: String? = "StaticBlock"
-    var body: BlockStatement? = null
+@JsonClassDiscriminator("type")
+@SerialName("StaticBlock")
+class StaticBlockImpl : StaticBlock {
+    // conflict with @SerialName
+    //  override var type : String? = "StaticBlock"
+    override var body: BlockStatement? = null
     override var span: Span? = null
 }
 
+interface Decorator : Node, HasSpan {
+    // conflict with @SerialName
+    //  var type: String?
+    var expression: Expression?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class Decorator : Node, HasSpan {
-/**
-     *literal is: "Decorator"
-     */
-    override var type: String? = "Decorator"
-    var expression: Expression? = null
+@JsonClassDiscriminator("type")
+@SerialName("Decorator")
+class DecoratorImpl : Decorator {
+    // conflict with @SerialName
+    //  override var type : String? = "Decorator"
+    override var expression: Expression? = null
     override var span: Span? = null
 }
 
+interface FunctionDeclaration : Fn, Declaration {
+    // conflict with @SerialName
+    //  var type: String?
+    var identifier: Identifier?
+    var declare: Boolean?
+    override var params: Array<Param>?
+    override var body: BlockStatement?
+    override var generator: Boolean?
+    override var async: Boolean?
+    override var typeParameters: TsTypeParameterDeclaration?
+    override var returnType: TsTypeAnnotation?
+    override var span: Span?
+    override var decorators: Array<Decorator>?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class FunctionDeclaration : Fn, Declaration {
-/**
-     *literal is: "FunctionDeclaration"
-     */
-    override var type: String? = "FunctionDeclaration"
-    var identifier: Identifier? = null
-    var declare: Boolean? = null
+@JsonClassDiscriminator("type")
+@SerialName("FunctionDeclaration")
+class FunctionDeclarationImpl : FunctionDeclaration {
+    // conflict with @SerialName
+    //  override var type : String? = "FunctionDeclaration"
+    override var identifier: Identifier? = null
+    override var declare: Boolean? = null
     override var params: Array<Param>? = null
     override var body: BlockStatement? = null
     override var generator: Boolean? = null
@@ -1421,205 +1527,356 @@ open class FunctionDeclaration : Fn, Declaration {
     override var decorators: Array<Decorator>? = null
 }
 
-@SwcDslMarker
-@Serializable
-open class ClassDeclaration : Class(), Node, Declaration {
-/**
-     *literal is: "ClassDeclaration"
-     */
-    override var type: String? = "ClassDeclaration"
-    var identifier: Identifier? = null
-    var declare: Boolean? = null
+interface ClassDeclaration : Class, Node, Declaration {
+    // conflict with @SerialName
+    //  var type: String?
+    var identifier: Identifier?
+    var declare: Boolean?
+    override var body: Array<ClassMember>?
+    override var superClass: Expression?
+    override var isAbstract: Boolean?
+    override var typeParams: TsTypeParameterDeclaration?
+    override var superTypeParams: TsTypeParameterInstantiation?
+    override var implements: Array<TsExpressionWithTypeArguments>?
+    override var span: Span?
+    override var decorators: Array<Decorator>?
 }
 
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class VariableDeclaration : Node, HasSpan, Declaration {
-/**
-     *literal is: "VariableDeclaration"
-     */
-    override var type: String? = "VariableDeclaration"
+@JsonClassDiscriminator("type")
+@SerialName("ClassDeclaration")
+class ClassDeclarationImpl : ClassDeclaration {
+    // conflict with @SerialName
+    //  override var type : String? = "ClassDeclaration"
+    override var identifier: Identifier? = null
+    override var declare: Boolean? = null
+    override var body: Array<ClassMember>? = null
+    override var superClass: Expression? = null
+    override var isAbstract: Boolean? = null
+    override var typeParams: TsTypeParameterDeclaration? = null
+    override var superTypeParams: TsTypeParameterInstantiation? = null
+    override var implements: Array<TsExpressionWithTypeArguments>? = null
+    override var span: Span? = null
+    override var decorators: Array<Decorator>? = null
+}
 
-/**
-     * [VariableDeclarationKind]
-     */
-    var kind: String? = null
-    var declare: Boolean? = null
-    var declarations: Array<VariableDeclarator>? = null
+interface VariableDeclaration : Node, HasSpan, Declaration {
+    // conflict with @SerialName
+    //  var type: String?
+    var kind: String?
+    var declare: Boolean?
+    var declarations: Array<VariableDeclarator>?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+@SwcDslMarker
+@Serializable
+@JsonClassDiscriminator("type")
+@SerialName("VariableDeclaration")
+class VariableDeclarationImpl : VariableDeclaration {
+    // conflict with @SerialName
+    //  override var type : String? = "VariableDeclaration"
+    override var kind: String? = null
+    override var declare: Boolean? = null
+    override var declarations: Array<VariableDeclarator>? = null
     override var span: Span? = null
 }
 
+interface VariableDeclarator : Node, HasSpan {
+    // conflict with @SerialName
+    //  var type: String?
+    var id: Pattern?
+    var init: Expression?
+    var definite: Boolean?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class VariableDeclarator : Node, HasSpan {
-/**
-     *literal is: "VariableDeclarator"
-     */
-    override var type: String? = "VariableDeclarator"
-    var id: Pattern? = null
-    var init: Expression? = null
-    var definite: Boolean? = null
+@JsonClassDiscriminator("type")
+@SerialName("VariableDeclarator")
+class VariableDeclaratorImpl : VariableDeclarator {
+    // conflict with @SerialName
+    //  override var type : String? = "VariableDeclarator"
+    override var id: Pattern? = null
+    override var init: Expression? = null
+    override var definite: Boolean? = null
     override var span: Span? = null
 }
 
-interface ExpressionBase : Node, HasSpan
+interface ExpressionBase : Node, HasSpan {
+    // conflict with @SerialName
+    //  override var type: String?
+    override var span: Span?
+}
 
+interface Identifier : ExpressionBase, Expression, JSXObject, JSXElementName, JSXAttributeName, ModuleExportName, Property, PropertyName, TsEntityName, TsThisTypeOrIdent, TsEnumMemberId, TsModuleName {
+    // conflict with @SerialName
+    //  var type: String?
+    var value: String?
+    var optional: Boolean?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class Identifier : ExpressionBase, Expression, JSXObject, JSXElementName, JSXAttributeName, ModuleExportName, Property, PropertyName, TsEntityName, TsThisTypeOrIdent, TsEnumMemberId, TsModuleName {
-/**
-     *literal is: "Identifier"
-     */
-    override var type: String? = "Identifier"
-    var value: String? = null
-    var optional: Boolean? = null
+@JsonClassDiscriminator("type")
+@SerialName("Identifier")
+class IdentifierImpl : Identifier {
+    // conflict with @SerialName
+    //  override var type : String? = "Identifier"
+    override var value: String? = null
+    override var optional: Boolean? = null
     override var span: Span? = null
 }
 
-@SwcDslMarker
-@Serializable
-open class OptionalChainingExpression : ExpressionBase, Expression {
-/**
-     *literal is: "OptionalChainingExpression"
-     */
-    override var type: String? = "OptionalChainingExpression"
-    var questionDotToken: Span? = null
+interface OptionalChainingExpression : ExpressionBase, Expression {
+    // conflict with @SerialName
+    //  var type: String?
+    var questionDotToken: Span?
 
 /**
      * Call expression or member expression.
      */
-    var base: Union.U2<MemberExpression, OptionalChainingCall>? = null
+    var base: Union.U2<MemberExpression, OptionalChainingCall>?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+@SwcDslMarker
+@Serializable
+@JsonClassDiscriminator("type")
+@SerialName("OptionalChainingExpression")
+class OptionalChainingExpressionImpl : OptionalChainingExpression {
+    // conflict with @SerialName
+    //  override var type : String? = "OptionalChainingExpression"
+    override var questionDotToken: Span? = null
+    override var base: Union.U2<MemberExpression, OptionalChainingCall>? = null
     override var span: Span? = null
 }
 
+interface OptionalChainingCall : ExpressionBase {
+    // conflict with @SerialName
+    //  var type: String?
+    var callee: Expression?
+    var arguments: Array<ExprOrSpread>?
+    var typeArguments: TsTypeParameterInstantiation?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class OptionalChainingCall : ExpressionBase {
-/**
-     *literal is: "CallExpression"
-     */
-    override var type: String? = "CallExpression"
-    var callee: Expression? = null
-    var arguments: Array<ExprOrSpread>? = null
-    var typeArguments: TsTypeParameterInstantiation? = null
+@JsonClassDiscriminator("type")
+@SerialName("OptionalChainingCall")
+class OptionalChainingCallImpl : OptionalChainingCall {
+    // conflict with @SerialName
+    //  override var type : String? = "CallExpression"
+    override var callee: Expression? = null
+    override var arguments: Array<ExprOrSpread>? = null
+    override var typeArguments: TsTypeParameterInstantiation? = null
     override var span: Span? = null
 }
 
+interface ThisExpression : ExpressionBase, Expression {
+    // conflict with @SerialName
+    //  var type: String?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class ThisExpression : ExpressionBase, Expression {
-/**
-     *literal is: "ThisExpression"
-     */
-    override var type: String? = "ThisExpression"
+@JsonClassDiscriminator("type")
+@SerialName("ThisExpression")
+class ThisExpressionImpl : ThisExpression {
+    // conflict with @SerialName
+    //  override var type : String? = "ThisExpression"
     override var span: Span? = null
 }
 
+interface ArrayExpression : ExpressionBase, Expression {
+    // conflict with @SerialName
+    //  var type: String?
+    var elements: Array<ExprOrSpread>?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class ArrayExpression : ExpressionBase, Expression {
-/**
-     *literal is: "ArrayExpression"
-     */
-    override var type: String? = "ArrayExpression"
-    var elements: Array<ExprOrSpread>? = null
+@JsonClassDiscriminator("type")
+@SerialName("ArrayExpression")
+class ArrayExpressionImpl : ArrayExpression {
+    // conflict with @SerialName
+    //  override var type : String? = "ArrayExpression"
+    override var elements: Array<ExprOrSpread>? = null
     override var span: Span? = null
 }
 
-@SwcDslMarker
-@Serializable
-open class ExprOrSpread {
-    var spread: Span? = null
-    var expression: Expression? = null
+interface ExprOrSpread {
+    var spread: Span?
+    var expression: Expression?
 }
 
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class ObjectExpression : ExpressionBase, Expression {
-/**
-     *literal is: "ObjectExpression"
-     */
-    override var type: String? = "ObjectExpression"
-    var properties: Array<Union.U2<SpreadElement, Property>>? = null
+@JsonClassDiscriminator("type")
+@SerialName("ExprOrSpread")
+class ExprOrSpreadImpl : ExprOrSpread {
+    override var spread: Span? = null
+    override var expression: Expression? = null
+}
+
+interface ObjectExpression : ExpressionBase, Expression {
+    // conflict with @SerialName
+    //  var type: String?
+    var properties: Array<Union.U2<SpreadElement, Property>>?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+@SwcDslMarker
+@Serializable
+@JsonClassDiscriminator("type")
+@SerialName("ObjectExpression")
+class ObjectExpressionImpl : ObjectExpression {
+    // conflict with @SerialName
+    //  override var type : String? = "ObjectExpression"
+    override var properties: Array<Union.U2<SpreadElement, Property>>? = null
     override var span: Span? = null
 }
 
-@SwcDslMarker
-@Serializable
-open class Argument {
-    var spread: Span? = null
-    var expression: Expression? = null
+interface Argument {
+    var spread: Span?
+    var expression: Expression?
 }
 
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class SpreadElement : Node, JSXAttributeOrSpread {
-/**
-     *literal is: "SpreadElement"
-     */
-    override var type: String? = "SpreadElement"
-    var spread: Span? = null
-    var arguments: Expression? = null
+@JsonClassDiscriminator("type")
+@SerialName("Argument")
+class ArgumentImpl : Argument {
+    override var spread: Span? = null
+    override var expression: Expression? = null
 }
 
+interface SpreadElement : Node, JSXAttributeOrSpread {
+    // conflict with @SerialName
+    //  var type: String?
+    var spread: Span?
+    var arguments: Expression?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class UnaryExpression : ExpressionBase, Expression {
-/**
-     *literal is: "UnaryExpression"
-     */
-    override var type: String? = "UnaryExpression"
+@JsonClassDiscriminator("type")
+@SerialName("SpreadElement")
+class SpreadElementImpl : SpreadElement {
+    // conflict with @SerialName
+    //  override var type : String? = "SpreadElement"
+    override var spread: Span? = null
+    override var arguments: Expression? = null
+}
 
-/**
-     * [UnaryOperator]
-     */
-    var operator: String? = null
-    var argument: Expression? = null
+interface UnaryExpression : ExpressionBase, Expression {
+    // conflict with @SerialName
+    //  var type: String?
+    var operator: String?
+    var argument: Expression?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+@SwcDslMarker
+@Serializable
+@JsonClassDiscriminator("type")
+@SerialName("UnaryExpression")
+class UnaryExpressionImpl : UnaryExpression {
+    // conflict with @SerialName
+    //  override var type : String? = "UnaryExpression"
+    override var operator: String? = null
+    override var argument: Expression? = null
     override var span: Span? = null
 }
 
+interface UpdateExpression : ExpressionBase, Expression {
+    // conflict with @SerialName
+    //  var type: String?
+    var operator: String?
+    var prefix: Boolean?
+    var argument: Expression?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class UpdateExpression : ExpressionBase, Expression {
-/**
-     *literal is: "UpdateExpression"
-     */
-    override var type: String? = "UpdateExpression"
-
-/**
-     * [UpdateOperator]
-     */
-    var operator: String? = null
-    var prefix: Boolean? = null
-    var argument: Expression? = null
+@JsonClassDiscriminator("type")
+@SerialName("UpdateExpression")
+class UpdateExpressionImpl : UpdateExpression {
+    // conflict with @SerialName
+    //  override var type : String? = "UpdateExpression"
+    override var operator: String? = null
+    override var prefix: Boolean? = null
+    override var argument: Expression? = null
     override var span: Span? = null
 }
 
+interface BinaryExpression : ExpressionBase, Expression {
+    // conflict with @SerialName
+    //  var type: String?
+    var operator: String?
+    var left: Expression?
+    var right: Expression?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class BinaryExpression : ExpressionBase, Expression {
-/**
-     *literal is: "BinaryExpression"
-     */
-    override var type: String? = "BinaryExpression"
-
-/**
-     * [BinaryOperator]
-     */
-    var operator: String? = null
-    var left: Expression? = null
-    var right: Expression? = null
+@JsonClassDiscriminator("type")
+@SerialName("BinaryExpression")
+class BinaryExpressionImpl : BinaryExpression {
+    // conflict with @SerialName
+    //  override var type : String? = "BinaryExpression"
+    override var operator: String? = null
+    override var left: Expression? = null
+    override var right: Expression? = null
     override var span: Span? = null
 }
 
+interface FunctionExpression : Fn, ExpressionBase, Expression, DefaultDecl {
+    // conflict with @SerialName
+    //  var type: String?
+    var identifier: Identifier?
+    override var params: Array<Param>?
+    override var body: BlockStatement?
+    override var generator: Boolean?
+    override var async: Boolean?
+    override var typeParameters: TsTypeParameterDeclaration?
+    override var returnType: TsTypeAnnotation?
+    override var span: Span?
+    override var decorators: Array<Decorator>?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class FunctionExpression : Fn, ExpressionBase, Expression, DefaultDecl {
-/**
-     *literal is: "FunctionExpression"
-     */
-    override var type: String? = "FunctionExpression"
-    var identifier: Identifier? = null
+@JsonClassDiscriminator("type")
+@SerialName("FunctionExpression")
+class FunctionExpressionImpl : FunctionExpression {
+    // conflict with @SerialName
+    //  override var type : String? = "FunctionExpression"
+    override var identifier: Identifier? = null
     override var params: Array<Param>? = null
     override var body: BlockStatement? = null
     override var generator: Boolean? = null
@@ -1630,225 +1887,397 @@ open class FunctionExpression : Fn, ExpressionBase, Expression, DefaultDecl {
     override var decorators: Array<Decorator>? = null
 }
 
-@SwcDslMarker
-@Serializable
-open class ClassExpression : Class(), ExpressionBase, Expression, DefaultDecl {
-/**
-     *literal is: "ClassExpression"
-     */
-    override var type: String? = "ClassExpression"
-    var identifier: Identifier? = null
+interface ClassExpression : Class, ExpressionBase, Expression, DefaultDecl {
+    // conflict with @SerialName
+    //  var type: String?
+    var identifier: Identifier?
+    override var body: Array<ClassMember>?
+    override var superClass: Expression?
+    override var isAbstract: Boolean?
+    override var typeParams: TsTypeParameterDeclaration?
+    override var superTypeParams: TsTypeParameterInstantiation?
+    override var implements: Array<TsExpressionWithTypeArguments>?
+    override var span: Span?
+    override var decorators: Array<Decorator>?
 }
 
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class AssignmentExpression : ExpressionBase, Expression {
-/**
-     *literal is: "AssignmentExpression"
-     */
-    override var type: String? = "AssignmentExpression"
+@JsonClassDiscriminator("type")
+@SerialName("ClassExpression")
+class ClassExpressionImpl : ClassExpression {
+    // conflict with @SerialName
+    //  override var type : String? = "ClassExpression"
+    override var identifier: Identifier? = null
+    override var body: Array<ClassMember>? = null
+    override var superClass: Expression? = null
+    override var isAbstract: Boolean? = null
+    override var typeParams: TsTypeParameterDeclaration? = null
+    override var superTypeParams: TsTypeParameterInstantiation? = null
+    override var implements: Array<TsExpressionWithTypeArguments>? = null
+    override var span: Span? = null
+    override var decorators: Array<Decorator>? = null
+}
 
-/**
-     * [AssignmentOperator]
-     */
-    var operator: String? = null
-    var left: Union.U2<Expression, Pattern>? = null
-    var right: Expression? = null
+interface AssignmentExpression : ExpressionBase, Expression {
+    // conflict with @SerialName
+    //  var type: String?
+    var operator: String?
+    var left: Union.U2<Expression, Pattern>?
+    var right: Expression?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+@SwcDslMarker
+@Serializable
+@JsonClassDiscriminator("type")
+@SerialName("AssignmentExpression")
+class AssignmentExpressionImpl : AssignmentExpression {
+    // conflict with @SerialName
+    //  override var type : String? = "AssignmentExpression"
+    override var operator: String? = null
+    override var left: Union.U2<Expression, Pattern>? = null
+    override var right: Expression? = null
     override var span: Span? = null
 }
 
+interface MemberExpression : ExpressionBase, Expression {
+    // conflict with @SerialName
+    //  var type: String?
+    var jsObject: Expression?
+    var property: Union.U3<Identifier, PrivateName, ComputedPropName>?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class MemberExpression : ExpressionBase, Expression {
-/**
-     *literal is: "MemberExpression"
-     */
-    override var type: String? = "MemberExpression"
-    var jsObject: Expression? = null
-    var property: Union.U3<Identifier, PrivateName, ComputedPropName>? = null
+@JsonClassDiscriminator("type")
+@SerialName("MemberExpression")
+class MemberExpressionImpl : MemberExpression {
+    // conflict with @SerialName
+    //  override var type : String? = "MemberExpression"
+    override var jsObject: Expression? = null
+    override var property: Union.U3<Identifier, PrivateName, ComputedPropName>? = null
     override var span: Span? = null
 }
 
+interface SuperPropExpression : ExpressionBase, Expression {
+    // conflict with @SerialName
+    //  var type: String?
+    var obj: Super?
+    var property: Union.U2<Identifier, ComputedPropName>?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class SuperPropExpression : ExpressionBase, Expression {
-/**
-     *literal is: "SuperPropExpression"
-     */
-    override var type: String? = "SuperPropExpression"
-    var obj: Super? = null
-    var property: Union.U2<Identifier, ComputedPropName>? = null
+@JsonClassDiscriminator("type")
+@SerialName("SuperPropExpression")
+class SuperPropExpressionImpl : SuperPropExpression {
+    // conflict with @SerialName
+    //  override var type : String? = "SuperPropExpression"
+    override var obj: Super? = null
+    override var property: Union.U2<Identifier, ComputedPropName>? = null
     override var span: Span? = null
 }
 
+interface ConditionalExpression : ExpressionBase, Expression {
+    // conflict with @SerialName
+    //  var type: String?
+    var test: Expression?
+    var consequent: Expression?
+    var alternate: Expression?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class ConditionalExpression : ExpressionBase, Expression {
-/**
-     *literal is: "ConditionalExpression"
-     */
-    override var type: String? = "ConditionalExpression"
-    var test: Expression? = null
-    var consequent: Expression? = null
-    var alternate: Expression? = null
+@JsonClassDiscriminator("type")
+@SerialName("ConditionalExpression")
+class ConditionalExpressionImpl : ConditionalExpression {
+    // conflict with @SerialName
+    //  override var type : String? = "ConditionalExpression"
+    override var test: Expression? = null
+    override var consequent: Expression? = null
+    override var alternate: Expression? = null
     override var span: Span? = null
 }
 
+interface Super : Node, HasSpan {
+    // conflict with @SerialName
+    //  var type: String?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class Super : Node, HasSpan {
-/**
-     *literal is: "Super"
-     */
-    override var type: String? = "Super"
+@JsonClassDiscriminator("type")
+@SerialName("Super")
+class SuperImpl : Super {
+    // conflict with @SerialName
+    //  override var type : String? = "Super"
     override var span: Span? = null
 }
 
+interface Import : Node, HasSpan {
+    // conflict with @SerialName
+    //  var type: String?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class Import : Node, HasSpan {
-/**
-     *literal is: "Import"
-     */
-    override var type: String? = "Import"
+@JsonClassDiscriminator("type")
+@SerialName("Import")
+class ImportImpl : Import {
+    // conflict with @SerialName
+    //  override var type : String? = "Import"
     override var span: Span? = null
 }
 
+interface CallExpression : ExpressionBase, Expression {
+    // conflict with @SerialName
+    //  var type: String?
+    var callee: Union.U3<Super, Import, Expression>?
+    var arguments: Array<Argument>?
+    var typeArguments: TsTypeParameterInstantiation?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class CallExpression : ExpressionBase, Expression {
-/**
-     *literal is: "CallExpression"
-     */
-    override var type: String? = "CallExpression"
-    var callee: Union.U3<Super, Import, Expression>? = null
-    var arguments: Array<Argument>? = null
-    var typeArguments: TsTypeParameterInstantiation? = null
+@JsonClassDiscriminator("type")
+@SerialName("CallExpression")
+class CallExpressionImpl : CallExpression {
+    // conflict with @SerialName
+    //  override var type : String? = "CallExpression"
+    override var callee: Union.U3<Super, Import, Expression>? = null
+    override var arguments: Array<Argument>? = null
+    override var typeArguments: TsTypeParameterInstantiation? = null
     override var span: Span? = null
 }
 
+interface NewExpression : ExpressionBase, Expression {
+    // conflict with @SerialName
+    //  var type: String?
+    var callee: Expression?
+    var arguments: Array<Argument>?
+    var typeArguments: TsTypeParameterInstantiation?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class NewExpression : ExpressionBase, Expression {
-/**
-     *literal is: "NewExpression"
-     */
-    override var type: String? = "NewExpression"
-    var callee: Expression? = null
-    var arguments: Array<Argument>? = null
-    var typeArguments: TsTypeParameterInstantiation? = null
+@JsonClassDiscriminator("type")
+@SerialName("NewExpression")
+class NewExpressionImpl : NewExpression {
+    // conflict with @SerialName
+    //  override var type : String? = "NewExpression"
+    override var callee: Expression? = null
+    override var arguments: Array<Argument>? = null
+    override var typeArguments: TsTypeParameterInstantiation? = null
     override var span: Span? = null
 }
 
+interface SequenceExpression : ExpressionBase, Expression {
+    // conflict with @SerialName
+    //  var type: String?
+    var expressions: Array<Expression>?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class SequenceExpression : ExpressionBase, Expression {
-/**
-     *literal is: "SequenceExpression"
-     */
-    override var type: String? = "SequenceExpression"
-    var expressions: Array<Expression>? = null
+@JsonClassDiscriminator("type")
+@SerialName("SequenceExpression")
+class SequenceExpressionImpl : SequenceExpression {
+    // conflict with @SerialName
+    //  override var type : String? = "SequenceExpression"
+    override var expressions: Array<Expression>? = null
     override var span: Span? = null
 }
 
+interface ArrowFunctionExpression : ExpressionBase, Expression {
+    // conflict with @SerialName
+    //  var type: String?
+    var params: Array<Pattern>?
+    var body: Union.U2<BlockStatement, Expression>?
+    var async: Boolean?
+    var generator: Boolean?
+    var typeParameters: TsTypeParameterDeclaration?
+    var returnType: TsTypeAnnotation?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class ArrowFunctionExpression : ExpressionBase, Expression {
-/**
-     *literal is: "ArrowFunctionExpression"
-     */
-    override var type: String? = "ArrowFunctionExpression"
-    var params: Array<Pattern>? = null
-    var body: Union.U2<BlockStatement, Expression>? = null
-    var async: Boolean? = null
-    var generator: Boolean? = null
-    var typeParameters: TsTypeParameterDeclaration? = null
-    var returnType: TsTypeAnnotation? = null
+@JsonClassDiscriminator("type")
+@SerialName("ArrowFunctionExpression")
+class ArrowFunctionExpressionImpl : ArrowFunctionExpression {
+    // conflict with @SerialName
+    //  override var type : String? = "ArrowFunctionExpression"
+    override var params: Array<Pattern>? = null
+    override var body: Union.U2<BlockStatement, Expression>? = null
+    override var async: Boolean? = null
+    override var generator: Boolean? = null
+    override var typeParameters: TsTypeParameterDeclaration? = null
+    override var returnType: TsTypeAnnotation? = null
     override var span: Span? = null
 }
 
+interface YieldExpression : ExpressionBase, Expression {
+    // conflict with @SerialName
+    //  var type: String?
+    var argument: Expression?
+    var delegate: Boolean?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class YieldExpression : ExpressionBase, Expression {
-/**
-     *literal is: "YieldExpression"
-     */
-    override var type: String? = "YieldExpression"
-    var argument: Expression? = null
-    var delegate: Boolean? = null
+@JsonClassDiscriminator("type")
+@SerialName("YieldExpression")
+class YieldExpressionImpl : YieldExpression {
+    // conflict with @SerialName
+    //  override var type : String? = "YieldExpression"
+    override var argument: Expression? = null
+    override var delegate: Boolean? = null
     override var span: Span? = null
 }
 
+interface MetaProperty : Node, HasSpan, Expression {
+    // conflict with @SerialName
+    //  var type: String?
+    var kind: String?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class MetaProperty : Node, HasSpan, Expression {
-/**
-     *literal is: "MetaProperty"
-     */
-    override var type: String? = "MetaProperty"
-
-/** literal is: "new.target","import.meta" */
-    var kind: String? = null
+@JsonClassDiscriminator("type")
+@SerialName("MetaProperty")
+class MetaPropertyImpl : MetaProperty {
+    // conflict with @SerialName
+    //  override var type : String? = "MetaProperty"
+    override var kind: String? = null
     override var span: Span? = null
 }
 
+interface AwaitExpression : ExpressionBase, Expression {
+    // conflict with @SerialName
+    //  var type: String?
+    var argument: Expression?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class AwaitExpression : ExpressionBase, Expression {
-/**
-     *literal is: "AwaitExpression"
-     */
-    override var type: String? = "AwaitExpression"
-    var argument: Expression? = null
+@JsonClassDiscriminator("type")
+@SerialName("AwaitExpression")
+class AwaitExpressionImpl : AwaitExpression {
+    // conflict with @SerialName
+    //  override var type : String? = "AwaitExpression"
+    override var argument: Expression? = null
     override var span: Span? = null
 }
 
+interface TemplateLiteral : ExpressionBase, Expression {
+    // conflict with @SerialName
+    //  var type: String?
+    var expressions: Array<Expression>?
+    var quasis: Array<TemplateElement>?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TemplateLiteral : ExpressionBase, Expression {
-/**
-     *literal is: "TemplateLiteral"
-     */
-    override var type: String? = "TemplateLiteral"
-    var expressions: Array<Expression>? = null
-    var quasis: Array<TemplateElement>? = null
+@JsonClassDiscriminator("type")
+@SerialName("TemplateLiteral")
+class TemplateLiteralImpl : TemplateLiteral {
+    // conflict with @SerialName
+    //  override var type : String? = "TemplateLiteral"
+    override var expressions: Array<Expression>? = null
+    override var quasis: Array<TemplateElement>? = null
     override var span: Span? = null
 }
 
+interface TaggedTemplateExpression : ExpressionBase, Expression {
+    // conflict with @SerialName
+    //  var type: String?
+    var tag: Expression?
+    var typeParameters: TsTypeParameterInstantiation?
+    var template: TemplateLiteral?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TaggedTemplateExpression : ExpressionBase, Expression {
-/**
-     *literal is: "TaggedTemplateExpression"
-     */
-    override var type: String? = "TaggedTemplateExpression"
-    var tag: Expression? = null
-    var typeParameters: TsTypeParameterInstantiation? = null
-    var template: TemplateLiteral? = null
+@JsonClassDiscriminator("type")
+@SerialName("TaggedTemplateExpression")
+class TaggedTemplateExpressionImpl : TaggedTemplateExpression {
+    // conflict with @SerialName
+    //  override var type : String? = "TaggedTemplateExpression"
+    override var tag: Expression? = null
+    override var typeParameters: TsTypeParameterInstantiation? = null
+    override var template: TemplateLiteral? = null
     override var span: Span? = null
 }
 
+interface TemplateElement : ExpressionBase {
+    // conflict with @SerialName
+    //  var type: String?
+    var tail: Boolean?
+    var cooked: String?
+    var raw: String?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TemplateElement : ExpressionBase {
-/**
-     *literal is: "TemplateElement"
-     */
-    override var type: String? = "TemplateElement"
-    var tail: Boolean? = null
-    var cooked: String? = null
-    var raw: String? = null
+@JsonClassDiscriminator("type")
+@SerialName("TemplateElement")
+class TemplateElementImpl : TemplateElement {
+    // conflict with @SerialName
+    //  override var type : String? = "TemplateElement"
+    override var tail: Boolean? = null
+    override var cooked: String? = null
+    override var raw: String? = null
     override var span: Span? = null
 }
 
+interface ParenthesisExpression : ExpressionBase, Expression {
+    // conflict with @SerialName
+    //  var type: String?
+    var expression: Expression?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class ParenthesisExpression : ExpressionBase, Expression {
-/**
-     *literal is: "ParenthesisExpression"
-     */
-    override var type: String? = "ParenthesisExpression"
-    var expression: Expression? = null
+@JsonClassDiscriminator("type")
+@SerialName("ParenthesisExpression")
+class ParenthesisExpressionImpl : ParenthesisExpression {
+    // conflict with @SerialName
+    //  override var type : String? = "ParenthesisExpression"
+    override var expression: Expression? = null
     override var span: Span? = null
 }
 
@@ -1859,289 +2288,503 @@ interface Fn : HasSpan, HasDecorator {
     var async: Boolean?
     var typeParameters: TsTypeParameterDeclaration?
     var returnType: TsTypeAnnotation?
+    override var span: Span?
+    override var decorators: Array<Decorator>?
 }
 
 interface PatternBase : Node, HasSpan {
     var typeAnnotation: TsTypeAnnotation?
+
+    // conflict with @SerialName
+    //  override var type: String?
+    override var span: Span?
 }
 
+interface PrivateName : ExpressionBase, Expression {
+    // conflict with @SerialName
+    //  var type: String?
+    var id: Identifier?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class PrivateName : ExpressionBase, Expression {
-/**
-     *literal is: "PrivateName"
-     */
-    override var type: String? = "PrivateName"
-    var id: Identifier? = null
+@JsonClassDiscriminator("type")
+@SerialName("PrivateName")
+class PrivateNameImpl : PrivateName {
+    // conflict with @SerialName
+    //  override var type : String? = "PrivateName"
+    override var id: Identifier? = null
     override var span: Span? = null
 }
 
+interface JSXMemberExpression : Node, Expression, JSXObject, JSXElementName {
+    // conflict with @SerialName
+    //  var type: String?
+    var jsObject: JSXObject?
+    var property: Identifier?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class JSXMemberExpression : Node, Expression, JSXObject, JSXElementName {
-/**
-     *literal is: "JSXMemberExpression"
-     */
-    override var type: String? = "JSXMemberExpression"
-    var jsObject: JSXObject? = null
-    var property: Identifier? = null
+@JsonClassDiscriminator("type")
+@SerialName("JSXMemberExpression")
+class JSXMemberExpressionImpl : JSXMemberExpression {
+    // conflict with @SerialName
+    //  override var type : String? = "JSXMemberExpression"
+    override var jsObject: JSXObject? = null
+    override var property: Identifier? = null
 }
 
 /**
  * XML-based namespace syntax:
  */
-@SwcDslMarker
-@Serializable
-open class JSXNamespacedName : Node, Expression, JSXElementName, JSXAttributeName {
-/**
-     *literal is: "JSXNamespacedName"
-     */
-    override var type: String? = "JSXNamespacedName"
-    var namespace: Identifier? = null
-    var name: Identifier? = null
+interface JSXNamespacedName : Node, Expression, JSXElementName, JSXAttributeName {
+    // conflict with @SerialName
+    //  var type: String?
+    var namespace: Identifier?
+    var name: Identifier?
 }
 
+/**
+ * XML-based namespace syntax:
+ */
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class JSXEmptyExpression : Node, HasSpan, Expression, JSXExpression {
-/**
-     *literal is: "JSXEmptyExpression"
-     */
-    override var type: String? = "JSXEmptyExpression"
+@JsonClassDiscriminator("type")
+@SerialName("JSXNamespacedName")
+class JSXNamespacedNameImpl : JSXNamespacedName {
+    // conflict with @SerialName
+    //  override var type : String? = "JSXNamespacedName"
+    override var namespace: Identifier? = null
+    override var name: Identifier? = null
+}
+
+interface JSXEmptyExpression : Node, HasSpan, Expression, JSXExpression {
+    // conflict with @SerialName
+    //  var type: String?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+@SwcDslMarker
+@Serializable
+@JsonClassDiscriminator("type")
+@SerialName("JSXEmptyExpression")
+class JSXEmptyExpressionImpl : JSXEmptyExpression {
+    // conflict with @SerialName
+    //  override var type : String? = "JSXEmptyExpression"
     override var span: Span? = null
 }
 
+interface JSXExpressionContainer : Node, HasSpan, JSXAttrValue, JSXElementChild {
+    // conflict with @SerialName
+    //  var type: String?
+    var expression: JSXExpression?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class JSXExpressionContainer : Node, HasSpan, JSXAttrValue, JSXElementChild {
-/**
-     *literal is: "JSXExpressionContainer"
-     */
-    override var type: String? = "JSXExpressionContainer"
-    var expression: JSXExpression? = null
+@JsonClassDiscriminator("type")
+@SerialName("JSXExpressionContainer")
+class JSXExpressionContainerImpl : JSXExpressionContainer {
+    // conflict with @SerialName
+    //  override var type : String? = "JSXExpressionContainer"
+    override var expression: JSXExpression? = null
     override var span: Span? = null
 }
 
+interface JSXSpreadChild : Node, HasSpan, JSXElementChild {
+    // conflict with @SerialName
+    //  var type: String?
+    var expression: Expression?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class JSXSpreadChild : Node, HasSpan, JSXElementChild {
-/**
-     *literal is: "JSXSpreadChild"
-     */
-    override var type: String? = "JSXSpreadChild"
-    var expression: Expression? = null
+@JsonClassDiscriminator("type")
+@SerialName("JSXSpreadChild")
+class JSXSpreadChildImpl : JSXSpreadChild {
+    // conflict with @SerialName
+    //  override var type : String? = "JSXSpreadChild"
+    override var expression: Expression? = null
     override var span: Span? = null
 }
 
+interface JSXOpeningElement : Node, HasSpan {
+    // conflict with @SerialName
+    //  var type: String?
+    var name: JSXElementName?
+    var attributes: Array<JSXAttributeOrSpread>?
+    var selfClosing: Boolean?
+    var typeArguments: TsTypeParameterInstantiation?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class JSXOpeningElement : Node, HasSpan {
-/**
-     *literal is: "JSXOpeningElement"
-     */
-    override var type: String? = "JSXOpeningElement"
-    var name: JSXElementName? = null
-    var attributes: Array<JSXAttributeOrSpread>? = null
-    var selfClosing: Boolean? = null
-    var typeArguments: TsTypeParameterInstantiation? = null
+@JsonClassDiscriminator("type")
+@SerialName("JSXOpeningElement")
+class JSXOpeningElementImpl : JSXOpeningElement {
+    // conflict with @SerialName
+    //  override var type : String? = "JSXOpeningElement"
+    override var name: JSXElementName? = null
+    override var attributes: Array<JSXAttributeOrSpread>? = null
+    override var selfClosing: Boolean? = null
+    override var typeArguments: TsTypeParameterInstantiation? = null
     override var span: Span? = null
 }
 
+interface JSXClosingElement : Node, HasSpan {
+    // conflict with @SerialName
+    //  var type: String?
+    var name: JSXElementName?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class JSXClosingElement : Node, HasSpan {
-/**
-     *literal is: "JSXClosingElement"
-     */
-    override var type: String? = "JSXClosingElement"
-    var name: JSXElementName? = null
+@JsonClassDiscriminator("type")
+@SerialName("JSXClosingElement")
+class JSXClosingElementImpl : JSXClosingElement {
+    // conflict with @SerialName
+    //  override var type : String? = "JSXClosingElement"
+    override var name: JSXElementName? = null
     override var span: Span? = null
 }
 
+interface JSXAttribute : Node, HasSpan, JSXAttributeOrSpread {
+    // conflict with @SerialName
+    //  var type: String?
+    var name: JSXAttributeName?
+    var value: JSXAttrValue?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class JSXAttribute : Node, HasSpan, JSXAttributeOrSpread {
-/**
-     *literal is: "JSXAttribute"
-     */
-    override var type: String? = "JSXAttribute"
-    var name: JSXAttributeName? = null
-    var value: JSXAttrValue? = null
+@JsonClassDiscriminator("type")
+@SerialName("JSXAttribute")
+class JSXAttributeImpl : JSXAttribute {
+    // conflict with @SerialName
+    //  override var type : String? = "JSXAttribute"
+    override var name: JSXAttributeName? = null
+    override var value: JSXAttrValue? = null
     override var span: Span? = null
 }
 
+interface JSXText : Node, HasSpan, JSXElementChild, Literal {
+    // conflict with @SerialName
+    //  var type: String?
+    var value: String?
+    var raw: String?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class JSXText : Node, HasSpan, JSXElementChild, Literal {
-/**
-     *literal is: "JSXText"
-     */
-    override var type: String? = "JSXText"
-    var value: String? = null
-    var raw: String? = null
+@JsonClassDiscriminator("type")
+@SerialName("JSXText")
+class JSXTextImpl : JSXText {
+    // conflict with @SerialName
+    //  override var type : String? = "JSXText"
+    override var value: String? = null
+    override var raw: String? = null
     override var span: Span? = null
 }
 
+interface JSXElement : Node, HasSpan, Expression, JSXAttrValue, JSXElementChild {
+    // conflict with @SerialName
+    //  var type: String?
+    var opening: JSXOpeningElement?
+    var children: Array<JSXElementChild>?
+    var closing: JSXClosingElement?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class JSXElement : Node, HasSpan, Expression, JSXAttrValue, JSXElementChild {
-/**
-     *literal is: "JSXElement"
-     */
-    override var type: String? = "JSXElement"
-    var opening: JSXOpeningElement? = null
-    var children: Array<JSXElementChild>? = null
-    var closing: JSXClosingElement? = null
+@JsonClassDiscriminator("type")
+@SerialName("JSXElement")
+class JSXElementImpl : JSXElement {
+    // conflict with @SerialName
+    //  override var type : String? = "JSXElement"
+    override var opening: JSXOpeningElement? = null
+    override var children: Array<JSXElementChild>? = null
+    override var closing: JSXClosingElement? = null
     override var span: Span? = null
 }
 
+interface JSXFragment : Node, HasSpan, Expression, JSXAttrValue, JSXElementChild {
+    // conflict with @SerialName
+    //  var type: String?
+    var opening: JSXOpeningFragment?
+    var children: Array<JSXElementChild>?
+    var closing: JSXClosingFragment?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class JSXFragment : Node, HasSpan, Expression, JSXAttrValue, JSXElementChild {
-/**
-     *literal is: "JSXFragment"
-     */
-    override var type: String? = "JSXFragment"
-    var opening: JSXOpeningFragment? = null
-    var children: Array<JSXElementChild>? = null
-    var closing: JSXClosingFragment? = null
+@JsonClassDiscriminator("type")
+@SerialName("JSXFragment")
+class JSXFragmentImpl : JSXFragment {
+    // conflict with @SerialName
+    //  override var type : String? = "JSXFragment"
+    override var opening: JSXOpeningFragment? = null
+    override var children: Array<JSXElementChild>? = null
+    override var closing: JSXClosingFragment? = null
     override var span: Span? = null
 }
 
+interface JSXOpeningFragment : Node, HasSpan {
+    // conflict with @SerialName
+    //  var type: String?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class JSXOpeningFragment : Node, HasSpan {
-/**
-     *literal is: "JSXOpeningFragment"
-     */
-    override var type: String? = "JSXOpeningFragment"
+@JsonClassDiscriminator("type")
+@SerialName("JSXOpeningFragment")
+class JSXOpeningFragmentImpl : JSXOpeningFragment {
+    // conflict with @SerialName
+    //  override var type : String? = "JSXOpeningFragment"
     override var span: Span? = null
 }
 
+interface JSXClosingFragment : Node, HasSpan {
+    // conflict with @SerialName
+    //  var type: String?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class JSXClosingFragment : Node, HasSpan {
-/**
-     *literal is: "JSXClosingFragment"
-     */
-    override var type: String? = "JSXClosingFragment"
+@JsonClassDiscriminator("type")
+@SerialName("JSXClosingFragment")
+class JSXClosingFragmentImpl : JSXClosingFragment {
+    // conflict with @SerialName
+    //  override var type : String? = "JSXClosingFragment"
     override var span: Span? = null
 }
 
+interface StringLiteral : Node, HasSpan, Literal, ModuleExportName, PropertyName, TsLiteral, TsEnumMemberId, TsModuleName {
+    // conflict with @SerialName
+    //  var type: String?
+    var value: String?
+    var raw: String?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class StringLiteral : Node, HasSpan, Literal, ModuleExportName, PropertyName, TsLiteral, TsEnumMemberId, TsModuleName {
-/**
-     *literal is: "StringLiteral"
-     */
-    override var type: String? = "StringLiteral"
-    var value: String? = null
-    var raw: String? = null
+@JsonClassDiscriminator("type")
+@SerialName("StringLiteral")
+class StringLiteralImpl : StringLiteral {
+    // conflict with @SerialName
+    //  override var type : String? = "StringLiteral"
+    override var value: String? = null
+    override var raw: String? = null
     override var span: Span? = null
 }
 
+interface BooleanLiteral : Node, HasSpan, Literal, TsLiteral {
+    // conflict with @SerialName
+    //  var type: String?
+    var value: Boolean?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class BooleanLiteral : Node, HasSpan, Literal, TsLiteral {
-/**
-     *literal is: "BooleanLiteral"
-     */
-    override var type: String? = "BooleanLiteral"
-    var value: Boolean? = null
+@JsonClassDiscriminator("type")
+@SerialName("BooleanLiteral")
+class BooleanLiteralImpl : BooleanLiteral {
+    // conflict with @SerialName
+    //  override var type : String? = "BooleanLiteral"
+    override var value: Boolean? = null
     override var span: Span? = null
 }
 
+interface NullLiteral : Node, HasSpan, Literal {
+    // conflict with @SerialName
+    //  var type: String?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class NullLiteral : Node, HasSpan, Literal {
-/**
-     *literal is: "NullLiteral"
-     */
-    override var type: String? = "NullLiteral"
+@JsonClassDiscriminator("type")
+@SerialName("NullLiteral")
+class NullLiteralImpl : NullLiteral {
+    // conflict with @SerialName
+    //  override var type : String? = "NullLiteral"
     override var span: Span? = null
 }
 
+interface RegExpLiteral : Node, HasSpan, Literal {
+    // conflict with @SerialName
+    //  var type: String?
+    var pattern: String?
+    var flags: String?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class RegExpLiteral : Node, HasSpan, Literal {
-/**
-     *literal is: "RegExpLiteral"
-     */
-    override var type: String? = "RegExpLiteral"
-    var pattern: String? = null
-    var flags: String? = null
+@JsonClassDiscriminator("type")
+@SerialName("RegExpLiteral")
+class RegExpLiteralImpl : RegExpLiteral {
+    // conflict with @SerialName
+    //  override var type : String? = "RegExpLiteral"
+    override var pattern: String? = null
+    override var flags: String? = null
     override var span: Span? = null
 }
 
+interface NumericLiteral : Node, HasSpan, Literal, PropertyName, TsLiteral {
+    // conflict with @SerialName
+    //  var type: String?
+    var value: Int?
+    var raw: String?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class NumericLiteral : Node, HasSpan, Literal, PropertyName, TsLiteral {
-/**
-     *literal is: "NumericLiteral"
-     */
-    override var type: String? = "NumericLiteral"
-    var value: Int? = null
-    var raw: String? = null
+@JsonClassDiscriminator("type")
+@SerialName("NumericLiteral")
+class NumericLiteralImpl : NumericLiteral {
+    // conflict with @SerialName
+    //  override var type : String? = "NumericLiteral"
+    override var value: Int? = null
+    override var raw: String? = null
     override var span: Span? = null
 }
 
+interface BigIntLiteral : Node, HasSpan, Literal, PropertyName, TsLiteral {
+    // conflict with @SerialName
+    //  var type: String?
+    var value: Long?
+    var raw: String?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class BigIntLiteral : Node, HasSpan, Literal, PropertyName, TsLiteral {
-/**
-     *literal is: "BigIntLiteral"
-     */
-    override var type: String? = "BigIntLiteral"
-    var value: Long? = null
-    var raw: String? = null
+@JsonClassDiscriminator("type")
+@SerialName("BigIntLiteral")
+class BigIntLiteralImpl : BigIntLiteral {
+    // conflict with @SerialName
+    //  override var type : String? = "BigIntLiteral"
+    override var value: Long? = null
+    override var raw: String? = null
     override var span: Span? = null
 }
 
+interface ExportDefaultExpression : Node, HasSpan, ModuleDeclaration {
+    // conflict with @SerialName
+    //  var type: String?
+    var expression: Expression?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class ExportDefaultExpression : Node, HasSpan, ModuleDeclaration {
-/**
-     *literal is: "ExportDefaultExpression"
-     */
-    override var type: String? = "ExportDefaultExpression"
-    var expression: Expression? = null
+@JsonClassDiscriminator("type")
+@SerialName("ExportDefaultExpression")
+class ExportDefaultExpressionImpl : ExportDefaultExpression {
+    // conflict with @SerialName
+    //  override var type : String? = "ExportDefaultExpression"
+    override var expression: Expression? = null
     override var span: Span? = null
 }
 
+interface ExportDeclaration : Node, HasSpan, ModuleDeclaration {
+    // conflict with @SerialName
+    //  var type: String?
+    var declaration: Declaration?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class ExportDeclaration : Node, HasSpan, ModuleDeclaration {
-/**
-     *literal is: "ExportDeclaration"
-     */
-    override var type: String? = "ExportDeclaration"
-    var declaration: Declaration? = null
+@JsonClassDiscriminator("type")
+@SerialName("ExportDeclaration")
+class ExportDeclarationImpl : ExportDeclaration {
+    // conflict with @SerialName
+    //  override var type : String? = "ExportDeclaration"
+    override var declaration: Declaration? = null
     override var span: Span? = null
 }
 
+interface ImportDeclaration : Node, HasSpan, ModuleDeclaration {
+    // conflict with @SerialName
+    //  var type: String?
+    var specifiers: Array<ImportSpecifier>?
+    var source: StringLiteral?
+    var typeOnly: Boolean?
+    var asserts: ObjectExpression?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class ImportDeclaration : Node, HasSpan, ModuleDeclaration {
-/**
-     *literal is: "ImportDeclaration"
-     */
-    override var type: String? = "ImportDeclaration"
-    var specifiers: Array<ImportSpecifier>? = null
-    var source: StringLiteral? = null
-    var typeOnly: Boolean? = null
-    var asserts: ObjectExpression? = null
+@JsonClassDiscriminator("type")
+@SerialName("ImportDeclaration")
+class ImportDeclarationImpl : ImportDeclaration {
+    // conflict with @SerialName
+    //  override var type : String? = "ImportDeclaration"
+    override var specifiers: Array<ImportSpecifier>? = null
+    override var source: StringLiteral? = null
+    override var typeOnly: Boolean? = null
+    override var asserts: ObjectExpression? = null
     override var span: Span? = null
 }
 
+interface ExportAllDeclaration : Node, HasSpan, ModuleDeclaration {
+    // conflict with @SerialName
+    //  var type: String?
+    var source: StringLiteral?
+    var asserts: ObjectExpression?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class ExportAllDeclaration : Node, HasSpan, ModuleDeclaration {
-/**
-     *literal is: "ExportAllDeclaration"
-     */
-    override var type: String? = "ExportAllDeclaration"
-    var source: StringLiteral? = null
-    var asserts: ObjectExpression? = null
+@JsonClassDiscriminator("type")
+@SerialName("ExportAllDeclaration")
+class ExportAllDeclarationImpl : ExportAllDeclaration {
+    // conflict with @SerialName
+    //  override var type : String? = "ExportAllDeclaration"
+    override var source: StringLiteral? = null
+    override var asserts: ObjectExpression? = null
     override var span: Span? = null
 }
 
@@ -2149,56 +2792,101 @@ open class ExportAllDeclaration : Node, HasSpan, ModuleDeclaration {
  * - `export { foo } from 'mod'`
  * - `export { foo as bar } from 'mod'`
  */
+interface ExportNamedDeclaration : Node, HasSpan, ModuleDeclaration {
+    // conflict with @SerialName
+    //  var type: String?
+    var specifiers: Array<ExportSpecifier>?
+    var source: StringLiteral?
+    var typeOnly: Boolean?
+    var asserts: ObjectExpression?
+    override var span: Span?
+}
+
+/**
+ * - `export { foo } from 'mod'`
+ * - `export { foo as bar } from 'mod'`
+ */
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class ExportNamedDeclaration : Node, HasSpan, ModuleDeclaration {
-/**
-     *literal is: "ExportNamedDeclaration"
-     */
-    override var type: String? = "ExportNamedDeclaration"
-    var specifiers: Array<ExportSpecifier>? = null
-    var source: StringLiteral? = null
-    var typeOnly: Boolean? = null
-    var asserts: ObjectExpression? = null
+@JsonClassDiscriminator("type")
+@SerialName("ExportNamedDeclaration")
+class ExportNamedDeclarationImpl : ExportNamedDeclaration {
+    // conflict with @SerialName
+    //  override var type : String? = "ExportNamedDeclaration"
+    override var specifiers: Array<ExportSpecifier>? = null
+    override var source: StringLiteral? = null
+    override var typeOnly: Boolean? = null
+    override var asserts: ObjectExpression? = null
     override var span: Span? = null
 }
 
+interface ExportDefaultDeclaration : Node, HasSpan, ModuleDeclaration {
+    // conflict with @SerialName
+    //  var type: String?
+    var decl: DefaultDecl?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class ExportDefaultDeclaration : Node, HasSpan, ModuleDeclaration {
-/**
-     *literal is: "ExportDefaultDeclaration"
-     */
-    override var type: String? = "ExportDefaultDeclaration"
-    var decl: DefaultDecl? = null
+@JsonClassDiscriminator("type")
+@SerialName("ExportDefaultDeclaration")
+class ExportDefaultDeclarationImpl : ExportDefaultDeclaration {
+    // conflict with @SerialName
+    //  override var type : String? = "ExportDefaultDeclaration"
+    override var decl: DefaultDecl? = null
     override var span: Span? = null
 }
 
 /**
  * e.g. `import foo from 'mod.js'`
  */
+interface ImportDefaultSpecifier : Node, HasSpan, ImportSpecifier {
+    // conflict with @SerialName
+    //  var type: String?
+    var local: Identifier?
+    override var span: Span?
+}
+
+/**
+ * e.g. `import foo from 'mod.js'`
+ */
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class ImportDefaultSpecifier : Node, HasSpan, ImportSpecifier {
-/**
-     *literal is: "ImportDefaultSpecifier"
-     */
-    override var type: String? = "ImportDefaultSpecifier"
-    var local: Identifier? = null
+@JsonClassDiscriminator("type")
+@SerialName("ImportDefaultSpecifier")
+class ImportDefaultSpecifierImpl : ImportDefaultSpecifier {
+    // conflict with @SerialName
+    //  override var type : String? = "ImportDefaultSpecifier"
+    override var local: Identifier? = null
     override var span: Span? = null
 }
 
 /**
  * e.g. `import * as foo from 'mod.js'`.
  */
+interface ImportNamespaceSpecifier : Node, HasSpan, ImportSpecifier {
+    // conflict with @SerialName
+    //  var type: String?
+    var local: Identifier?
+    override var span: Span?
+}
+
+/**
+ * e.g. `import * as foo from 'mod.js'`.
+ */
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class ImportNamespaceSpecifier : Node, HasSpan, ImportSpecifier {
-/**
-     *literal is: "ImportNamespaceSpecifier"
-     */
-    override var type: String? = "ImportNamespaceSpecifier"
-    var local: Identifier? = null
+@JsonClassDiscriminator("type")
+@SerialName("ImportNamespaceSpecifier")
+class ImportNamespaceSpecifierImpl : ImportNamespaceSpecifier {
+    // conflict with @SerialName
+    //  override var type : String? = "ImportNamespaceSpecifier"
+    override var local: Identifier? = null
     override var span: Span? = null
 }
 
@@ -2211,153 +2899,286 @@ open class ImportNamespaceSpecifier : Node, HasSpan, ImportSpecifier {
  *
  * local = bar, imported = Some(foo) for
  */
+interface NamedImportSpecifier : Node, HasSpan, ImportSpecifier {
+    // conflict with @SerialName
+    //  var type: String?
+    var local: Identifier?
+    var imported: ModuleExportName?
+    var isTypeOnly: Boolean?
+    override var span: Span?
+}
+
+/**
+ * e.g. - `import { foo } from 'mod.js'`
+ *
+ * local = foo, imported = None
+ *
+ * e.g. `import { foo as bar } from 'mod.js'`
+ *
+ * local = bar, imported = Some(foo) for
+ */
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class NamedImportSpecifier : Node, HasSpan, ImportSpecifier {
-/**
-     *literal is: "ImportSpecifier"
-     */
-    override var type: String? = "ImportSpecifier"
-    var local: Identifier? = null
-    var imported: ModuleExportName? = null
-    var isTypeOnly: Boolean? = null
+@JsonClassDiscriminator("type")
+@SerialName("ImportSpecifier")
+class NamedImportSpecifierImpl : NamedImportSpecifier {
+    // conflict with @SerialName
+    //  override var type : String? = "ImportSpecifier"
+    override var local: Identifier? = null
+    override var imported: ModuleExportName? = null
+    override var isTypeOnly: Boolean? = null
     override var span: Span? = null
 }
 
 /**
  * `export * as foo from 'src';`
  */
+interface ExportNamespaceSpecifier : Node, HasSpan, ExportSpecifier {
+    // conflict with @SerialName
+    //  var type: String?
+    var name: ModuleExportName?
+    override var span: Span?
+}
+
+/**
+ * `export * as foo from 'src';`
+ */
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class ExportNamespaceSpecifier : Node, HasSpan, ExportSpecifier {
-/**
-     *literal is: "ExportNamespaceSpecifier"
-     */
-    override var type: String? = "ExportNamespaceSpecifier"
-    var name: ModuleExportName? = null
+@JsonClassDiscriminator("type")
+@SerialName("ExportNamespaceSpecifier")
+class ExportNamespaceSpecifierImpl : ExportNamespaceSpecifier {
+    // conflict with @SerialName
+    //  override var type : String? = "ExportNamespaceSpecifier"
+    override var name: ModuleExportName? = null
     override var span: Span? = null
 }
 
+interface ExportDefaultSpecifier : Node, HasSpan, ExportSpecifier {
+    // conflict with @SerialName
+    //  var type: String?
+    var exported: Identifier?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class ExportDefaultSpecifier : Node, HasSpan, ExportSpecifier {
-/**
-     *literal is: "ExportDefaultSpecifier"
-     */
-    override var type: String? = "ExportDefaultSpecifier"
-    var exported: Identifier? = null
+@JsonClassDiscriminator("type")
+@SerialName("ExportDefaultSpecifier")
+class ExportDefaultSpecifierImpl : ExportDefaultSpecifier {
+    // conflict with @SerialName
+    //  override var type : String? = "ExportDefaultSpecifier"
+    override var exported: Identifier? = null
     override var span: Span? = null
 }
 
-@SwcDslMarker
-@Serializable
-open class NamedExportSpecifier : Node, HasSpan, ExportSpecifier {
-/**
-     *literal is: "ExportSpecifier"
-     */
-    override var type: String? = "ExportSpecifier"
-    var orig: ModuleExportName? = null
+interface NamedExportSpecifier : Node, HasSpan, ExportSpecifier {
+    // conflict with @SerialName
+    //  var type: String?
+    var orig: ModuleExportName?
 
 /**
      * `Some(bar)` in `export { foo as bar }`
      */
-    var exported: ModuleExportName? = null
-    var isTypeOnly: Boolean? = null
+    var exported: ModuleExportName?
+    var isTypeOnly: Boolean?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+@SwcDslMarker
+@Serializable
+@JsonClassDiscriminator("type")
+@SerialName("ExportSpecifier")
+class NamedExportSpecifierImpl : NamedExportSpecifier {
+    // conflict with @SerialName
+    //  override var type : String? = "ExportSpecifier"
+    override var orig: ModuleExportName? = null
+    override var exported: ModuleExportName? = null
+    override var isTypeOnly: Boolean? = null
     override var span: Span? = null
 }
 
-@SwcDslMarker
-@Serializable
-open class HasInterpreter {
+interface HasInterpreter {
 /**
      * e.g. `/usr/bin/node` for `#!/usr/bin/node`
      */
-    var interpreter: String? = null
+    var interpreter: String?
 }
 
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class Module : Node, HasSpan, HasInterpreter(), Program {
+@JsonClassDiscriminator("type")
+@SerialName("HasInterpreter")
+class HasInterpreterImpl : HasInterpreter {
+    override var interpreter: String? = null
+}
+
+interface Module : Node, HasSpan, HasInterpreter, Program {
+    // conflict with @SerialName
+    //  var type: String?
+    var body: Array<ModuleItem>?
+    override var span: Span?
+
 /**
-     *literal is: "Module"
+     * e.g. `/usr/bin/node` for `#!/usr/bin/node`
      */
-    override var type: String? = "Module"
-    var body: Array<ModuleItem>? = null
+    override var interpreter: String?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+@SwcDslMarker
+@Serializable
+@JsonClassDiscriminator("type")
+@SerialName("Module")
+class ModuleImpl : Module {
+    // conflict with @SerialName
+    //  override var type : String? = "Module"
+    override var body: Array<ModuleItem>? = null
     override var span: Span? = null
+    override var interpreter: String? = null
 }
 
+interface Script : Node, HasSpan, HasInterpreter, Program {
+    // conflict with @SerialName
+    //  var type: String?
+    var body: Array<Statement>?
+    override var span: Span?
+
+/**
+     * e.g. `/usr/bin/node` for `#!/usr/bin/node`
+     */
+    override var interpreter: String?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class Script : Node, HasSpan, HasInterpreter(), Program {
-/**
-     *literal is: "Script"
-     */
-    override var type: String? = "Script"
-    var body: Array<Statement>? = null
+@JsonClassDiscriminator("type")
+@SerialName("Script")
+class ScriptImpl : Script {
+    // conflict with @SerialName
+    //  override var type : String? = "Script"
+    override var body: Array<Statement>? = null
     override var span: Span? = null
+    override var interpreter: String? = null
 }
 
+interface BindingIdentifier : PatternBase, Pattern, TsParameterPropertyParameter, TsFnParameter {
+    // conflict with @SerialName
+    //  var type: String?
+    var value: String?
+    var optional: Boolean?
+    override var typeAnnotation: TsTypeAnnotation?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class BindingIdentifier : PatternBase, Pattern, TsParameterPropertyParameter, TsFnParameter {
-/**
-     *literal is: "Identifier"
-     */
-    override var type: String? = "Identifier"
-    var value: String? = null
-    var optional: Boolean? = null
+@JsonClassDiscriminator("type")
+@SerialName("BindingIdentifier")
+class BindingIdentifierImpl : BindingIdentifier {
+    // conflict with @SerialName
+    //  override var type : String? = "Identifier"
+    override var value: String? = null
+    override var optional: Boolean? = null
     override var typeAnnotation: TsTypeAnnotation? = null
     override var span: Span? = null
 }
 
+interface ArrayPattern : PatternBase, Pattern, TsFnParameter {
+    // conflict with @SerialName
+    //  var type: String?
+    var elements: Array<Pattern>?
+    var optional: Boolean?
+    override var typeAnnotation: TsTypeAnnotation?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class ArrayPattern : PatternBase, Pattern, TsFnParameter {
-/**
-     *literal is: "ArrayPattern"
-     */
-    override var type: String? = "ArrayPattern"
-    var elements: Array<Pattern>? = null
-    var optional: Boolean? = null
+@JsonClassDiscriminator("type")
+@SerialName("ArrayPattern")
+class ArrayPatternImpl : ArrayPattern {
+    // conflict with @SerialName
+    //  override var type : String? = "ArrayPattern"
+    override var elements: Array<Pattern>? = null
+    override var optional: Boolean? = null
     override var typeAnnotation: TsTypeAnnotation? = null
     override var span: Span? = null
 }
 
+interface ObjectPattern : PatternBase, Pattern, TsFnParameter {
+    // conflict with @SerialName
+    //  var type: String?
+    var properties: Array<ObjectPatternProperty>?
+    var optional: Boolean?
+    override var typeAnnotation: TsTypeAnnotation?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class ObjectPattern : PatternBase, Pattern, TsFnParameter {
-/**
-     *literal is: "ObjectPattern"
-     */
-    override var type: String? = "ObjectPattern"
-    var properties: Array<ObjectPatternProperty>? = null
-    var optional: Boolean? = null
+@JsonClassDiscriminator("type")
+@SerialName("ObjectPattern")
+class ObjectPatternImpl : ObjectPattern {
+    // conflict with @SerialName
+    //  override var type : String? = "ObjectPattern"
+    override var properties: Array<ObjectPatternProperty>? = null
+    override var optional: Boolean? = null
     override var typeAnnotation: TsTypeAnnotation? = null
     override var span: Span? = null
 }
 
+interface AssignmentPattern : PatternBase, Pattern, TsParameterPropertyParameter {
+    // conflict with @SerialName
+    //  var type: String?
+    var left: Pattern?
+    var right: Expression?
+    override var typeAnnotation: TsTypeAnnotation?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class AssignmentPattern : PatternBase, Pattern, TsParameterPropertyParameter {
-/**
-     *literal is: "AssignmentPattern"
-     */
-    override var type: String? = "AssignmentPattern"
-    var left: Pattern? = null
-    var right: Expression? = null
+@JsonClassDiscriminator("type")
+@SerialName("AssignmentPattern")
+class AssignmentPatternImpl : AssignmentPattern {
+    // conflict with @SerialName
+    //  override var type : String? = "AssignmentPattern"
+    override var left: Pattern? = null
+    override var right: Expression? = null
     override var typeAnnotation: TsTypeAnnotation? = null
     override var span: Span? = null
 }
 
+interface RestElement : PatternBase, Pattern, ObjectPatternProperty, TsFnParameter {
+    // conflict with @SerialName
+    //  var type: String?
+    var rest: Span?
+    var argument: Pattern?
+    override var typeAnnotation: TsTypeAnnotation?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class RestElement : PatternBase, Pattern, ObjectPatternProperty, TsFnParameter {
-/**
-     *literal is: "RestElement"
-     */
-    override var type: String? = "RestElement"
-    var rest: Span? = null
-    var argument: Pattern? = null
+@JsonClassDiscriminator("type")
+@SerialName("RestElement")
+class RestElementImpl : RestElement {
+    // conflict with @SerialName
+    //  override var type : String? = "RestElement"
+    override var rest: Span? = null
+    override var argument: Pattern? = null
     override var typeAnnotation: TsTypeAnnotation? = null
     override var span: Span? = null
 }
@@ -2365,91 +3186,167 @@ open class RestElement : PatternBase, Pattern, ObjectPatternProperty, TsFnParame
 /**
  * `{key: value}`
  */
+interface KeyValuePatternProperty : Node, ObjectPatternProperty {
+    // conflict with @SerialName
+    //  var type: String?
+    var key: PropertyName?
+    var value: Pattern?
+}
+
+/**
+ * `{key: value}`
+ */
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class KeyValuePatternProperty : Node, ObjectPatternProperty {
-/**
-     *literal is: "KeyValuePatternProperty"
-     */
-    override var type: String? = "KeyValuePatternProperty"
-    var key: PropertyName? = null
-    var value: Pattern? = null
+@JsonClassDiscriminator("type")
+@SerialName("KeyValuePatternProperty")
+class KeyValuePatternPropertyImpl : KeyValuePatternProperty {
+    // conflict with @SerialName
+    //  override var type : String? = "KeyValuePatternProperty"
+    override var key: PropertyName? = null
+    override var value: Pattern? = null
 }
 
 /**
  * `{key}` or `{key = value}`
  */
+interface AssignmentPatternProperty : Node, HasSpan, ObjectPatternProperty {
+    // conflict with @SerialName
+    //  var type: String?
+    var key: Identifier?
+    var value: Expression?
+    override var span: Span?
+}
+
+/**
+ * `{key}` or `{key = value}`
+ */
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class AssignmentPatternProperty : Node, HasSpan, ObjectPatternProperty {
-/**
-     *literal is: "AssignmentPatternProperty"
-     */
-    override var type: String? = "AssignmentPatternProperty"
-    var key: Identifier? = null
-    var value: Expression? = null
+@JsonClassDiscriminator("type")
+@SerialName("AssignmentPatternProperty")
+class AssignmentPatternPropertyImpl : AssignmentPatternProperty {
+    // conflict with @SerialName
+    //  override var type : String? = "AssignmentPatternProperty"
+    override var key: Identifier? = null
+    override var value: Expression? = null
     override var span: Span? = null
 }
 
 interface PropBase : Node {
     var key: PropertyName?
+    // conflict with @SerialName
+    //  override var type: String?
 }
 
+interface KeyValueProperty : PropBase, Property {
+    // conflict with @SerialName
+    //  var type: String?
+    var value: Expression?
+    override var key: PropertyName?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class KeyValueProperty : PropBase, Property {
-/**
-     *literal is: "KeyValueProperty"
-     */
-    override var type: String? = "KeyValueProperty"
-    var value: Expression? = null
+@JsonClassDiscriminator("type")
+@SerialName("KeyValueProperty")
+class KeyValuePropertyImpl : KeyValueProperty {
+    // conflict with @SerialName
+    //  override var type : String? = "KeyValueProperty"
+    override var value: Expression? = null
     override var key: PropertyName? = null
 }
 
-@SwcDslMarker
-@Serializable
-open class AssignmentProperty : Node, Property {
-/**
-     *literal is: "AssignmentProperty"
-     */
-    override var type: String? = "AssignmentProperty"
-    var key: Identifier? = null
-    var value: Expression? = null
+interface AssignmentProperty : Node, Property {
+    // conflict with @SerialName
+    //  var type: String?
+    var key: Identifier?
+    var value: Expression?
 }
 
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class GetterProperty : PropBase, HasSpan, Property {
-/**
-     *literal is: "GetterProperty"
-     */
-    override var type: String? = "GetterProperty"
-    var typeAnnotation: TsTypeAnnotation? = null
-    var body: BlockStatement? = null
+@JsonClassDiscriminator("type")
+@SerialName("AssignmentProperty")
+class AssignmentPropertyImpl : AssignmentProperty {
+    // conflict with @SerialName
+    //  override var type : String? = "AssignmentProperty"
+    override var key: Identifier? = null
+    override var value: Expression? = null
+}
+
+interface GetterProperty : PropBase, HasSpan, Property {
+    // conflict with @SerialName
+    //  var type: String?
+    var typeAnnotation: TsTypeAnnotation?
+    var body: BlockStatement?
+    override var key: PropertyName?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+@SwcDslMarker
+@Serializable
+@JsonClassDiscriminator("type")
+@SerialName("GetterProperty")
+class GetterPropertyImpl : GetterProperty {
+    // conflict with @SerialName
+    //  override var type : String? = "GetterProperty"
+    override var typeAnnotation: TsTypeAnnotation? = null
+    override var body: BlockStatement? = null
     override var key: PropertyName? = null
     override var span: Span? = null
 }
 
+interface SetterProperty : PropBase, HasSpan, Property {
+    // conflict with @SerialName
+    //  var type: String?
+    var param: Pattern?
+    var body: BlockStatement?
+    override var key: PropertyName?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class SetterProperty : PropBase, HasSpan, Property {
-/**
-     *literal is: "SetterProperty"
-     */
-    override var type: String? = "SetterProperty"
-    var param: Pattern? = null
-    var body: BlockStatement? = null
+@JsonClassDiscriminator("type")
+@SerialName("SetterProperty")
+class SetterPropertyImpl : SetterProperty {
+    // conflict with @SerialName
+    //  override var type : String? = "SetterProperty"
+    override var param: Pattern? = null
+    override var body: BlockStatement? = null
     override var key: PropertyName? = null
     override var span: Span? = null
 }
 
+interface MethodProperty : PropBase, Fn, Property {
+    // conflict with @SerialName
+    //  var type: String?
+    override var key: PropertyName?
+    override var params: Array<Param>?
+    override var body: BlockStatement?
+    override var generator: Boolean?
+    override var async: Boolean?
+    override var typeParameters: TsTypeParameterDeclaration?
+    override var returnType: TsTypeAnnotation?
+    override var span: Span?
+    override var decorators: Array<Decorator>?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class MethodProperty : PropBase, Fn, Property {
-/**
-     *literal is: "MethodProperty"
-     */
-    override var type: String? = "MethodProperty"
+@JsonClassDiscriminator("type")
+@SerialName("MethodProperty")
+class MethodPropertyImpl : MethodProperty {
+    // conflict with @SerialName
+    //  override var type : String? = "MethodProperty"
     override var key: PropertyName? = null
     override var params: Array<Param>? = null
     override var body: BlockStatement? = null
@@ -2461,989 +3358,1701 @@ open class MethodProperty : PropBase, Fn, Property {
     override var decorators: Array<Decorator>? = null
 }
 
+interface ComputedPropName : Node, HasSpan, PropertyName {
+    // conflict with @SerialName
+    //  var type: String?
+    var expression: Expression?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class ComputedPropName : Node, HasSpan, PropertyName {
-/**
-     *literal is: "Computed"
-     */
-    override var type: String? = "Computed"
-    var expression: Expression? = null
+@JsonClassDiscriminator("type")
+@SerialName("Computed")
+class ComputedPropNameImpl : ComputedPropName {
+    // conflict with @SerialName
+    //  override var type : String? = "Computed"
+    override var expression: Expression? = null
     override var span: Span? = null
 }
 
+interface BlockStatement : Node, HasSpan, Statement {
+    // conflict with @SerialName
+    //  var type: String?
+    var stmts: Array<Statement>?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class BlockStatement : Node, HasSpan, Statement {
-/**
-     *literal is: "BlockStatement"
-     */
-    override var type: String? = "BlockStatement"
-    var stmts: Array<Statement>? = null
+@JsonClassDiscriminator("type")
+@SerialName("BlockStatement")
+class BlockStatementImpl : BlockStatement {
+    // conflict with @SerialName
+    //  override var type : String? = "BlockStatement"
+    override var stmts: Array<Statement>? = null
     override var span: Span? = null
 }
 
+interface ExpressionStatement : Node, HasSpan, Statement {
+    // conflict with @SerialName
+    //  var type: String?
+    var expression: Expression?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class ExpressionStatement : Node, HasSpan, Statement {
-/**
-     *literal is: "ExpressionStatement"
-     */
-    override var type: String? = "ExpressionStatement"
-    var expression: Expression? = null
+@JsonClassDiscriminator("type")
+@SerialName("ExpressionStatement")
+class ExpressionStatementImpl : ExpressionStatement {
+    // conflict with @SerialName
+    //  override var type : String? = "ExpressionStatement"
+    override var expression: Expression? = null
     override var span: Span? = null
 }
 
+interface EmptyStatement : Node, HasSpan, ClassMember, Statement {
+    // conflict with @SerialName
+    //  var type: String?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class EmptyStatement : Node, HasSpan, ClassMember, Statement {
-/**
-     *literal is: "EmptyStatement"
-     */
-    override var type: String? = "EmptyStatement"
+@JsonClassDiscriminator("type")
+@SerialName("EmptyStatement")
+class EmptyStatementImpl : EmptyStatement {
+    // conflict with @SerialName
+    //  override var type : String? = "EmptyStatement"
     override var span: Span? = null
 }
 
+interface DebuggerStatement : Node, HasSpan, Statement {
+    // conflict with @SerialName
+    //  var type: String?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class DebuggerStatement : Node, HasSpan, Statement {
-/**
-     *literal is: "DebuggerStatement"
-     */
-    override var type: String? = "DebuggerStatement"
+@JsonClassDiscriminator("type")
+@SerialName("DebuggerStatement")
+class DebuggerStatementImpl : DebuggerStatement {
+    // conflict with @SerialName
+    //  override var type : String? = "DebuggerStatement"
     override var span: Span? = null
 }
 
+interface WithStatement : Node, HasSpan, Statement {
+    // conflict with @SerialName
+    //  var type: String?
+    var jsObject: Expression?
+    var body: Statement?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class WithStatement : Node, HasSpan, Statement {
-/**
-     *literal is: "WithStatement"
-     */
-    override var type: String? = "WithStatement"
-    var jsObject: Expression? = null
-    var body: Statement? = null
+@JsonClassDiscriminator("type")
+@SerialName("WithStatement")
+class WithStatementImpl : WithStatement {
+    // conflict with @SerialName
+    //  override var type : String? = "WithStatement"
+    override var jsObject: Expression? = null
+    override var body: Statement? = null
     override var span: Span? = null
 }
 
+interface ReturnStatement : Node, HasSpan, Statement {
+    // conflict with @SerialName
+    //  var type: String?
+    var argument: Expression?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class ReturnStatement : Node, HasSpan, Statement {
-/**
-     *literal is: "ReturnStatement"
-     */
-    override var type: String? = "ReturnStatement"
-    var argument: Expression? = null
+@JsonClassDiscriminator("type")
+@SerialName("ReturnStatement")
+class ReturnStatementImpl : ReturnStatement {
+    // conflict with @SerialName
+    //  override var type : String? = "ReturnStatement"
+    override var argument: Expression? = null
     override var span: Span? = null
 }
 
+interface LabeledStatement : Node, HasSpan, Statement {
+    // conflict with @SerialName
+    //  var type: String?
+    var label: Identifier?
+    var body: Statement?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class LabeledStatement : Node, HasSpan, Statement {
-/**
-     *literal is: "LabeledStatement"
-     */
-    override var type: String? = "LabeledStatement"
-    var label: Identifier? = null
-    var body: Statement? = null
+@JsonClassDiscriminator("type")
+@SerialName("LabeledStatement")
+class LabeledStatementImpl : LabeledStatement {
+    // conflict with @SerialName
+    //  override var type : String? = "LabeledStatement"
+    override var label: Identifier? = null
+    override var body: Statement? = null
     override var span: Span? = null
 }
 
+interface BreakStatement : Node, HasSpan, Statement {
+    // conflict with @SerialName
+    //  var type: String?
+    var label: Identifier?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class BreakStatement : Node, HasSpan, Statement {
-/**
-     *literal is: "BreakStatement"
-     */
-    override var type: String? = "BreakStatement"
-    var label: Identifier? = null
+@JsonClassDiscriminator("type")
+@SerialName("BreakStatement")
+class BreakStatementImpl : BreakStatement {
+    // conflict with @SerialName
+    //  override var type : String? = "BreakStatement"
+    override var label: Identifier? = null
     override var span: Span? = null
 }
 
+interface ContinueStatement : Node, HasSpan, Statement {
+    // conflict with @SerialName
+    //  var type: String?
+    var label: Identifier?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class ContinueStatement : Node, HasSpan, Statement {
-/**
-     *literal is: "ContinueStatement"
-     */
-    override var type: String? = "ContinueStatement"
-    var label: Identifier? = null
+@JsonClassDiscriminator("type")
+@SerialName("ContinueStatement")
+class ContinueStatementImpl : ContinueStatement {
+    // conflict with @SerialName
+    //  override var type : String? = "ContinueStatement"
+    override var label: Identifier? = null
     override var span: Span? = null
 }
 
+interface IfStatement : Node, HasSpan, Statement {
+    // conflict with @SerialName
+    //  var type: String?
+    var test: Expression?
+    var consequent: Statement?
+    var alternate: Statement?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class IfStatement : Node, HasSpan, Statement {
-/**
-     *literal is: "IfStatement"
-     */
-    override var type: String? = "IfStatement"
-    var test: Expression? = null
-    var consequent: Statement? = null
-    var alternate: Statement? = null
+@JsonClassDiscriminator("type")
+@SerialName("IfStatement")
+class IfStatementImpl : IfStatement {
+    // conflict with @SerialName
+    //  override var type : String? = "IfStatement"
+    override var test: Expression? = null
+    override var consequent: Statement? = null
+    override var alternate: Statement? = null
     override var span: Span? = null
 }
 
+interface SwitchStatement : Node, HasSpan, Statement {
+    // conflict with @SerialName
+    //  var type: String?
+    var discriminant: Expression?
+    var cases: Array<SwitchCase>?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class SwitchStatement : Node, HasSpan, Statement {
-/**
-     *literal is: "SwitchStatement"
-     */
-    override var type: String? = "SwitchStatement"
-    var discriminant: Expression? = null
-    var cases: Array<SwitchCase>? = null
+@JsonClassDiscriminator("type")
+@SerialName("SwitchStatement")
+class SwitchStatementImpl : SwitchStatement {
+    // conflict with @SerialName
+    //  override var type : String? = "SwitchStatement"
+    override var discriminant: Expression? = null
+    override var cases: Array<SwitchCase>? = null
     override var span: Span? = null
 }
 
+interface ThrowStatement : Node, HasSpan, Statement {
+    // conflict with @SerialName
+    //  var type: String?
+    var argument: Expression?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class ThrowStatement : Node, HasSpan, Statement {
-/**
-     *literal is: "ThrowStatement"
-     */
-    override var type: String? = "ThrowStatement"
-    var argument: Expression? = null
+@JsonClassDiscriminator("type")
+@SerialName("ThrowStatement")
+class ThrowStatementImpl : ThrowStatement {
+    // conflict with @SerialName
+    //  override var type : String? = "ThrowStatement"
+    override var argument: Expression? = null
     override var span: Span? = null
 }
 
+interface TryStatement : Node, HasSpan, Statement {
+    // conflict with @SerialName
+    //  var type: String?
+    var block: BlockStatement?
+    var handler: CatchClause?
+    var finalizer: BlockStatement?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TryStatement : Node, HasSpan, Statement {
-/**
-     *literal is: "TryStatement"
-     */
-    override var type: String? = "TryStatement"
-    var block: BlockStatement? = null
-    var handler: CatchClause? = null
-    var finalizer: BlockStatement? = null
+@JsonClassDiscriminator("type")
+@SerialName("TryStatement")
+class TryStatementImpl : TryStatement {
+    // conflict with @SerialName
+    //  override var type : String? = "TryStatement"
+    override var block: BlockStatement? = null
+    override var handler: CatchClause? = null
+    override var finalizer: BlockStatement? = null
     override var span: Span? = null
 }
 
+interface WhileStatement : Node, HasSpan, Statement {
+    // conflict with @SerialName
+    //  var type: String?
+    var test: Expression?
+    var body: Statement?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class WhileStatement : Node, HasSpan, Statement {
-/**
-     *literal is: "WhileStatement"
-     */
-    override var type: String? = "WhileStatement"
-    var test: Expression? = null
-    var body: Statement? = null
+@JsonClassDiscriminator("type")
+@SerialName("WhileStatement")
+class WhileStatementImpl : WhileStatement {
+    // conflict with @SerialName
+    //  override var type : String? = "WhileStatement"
+    override var test: Expression? = null
+    override var body: Statement? = null
     override var span: Span? = null
 }
 
+interface DoWhileStatement : Node, HasSpan, Statement {
+    // conflict with @SerialName
+    //  var type: String?
+    var test: Expression?
+    var body: Statement?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class DoWhileStatement : Node, HasSpan, Statement {
-/**
-     *literal is: "DoWhileStatement"
-     */
-    override var type: String? = "DoWhileStatement"
-    var test: Expression? = null
-    var body: Statement? = null
+@JsonClassDiscriminator("type")
+@SerialName("DoWhileStatement")
+class DoWhileStatementImpl : DoWhileStatement {
+    // conflict with @SerialName
+    //  override var type : String? = "DoWhileStatement"
+    override var test: Expression? = null
+    override var body: Statement? = null
     override var span: Span? = null
 }
 
+interface ForStatement : Node, HasSpan, Statement {
+    // conflict with @SerialName
+    //  var type: String?
+    var init: Union.U2<VariableDeclaration, Expression>?
+    var test: Expression?
+    var update: Expression?
+    var body: Statement?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class ForStatement : Node, HasSpan, Statement {
-/**
-     *literal is: "ForStatement"
-     */
-    override var type: String? = "ForStatement"
-    var init: Union.U2<VariableDeclaration, Expression>? = null
-    var test: Expression? = null
-    var update: Expression? = null
-    var body: Statement? = null
+@JsonClassDiscriminator("type")
+@SerialName("ForStatement")
+class ForStatementImpl : ForStatement {
+    // conflict with @SerialName
+    //  override var type : String? = "ForStatement"
+    override var init: Union.U2<VariableDeclaration, Expression>? = null
+    override var test: Expression? = null
+    override var update: Expression? = null
+    override var body: Statement? = null
     override var span: Span? = null
 }
 
+interface ForInStatement : Node, HasSpan, Statement {
+    // conflict with @SerialName
+    //  var type: String?
+    var left: Union.U2<VariableDeclaration, Pattern>?
+    var right: Expression?
+    var body: Statement?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class ForInStatement : Node, HasSpan, Statement {
-/**
-     *literal is: "ForInStatement"
-     */
-    override var type: String? = "ForInStatement"
-    var left: Union.U2<VariableDeclaration, Pattern>? = null
-    var right: Expression? = null
-    var body: Statement? = null
+@JsonClassDiscriminator("type")
+@SerialName("ForInStatement")
+class ForInStatementImpl : ForInStatement {
+    // conflict with @SerialName
+    //  override var type : String? = "ForInStatement"
+    override var left: Union.U2<VariableDeclaration, Pattern>? = null
+    override var right: Expression? = null
+    override var body: Statement? = null
     override var span: Span? = null
 }
 
-@SwcDslMarker
-@Serializable
-open class ForOfStatement : Node, HasSpan, Statement {
-/**
-     *literal is: "ForOfStatement"
-     */
-    override var type: String? = "ForOfStatement"
-
+interface ForOfStatement : Node, HasSpan, Statement {
+    // conflict with @SerialName
+    //  var type: String?
 /**
      *  Span of the await token.
      *
      *  es2018 for-await-of statements, e.g., `for await (const x of xs) {`
      */
-    var await: Span? = null
-    var left: Union.U2<VariableDeclaration, Pattern>? = null
-    var right: Expression? = null
-    var body: Statement? = null
+    var await: Span?
+    var left: Union.U2<VariableDeclaration, Pattern>?
+    var right: Expression?
+    var body: Statement?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+@SwcDslMarker
+@Serializable
+@JsonClassDiscriminator("type")
+@SerialName("ForOfStatement")
+class ForOfStatementImpl : ForOfStatement {
+    // conflict with @SerialName
+    //  override var type : String? = "ForOfStatement"
+    override var await: Span? = null
+    override var left: Union.U2<VariableDeclaration, Pattern>? = null
+    override var right: Expression? = null
+    override var body: Statement? = null
     override var span: Span? = null
 }
 
-@SwcDslMarker
-@Serializable
-open class SwitchCase : Node, HasSpan {
-/**
-     *literal is: "SwitchCase"
-     */
-    override var type: String? = "SwitchCase"
-
+interface SwitchCase : Node, HasSpan {
+    // conflict with @SerialName
+    //  var type: String?
 /**
      * Undefined for default case
      */
-    var test: Expression? = null
-    var consequent: Array<Statement>? = null
+    var test: Expression?
+    var consequent: Array<Statement>?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+@SwcDslMarker
+@Serializable
+@JsonClassDiscriminator("type")
+@SerialName("SwitchCase")
+class SwitchCaseImpl : SwitchCase {
+    // conflict with @SerialName
+    //  override var type : String? = "SwitchCase"
+    override var test: Expression? = null
+    override var consequent: Array<Statement>? = null
     override var span: Span? = null
 }
 
-@SwcDslMarker
-@Serializable
-open class CatchClause : Node, HasSpan {
-/**
-     *literal is: "CatchClause"
-     */
-    override var type: String? = "CatchClause"
-
+interface CatchClause : Node, HasSpan {
+    // conflict with @SerialName
+    //  var type: String?
 /**
      * The param is `undefined` if the catch binding is omitted. E.g., `try { foo() } catch {}`
      */
-    var param: Pattern? = null
-    var body: BlockStatement? = null
+    var param: Pattern?
+    var body: BlockStatement?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+@SwcDslMarker
+@Serializable
+@JsonClassDiscriminator("type")
+@SerialName("CatchClause")
+class CatchClauseImpl : CatchClause {
+    // conflict with @SerialName
+    //  override var type : String? = "CatchClause"
+    override var param: Pattern? = null
+    override var body: BlockStatement? = null
     override var span: Span? = null
 }
 
+interface TsTypeAnnotation : Node, HasSpan {
+    // conflict with @SerialName
+    //  var type: String?
+    var typeAnnotation: TsType?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsTypeAnnotation : Node, HasSpan {
-/**
-     *literal is: "TsTypeAnnotation"
-     */
-    override var type: String? = "TsTypeAnnotation"
-    var typeAnnotation: TsType? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsTypeAnnotation")
+class TsTypeAnnotationImpl : TsTypeAnnotation {
+    // conflict with @SerialName
+    //  override var type : String? = "TsTypeAnnotation"
+    override var typeAnnotation: TsType? = null
     override var span: Span? = null
 }
 
+interface TsTypeParameterDeclaration : Node, HasSpan {
+    // conflict with @SerialName
+    //  var type: String?
+    var parameters: Array<TsTypeParameter>?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsTypeParameterDeclaration : Node, HasSpan {
-/**
-     *literal is: "TsTypeParameterDeclaration"
-     */
-    override var type: String? = "TsTypeParameterDeclaration"
-    var parameters: Array<TsTypeParameter>? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsTypeParameterDeclaration")
+class TsTypeParameterDeclarationImpl : TsTypeParameterDeclaration {
+    // conflict with @SerialName
+    //  override var type : String? = "TsTypeParameterDeclaration"
+    override var parameters: Array<TsTypeParameter>? = null
     override var span: Span? = null
 }
 
+interface TsTypeParameter : Node, HasSpan {
+    // conflict with @SerialName
+    //  var type: String?
+    var name: Identifier?
+    var jsIn: Boolean?
+    var out: Boolean?
+    var constraint: TsType?
+    var default: TsType?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsTypeParameter : Node, HasSpan {
-/**
-     *literal is: "TsTypeParameter"
-     */
-    override var type: String? = "TsTypeParameter"
-    var name: Identifier? = null
-    var jsIn: Boolean? = null
-    var out: Boolean? = null
-    var constraint: TsType? = null
-    var default: TsType? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsTypeParameter")
+class TsTypeParameterImpl : TsTypeParameter {
+    // conflict with @SerialName
+    //  override var type : String? = "TsTypeParameter"
+    override var name: Identifier? = null
+    override var jsIn: Boolean? = null
+    override var out: Boolean? = null
+    override var constraint: TsType? = null
+    override var default: TsType? = null
     override var span: Span? = null
 }
 
+interface TsTypeParameterInstantiation : Node, HasSpan {
+    // conflict with @SerialName
+    //  var type: String?
+    var params: Array<TsType>?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsTypeParameterInstantiation : Node, HasSpan {
-/**
-     *literal is: "TsTypeParameterInstantiation"
-     */
-    override var type: String? = "TsTypeParameterInstantiation"
-    var params: Array<TsType>? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsTypeParameterInstantiation")
+class TsTypeParameterInstantiationImpl : TsTypeParameterInstantiation {
+    // conflict with @SerialName
+    //  override var type : String? = "TsTypeParameterInstantiation"
+    override var params: Array<TsType>? = null
     override var span: Span? = null
 }
 
+interface TsParameterProperty : Node, HasSpan, HasDecorator {
+    // conflict with @SerialName
+    //  var type: String?
+    var accessibility: String?
+    var override: Boolean?
+    var readonly: Boolean?
+    var param: TsParameterPropertyParameter?
+    override var span: Span?
+    override var decorators: Array<Decorator>?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsParameterProperty : Node, HasSpan, HasDecorator {
-/**
-     *literal is: "TsParameterProperty"
-     */
-    override var type: String? = "TsParameterProperty"
-
-/**
-     * [Accessibility]
-     */
-    var accessibility: String? = null
-    var override: Boolean? = null
-    var readonly: Boolean? = null
-    var param: TsParameterPropertyParameter? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsParameterProperty")
+class TsParameterPropertyImpl : TsParameterProperty {
+    // conflict with @SerialName
+    //  override var type : String? = "TsParameterProperty"
+    override var accessibility: String? = null
+    override var override: Boolean? = null
+    override var readonly: Boolean? = null
+    override var param: TsParameterPropertyParameter? = null
     override var span: Span? = null
     override var decorators: Array<Decorator>? = null
 }
 
-@SwcDslMarker
-@Serializable
-open class TsQualifiedName : Node, TsEntityName {
-/**
-     *literal is: "TsQualifiedName"
-     */
-    override var type: String? = "TsQualifiedName"
-    var left: TsEntityName? = null
-    var right: Identifier? = null
+interface TsQualifiedName : Node, TsEntityName {
+    // conflict with @SerialName
+    //  var type: String?
+    var left: TsEntityName?
+    var right: Identifier?
 }
 
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsCallSignatureDeclaration : Node, HasSpan, TsTypeElement {
-/**
-     *literal is: "TsCallSignatureDeclaration"
-     */
-    override var type: String? = "TsCallSignatureDeclaration"
-    var params: Array<TsFnParameter>? = null
-    var typeAnnotation: TsTypeAnnotation? = null
-    var typeParams: TsTypeParameterDeclaration? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsQualifiedName")
+class TsQualifiedNameImpl : TsQualifiedName {
+    // conflict with @SerialName
+    //  override var type : String? = "TsQualifiedName"
+    override var left: TsEntityName? = null
+    override var right: Identifier? = null
+}
+
+interface TsCallSignatureDeclaration : Node, HasSpan, TsTypeElement {
+    // conflict with @SerialName
+    //  var type: String?
+    var params: Array<TsFnParameter>?
+    var typeAnnotation: TsTypeAnnotation?
+    var typeParams: TsTypeParameterDeclaration?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
+@SwcDslMarker
+@Serializable
+@JsonClassDiscriminator("type")
+@SerialName("TsCallSignatureDeclaration")
+class TsCallSignatureDeclarationImpl : TsCallSignatureDeclaration {
+    // conflict with @SerialName
+    //  override var type : String? = "TsCallSignatureDeclaration"
+    override var params: Array<TsFnParameter>? = null
+    override var typeAnnotation: TsTypeAnnotation? = null
+    override var typeParams: TsTypeParameterDeclaration? = null
     override var span: Span? = null
 }
 
+interface TsConstructSignatureDeclaration : Node, HasSpan, TsTypeElement {
+    // conflict with @SerialName
+    //  var type: String?
+    var params: Array<TsFnParameter>?
+    var typeAnnotation: TsTypeAnnotation?
+    var typeParams: TsTypeParameterDeclaration?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsConstructSignatureDeclaration : Node, HasSpan, TsTypeElement {
-/**
-     *literal is: "TsConstructSignatureDeclaration"
-     */
-    override var type: String? = "TsConstructSignatureDeclaration"
-    var params: Array<TsFnParameter>? = null
-    var typeAnnotation: TsTypeAnnotation? = null
-    var typeParams: TsTypeParameterDeclaration? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsConstructSignatureDeclaration")
+class TsConstructSignatureDeclarationImpl : TsConstructSignatureDeclaration {
+    // conflict with @SerialName
+    //  override var type : String? = "TsConstructSignatureDeclaration"
+    override var params: Array<TsFnParameter>? = null
+    override var typeAnnotation: TsTypeAnnotation? = null
+    override var typeParams: TsTypeParameterDeclaration? = null
     override var span: Span? = null
 }
 
+interface TsPropertySignature : Node, HasSpan, TsTypeElement {
+    // conflict with @SerialName
+    //  var type: String?
+    var readonly: Boolean?
+    var key: Expression?
+    var computed: Boolean?
+    var optional: Boolean?
+    var init: Expression?
+    var params: Array<TsFnParameter>?
+    var typeAnnotation: TsTypeAnnotation?
+    var typeParams: TsTypeParameterDeclaration?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsPropertySignature : Node, HasSpan, TsTypeElement {
-/**
-     *literal is: "TsPropertySignature"
-     */
-    override var type: String? = "TsPropertySignature"
-    var readonly: Boolean? = null
-    var key: Expression? = null
-    var computed: Boolean? = null
-    var optional: Boolean? = null
-    var init: Expression? = null
-    var params: Array<TsFnParameter>? = null
-    var typeAnnotation: TsTypeAnnotation? = null
-    var typeParams: TsTypeParameterDeclaration? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsPropertySignature")
+class TsPropertySignatureImpl : TsPropertySignature {
+    // conflict with @SerialName
+    //  override var type : String? = "TsPropertySignature"
+    override var readonly: Boolean? = null
+    override var key: Expression? = null
+    override var computed: Boolean? = null
+    override var optional: Boolean? = null
+    override var init: Expression? = null
+    override var params: Array<TsFnParameter>? = null
+    override var typeAnnotation: TsTypeAnnotation? = null
+    override var typeParams: TsTypeParameterDeclaration? = null
     override var span: Span? = null
 }
 
+interface TsGetterSignature : Node, HasSpan, TsTypeElement {
+    // conflict with @SerialName
+    //  var type: String?
+    var readonly: Boolean?
+    var key: Expression?
+    var computed: Boolean?
+    var optional: Boolean?
+    var typeAnnotation: TsTypeAnnotation?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsGetterSignature : Node, HasSpan, TsTypeElement {
-/**
-     *literal is: "TsGetterSignature"
-     */
-    override var type: String? = "TsGetterSignature"
-    var readonly: Boolean? = null
-    var key: Expression? = null
-    var computed: Boolean? = null
-    var optional: Boolean? = null
-    var typeAnnotation: TsTypeAnnotation? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsGetterSignature")
+class TsGetterSignatureImpl : TsGetterSignature {
+    // conflict with @SerialName
+    //  override var type : String? = "TsGetterSignature"
+    override var readonly: Boolean? = null
+    override var key: Expression? = null
+    override var computed: Boolean? = null
+    override var optional: Boolean? = null
+    override var typeAnnotation: TsTypeAnnotation? = null
     override var span: Span? = null
 }
 
+interface TsSetterSignature : Node, HasSpan, TsTypeElement {
+    // conflict with @SerialName
+    //  var type: String?
+    var readonly: Boolean?
+    var key: Expression?
+    var computed: Boolean?
+    var optional: Boolean?
+    var param: TsFnParameter?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsSetterSignature : Node, HasSpan, TsTypeElement {
-/**
-     *literal is: "TsSetterSignature"
-     */
-    override var type: String? = "TsSetterSignature"
-    var readonly: Boolean? = null
-    var key: Expression? = null
-    var computed: Boolean? = null
-    var optional: Boolean? = null
-    var param: TsFnParameter? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsSetterSignature")
+class TsSetterSignatureImpl : TsSetterSignature {
+    // conflict with @SerialName
+    //  override var type : String? = "TsSetterSignature"
+    override var readonly: Boolean? = null
+    override var key: Expression? = null
+    override var computed: Boolean? = null
+    override var optional: Boolean? = null
+    override var param: TsFnParameter? = null
     override var span: Span? = null
 }
 
+interface TsMethodSignature : Node, HasSpan, TsTypeElement {
+    // conflict with @SerialName
+    //  var type: String?
+    var readonly: Boolean?
+    var key: Expression?
+    var computed: Boolean?
+    var optional: Boolean?
+    var params: Array<TsFnParameter>?
+    var typeAnn: TsTypeAnnotation?
+    var typeParams: TsTypeParameterDeclaration?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsMethodSignature : Node, HasSpan, TsTypeElement {
-/**
-     *literal is: "TsMethodSignature"
-     */
-    override var type: String? = "TsMethodSignature"
-    var readonly: Boolean? = null
-    var key: Expression? = null
-    var computed: Boolean? = null
-    var optional: Boolean? = null
-    var params: Array<TsFnParameter>? = null
-    var typeAnn: TsTypeAnnotation? = null
-    var typeParams: TsTypeParameterDeclaration? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsMethodSignature")
+class TsMethodSignatureImpl : TsMethodSignature {
+    // conflict with @SerialName
+    //  override var type : String? = "TsMethodSignature"
+    override var readonly: Boolean? = null
+    override var key: Expression? = null
+    override var computed: Boolean? = null
+    override var optional: Boolean? = null
+    override var params: Array<TsFnParameter>? = null
+    override var typeAnn: TsTypeAnnotation? = null
+    override var typeParams: TsTypeParameterDeclaration? = null
     override var span: Span? = null
 }
 
+interface TsIndexSignature : Node, HasSpan, ClassMember, TsTypeElement {
+    // conflict with @SerialName
+    //  var type: String?
+    var params: Array<TsFnParameter>?
+    var typeAnnotation: TsTypeAnnotation?
+    var readonly: Boolean?
+    var static: Boolean?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsIndexSignature : Node, HasSpan, ClassMember, TsTypeElement {
-/**
-     *literal is: "TsIndexSignature"
-     */
-    override var type: String? = "TsIndexSignature"
-    var params: Array<TsFnParameter>? = null
-    var typeAnnotation: TsTypeAnnotation? = null
-    var readonly: Boolean? = null
-    var static: Boolean? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsIndexSignature")
+class TsIndexSignatureImpl : TsIndexSignature {
+    // conflict with @SerialName
+    //  override var type : String? = "TsIndexSignature"
+    override var params: Array<TsFnParameter>? = null
+    override var typeAnnotation: TsTypeAnnotation? = null
+    override var readonly: Boolean? = null
+    override var static: Boolean? = null
     override var span: Span? = null
 }
 
+interface TsKeywordType : Node, HasSpan, TsType {
+    // conflict with @SerialName
+    //  var type: String?
+    var kind: String?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsKeywordType : Node, HasSpan, TsType {
-/**
-     *literal is: "TsKeywordType"
-     */
-    override var type: String? = "TsKeywordType"
-
-/**
-     * [TsKeywordTypeKind]
-     */
-    var kind: String? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsKeywordType")
+class TsKeywordTypeImpl : TsKeywordType {
+    // conflict with @SerialName
+    //  override var type : String? = "TsKeywordType"
+    override var kind: String? = null
     override var span: Span? = null
 }
 
+interface TsThisType : Node, HasSpan, TsType, TsThisTypeOrIdent {
+    // conflict with @SerialName
+    //  var type: String?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsThisType : Node, HasSpan, TsType, TsThisTypeOrIdent {
-/**
-     *literal is: "TsThisType"
-     */
-    override var type: String? = "TsThisType"
+@JsonClassDiscriminator("type")
+@SerialName("TsThisType")
+class TsThisTypeImpl : TsThisType {
+    // conflict with @SerialName
+    //  override var type : String? = "TsThisType"
     override var span: Span? = null
 }
 
+interface TsFunctionType : Node, HasSpan, TsFnOrConstructorType {
+    // conflict with @SerialName
+    //  var type: String?
+    var params: Array<TsFnParameter>?
+    var typeParams: TsTypeParameterDeclaration?
+    var typeAnnotation: TsTypeAnnotation?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsFunctionType : Node, HasSpan, TsFnOrConstructorType {
-/**
-     *literal is: "TsFunctionType"
-     */
-    override var type: String? = "TsFunctionType"
-    var params: Array<TsFnParameter>? = null
-    var typeParams: TsTypeParameterDeclaration? = null
-    var typeAnnotation: TsTypeAnnotation? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsFunctionType")
+class TsFunctionTypeImpl : TsFunctionType {
+    // conflict with @SerialName
+    //  override var type : String? = "TsFunctionType"
+    override var params: Array<TsFnParameter>? = null
+    override var typeParams: TsTypeParameterDeclaration? = null
+    override var typeAnnotation: TsTypeAnnotation? = null
     override var span: Span? = null
 }
 
+interface TsConstructorType : Node, HasSpan, TsFnOrConstructorType {
+    // conflict with @SerialName
+    //  var type: String?
+    var params: Array<TsFnParameter>?
+    var typeParams: TsTypeParameterDeclaration?
+    var typeAnnotation: TsTypeAnnotation?
+    var isAbstract: Boolean?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsConstructorType : Node, HasSpan, TsFnOrConstructorType {
-/**
-     *literal is: "TsConstructorType"
-     */
-    override var type: String? = "TsConstructorType"
-    var params: Array<TsFnParameter>? = null
-    var typeParams: TsTypeParameterDeclaration? = null
-    var typeAnnotation: TsTypeAnnotation? = null
-    var isAbstract: Boolean? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsConstructorType")
+class TsConstructorTypeImpl : TsConstructorType {
+    // conflict with @SerialName
+    //  override var type : String? = "TsConstructorType"
+    override var params: Array<TsFnParameter>? = null
+    override var typeParams: TsTypeParameterDeclaration? = null
+    override var typeAnnotation: TsTypeAnnotation? = null
+    override var isAbstract: Boolean? = null
     override var span: Span? = null
 }
 
+interface TsTypeReference : Node, HasSpan, TsType {
+    // conflict with @SerialName
+    //  var type: String?
+    var typeName: TsEntityName?
+    var typeParams: TsTypeParameterInstantiation?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsTypeReference : Node, HasSpan, TsType {
-/**
-     *literal is: "TsTypeReference"
-     */
-    override var type: String? = "TsTypeReference"
-    var typeName: TsEntityName? = null
-    var typeParams: TsTypeParameterInstantiation? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsTypeReference")
+class TsTypeReferenceImpl : TsTypeReference {
+    // conflict with @SerialName
+    //  override var type : String? = "TsTypeReference"
+    override var typeName: TsEntityName? = null
+    override var typeParams: TsTypeParameterInstantiation? = null
     override var span: Span? = null
 }
 
+interface TsTypePredicate : Node, HasSpan, TsType {
+    // conflict with @SerialName
+    //  var type: String?
+    var asserts: Boolean?
+    var paramName: TsThisTypeOrIdent?
+    var typeAnnotation: TsTypeAnnotation?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsTypePredicate : Node, HasSpan, TsType {
-/**
-     *literal is: "TsTypePredicate"
-     */
-    override var type: String? = "TsTypePredicate"
-    var asserts: Boolean? = null
-    var paramName: TsThisTypeOrIdent? = null
-    var typeAnnotation: TsTypeAnnotation? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsTypePredicate")
+class TsTypePredicateImpl : TsTypePredicate {
+    // conflict with @SerialName
+    //  override var type : String? = "TsTypePredicate"
+    override var asserts: Boolean? = null
+    override var paramName: TsThisTypeOrIdent? = null
+    override var typeAnnotation: TsTypeAnnotation? = null
     override var span: Span? = null
 }
 
+interface TsImportType : Node, HasSpan, TsType, TsTypeQueryExpr {
+    // conflict with @SerialName
+    //  var type: String?
+    var argument: StringLiteral?
+    var qualifier: TsEntityName?
+    var typeArguments: TsTypeParameterInstantiation?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsImportType : Node, HasSpan, TsType, TsTypeQueryExpr {
-/**
-     *literal is: "TsImportType"
-     */
-    override var type: String? = "TsImportType"
-    var argument: StringLiteral? = null
-    var qualifier: TsEntityName? = null
-    var typeArguments: TsTypeParameterInstantiation? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsImportType")
+class TsImportTypeImpl : TsImportType {
+    // conflict with @SerialName
+    //  override var type : String? = "TsImportType"
+    override var argument: StringLiteral? = null
+    override var qualifier: TsEntityName? = null
+    override var typeArguments: TsTypeParameterInstantiation? = null
     override var span: Span? = null
 }
 
 /**
  * `typeof` operator
  */
+interface TsTypeQuery : Node, HasSpan, TsType {
+    // conflict with @SerialName
+    //  var type: String?
+    var exprName: TsTypeQueryExpr?
+    var typeArguments: TsTypeParameterInstantiation?
+    override var span: Span?
+}
+
+/**
+ * `typeof` operator
+ */
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsTypeQuery : Node, HasSpan, TsType {
-/**
-     *literal is: "TsTypeQuery"
-     */
-    override var type: String? = "TsTypeQuery"
-    var exprName: TsTypeQueryExpr? = null
-    var typeArguments: TsTypeParameterInstantiation? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsTypeQuery")
+class TsTypeQueryImpl : TsTypeQuery {
+    // conflict with @SerialName
+    //  override var type : String? = "TsTypeQuery"
+    override var exprName: TsTypeQueryExpr? = null
+    override var typeArguments: TsTypeParameterInstantiation? = null
     override var span: Span? = null
 }
 
+interface TsTypeLiteral : Node, HasSpan, TsType {
+    // conflict with @SerialName
+    //  var type: String?
+    var members: Array<TsTypeElement>?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsTypeLiteral : Node, HasSpan, TsType {
-/**
-     *literal is: "TsTypeLiteral"
-     */
-    override var type: String? = "TsTypeLiteral"
-    var members: Array<TsTypeElement>? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsTypeLiteral")
+class TsTypeLiteralImpl : TsTypeLiteral {
+    // conflict with @SerialName
+    //  override var type : String? = "TsTypeLiteral"
+    override var members: Array<TsTypeElement>? = null
     override var span: Span? = null
 }
 
+interface TsArrayType : Node, HasSpan, TsType {
+    // conflict with @SerialName
+    //  var type: String?
+    var elemType: TsType?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsArrayType : Node, HasSpan, TsType {
-/**
-     *literal is: "TsArrayType"
-     */
-    override var type: String? = "TsArrayType"
-    var elemType: TsType? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsArrayType")
+class TsArrayTypeImpl : TsArrayType {
+    // conflict with @SerialName
+    //  override var type : String? = "TsArrayType"
+    override var elemType: TsType? = null
     override var span: Span? = null
 }
 
+interface TsTupleType : Node, HasSpan, TsType {
+    // conflict with @SerialName
+    //  var type: String?
+    var elemTypes: Array<TsTupleElement>?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsTupleType : Node, HasSpan, TsType {
-/**
-     *literal is: "TsTupleType"
-     */
-    override var type: String? = "TsTupleType"
-    var elemTypes: Array<TsTupleElement>? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsTupleType")
+class TsTupleTypeImpl : TsTupleType {
+    // conflict with @SerialName
+    //  override var type : String? = "TsTupleType"
+    override var elemTypes: Array<TsTupleElement>? = null
     override var span: Span? = null
 }
 
+interface TsTupleElement : Node, HasSpan {
+    // conflict with @SerialName
+    //  var type: String?
+    var label: Pattern?
+    var ty: TsType?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsTupleElement : Node, HasSpan {
-/**
-     *literal is: "TsTupleElement"
-     */
-    override var type: String? = "TsTupleElement"
-    var label: Pattern? = null
-    var ty: TsType? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsTupleElement")
+class TsTupleElementImpl : TsTupleElement {
+    // conflict with @SerialName
+    //  override var type : String? = "TsTupleElement"
+    override var label: Pattern? = null
+    override var ty: TsType? = null
     override var span: Span? = null
 }
 
+interface TsOptionalType : Node, HasSpan, TsType {
+    // conflict with @SerialName
+    //  var type: String?
+    var typeAnnotation: TsType?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsOptionalType : Node, HasSpan, TsType {
-/**
-     *literal is: "TsOptionalType"
-     */
-    override var type: String? = "TsOptionalType"
-    var typeAnnotation: TsType? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsOptionalType")
+class TsOptionalTypeImpl : TsOptionalType {
+    // conflict with @SerialName
+    //  override var type : String? = "TsOptionalType"
+    override var typeAnnotation: TsType? = null
     override var span: Span? = null
 }
 
+interface TsRestType : Node, HasSpan, TsType {
+    // conflict with @SerialName
+    //  var type: String?
+    var typeAnnotation: TsType?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsRestType : Node, HasSpan, TsType {
-/**
-     *literal is: "TsRestType"
-     */
-    override var type: String? = "TsRestType"
-    var typeAnnotation: TsType? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsRestType")
+class TsRestTypeImpl : TsRestType {
+    // conflict with @SerialName
+    //  override var type : String? = "TsRestType"
+    override var typeAnnotation: TsType? = null
     override var span: Span? = null
 }
 
+interface TsUnionType : Node, HasSpan, TsUnionOrIntersectionType {
+    // conflict with @SerialName
+    //  var type: String?
+    var types: Array<TsType>?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsUnionType : Node, HasSpan, TsUnionOrIntersectionType {
-/**
-     *literal is: "TsUnionType"
-     */
-    override var type: String? = "TsUnionType"
-    var types: Array<TsType>? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsUnionType")
+class TsUnionTypeImpl : TsUnionType {
+    // conflict with @SerialName
+    //  override var type : String? = "TsUnionType"
+    override var types: Array<TsType>? = null
     override var span: Span? = null
 }
 
+interface TsIntersectionType : Node, HasSpan, TsUnionOrIntersectionType {
+    // conflict with @SerialName
+    //  var type: String?
+    var types: Array<TsType>?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsIntersectionType : Node, HasSpan, TsUnionOrIntersectionType {
-/**
-     *literal is: "TsIntersectionType"
-     */
-    override var type: String? = "TsIntersectionType"
-    var types: Array<TsType>? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsIntersectionType")
+class TsIntersectionTypeImpl : TsIntersectionType {
+    // conflict with @SerialName
+    //  override var type : String? = "TsIntersectionType"
+    override var types: Array<TsType>? = null
     override var span: Span? = null
 }
 
+interface TsConditionalType : Node, HasSpan, TsType {
+    // conflict with @SerialName
+    //  var type: String?
+    var checkType: TsType?
+    var extendsType: TsType?
+    var trueType: TsType?
+    var falseType: TsType?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsConditionalType : Node, HasSpan, TsType {
-/**
-     *literal is: "TsConditionalType"
-     */
-    override var type: String? = "TsConditionalType"
-    var checkType: TsType? = null
-    var extendsType: TsType? = null
-    var trueType: TsType? = null
-    var falseType: TsType? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsConditionalType")
+class TsConditionalTypeImpl : TsConditionalType {
+    // conflict with @SerialName
+    //  override var type : String? = "TsConditionalType"
+    override var checkType: TsType? = null
+    override var extendsType: TsType? = null
+    override var trueType: TsType? = null
+    override var falseType: TsType? = null
     override var span: Span? = null
 }
 
+interface TsInferType : Node, HasSpan, TsType {
+    // conflict with @SerialName
+    //  var type: String?
+    var typeParam: TsTypeParameter?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsInferType : Node, HasSpan, TsType {
-/**
-     *literal is: "TsInferType"
-     */
-    override var type: String? = "TsInferType"
-    var typeParam: TsTypeParameter? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsInferType")
+class TsInferTypeImpl : TsInferType {
+    // conflict with @SerialName
+    //  override var type : String? = "TsInferType"
+    override var typeParam: TsTypeParameter? = null
     override var span: Span? = null
 }
 
+interface TsParenthesizedType : Node, HasSpan, TsType {
+    // conflict with @SerialName
+    //  var type: String?
+    var typeAnnotation: TsType?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsParenthesizedType : Node, HasSpan, TsType {
-/**
-     *literal is: "TsParenthesizedType"
-     */
-    override var type: String? = "TsParenthesizedType"
-    var typeAnnotation: TsType? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsParenthesizedType")
+class TsParenthesizedTypeImpl : TsParenthesizedType {
+    // conflict with @SerialName
+    //  override var type : String? = "TsParenthesizedType"
+    override var typeAnnotation: TsType? = null
     override var span: Span? = null
 }
 
+interface TsTypeOperator : Node, HasSpan, TsType {
+    // conflict with @SerialName
+    //  var type: String?
+    var op: String?
+    var typeAnnotation: TsType?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsTypeOperator : Node, HasSpan, TsType {
-/**
-     *literal is: "TsTypeOperator"
-     */
-    override var type: String? = "TsTypeOperator"
-
-/**
-     * [TsTypeOperatorOp]
-     */
-    var op: String? = null
-    var typeAnnotation: TsType? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsTypeOperator")
+class TsTypeOperatorImpl : TsTypeOperator {
+    // conflict with @SerialName
+    //  override var type : String? = "TsTypeOperator"
+    override var op: String? = null
+    override var typeAnnotation: TsType? = null
     override var span: Span? = null
 }
 
+interface TsIndexedAccessType : Node, HasSpan, TsType {
+    // conflict with @SerialName
+    //  var type: String?
+    var readonly: Boolean?
+    var objectType: TsType?
+    var indexType: TsType?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsIndexedAccessType : Node, HasSpan, TsType {
-/**
-     *literal is: "TsIndexedAccessType"
-     */
-    override var type: String? = "TsIndexedAccessType"
-    var readonly: Boolean? = null
-    var objectType: TsType? = null
-    var indexType: TsType? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsIndexedAccessType")
+class TsIndexedAccessTypeImpl : TsIndexedAccessType {
+    // conflict with @SerialName
+    //  override var type : String? = "TsIndexedAccessType"
+    override var readonly: Boolean? = null
+    override var objectType: TsType? = null
+    override var indexType: TsType? = null
     override var span: Span? = null
 }
 
+interface TsMappedType : Node, HasSpan, TsType {
+    // conflict with @SerialName
+    //  var type: String?
+    var readonly: TruePlusMinus?
+    var typeParam: TsTypeParameter?
+    var nameType: TsType?
+    var optional: TruePlusMinus?
+    var typeAnnotation: TsType?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsMappedType : Node, HasSpan, TsType {
-/**
-     *literal is: "TsMappedType"
-     */
-    override var type: String? = "TsMappedType"
-    var readonly: TruePlusMinus? = null
-    var typeParam: TsTypeParameter? = null
-    var nameType: TsType? = null
-    var optional: TruePlusMinus? = null
-    var typeAnnotation: TsType? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsMappedType")
+class TsMappedTypeImpl : TsMappedType {
+    // conflict with @SerialName
+    //  override var type : String? = "TsMappedType"
+    override var readonly: TruePlusMinus? = null
+    override var typeParam: TsTypeParameter? = null
+    override var nameType: TsType? = null
+    override var optional: TruePlusMinus? = null
+    override var typeAnnotation: TsType? = null
     override var span: Span? = null
 }
 
+interface TsLiteralType : Node, HasSpan, TsType {
+    // conflict with @SerialName
+    //  var type: String?
+    var literal: TsLiteral?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsLiteralType : Node, HasSpan, TsType {
-/**
-     *literal is: "TsLiteralType"
-     */
-    override var type: String? = "TsLiteralType"
-    var literal: TsLiteral? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsLiteralType")
+class TsLiteralTypeImpl : TsLiteralType {
+    // conflict with @SerialName
+    //  override var type : String? = "TsLiteralType"
+    override var literal: TsLiteral? = null
     override var span: Span? = null
 }
 
+interface TsTemplateLiteralType : Node, HasSpan, TsLiteral {
+    // conflict with @SerialName
+    //  var type: String?
+    var types: Array<TsType>?
+    var quasis: Array<TemplateElement>?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsTemplateLiteralType : Node, HasSpan, TsLiteral {
-/**
-     *literal is: "TemplateLiteral"
-     */
-    override var type: String? = "TemplateLiteral"
-    var types: Array<TsType>? = null
-    var quasis: Array<TemplateElement>? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsTemplateLiteralType")
+class TsTemplateLiteralTypeImpl : TsTemplateLiteralType {
+    // conflict with @SerialName
+    //  override var type : String? = "TemplateLiteral"
+    override var types: Array<TsType>? = null
+    override var quasis: Array<TemplateElement>? = null
     override var span: Span? = null
 }
 
+interface TsInterfaceDeclaration : Node, HasSpan, Declaration, DefaultDecl {
+    // conflict with @SerialName
+    //  var type: String?
+    var id: Identifier?
+    var declare: Boolean?
+    var typeParams: TsTypeParameterDeclaration?
+    var extends: Array<TsExpressionWithTypeArguments>?
+    var body: TsInterfaceBody?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsInterfaceDeclaration : Node, HasSpan, Declaration, DefaultDecl {
-/**
-     *literal is: "TsInterfaceDeclaration"
-     */
-    override var type: String? = "TsInterfaceDeclaration"
-    var id: Identifier? = null
-    var declare: Boolean? = null
-    var typeParams: TsTypeParameterDeclaration? = null
-    var extends: Array<TsExpressionWithTypeArguments>? = null
-    var body: TsInterfaceBody? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsInterfaceDeclaration")
+class TsInterfaceDeclarationImpl : TsInterfaceDeclaration {
+    // conflict with @SerialName
+    //  override var type : String? = "TsInterfaceDeclaration"
+    override var id: Identifier? = null
+    override var declare: Boolean? = null
+    override var typeParams: TsTypeParameterDeclaration? = null
+    override var extends: Array<TsExpressionWithTypeArguments>? = null
+    override var body: TsInterfaceBody? = null
     override var span: Span? = null
 }
 
+interface TsInterfaceBody : Node, HasSpan {
+    // conflict with @SerialName
+    //  var type: String?
+    var body: Array<TsTypeElement>?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsInterfaceBody : Node, HasSpan {
-/**
-     *literal is: "TsInterfaceBody"
-     */
-    override var type: String? = "TsInterfaceBody"
-    var body: Array<TsTypeElement>? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsInterfaceBody")
+class TsInterfaceBodyImpl : TsInterfaceBody {
+    // conflict with @SerialName
+    //  override var type : String? = "TsInterfaceBody"
+    override var body: Array<TsTypeElement>? = null
     override var span: Span? = null
 }
 
+interface TsExpressionWithTypeArguments : Node, HasSpan {
+    // conflict with @SerialName
+    //  var type: String?
+    var expression: Expression?
+    var typeArguments: TsTypeParameterInstantiation?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsExpressionWithTypeArguments : Node, HasSpan {
-/**
-     *literal is: "TsExpressionWithTypeArguments"
-     */
-    override var type: String? = "TsExpressionWithTypeArguments"
-    var expression: Expression? = null
-    var typeArguments: TsTypeParameterInstantiation? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsExpressionWithTypeArguments")
+class TsExpressionWithTypeArgumentsImpl : TsExpressionWithTypeArguments {
+    // conflict with @SerialName
+    //  override var type : String? = "TsExpressionWithTypeArguments"
+    override var expression: Expression? = null
+    override var typeArguments: TsTypeParameterInstantiation? = null
     override var span: Span? = null
 }
 
+interface TsTypeAliasDeclaration : Node, HasSpan, Declaration {
+    // conflict with @SerialName
+    //  var type: String?
+    var declare: Boolean?
+    var id: Identifier?
+    var typeParams: TsTypeParameterDeclaration?
+    var typeAnnotation: TsType?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsTypeAliasDeclaration : Node, HasSpan, Declaration {
-/**
-     *literal is: "TsTypeAliasDeclaration"
-     */
-    override var type: String? = "TsTypeAliasDeclaration"
-    var declare: Boolean? = null
-    var id: Identifier? = null
-    var typeParams: TsTypeParameterDeclaration? = null
-    var typeAnnotation: TsType? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsTypeAliasDeclaration")
+class TsTypeAliasDeclarationImpl : TsTypeAliasDeclaration {
+    // conflict with @SerialName
+    //  override var type : String? = "TsTypeAliasDeclaration"
+    override var declare: Boolean? = null
+    override var id: Identifier? = null
+    override var typeParams: TsTypeParameterDeclaration? = null
+    override var typeAnnotation: TsType? = null
     override var span: Span? = null
 }
 
+interface TsEnumDeclaration : Node, HasSpan, Declaration {
+    // conflict with @SerialName
+    //  var type: String?
+    var declare: Boolean?
+    var isConst: Boolean?
+    var id: Identifier?
+    var members: Array<TsEnumMember>?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsEnumDeclaration : Node, HasSpan, Declaration {
-/**
-     *literal is: "TsEnumDeclaration"
-     */
-    override var type: String? = "TsEnumDeclaration"
-    var declare: Boolean? = null
-    var isConst: Boolean? = null
-    var id: Identifier? = null
-    var members: Array<TsEnumMember>? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsEnumDeclaration")
+class TsEnumDeclarationImpl : TsEnumDeclaration {
+    // conflict with @SerialName
+    //  override var type : String? = "TsEnumDeclaration"
+    override var declare: Boolean? = null
+    override var isConst: Boolean? = null
+    override var id: Identifier? = null
+    override var members: Array<TsEnumMember>? = null
     override var span: Span? = null
 }
 
+interface TsEnumMember : Node, HasSpan {
+    // conflict with @SerialName
+    //  var type: String?
+    var id: TsEnumMemberId?
+    var init: Expression?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsEnumMember : Node, HasSpan {
-/**
-     *literal is: "TsEnumMember"
-     */
-    override var type: String? = "TsEnumMember"
-    var id: TsEnumMemberId? = null
-    var init: Expression? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsEnumMember")
+class TsEnumMemberImpl : TsEnumMember {
+    // conflict with @SerialName
+    //  override var type : String? = "TsEnumMember"
+    override var id: TsEnumMemberId? = null
+    override var init: Expression? = null
     override var span: Span? = null
 }
 
+interface TsModuleDeclaration : Node, HasSpan, Declaration {
+    // conflict with @SerialName
+    //  var type: String?
+    var declare: Boolean?
+    var global: Boolean?
+    var id: TsModuleName?
+    var body: TsNamespaceBody?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsModuleDeclaration : Node, HasSpan, Declaration {
-/**
-     *literal is: "TsModuleDeclaration"
-     */
-    override var type: String? = "TsModuleDeclaration"
-    var declare: Boolean? = null
-    var global: Boolean? = null
-    var id: TsModuleName? = null
-    var body: TsNamespaceBody? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsModuleDeclaration")
+class TsModuleDeclarationImpl : TsModuleDeclaration {
+    // conflict with @SerialName
+    //  override var type : String? = "TsModuleDeclaration"
+    override var declare: Boolean? = null
+    override var global: Boolean? = null
+    override var id: TsModuleName? = null
+    override var body: TsNamespaceBody? = null
     override var span: Span? = null
 }
 
+interface TsModuleBlock : Node, HasSpan, TsNamespaceBody {
+    // conflict with @SerialName
+    //  var type: String?
+    var body: Array<ModuleItem>?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsModuleBlock : Node, HasSpan, TsNamespaceBody {
-/**
-     *literal is: "TsModuleBlock"
-     */
-    override var type: String? = "TsModuleBlock"
-    var body: Array<ModuleItem>? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsModuleBlock")
+class TsModuleBlockImpl : TsModuleBlock {
+    // conflict with @SerialName
+    //  override var type : String? = "TsModuleBlock"
+    override var body: Array<ModuleItem>? = null
     override var span: Span? = null
 }
 
+interface TsNamespaceDeclaration : Node, HasSpan, TsNamespaceBody {
+    // conflict with @SerialName
+    //  var type: String?
+    var declare: Boolean?
+    var global: Boolean?
+    var id: Identifier?
+    var body: TsNamespaceBody?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsNamespaceDeclaration : Node, HasSpan, TsNamespaceBody {
-/**
-     *literal is: "TsNamespaceDeclaration"
-     */
-    override var type: String? = "TsNamespaceDeclaration"
-    var declare: Boolean? = null
-    var global: Boolean? = null
-    var id: Identifier? = null
-    var body: TsNamespaceBody? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsNamespaceDeclaration")
+class TsNamespaceDeclarationImpl : TsNamespaceDeclaration {
+    // conflict with @SerialName
+    //  override var type : String? = "TsNamespaceDeclaration"
+    override var declare: Boolean? = null
+    override var global: Boolean? = null
+    override var id: Identifier? = null
+    override var body: TsNamespaceBody? = null
     override var span: Span? = null
 }
 
+interface TsImportEqualsDeclaration : Node, HasSpan, ModuleDeclaration {
+    // conflict with @SerialName
+    //  var type: String?
+    var declare: Boolean?
+    var isExport: Boolean?
+    var isTypeOnly: Boolean?
+    var id: Identifier?
+    var moduleRef: TsModuleReference?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsImportEqualsDeclaration : Node, HasSpan, ModuleDeclaration {
-/**
-     *literal is: "TsImportEqualsDeclaration"
-     */
-    override var type: String? = "TsImportEqualsDeclaration"
-    var declare: Boolean? = null
-    var isExport: Boolean? = null
-    var isTypeOnly: Boolean? = null
-    var id: Identifier? = null
-    var moduleRef: TsModuleReference? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsImportEqualsDeclaration")
+class TsImportEqualsDeclarationImpl : TsImportEqualsDeclaration {
+    // conflict with @SerialName
+    //  override var type : String? = "TsImportEqualsDeclaration"
+    override var declare: Boolean? = null
+    override var isExport: Boolean? = null
+    override var isTypeOnly: Boolean? = null
+    override var id: Identifier? = null
+    override var moduleRef: TsModuleReference? = null
     override var span: Span? = null
 }
 
+interface TsExternalModuleReference : Node, HasSpan, TsModuleReference {
+    // conflict with @SerialName
+    //  var type: String?
+    var expression: StringLiteral?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsExternalModuleReference : Node, HasSpan, TsModuleReference {
-/**
-     *literal is: "TsExternalModuleReference"
-     */
-    override var type: String? = "TsExternalModuleReference"
-    var expression: StringLiteral? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsExternalModuleReference")
+class TsExternalModuleReferenceImpl : TsExternalModuleReference {
+    // conflict with @SerialName
+    //  override var type : String? = "TsExternalModuleReference"
+    override var expression: StringLiteral? = null
     override var span: Span? = null
 }
 
+interface TsExportAssignment : Node, HasSpan, ModuleDeclaration {
+    // conflict with @SerialName
+    //  var type: String?
+    var expression: Expression?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsExportAssignment : Node, HasSpan, ModuleDeclaration {
-/**
-     *literal is: "TsExportAssignment"
-     */
-    override var type: String? = "TsExportAssignment"
-    var expression: Expression? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsExportAssignment")
+class TsExportAssignmentImpl : TsExportAssignment {
+    // conflict with @SerialName
+    //  override var type : String? = "TsExportAssignment"
+    override var expression: Expression? = null
     override var span: Span? = null
 }
 
+interface TsNamespaceExportDeclaration : Node, HasSpan, ModuleDeclaration {
+    // conflict with @SerialName
+    //  var type: String?
+    var id: Identifier?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsNamespaceExportDeclaration : Node, HasSpan, ModuleDeclaration {
-/**
-     *literal is: "TsNamespaceExportDeclaration"
-     */
-    override var type: String? = "TsNamespaceExportDeclaration"
-    var id: Identifier? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsNamespaceExportDeclaration")
+class TsNamespaceExportDeclarationImpl : TsNamespaceExportDeclaration {
+    // conflict with @SerialName
+    //  override var type : String? = "TsNamespaceExportDeclaration"
+    override var id: Identifier? = null
     override var span: Span? = null
 }
 
+interface TsAsExpression : ExpressionBase, Expression {
+    // conflict with @SerialName
+    //  var type: String?
+    var expression: Expression?
+    var typeAnnotation: TsType?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsAsExpression : ExpressionBase, Expression {
-/**
-     *literal is: "TsAsExpression"
-     */
-    override var type: String? = "TsAsExpression"
-    var expression: Expression? = null
-    var typeAnnotation: TsType? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsAsExpression")
+class TsAsExpressionImpl : TsAsExpression {
+    // conflict with @SerialName
+    //  override var type : String? = "TsAsExpression"
+    override var expression: Expression? = null
+    override var typeAnnotation: TsType? = null
     override var span: Span? = null
 }
 
+interface TsSatisfiesExpression : ExpressionBase, Expression {
+    // conflict with @SerialName
+    //  var type: String?
+    var expression: Expression?
+    var typeAnnotation: TsType?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsSatisfiesExpression : ExpressionBase, Expression {
-/**
-     *literal is: "TsSatisfiesExpression"
-     */
-    override var type: String? = "TsSatisfiesExpression"
-    var expression: Expression? = null
-    var typeAnnotation: TsType? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsSatisfiesExpression")
+class TsSatisfiesExpressionImpl : TsSatisfiesExpression {
+    // conflict with @SerialName
+    //  override var type : String? = "TsSatisfiesExpression"
+    override var expression: Expression? = null
+    override var typeAnnotation: TsType? = null
     override var span: Span? = null
 }
 
+interface TsInstantiation : Node, HasSpan, Expression {
+    // conflict with @SerialName
+    //  var type: String?
+    var expression: Expression?
+    var typeArguments: TsTypeParameterInstantiation?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsInstantiation : Node, HasSpan, Expression {
-/**
-     *literal is: "TsInstantiation"
-     */
-    override var type: String? = "TsInstantiation"
-    var expression: Expression? = null
-    var typeArguments: TsTypeParameterInstantiation? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsInstantiation")
+class TsInstantiationImpl : TsInstantiation {
+    // conflict with @SerialName
+    //  override var type : String? = "TsInstantiation"
+    override var expression: Expression? = null
+    override var typeArguments: TsTypeParameterInstantiation? = null
     override var span: Span? = null
 }
 
+interface TsTypeAssertion : ExpressionBase, Expression {
+    // conflict with @SerialName
+    //  var type: String?
+    var expression: Expression?
+    var typeAnnotation: TsType?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsTypeAssertion : ExpressionBase, Expression {
-/**
-     *literal is: "TsTypeAssertion"
-     */
-    override var type: String? = "TsTypeAssertion"
-    var expression: Expression? = null
-    var typeAnnotation: TsType? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsTypeAssertion")
+class TsTypeAssertionImpl : TsTypeAssertion {
+    // conflict with @SerialName
+    //  override var type : String? = "TsTypeAssertion"
+    override var expression: Expression? = null
+    override var typeAnnotation: TsType? = null
     override var span: Span? = null
 }
 
+interface TsConstAssertion : ExpressionBase, Expression {
+    // conflict with @SerialName
+    //  var type: String?
+    var expression: Expression?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsConstAssertion : ExpressionBase, Expression {
-/**
-     *literal is: "TsConstAssertion"
-     */
-    override var type: String? = "TsConstAssertion"
-    var expression: Expression? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsConstAssertion")
+class TsConstAssertionImpl : TsConstAssertion {
+    // conflict with @SerialName
+    //  override var type : String? = "TsConstAssertion"
+    override var expression: Expression? = null
     override var span: Span? = null
 }
 
+interface TsNonNullExpression : ExpressionBase, Expression {
+    // conflict with @SerialName
+    //  var type: String?
+    var expression: Expression?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class TsNonNullExpression : ExpressionBase, Expression {
-/**
-     *literal is: "TsNonNullExpression"
-     */
-    override var type: String? = "TsNonNullExpression"
-    var expression: Expression? = null
+@JsonClassDiscriminator("type")
+@SerialName("TsNonNullExpression")
+class TsNonNullExpressionImpl : TsNonNullExpression {
+    // conflict with @SerialName
+    //  override var type : String? = "TsNonNullExpression"
+    override var expression: Expression? = null
     override var span: Span? = null
 }
 
+interface Invalid : Node, HasSpan, Expression, Pattern {
+    // conflict with @SerialName
+    //  var type: String?
+    override var span: Span?
+}
+
+@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-open class Invalid : Node, HasSpan, Expression, Pattern {
-/**
-     *literal is: "Invalid"
-     */
-    override var type: String? = "Invalid"
+@JsonClassDiscriminator("type")
+@SerialName("Invalid")
+class InvalidImpl : Invalid {
+    // conflict with @SerialName
+    //  override var type : String? = "Invalid"
     override var span: Span? = null
 }
