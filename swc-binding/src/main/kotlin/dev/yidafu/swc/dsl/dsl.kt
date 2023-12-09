@@ -2,24 +2,3656 @@ package dev.yidafu.swc.dsl
 
 import dev.yidafu.swc.types.*
 
+fun BaseParseOptions.tsParserConfig(block: TsParserConfig.() -> Unit): TsParserConfig {
+    return TsParserConfig().apply(block)
+}
+
+fun BaseParseOptions.esParserConfig(block: EsParserConfig.() -> Unit): EsParserConfig {
+    return EsParserConfig().apply(block)
+}
+
+fun ParserConfig.tsParserConfig(block: TsParserConfig.() -> Unit): TsParserConfig {
+    return TsParserConfig().apply(block)
+}
+
+fun ParserConfig.esParserConfig(block: EsParserConfig.() -> Unit): EsParserConfig {
+    return EsParserConfig().apply(block)
+}
+
+fun ModuleConfig.es6Config(block: Es6Config.() -> Unit): Es6Config {
+    return Es6Config().apply(block)
+}
+
+fun ModuleConfig.commonJsConfig(block: CommonJsConfig.() -> Unit): CommonJsConfig {
+    return CommonJsConfig().apply(block)
+}
+
+fun ModuleConfig.umdConfig(block: UmdConfig.() -> Unit): UmdConfig {
+    return UmdConfig().apply(block)
+}
+
+fun ModuleConfig.amdConfig(block: AmdConfig.() -> Unit): AmdConfig {
+    return AmdConfig().apply(block)
+}
+
+fun ModuleConfig.nodeNextConfig(block: NodeNextConfig.() -> Unit): NodeNextConfig {
+    return NodeNextConfig().apply(block)
+}
+
+fun ModuleConfig.systemjsConfig(block: SystemjsConfig.() -> Unit): SystemjsConfig {
+    return SystemjsConfig().apply(block)
+}
+
+fun ClassMember.constructor(block: Constructor.() -> Unit): Constructor {
+    return ConstructorImpl().apply(block)
+}
+
+fun ClassMember.classMethod(block: ClassMethod.() -> Unit): ClassMethod {
+    return ClassMethodImpl().apply(block)
+}
+
+fun ClassMember.privateMethod(block: PrivateMethod.() -> Unit): PrivateMethod {
+    return PrivateMethodImpl().apply(block)
+}
+
+fun ClassMember.classProperty(block: ClassProperty.() -> Unit): ClassProperty {
+    return ClassPropertyImpl().apply(block)
+}
+
+fun ClassMember.privateProperty(block: PrivateProperty.() -> Unit): PrivateProperty {
+    return PrivatePropertyImpl().apply(block)
+}
+
+fun ClassMember.tsIndexSignature(block: TsIndexSignature.() -> Unit): TsIndexSignature {
+    return TsIndexSignatureImpl().apply(block)
+}
+
+fun ClassMember.emptyStatement(block: EmptyStatement.() -> Unit): EmptyStatement {
+    return EmptyStatementImpl().apply(block)
+}
+
+fun ClassMember.staticBlock(block: StaticBlock.() -> Unit): StaticBlock {
+    return StaticBlockImpl().apply(block)
+}
+
+fun Declaration.classDeclaration(block: ClassDeclaration.() -> Unit): ClassDeclaration {
+    return ClassDeclarationImpl().apply(block)
+}
+
+fun Declaration.functionDeclaration(block: FunctionDeclaration.() -> Unit): FunctionDeclaration {
+    return FunctionDeclarationImpl().apply(block)
+}
+
+fun Declaration.variableDeclaration(block: VariableDeclaration.() -> Unit): VariableDeclaration {
+    return VariableDeclarationImpl().apply(block)
+}
+
+fun Declaration.tsInterfaceDeclaration(block: TsInterfaceDeclaration.() -> Unit): TsInterfaceDeclaration {
+    return TsInterfaceDeclarationImpl().apply(block)
+}
+
+fun Declaration.tsTypeAliasDeclaration(block: TsTypeAliasDeclaration.() -> Unit): TsTypeAliasDeclaration {
+    return TsTypeAliasDeclarationImpl().apply(block)
+}
+
+fun Declaration.tsEnumDeclaration(block: TsEnumDeclaration.() -> Unit): TsEnumDeclaration {
+    return TsEnumDeclarationImpl().apply(block)
+}
+
+fun Declaration.tsModuleDeclaration(block: TsModuleDeclaration.() -> Unit): TsModuleDeclaration {
+    return TsModuleDeclarationImpl().apply(block)
+}
+
+fun Expression.thisExpression(block: ThisExpression.() -> Unit): ThisExpression {
+    return ThisExpressionImpl().apply(block)
+}
+
+fun Expression.arrayExpression(block: ArrayExpression.() -> Unit): ArrayExpression {
+    return ArrayExpressionImpl().apply(block)
+}
+
+fun Expression.objectExpression(block: ObjectExpression.() -> Unit): ObjectExpression {
+    return ObjectExpressionImpl().apply(block)
+}
+
+fun Expression.functionExpression(block: FunctionExpression.() -> Unit): FunctionExpression {
+    return FunctionExpressionImpl().apply(block)
+}
+
+fun Expression.unaryExpression(block: UnaryExpression.() -> Unit): UnaryExpression {
+    return UnaryExpressionImpl().apply(block)
+}
+
+fun Expression.updateExpression(block: UpdateExpression.() -> Unit): UpdateExpression {
+    return UpdateExpressionImpl().apply(block)
+}
+
+fun Expression.binaryExpression(block: BinaryExpression.() -> Unit): BinaryExpression {
+    return BinaryExpressionImpl().apply(block)
+}
+
+fun Expression.assignmentExpression(block: AssignmentExpression.() -> Unit): AssignmentExpression {
+    return AssignmentExpressionImpl().apply(block)
+}
+
+fun Expression.memberExpression(block: MemberExpression.() -> Unit): MemberExpression {
+    return MemberExpressionImpl().apply(block)
+}
+
+fun Expression.superPropExpression(block: SuperPropExpression.() -> Unit): SuperPropExpression {
+    return SuperPropExpressionImpl().apply(block)
+}
+
+fun Expression.conditionalExpression(block: ConditionalExpression.() -> Unit): ConditionalExpression {
+    return ConditionalExpressionImpl().apply(block)
+}
+
+fun Expression.callExpression(block: CallExpression.() -> Unit): CallExpression {
+    return CallExpressionImpl().apply(block)
+}
+
+fun Expression.newExpression(block: NewExpression.() -> Unit): NewExpression {
+    return NewExpressionImpl().apply(block)
+}
+
+fun Expression.sequenceExpression(block: SequenceExpression.() -> Unit): SequenceExpression {
+    return SequenceExpressionImpl().apply(block)
+}
+
+fun Expression.identifier(block: Identifier.() -> Unit): Identifier {
+    return IdentifierImpl().apply(block)
+}
+
+fun Expression.stringLiteral(block: StringLiteral.() -> Unit): StringLiteral {
+    return StringLiteralImpl().apply(block)
+}
+
+fun Expression.booleanLiteral(block: BooleanLiteral.() -> Unit): BooleanLiteral {
+    return BooleanLiteralImpl().apply(block)
+}
+
+fun Expression.nullLiteral(block: NullLiteral.() -> Unit): NullLiteral {
+    return NullLiteralImpl().apply(block)
+}
+
+fun Expression.numericLiteral(block: NumericLiteral.() -> Unit): NumericLiteral {
+    return NumericLiteralImpl().apply(block)
+}
+
+fun Expression.bigIntLiteral(block: BigIntLiteral.() -> Unit): BigIntLiteral {
+    return BigIntLiteralImpl().apply(block)
+}
+
+fun Expression.regExpLiteral(block: RegExpLiteral.() -> Unit): RegExpLiteral {
+    return RegExpLiteralImpl().apply(block)
+}
+
+fun Expression.jSXText(block: JSXText.() -> Unit): JSXText {
+    return JSXTextImpl().apply(block)
+}
+
+fun Expression.templateLiteral(block: TemplateLiteral.() -> Unit): TemplateLiteral {
+    return TemplateLiteralImpl().apply(block)
+}
+
+fun Expression.taggedTemplateExpression(block: TaggedTemplateExpression.() -> Unit): TaggedTemplateExpression {
+    return TaggedTemplateExpressionImpl().apply(block)
+}
+
+fun Expression.arrowFunctionExpression(block: ArrowFunctionExpression.() -> Unit): ArrowFunctionExpression {
+    return ArrowFunctionExpressionImpl().apply(block)
+}
+
+fun Expression.classExpression(block: ClassExpression.() -> Unit): ClassExpression {
+    return ClassExpressionImpl().apply(block)
+}
+
+fun Expression.yieldExpression(block: YieldExpression.() -> Unit): YieldExpression {
+    return YieldExpressionImpl().apply(block)
+}
+
+fun Expression.metaProperty(block: MetaProperty.() -> Unit): MetaProperty {
+    return MetaPropertyImpl().apply(block)
+}
+
+fun Expression.awaitExpression(block: AwaitExpression.() -> Unit): AwaitExpression {
+    return AwaitExpressionImpl().apply(block)
+}
+
+fun Expression.parenthesisExpression(block: ParenthesisExpression.() -> Unit): ParenthesisExpression {
+    return ParenthesisExpressionImpl().apply(block)
+}
+
+fun Expression.jSXMemberExpression(block: JSXMemberExpression.() -> Unit): JSXMemberExpression {
+    return JSXMemberExpressionImpl().apply(block)
+}
+
+fun Expression.jSXNamespacedName(block: JSXNamespacedName.() -> Unit): JSXNamespacedName {
+    return JSXNamespacedNameImpl().apply(block)
+}
+
+fun Expression.jSXEmptyExpression(block: JSXEmptyExpression.() -> Unit): JSXEmptyExpression {
+    return JSXEmptyExpressionImpl().apply(block)
+}
+
+fun Expression.jSXElement(block: JSXElement.() -> Unit): JSXElement {
+    return JSXElementImpl().apply(block)
+}
+
+fun Expression.jSXFragment(block: JSXFragment.() -> Unit): JSXFragment {
+    return JSXFragmentImpl().apply(block)
+}
+
+fun Expression.tsTypeAssertion(block: TsTypeAssertion.() -> Unit): TsTypeAssertion {
+    return TsTypeAssertionImpl().apply(block)
+}
+
+fun Expression.tsConstAssertion(block: TsConstAssertion.() -> Unit): TsConstAssertion {
+    return TsConstAssertionImpl().apply(block)
+}
+
+fun Expression.tsNonNullExpression(block: TsNonNullExpression.() -> Unit): TsNonNullExpression {
+    return TsNonNullExpressionImpl().apply(block)
+}
+
+fun Expression.tsAsExpression(block: TsAsExpression.() -> Unit): TsAsExpression {
+    return TsAsExpressionImpl().apply(block)
+}
+
+fun Expression.tsSatisfiesExpression(block: TsSatisfiesExpression.() -> Unit): TsSatisfiesExpression {
+    return TsSatisfiesExpressionImpl().apply(block)
+}
+
+fun Expression.tsInstantiation(block: TsInstantiation.() -> Unit): TsInstantiation {
+    return TsInstantiationImpl().apply(block)
+}
+
+fun Expression.privateName(block: PrivateName.() -> Unit): PrivateName {
+    return PrivateNameImpl().apply(block)
+}
+
+fun Expression.optionalChainingExpression(block: OptionalChainingExpression.() -> Unit): OptionalChainingExpression {
+    return OptionalChainingExpressionImpl().apply(block)
+}
+
+fun Expression.invalid(block: Invalid.() -> Unit): Invalid {
+    return InvalidImpl().apply(block)
+}
+
+fun JSXObject.jSXMemberExpression(block: JSXMemberExpression.() -> Unit): JSXMemberExpression {
+    return JSXMemberExpressionImpl().apply(block)
+}
+
+fun JSXObject.identifier(block: Identifier.() -> Unit): Identifier {
+    return IdentifierImpl().apply(block)
+}
+
+fun JSXExpression.jSXEmptyExpression(block: JSXEmptyExpression.() -> Unit): JSXEmptyExpression {
+    return JSXEmptyExpressionImpl().apply(block)
+}
+
+fun JSXExpression.thisExpression(block: ThisExpression.() -> Unit): ThisExpression {
+    return ThisExpressionImpl().apply(block)
+}
+
+fun JSXExpression.arrayExpression(block: ArrayExpression.() -> Unit): ArrayExpression {
+    return ArrayExpressionImpl().apply(block)
+}
+
+fun JSXExpression.objectExpression(block: ObjectExpression.() -> Unit): ObjectExpression {
+    return ObjectExpressionImpl().apply(block)
+}
+
+fun JSXExpression.functionExpression(block: FunctionExpression.() -> Unit): FunctionExpression {
+    return FunctionExpressionImpl().apply(block)
+}
+
+fun JSXExpression.unaryExpression(block: UnaryExpression.() -> Unit): UnaryExpression {
+    return UnaryExpressionImpl().apply(block)
+}
+
+fun JSXExpression.updateExpression(block: UpdateExpression.() -> Unit): UpdateExpression {
+    return UpdateExpressionImpl().apply(block)
+}
+
+fun JSXExpression.binaryExpression(block: BinaryExpression.() -> Unit): BinaryExpression {
+    return BinaryExpressionImpl().apply(block)
+}
+
+fun JSXExpression.assignmentExpression(block: AssignmentExpression.() -> Unit): AssignmentExpression {
+    return AssignmentExpressionImpl().apply(block)
+}
+
+fun JSXExpression.memberExpression(block: MemberExpression.() -> Unit): MemberExpression {
+    return MemberExpressionImpl().apply(block)
+}
+
+fun JSXExpression.superPropExpression(block: SuperPropExpression.() -> Unit): SuperPropExpression {
+    return SuperPropExpressionImpl().apply(block)
+}
+
+fun JSXExpression.conditionalExpression(block: ConditionalExpression.() -> Unit): ConditionalExpression {
+    return ConditionalExpressionImpl().apply(block)
+}
+
+fun JSXExpression.callExpression(block: CallExpression.() -> Unit): CallExpression {
+    return CallExpressionImpl().apply(block)
+}
+
+fun JSXExpression.newExpression(block: NewExpression.() -> Unit): NewExpression {
+    return NewExpressionImpl().apply(block)
+}
+
+fun JSXExpression.sequenceExpression(block: SequenceExpression.() -> Unit): SequenceExpression {
+    return SequenceExpressionImpl().apply(block)
+}
+
+fun JSXExpression.identifier(block: Identifier.() -> Unit): Identifier {
+    return IdentifierImpl().apply(block)
+}
+
+fun JSXExpression.stringLiteral(block: StringLiteral.() -> Unit): StringLiteral {
+    return StringLiteralImpl().apply(block)
+}
+
+fun JSXExpression.booleanLiteral(block: BooleanLiteral.() -> Unit): BooleanLiteral {
+    return BooleanLiteralImpl().apply(block)
+}
+
+fun JSXExpression.nullLiteral(block: NullLiteral.() -> Unit): NullLiteral {
+    return NullLiteralImpl().apply(block)
+}
+
+fun JSXExpression.numericLiteral(block: NumericLiteral.() -> Unit): NumericLiteral {
+    return NumericLiteralImpl().apply(block)
+}
+
+fun JSXExpression.bigIntLiteral(block: BigIntLiteral.() -> Unit): BigIntLiteral {
+    return BigIntLiteralImpl().apply(block)
+}
+
+fun JSXExpression.regExpLiteral(block: RegExpLiteral.() -> Unit): RegExpLiteral {
+    return RegExpLiteralImpl().apply(block)
+}
+
+fun JSXExpression.jSXText(block: JSXText.() -> Unit): JSXText {
+    return JSXTextImpl().apply(block)
+}
+
+fun JSXExpression.templateLiteral(block: TemplateLiteral.() -> Unit): TemplateLiteral {
+    return TemplateLiteralImpl().apply(block)
+}
+
+fun JSXExpression.taggedTemplateExpression(block: TaggedTemplateExpression.() -> Unit): TaggedTemplateExpression {
+    return TaggedTemplateExpressionImpl().apply(block)
+}
+
+fun JSXExpression.arrowFunctionExpression(block: ArrowFunctionExpression.() -> Unit): ArrowFunctionExpression {
+    return ArrowFunctionExpressionImpl().apply(block)
+}
+
+fun JSXExpression.classExpression(block: ClassExpression.() -> Unit): ClassExpression {
+    return ClassExpressionImpl().apply(block)
+}
+
+fun JSXExpression.yieldExpression(block: YieldExpression.() -> Unit): YieldExpression {
+    return YieldExpressionImpl().apply(block)
+}
+
+fun JSXExpression.metaProperty(block: MetaProperty.() -> Unit): MetaProperty {
+    return MetaPropertyImpl().apply(block)
+}
+
+fun JSXExpression.awaitExpression(block: AwaitExpression.() -> Unit): AwaitExpression {
+    return AwaitExpressionImpl().apply(block)
+}
+
+fun JSXExpression.parenthesisExpression(block: ParenthesisExpression.() -> Unit): ParenthesisExpression {
+    return ParenthesisExpressionImpl().apply(block)
+}
+
+fun JSXExpression.jSXMemberExpression(block: JSXMemberExpression.() -> Unit): JSXMemberExpression {
+    return JSXMemberExpressionImpl().apply(block)
+}
+
+fun JSXExpression.jSXNamespacedName(block: JSXNamespacedName.() -> Unit): JSXNamespacedName {
+    return JSXNamespacedNameImpl().apply(block)
+}
+
+fun JSXExpression.jSXElement(block: JSXElement.() -> Unit): JSXElement {
+    return JSXElementImpl().apply(block)
+}
+
+fun JSXExpression.jSXFragment(block: JSXFragment.() -> Unit): JSXFragment {
+    return JSXFragmentImpl().apply(block)
+}
+
+fun JSXExpression.tsTypeAssertion(block: TsTypeAssertion.() -> Unit): TsTypeAssertion {
+    return TsTypeAssertionImpl().apply(block)
+}
+
+fun JSXExpression.tsConstAssertion(block: TsConstAssertion.() -> Unit): TsConstAssertion {
+    return TsConstAssertionImpl().apply(block)
+}
+
+fun JSXExpression.tsNonNullExpression(block: TsNonNullExpression.() -> Unit): TsNonNullExpression {
+    return TsNonNullExpressionImpl().apply(block)
+}
+
+fun JSXExpression.tsAsExpression(block: TsAsExpression.() -> Unit): TsAsExpression {
+    return TsAsExpressionImpl().apply(block)
+}
+
+fun JSXExpression.tsSatisfiesExpression(block: TsSatisfiesExpression.() -> Unit): TsSatisfiesExpression {
+    return TsSatisfiesExpressionImpl().apply(block)
+}
+
+fun JSXExpression.tsInstantiation(block: TsInstantiation.() -> Unit): TsInstantiation {
+    return TsInstantiationImpl().apply(block)
+}
+
+fun JSXExpression.privateName(block: PrivateName.() -> Unit): PrivateName {
+    return PrivateNameImpl().apply(block)
+}
+
+fun JSXExpression.optionalChainingExpression(block: OptionalChainingExpression.() -> Unit): OptionalChainingExpression {
+    return OptionalChainingExpressionImpl().apply(block)
+}
+
+fun JSXExpression.invalid(block: Invalid.() -> Unit): Invalid {
+    return InvalidImpl().apply(block)
+}
+
+fun JSXElementName.identifier(block: Identifier.() -> Unit): Identifier {
+    return IdentifierImpl().apply(block)
+}
+
+fun JSXElementName.jSXMemberExpression(block: JSXMemberExpression.() -> Unit): JSXMemberExpression {
+    return JSXMemberExpressionImpl().apply(block)
+}
+
+fun JSXElementName.jSXNamespacedName(block: JSXNamespacedName.() -> Unit): JSXNamespacedName {
+    return JSXNamespacedNameImpl().apply(block)
+}
+
+fun JSXAttributeOrSpread.jSXAttribute(block: JSXAttribute.() -> Unit): JSXAttribute {
+    return JSXAttributeImpl().apply(block)
+}
+
+fun JSXAttributeOrSpread.spreadElement(block: SpreadElement.() -> Unit): SpreadElement {
+    return SpreadElementImpl().apply(block)
+}
+
+fun JSXAttributeName.identifier(block: Identifier.() -> Unit): Identifier {
+    return IdentifierImpl().apply(block)
+}
+
+fun JSXAttributeName.jSXNamespacedName(block: JSXNamespacedName.() -> Unit): JSXNamespacedName {
+    return JSXNamespacedNameImpl().apply(block)
+}
+
+fun JSXAttrValue.stringLiteral(block: StringLiteral.() -> Unit): StringLiteral {
+    return StringLiteralImpl().apply(block)
+}
+
+fun JSXAttrValue.booleanLiteral(block: BooleanLiteral.() -> Unit): BooleanLiteral {
+    return BooleanLiteralImpl().apply(block)
+}
+
+fun JSXAttrValue.nullLiteral(block: NullLiteral.() -> Unit): NullLiteral {
+    return NullLiteralImpl().apply(block)
+}
+
+fun JSXAttrValue.numericLiteral(block: NumericLiteral.() -> Unit): NumericLiteral {
+    return NumericLiteralImpl().apply(block)
+}
+
+fun JSXAttrValue.bigIntLiteral(block: BigIntLiteral.() -> Unit): BigIntLiteral {
+    return BigIntLiteralImpl().apply(block)
+}
+
+fun JSXAttrValue.regExpLiteral(block: RegExpLiteral.() -> Unit): RegExpLiteral {
+    return RegExpLiteralImpl().apply(block)
+}
+
+fun JSXAttrValue.jSXText(block: JSXText.() -> Unit): JSXText {
+    return JSXTextImpl().apply(block)
+}
+
+fun JSXAttrValue.jSXExpressionContainer(block: JSXExpressionContainer.() -> Unit): JSXExpressionContainer {
+    return JSXExpressionContainerImpl().apply(block)
+}
+
+fun JSXAttrValue.jSXElement(block: JSXElement.() -> Unit): JSXElement {
+    return JSXElementImpl().apply(block)
+}
+
+fun JSXAttrValue.jSXFragment(block: JSXFragment.() -> Unit): JSXFragment {
+    return JSXFragmentImpl().apply(block)
+}
+
+fun JSXElementChild.jSXText(block: JSXText.() -> Unit): JSXText {
+    return JSXTextImpl().apply(block)
+}
+
+fun JSXElementChild.jSXExpressionContainer(block: JSXExpressionContainer.() -> Unit): JSXExpressionContainer {
+    return JSXExpressionContainerImpl().apply(block)
+}
+
+fun JSXElementChild.jSXSpreadChild(block: JSXSpreadChild.() -> Unit): JSXSpreadChild {
+    return JSXSpreadChildImpl().apply(block)
+}
+
+fun JSXElementChild.jSXElement(block: JSXElement.() -> Unit): JSXElement {
+    return JSXElementImpl().apply(block)
+}
+
+fun JSXElementChild.jSXFragment(block: JSXFragment.() -> Unit): JSXFragment {
+    return JSXFragmentImpl().apply(block)
+}
+
+fun Literal.stringLiteral(block: StringLiteral.() -> Unit): StringLiteral {
+    return StringLiteralImpl().apply(block)
+}
+
+fun Literal.booleanLiteral(block: BooleanLiteral.() -> Unit): BooleanLiteral {
+    return BooleanLiteralImpl().apply(block)
+}
+
+fun Literal.nullLiteral(block: NullLiteral.() -> Unit): NullLiteral {
+    return NullLiteralImpl().apply(block)
+}
+
+fun Literal.numericLiteral(block: NumericLiteral.() -> Unit): NumericLiteral {
+    return NumericLiteralImpl().apply(block)
+}
+
+fun Literal.bigIntLiteral(block: BigIntLiteral.() -> Unit): BigIntLiteral {
+    return BigIntLiteralImpl().apply(block)
+}
+
+fun Literal.regExpLiteral(block: RegExpLiteral.() -> Unit): RegExpLiteral {
+    return RegExpLiteralImpl().apply(block)
+}
+
+fun Literal.jSXText(block: JSXText.() -> Unit): JSXText {
+    return JSXTextImpl().apply(block)
+}
+
+fun ModuleDeclaration.importDeclaration(block: ImportDeclaration.() -> Unit): ImportDeclaration {
+    return ImportDeclarationImpl().apply(block)
+}
+
+fun ModuleDeclaration.exportDeclaration(block: ExportDeclaration.() -> Unit): ExportDeclaration {
+    return ExportDeclarationImpl().apply(block)
+}
+
+fun ModuleDeclaration.exportNamedDeclaration(block: ExportNamedDeclaration.() -> Unit): ExportNamedDeclaration {
+    return ExportNamedDeclarationImpl().apply(block)
+}
+
+fun ModuleDeclaration.exportDefaultDeclaration(block: ExportDefaultDeclaration.() -> Unit): ExportDefaultDeclaration {
+    return ExportDefaultDeclarationImpl().apply(block)
+}
+
+fun ModuleDeclaration.exportDefaultExpression(block: ExportDefaultExpression.() -> Unit): ExportDefaultExpression {
+    return ExportDefaultExpressionImpl().apply(block)
+}
+
+fun ModuleDeclaration.exportAllDeclaration(block: ExportAllDeclaration.() -> Unit): ExportAllDeclaration {
+    return ExportAllDeclarationImpl().apply(block)
+}
+
+fun ModuleDeclaration.tsImportEqualsDeclaration(block: TsImportEqualsDeclaration.() -> Unit): TsImportEqualsDeclaration {
+    return TsImportEqualsDeclarationImpl().apply(block)
+}
+
+fun ModuleDeclaration.tsExportAssignment(block: TsExportAssignment.() -> Unit): TsExportAssignment {
+    return TsExportAssignmentImpl().apply(block)
+}
+
+fun ModuleDeclaration.tsNamespaceExportDeclaration(block: TsNamespaceExportDeclaration.() -> Unit): TsNamespaceExportDeclaration {
+    return TsNamespaceExportDeclarationImpl().apply(block)
+}
+
+fun DefaultDecl.classExpression(block: ClassExpression.() -> Unit): ClassExpression {
+    return ClassExpressionImpl().apply(block)
+}
+
+fun DefaultDecl.functionExpression(block: FunctionExpression.() -> Unit): FunctionExpression {
+    return FunctionExpressionImpl().apply(block)
+}
+
+fun DefaultDecl.tsInterfaceDeclaration(block: TsInterfaceDeclaration.() -> Unit): TsInterfaceDeclaration {
+    return TsInterfaceDeclarationImpl().apply(block)
+}
+
+fun ImportSpecifier.namedImportSpecifier(block: NamedImportSpecifier.() -> Unit): NamedImportSpecifier {
+    return NamedImportSpecifierImpl().apply(block)
+}
+
+fun ImportSpecifier.importDefaultSpecifier(block: ImportDefaultSpecifier.() -> Unit): ImportDefaultSpecifier {
+    return ImportDefaultSpecifierImpl().apply(block)
+}
+
+fun ImportSpecifier.importNamespaceSpecifier(block: ImportNamespaceSpecifier.() -> Unit): ImportNamespaceSpecifier {
+    return ImportNamespaceSpecifierImpl().apply(block)
+}
+
+fun ModuleExportName.identifier(block: Identifier.() -> Unit): Identifier {
+    return IdentifierImpl().apply(block)
+}
+
+fun ModuleExportName.stringLiteral(block: StringLiteral.() -> Unit): StringLiteral {
+    return StringLiteralImpl().apply(block)
+}
+
+fun ExportSpecifier.exportNamespaceSpecifier(block: ExportNamespaceSpecifier.() -> Unit): ExportNamespaceSpecifier {
+    return ExportNamespaceSpecifierImpl().apply(block)
+}
+
+fun ExportSpecifier.exportDefaultSpecifier(block: ExportDefaultSpecifier.() -> Unit): ExportDefaultSpecifier {
+    return ExportDefaultSpecifierImpl().apply(block)
+}
+
+fun ExportSpecifier.namedExportSpecifier(block: NamedExportSpecifier.() -> Unit): NamedExportSpecifier {
+    return NamedExportSpecifierImpl().apply(block)
+}
+
+fun Program.module(block: Module.() -> Unit): Module {
+    return ModuleImpl().apply(block)
+}
+
+fun Program.script(block: Script.() -> Unit): Script {
+    return ScriptImpl().apply(block)
+}
+
+fun ModuleItem.importDeclaration(block: ImportDeclaration.() -> Unit): ImportDeclaration {
+    return ImportDeclarationImpl().apply(block)
+}
+
+fun ModuleItem.exportDeclaration(block: ExportDeclaration.() -> Unit): ExportDeclaration {
+    return ExportDeclarationImpl().apply(block)
+}
+
+fun ModuleItem.exportNamedDeclaration(block: ExportNamedDeclaration.() -> Unit): ExportNamedDeclaration {
+    return ExportNamedDeclarationImpl().apply(block)
+}
+
+fun ModuleItem.exportDefaultDeclaration(block: ExportDefaultDeclaration.() -> Unit): ExportDefaultDeclaration {
+    return ExportDefaultDeclarationImpl().apply(block)
+}
+
+fun ModuleItem.exportDefaultExpression(block: ExportDefaultExpression.() -> Unit): ExportDefaultExpression {
+    return ExportDefaultExpressionImpl().apply(block)
+}
+
+fun ModuleItem.exportAllDeclaration(block: ExportAllDeclaration.() -> Unit): ExportAllDeclaration {
+    return ExportAllDeclarationImpl().apply(block)
+}
+
+fun ModuleItem.tsImportEqualsDeclaration(block: TsImportEqualsDeclaration.() -> Unit): TsImportEqualsDeclaration {
+    return TsImportEqualsDeclarationImpl().apply(block)
+}
+
+fun ModuleItem.tsExportAssignment(block: TsExportAssignment.() -> Unit): TsExportAssignment {
+    return TsExportAssignmentImpl().apply(block)
+}
+
+fun ModuleItem.tsNamespaceExportDeclaration(block: TsNamespaceExportDeclaration.() -> Unit): TsNamespaceExportDeclaration {
+    return TsNamespaceExportDeclarationImpl().apply(block)
+}
+
+fun ModuleItem.blockStatement(block: BlockStatement.() -> Unit): BlockStatement {
+    return BlockStatementImpl().apply(block)
+}
+
+fun ModuleItem.emptyStatement(block: EmptyStatement.() -> Unit): EmptyStatement {
+    return EmptyStatementImpl().apply(block)
+}
+
+fun ModuleItem.debuggerStatement(block: DebuggerStatement.() -> Unit): DebuggerStatement {
+    return DebuggerStatementImpl().apply(block)
+}
+
+fun ModuleItem.withStatement(block: WithStatement.() -> Unit): WithStatement {
+    return WithStatementImpl().apply(block)
+}
+
+fun ModuleItem.returnStatement(block: ReturnStatement.() -> Unit): ReturnStatement {
+    return ReturnStatementImpl().apply(block)
+}
+
+fun ModuleItem.labeledStatement(block: LabeledStatement.() -> Unit): LabeledStatement {
+    return LabeledStatementImpl().apply(block)
+}
+
+fun ModuleItem.breakStatement(block: BreakStatement.() -> Unit): BreakStatement {
+    return BreakStatementImpl().apply(block)
+}
+
+fun ModuleItem.continueStatement(block: ContinueStatement.() -> Unit): ContinueStatement {
+    return ContinueStatementImpl().apply(block)
+}
+
+fun ModuleItem.ifStatement(block: IfStatement.() -> Unit): IfStatement {
+    return IfStatementImpl().apply(block)
+}
+
+fun ModuleItem.switchStatement(block: SwitchStatement.() -> Unit): SwitchStatement {
+    return SwitchStatementImpl().apply(block)
+}
+
+fun ModuleItem.throwStatement(block: ThrowStatement.() -> Unit): ThrowStatement {
+    return ThrowStatementImpl().apply(block)
+}
+
+fun ModuleItem.tryStatement(block: TryStatement.() -> Unit): TryStatement {
+    return TryStatementImpl().apply(block)
+}
+
+fun ModuleItem.whileStatement(block: WhileStatement.() -> Unit): WhileStatement {
+    return WhileStatementImpl().apply(block)
+}
+
+fun ModuleItem.doWhileStatement(block: DoWhileStatement.() -> Unit): DoWhileStatement {
+    return DoWhileStatementImpl().apply(block)
+}
+
+fun ModuleItem.forStatement(block: ForStatement.() -> Unit): ForStatement {
+    return ForStatementImpl().apply(block)
+}
+
+fun ModuleItem.forInStatement(block: ForInStatement.() -> Unit): ForInStatement {
+    return ForInStatementImpl().apply(block)
+}
+
+fun ModuleItem.forOfStatement(block: ForOfStatement.() -> Unit): ForOfStatement {
+    return ForOfStatementImpl().apply(block)
+}
+
+fun ModuleItem.classDeclaration(block: ClassDeclaration.() -> Unit): ClassDeclaration {
+    return ClassDeclarationImpl().apply(block)
+}
+
+fun ModuleItem.functionDeclaration(block: FunctionDeclaration.() -> Unit): FunctionDeclaration {
+    return FunctionDeclarationImpl().apply(block)
+}
+
+fun ModuleItem.variableDeclaration(block: VariableDeclaration.() -> Unit): VariableDeclaration {
+    return VariableDeclarationImpl().apply(block)
+}
+
+fun ModuleItem.tsInterfaceDeclaration(block: TsInterfaceDeclaration.() -> Unit): TsInterfaceDeclaration {
+    return TsInterfaceDeclarationImpl().apply(block)
+}
+
+fun ModuleItem.tsTypeAliasDeclaration(block: TsTypeAliasDeclaration.() -> Unit): TsTypeAliasDeclaration {
+    return TsTypeAliasDeclarationImpl().apply(block)
+}
+
+fun ModuleItem.tsEnumDeclaration(block: TsEnumDeclaration.() -> Unit): TsEnumDeclaration {
+    return TsEnumDeclarationImpl().apply(block)
+}
+
+fun ModuleItem.tsModuleDeclaration(block: TsModuleDeclaration.() -> Unit): TsModuleDeclaration {
+    return TsModuleDeclarationImpl().apply(block)
+}
+
+fun ModuleItem.expressionStatement(block: ExpressionStatement.() -> Unit): ExpressionStatement {
+    return ExpressionStatementImpl().apply(block)
+}
+
+fun Pattern.bindingIdentifier(block: BindingIdentifier.() -> Unit): BindingIdentifier {
+    return BindingIdentifierImpl().apply(block)
+}
+
+fun Pattern.arrayPattern(block: ArrayPattern.() -> Unit): ArrayPattern {
+    return ArrayPatternImpl().apply(block)
+}
+
+fun Pattern.restElement(block: RestElement.() -> Unit): RestElement {
+    return RestElementImpl().apply(block)
+}
+
+fun Pattern.objectPattern(block: ObjectPattern.() -> Unit): ObjectPattern {
+    return ObjectPatternImpl().apply(block)
+}
+
+fun Pattern.assignmentPattern(block: AssignmentPattern.() -> Unit): AssignmentPattern {
+    return AssignmentPatternImpl().apply(block)
+}
+
+fun Pattern.invalid(block: Invalid.() -> Unit): Invalid {
+    return InvalidImpl().apply(block)
+}
+
+fun Pattern.thisExpression(block: ThisExpression.() -> Unit): ThisExpression {
+    return ThisExpressionImpl().apply(block)
+}
+
+fun Pattern.arrayExpression(block: ArrayExpression.() -> Unit): ArrayExpression {
+    return ArrayExpressionImpl().apply(block)
+}
+
+fun Pattern.objectExpression(block: ObjectExpression.() -> Unit): ObjectExpression {
+    return ObjectExpressionImpl().apply(block)
+}
+
+fun Pattern.functionExpression(block: FunctionExpression.() -> Unit): FunctionExpression {
+    return FunctionExpressionImpl().apply(block)
+}
+
+fun Pattern.unaryExpression(block: UnaryExpression.() -> Unit): UnaryExpression {
+    return UnaryExpressionImpl().apply(block)
+}
+
+fun Pattern.updateExpression(block: UpdateExpression.() -> Unit): UpdateExpression {
+    return UpdateExpressionImpl().apply(block)
+}
+
+fun Pattern.binaryExpression(block: BinaryExpression.() -> Unit): BinaryExpression {
+    return BinaryExpressionImpl().apply(block)
+}
+
+fun Pattern.assignmentExpression(block: AssignmentExpression.() -> Unit): AssignmentExpression {
+    return AssignmentExpressionImpl().apply(block)
+}
+
+fun Pattern.memberExpression(block: MemberExpression.() -> Unit): MemberExpression {
+    return MemberExpressionImpl().apply(block)
+}
+
+fun Pattern.superPropExpression(block: SuperPropExpression.() -> Unit): SuperPropExpression {
+    return SuperPropExpressionImpl().apply(block)
+}
+
+fun Pattern.conditionalExpression(block: ConditionalExpression.() -> Unit): ConditionalExpression {
+    return ConditionalExpressionImpl().apply(block)
+}
+
+fun Pattern.callExpression(block: CallExpression.() -> Unit): CallExpression {
+    return CallExpressionImpl().apply(block)
+}
+
+fun Pattern.newExpression(block: NewExpression.() -> Unit): NewExpression {
+    return NewExpressionImpl().apply(block)
+}
+
+fun Pattern.sequenceExpression(block: SequenceExpression.() -> Unit): SequenceExpression {
+    return SequenceExpressionImpl().apply(block)
+}
+
+fun Pattern.identifier(block: Identifier.() -> Unit): Identifier {
+    return IdentifierImpl().apply(block)
+}
+
+fun Pattern.stringLiteral(block: StringLiteral.() -> Unit): StringLiteral {
+    return StringLiteralImpl().apply(block)
+}
+
+fun Pattern.booleanLiteral(block: BooleanLiteral.() -> Unit): BooleanLiteral {
+    return BooleanLiteralImpl().apply(block)
+}
+
+fun Pattern.nullLiteral(block: NullLiteral.() -> Unit): NullLiteral {
+    return NullLiteralImpl().apply(block)
+}
+
+fun Pattern.numericLiteral(block: NumericLiteral.() -> Unit): NumericLiteral {
+    return NumericLiteralImpl().apply(block)
+}
+
+fun Pattern.bigIntLiteral(block: BigIntLiteral.() -> Unit): BigIntLiteral {
+    return BigIntLiteralImpl().apply(block)
+}
+
+fun Pattern.regExpLiteral(block: RegExpLiteral.() -> Unit): RegExpLiteral {
+    return RegExpLiteralImpl().apply(block)
+}
+
+fun Pattern.jSXText(block: JSXText.() -> Unit): JSXText {
+    return JSXTextImpl().apply(block)
+}
+
+fun Pattern.templateLiteral(block: TemplateLiteral.() -> Unit): TemplateLiteral {
+    return TemplateLiteralImpl().apply(block)
+}
+
+fun Pattern.taggedTemplateExpression(block: TaggedTemplateExpression.() -> Unit): TaggedTemplateExpression {
+    return TaggedTemplateExpressionImpl().apply(block)
+}
+
+fun Pattern.arrowFunctionExpression(block: ArrowFunctionExpression.() -> Unit): ArrowFunctionExpression {
+    return ArrowFunctionExpressionImpl().apply(block)
+}
+
+fun Pattern.classExpression(block: ClassExpression.() -> Unit): ClassExpression {
+    return ClassExpressionImpl().apply(block)
+}
+
+fun Pattern.yieldExpression(block: YieldExpression.() -> Unit): YieldExpression {
+    return YieldExpressionImpl().apply(block)
+}
+
+fun Pattern.metaProperty(block: MetaProperty.() -> Unit): MetaProperty {
+    return MetaPropertyImpl().apply(block)
+}
+
+fun Pattern.awaitExpression(block: AwaitExpression.() -> Unit): AwaitExpression {
+    return AwaitExpressionImpl().apply(block)
+}
+
+fun Pattern.parenthesisExpression(block: ParenthesisExpression.() -> Unit): ParenthesisExpression {
+    return ParenthesisExpressionImpl().apply(block)
+}
+
+fun Pattern.jSXMemberExpression(block: JSXMemberExpression.() -> Unit): JSXMemberExpression {
+    return JSXMemberExpressionImpl().apply(block)
+}
+
+fun Pattern.jSXNamespacedName(block: JSXNamespacedName.() -> Unit): JSXNamespacedName {
+    return JSXNamespacedNameImpl().apply(block)
+}
+
+fun Pattern.jSXEmptyExpression(block: JSXEmptyExpression.() -> Unit): JSXEmptyExpression {
+    return JSXEmptyExpressionImpl().apply(block)
+}
+
+fun Pattern.jSXElement(block: JSXElement.() -> Unit): JSXElement {
+    return JSXElementImpl().apply(block)
+}
+
+fun Pattern.jSXFragment(block: JSXFragment.() -> Unit): JSXFragment {
+    return JSXFragmentImpl().apply(block)
+}
+
+fun Pattern.tsTypeAssertion(block: TsTypeAssertion.() -> Unit): TsTypeAssertion {
+    return TsTypeAssertionImpl().apply(block)
+}
+
+fun Pattern.tsConstAssertion(block: TsConstAssertion.() -> Unit): TsConstAssertion {
+    return TsConstAssertionImpl().apply(block)
+}
+
+fun Pattern.tsNonNullExpression(block: TsNonNullExpression.() -> Unit): TsNonNullExpression {
+    return TsNonNullExpressionImpl().apply(block)
+}
+
+fun Pattern.tsAsExpression(block: TsAsExpression.() -> Unit): TsAsExpression {
+    return TsAsExpressionImpl().apply(block)
+}
+
+fun Pattern.tsSatisfiesExpression(block: TsSatisfiesExpression.() -> Unit): TsSatisfiesExpression {
+    return TsSatisfiesExpressionImpl().apply(block)
+}
+
+fun Pattern.tsInstantiation(block: TsInstantiation.() -> Unit): TsInstantiation {
+    return TsInstantiationImpl().apply(block)
+}
+
+fun Pattern.privateName(block: PrivateName.() -> Unit): PrivateName {
+    return PrivateNameImpl().apply(block)
+}
+
+fun Pattern.optionalChainingExpression(block: OptionalChainingExpression.() -> Unit): OptionalChainingExpression {
+    return OptionalChainingExpressionImpl().apply(block)
+}
+
+fun ObjectPatternProperty.keyValuePatternProperty(block: KeyValuePatternProperty.() -> Unit): KeyValuePatternProperty {
+    return KeyValuePatternPropertyImpl().apply(block)
+}
+
+fun ObjectPatternProperty.assignmentPatternProperty(block: AssignmentPatternProperty.() -> Unit): AssignmentPatternProperty {
+    return AssignmentPatternPropertyImpl().apply(block)
+}
+
+fun ObjectPatternProperty.restElement(block: RestElement.() -> Unit): RestElement {
+    return RestElementImpl().apply(block)
+}
+
+fun Property.identifier(block: Identifier.() -> Unit): Identifier {
+    return IdentifierImpl().apply(block)
+}
+
+fun Property.keyValueProperty(block: KeyValueProperty.() -> Unit): KeyValueProperty {
+    return KeyValuePropertyImpl().apply(block)
+}
+
+fun Property.assignmentProperty(block: AssignmentProperty.() -> Unit): AssignmentProperty {
+    return AssignmentPropertyImpl().apply(block)
+}
+
+fun Property.getterProperty(block: GetterProperty.() -> Unit): GetterProperty {
+    return GetterPropertyImpl().apply(block)
+}
+
+fun Property.setterProperty(block: SetterProperty.() -> Unit): SetterProperty {
+    return SetterPropertyImpl().apply(block)
+}
+
+fun Property.methodProperty(block: MethodProperty.() -> Unit): MethodProperty {
+    return MethodPropertyImpl().apply(block)
+}
+
+fun PropertyName.identifier(block: Identifier.() -> Unit): Identifier {
+    return IdentifierImpl().apply(block)
+}
+
+fun PropertyName.stringLiteral(block: StringLiteral.() -> Unit): StringLiteral {
+    return StringLiteralImpl().apply(block)
+}
+
+fun PropertyName.numericLiteral(block: NumericLiteral.() -> Unit): NumericLiteral {
+    return NumericLiteralImpl().apply(block)
+}
+
+fun PropertyName.computedPropName(block: ComputedPropName.() -> Unit): ComputedPropName {
+    return ComputedPropNameImpl().apply(block)
+}
+
+fun PropertyName.bigIntLiteral(block: BigIntLiteral.() -> Unit): BigIntLiteral {
+    return BigIntLiteralImpl().apply(block)
+}
+
+fun Statement.blockStatement(block: BlockStatement.() -> Unit): BlockStatement {
+    return BlockStatementImpl().apply(block)
+}
+
+fun Statement.emptyStatement(block: EmptyStatement.() -> Unit): EmptyStatement {
+    return EmptyStatementImpl().apply(block)
+}
+
+fun Statement.debuggerStatement(block: DebuggerStatement.() -> Unit): DebuggerStatement {
+    return DebuggerStatementImpl().apply(block)
+}
+
+fun Statement.withStatement(block: WithStatement.() -> Unit): WithStatement {
+    return WithStatementImpl().apply(block)
+}
+
+fun Statement.returnStatement(block: ReturnStatement.() -> Unit): ReturnStatement {
+    return ReturnStatementImpl().apply(block)
+}
+
+fun Statement.labeledStatement(block: LabeledStatement.() -> Unit): LabeledStatement {
+    return LabeledStatementImpl().apply(block)
+}
+
+fun Statement.breakStatement(block: BreakStatement.() -> Unit): BreakStatement {
+    return BreakStatementImpl().apply(block)
+}
+
+fun Statement.continueStatement(block: ContinueStatement.() -> Unit): ContinueStatement {
+    return ContinueStatementImpl().apply(block)
+}
+
+fun Statement.ifStatement(block: IfStatement.() -> Unit): IfStatement {
+    return IfStatementImpl().apply(block)
+}
+
+fun Statement.switchStatement(block: SwitchStatement.() -> Unit): SwitchStatement {
+    return SwitchStatementImpl().apply(block)
+}
+
+fun Statement.throwStatement(block: ThrowStatement.() -> Unit): ThrowStatement {
+    return ThrowStatementImpl().apply(block)
+}
+
+fun Statement.tryStatement(block: TryStatement.() -> Unit): TryStatement {
+    return TryStatementImpl().apply(block)
+}
+
+fun Statement.whileStatement(block: WhileStatement.() -> Unit): WhileStatement {
+    return WhileStatementImpl().apply(block)
+}
+
+fun Statement.doWhileStatement(block: DoWhileStatement.() -> Unit): DoWhileStatement {
+    return DoWhileStatementImpl().apply(block)
+}
+
+fun Statement.forStatement(block: ForStatement.() -> Unit): ForStatement {
+    return ForStatementImpl().apply(block)
+}
+
+fun Statement.forInStatement(block: ForInStatement.() -> Unit): ForInStatement {
+    return ForInStatementImpl().apply(block)
+}
+
+fun Statement.forOfStatement(block: ForOfStatement.() -> Unit): ForOfStatement {
+    return ForOfStatementImpl().apply(block)
+}
+
+fun Statement.classDeclaration(block: ClassDeclaration.() -> Unit): ClassDeclaration {
+    return ClassDeclarationImpl().apply(block)
+}
+
+fun Statement.functionDeclaration(block: FunctionDeclaration.() -> Unit): FunctionDeclaration {
+    return FunctionDeclarationImpl().apply(block)
+}
+
+fun Statement.variableDeclaration(block: VariableDeclaration.() -> Unit): VariableDeclaration {
+    return VariableDeclarationImpl().apply(block)
+}
+
+fun Statement.tsInterfaceDeclaration(block: TsInterfaceDeclaration.() -> Unit): TsInterfaceDeclaration {
+    return TsInterfaceDeclarationImpl().apply(block)
+}
+
+fun Statement.tsTypeAliasDeclaration(block: TsTypeAliasDeclaration.() -> Unit): TsTypeAliasDeclaration {
+    return TsTypeAliasDeclarationImpl().apply(block)
+}
+
+fun Statement.tsEnumDeclaration(block: TsEnumDeclaration.() -> Unit): TsEnumDeclaration {
+    return TsEnumDeclarationImpl().apply(block)
+}
+
+fun Statement.tsModuleDeclaration(block: TsModuleDeclaration.() -> Unit): TsModuleDeclaration {
+    return TsModuleDeclarationImpl().apply(block)
+}
+
+fun Statement.expressionStatement(block: ExpressionStatement.() -> Unit): ExpressionStatement {
+    return ExpressionStatementImpl().apply(block)
+}
+
+fun TsParameterPropertyParameter.bindingIdentifier(block: BindingIdentifier.() -> Unit): BindingIdentifier {
+    return BindingIdentifierImpl().apply(block)
+}
+
+fun TsParameterPropertyParameter.assignmentPattern(block: AssignmentPattern.() -> Unit): AssignmentPattern {
+    return AssignmentPatternImpl().apply(block)
+}
+
+fun TsEntityName.tsQualifiedName(block: TsQualifiedName.() -> Unit): TsQualifiedName {
+    return TsQualifiedNameImpl().apply(block)
+}
+
+fun TsEntityName.identifier(block: Identifier.() -> Unit): Identifier {
+    return IdentifierImpl().apply(block)
+}
+
+fun TsTypeElement.tsCallSignatureDeclaration(block: TsCallSignatureDeclaration.() -> Unit): TsCallSignatureDeclaration {
+    return TsCallSignatureDeclarationImpl().apply(block)
+}
+
+fun TsTypeElement.tsConstructSignatureDeclaration(block: TsConstructSignatureDeclaration.() -> Unit): TsConstructSignatureDeclaration {
+    return TsConstructSignatureDeclarationImpl().apply(block)
+}
+
+fun TsTypeElement.tsPropertySignature(block: TsPropertySignature.() -> Unit): TsPropertySignature {
+    return TsPropertySignatureImpl().apply(block)
+}
+
+fun TsTypeElement.tsGetterSignature(block: TsGetterSignature.() -> Unit): TsGetterSignature {
+    return TsGetterSignatureImpl().apply(block)
+}
+
+fun TsTypeElement.tsSetterSignature(block: TsSetterSignature.() -> Unit): TsSetterSignature {
+    return TsSetterSignatureImpl().apply(block)
+}
+
+fun TsTypeElement.tsMethodSignature(block: TsMethodSignature.() -> Unit): TsMethodSignature {
+    return TsMethodSignatureImpl().apply(block)
+}
+
+fun TsTypeElement.tsIndexSignature(block: TsIndexSignature.() -> Unit): TsIndexSignature {
+    return TsIndexSignatureImpl().apply(block)
+}
+
+fun TsType.tsKeywordType(block: TsKeywordType.() -> Unit): TsKeywordType {
+    return TsKeywordTypeImpl().apply(block)
+}
+
+fun TsType.tsThisType(block: TsThisType.() -> Unit): TsThisType {
+    return TsThisTypeImpl().apply(block)
+}
+
+fun TsType.tsFunctionType(block: TsFunctionType.() -> Unit): TsFunctionType {
+    return TsFunctionTypeImpl().apply(block)
+}
+
+fun TsType.tsConstructorType(block: TsConstructorType.() -> Unit): TsConstructorType {
+    return TsConstructorTypeImpl().apply(block)
+}
+
+fun TsType.tsTypeReference(block: TsTypeReference.() -> Unit): TsTypeReference {
+    return TsTypeReferenceImpl().apply(block)
+}
+
+fun TsType.tsTypeQuery(block: TsTypeQuery.() -> Unit): TsTypeQuery {
+    return TsTypeQueryImpl().apply(block)
+}
+
+fun TsType.tsTypeLiteral(block: TsTypeLiteral.() -> Unit): TsTypeLiteral {
+    return TsTypeLiteralImpl().apply(block)
+}
+
+fun TsType.tsArrayType(block: TsArrayType.() -> Unit): TsArrayType {
+    return TsArrayTypeImpl().apply(block)
+}
+
+fun TsType.tsTupleType(block: TsTupleType.() -> Unit): TsTupleType {
+    return TsTupleTypeImpl().apply(block)
+}
+
+fun TsType.tsOptionalType(block: TsOptionalType.() -> Unit): TsOptionalType {
+    return TsOptionalTypeImpl().apply(block)
+}
+
+fun TsType.tsRestType(block: TsRestType.() -> Unit): TsRestType {
+    return TsRestTypeImpl().apply(block)
+}
+
+fun TsType.tsUnionType(block: TsUnionType.() -> Unit): TsUnionType {
+    return TsUnionTypeImpl().apply(block)
+}
+
+fun TsType.tsIntersectionType(block: TsIntersectionType.() -> Unit): TsIntersectionType {
+    return TsIntersectionTypeImpl().apply(block)
+}
+
+fun TsType.tsConditionalType(block: TsConditionalType.() -> Unit): TsConditionalType {
+    return TsConditionalTypeImpl().apply(block)
+}
+
+fun TsType.tsInferType(block: TsInferType.() -> Unit): TsInferType {
+    return TsInferTypeImpl().apply(block)
+}
+
+fun TsType.tsParenthesizedType(block: TsParenthesizedType.() -> Unit): TsParenthesizedType {
+    return TsParenthesizedTypeImpl().apply(block)
+}
+
+fun TsType.tsTypeOperator(block: TsTypeOperator.() -> Unit): TsTypeOperator {
+    return TsTypeOperatorImpl().apply(block)
+}
+
+fun TsType.tsIndexedAccessType(block: TsIndexedAccessType.() -> Unit): TsIndexedAccessType {
+    return TsIndexedAccessTypeImpl().apply(block)
+}
+
+fun TsType.tsMappedType(block: TsMappedType.() -> Unit): TsMappedType {
+    return TsMappedTypeImpl().apply(block)
+}
+
+fun TsType.tsLiteralType(block: TsLiteralType.() -> Unit): TsLiteralType {
+    return TsLiteralTypeImpl().apply(block)
+}
+
+fun TsType.tsTypePredicate(block: TsTypePredicate.() -> Unit): TsTypePredicate {
+    return TsTypePredicateImpl().apply(block)
+}
+
+fun TsType.tsImportType(block: TsImportType.() -> Unit): TsImportType {
+    return TsImportTypeImpl().apply(block)
+}
+
+fun TsFnOrConstructorType.tsFunctionType(block: TsFunctionType.() -> Unit): TsFunctionType {
+    return TsFunctionTypeImpl().apply(block)
+}
+
+fun TsFnOrConstructorType.tsConstructorType(block: TsConstructorType.() -> Unit): TsConstructorType {
+    return TsConstructorTypeImpl().apply(block)
+}
+
+fun TsFnParameter.bindingIdentifier(block: BindingIdentifier.() -> Unit): BindingIdentifier {
+    return BindingIdentifierImpl().apply(block)
+}
+
+fun TsFnParameter.arrayPattern(block: ArrayPattern.() -> Unit): ArrayPattern {
+    return ArrayPatternImpl().apply(block)
+}
+
+fun TsFnParameter.restElement(block: RestElement.() -> Unit): RestElement {
+    return RestElementImpl().apply(block)
+}
+
+fun TsFnParameter.objectPattern(block: ObjectPattern.() -> Unit): ObjectPattern {
+    return ObjectPatternImpl().apply(block)
+}
+
+fun TsThisTypeOrIdent.tsThisType(block: TsThisType.() -> Unit): TsThisType {
+    return TsThisTypeImpl().apply(block)
+}
+
+fun TsThisTypeOrIdent.identifier(block: Identifier.() -> Unit): Identifier {
+    return IdentifierImpl().apply(block)
+}
+
+fun TsTypeQueryExpr.tsQualifiedName(block: TsQualifiedName.() -> Unit): TsQualifiedName {
+    return TsQualifiedNameImpl().apply(block)
+}
+
+fun TsTypeQueryExpr.identifier(block: Identifier.() -> Unit): Identifier {
+    return IdentifierImpl().apply(block)
+}
+
+fun TsTypeQueryExpr.tsImportType(block: TsImportType.() -> Unit): TsImportType {
+    return TsImportTypeImpl().apply(block)
+}
+
+fun TsUnionOrIntersectionType.tsUnionType(block: TsUnionType.() -> Unit): TsUnionType {
+    return TsUnionTypeImpl().apply(block)
+}
+
+fun TsUnionOrIntersectionType.tsIntersectionType(block: TsIntersectionType.() -> Unit): TsIntersectionType {
+    return TsIntersectionTypeImpl().apply(block)
+}
+
+fun TsLiteral.numericLiteral(block: NumericLiteral.() -> Unit): NumericLiteral {
+    return NumericLiteralImpl().apply(block)
+}
+
+fun TsLiteral.stringLiteral(block: StringLiteral.() -> Unit): StringLiteral {
+    return StringLiteralImpl().apply(block)
+}
+
+fun TsLiteral.booleanLiteral(block: BooleanLiteral.() -> Unit): BooleanLiteral {
+    return BooleanLiteralImpl().apply(block)
+}
+
+fun TsLiteral.bigIntLiteral(block: BigIntLiteral.() -> Unit): BigIntLiteral {
+    return BigIntLiteralImpl().apply(block)
+}
+
+fun TsLiteral.tsTemplateLiteralType(block: TsTemplateLiteralType.() -> Unit): TsTemplateLiteralType {
+    return TsTemplateLiteralTypeImpl().apply(block)
+}
+
+fun TsEnumMemberId.identifier(block: Identifier.() -> Unit): Identifier {
+    return IdentifierImpl().apply(block)
+}
+
+fun TsEnumMemberId.stringLiteral(block: StringLiteral.() -> Unit): StringLiteral {
+    return StringLiteralImpl().apply(block)
+}
+
+fun TsNamespaceBody.tsModuleBlock(block: TsModuleBlock.() -> Unit): TsModuleBlock {
+    return TsModuleBlockImpl().apply(block)
+}
+
+fun TsNamespaceBody.tsNamespaceDeclaration(block: TsNamespaceDeclaration.() -> Unit): TsNamespaceDeclaration {
+    return TsNamespaceDeclarationImpl().apply(block)
+}
+
+fun TsModuleName.identifier(block: Identifier.() -> Unit): Identifier {
+    return IdentifierImpl().apply(block)
+}
+
+fun TsModuleName.stringLiteral(block: StringLiteral.() -> Unit): StringLiteral {
+    return StringLiteralImpl().apply(block)
+}
+
+fun TsModuleReference.tsQualifiedName(block: TsQualifiedName.() -> Unit): TsQualifiedName {
+    return TsQualifiedNameImpl().apply(block)
+}
+
+fun TsModuleReference.identifier(block: Identifier.() -> Unit): Identifier {
+    return IdentifierImpl().apply(block)
+}
+
+fun TsModuleReference.tsExternalModuleReference(block: TsExternalModuleReference.() -> Unit): TsExternalModuleReference {
+    return TsExternalModuleReferenceImpl().apply(block)
+}
+
+fun Config.options(block: Options.() -> Unit): Options {
+    return Options().apply(block)
+}
+
+fun Config.config(block: Config.() -> Unit): Config {
+    return ConfigImpl().apply(block)
+}
+
+fun BaseModuleConfig.es6Config(block: Es6Config.() -> Unit): Es6Config {
+    return Es6Config().apply(block)
+}
+
+fun BaseModuleConfig.nodeNextConfig(block: NodeNextConfig.() -> Unit): NodeNextConfig {
+    return NodeNextConfig().apply(block)
+}
+
+fun BaseModuleConfig.commonJsConfig(block: CommonJsConfig.() -> Unit): CommonJsConfig {
+    return CommonJsConfig().apply(block)
+}
+
+fun BaseModuleConfig.umdConfig(block: UmdConfig.() -> Unit): UmdConfig {
+    return UmdConfig().apply(block)
+}
+
+fun BaseModuleConfig.amdConfig(block: AmdConfig.() -> Unit): AmdConfig {
+    return AmdConfig().apply(block)
+}
+
+fun Node.classProperty(block: ClassProperty.() -> Unit): ClassProperty {
+    return ClassPropertyImpl().apply(block)
+}
+
+fun Node.privateProperty(block: PrivateProperty.() -> Unit): PrivateProperty {
+    return PrivatePropertyImpl().apply(block)
+}
+
+fun Node.param(block: Param.() -> Unit): Param {
+    return ParamImpl().apply(block)
+}
+
+fun Node.constructor(block: Constructor.() -> Unit): Constructor {
+    return ConstructorImpl().apply(block)
+}
+
+fun Node.classMethod(block: ClassMethod.() -> Unit): ClassMethod {
+    return ClassMethodImpl().apply(block)
+}
+
+fun Node.privateMethod(block: PrivateMethod.() -> Unit): PrivateMethod {
+    return PrivateMethodImpl().apply(block)
+}
+
+fun Node.staticBlock(block: StaticBlock.() -> Unit): StaticBlock {
+    return StaticBlockImpl().apply(block)
+}
+
+fun Node.decorator(block: Decorator.() -> Unit): Decorator {
+    return DecoratorImpl().apply(block)
+}
+
+fun Node.classDeclaration(block: ClassDeclaration.() -> Unit): ClassDeclaration {
+    return ClassDeclarationImpl().apply(block)
+}
+
+fun Node.variableDeclaration(block: VariableDeclaration.() -> Unit): VariableDeclaration {
+    return VariableDeclarationImpl().apply(block)
+}
+
+fun Node.variableDeclarator(block: VariableDeclarator.() -> Unit): VariableDeclarator {
+    return VariableDeclaratorImpl().apply(block)
+}
+
+fun Node.identifier(block: Identifier.() -> Unit): Identifier {
+    return IdentifierImpl().apply(block)
+}
+
+fun Node.optionalChainingExpression(block: OptionalChainingExpression.() -> Unit): OptionalChainingExpression {
+    return OptionalChainingExpressionImpl().apply(block)
+}
+
+fun Node.optionalChainingCall(block: OptionalChainingCall.() -> Unit): OptionalChainingCall {
+    return OptionalChainingCallImpl().apply(block)
+}
+
+fun Node.thisExpression(block: ThisExpression.() -> Unit): ThisExpression {
+    return ThisExpressionImpl().apply(block)
+}
+
+fun Node.arrayExpression(block: ArrayExpression.() -> Unit): ArrayExpression {
+    return ArrayExpressionImpl().apply(block)
+}
+
+fun Node.objectExpression(block: ObjectExpression.() -> Unit): ObjectExpression {
+    return ObjectExpressionImpl().apply(block)
+}
+
+fun Node.unaryExpression(block: UnaryExpression.() -> Unit): UnaryExpression {
+    return UnaryExpressionImpl().apply(block)
+}
+
+fun Node.updateExpression(block: UpdateExpression.() -> Unit): UpdateExpression {
+    return UpdateExpressionImpl().apply(block)
+}
+
+fun Node.binaryExpression(block: BinaryExpression.() -> Unit): BinaryExpression {
+    return BinaryExpressionImpl().apply(block)
+}
+
+fun Node.functionExpression(block: FunctionExpression.() -> Unit): FunctionExpression {
+    return FunctionExpressionImpl().apply(block)
+}
+
+fun Node.classExpression(block: ClassExpression.() -> Unit): ClassExpression {
+    return ClassExpressionImpl().apply(block)
+}
+
+fun Node.assignmentExpression(block: AssignmentExpression.() -> Unit): AssignmentExpression {
+    return AssignmentExpressionImpl().apply(block)
+}
+
+fun Node.memberExpression(block: MemberExpression.() -> Unit): MemberExpression {
+    return MemberExpressionImpl().apply(block)
+}
+
+fun Node.superPropExpression(block: SuperPropExpression.() -> Unit): SuperPropExpression {
+    return SuperPropExpressionImpl().apply(block)
+}
+
+fun Node.conditionalExpression(block: ConditionalExpression.() -> Unit): ConditionalExpression {
+    return ConditionalExpressionImpl().apply(block)
+}
+
+fun Node.callExpression(block: CallExpression.() -> Unit): CallExpression {
+    return CallExpressionImpl().apply(block)
+}
+
+fun Node.newExpression(block: NewExpression.() -> Unit): NewExpression {
+    return NewExpressionImpl().apply(block)
+}
+
+fun Node.sequenceExpression(block: SequenceExpression.() -> Unit): SequenceExpression {
+    return SequenceExpressionImpl().apply(block)
+}
+
+fun Node.arrowFunctionExpression(block: ArrowFunctionExpression.() -> Unit): ArrowFunctionExpression {
+    return ArrowFunctionExpressionImpl().apply(block)
+}
+
+fun Node.yieldExpression(block: YieldExpression.() -> Unit): YieldExpression {
+    return YieldExpressionImpl().apply(block)
+}
+
+fun Node.awaitExpression(block: AwaitExpression.() -> Unit): AwaitExpression {
+    return AwaitExpressionImpl().apply(block)
+}
+
+fun Node.templateLiteral(block: TemplateLiteral.() -> Unit): TemplateLiteral {
+    return TemplateLiteralImpl().apply(block)
+}
+
+fun Node.taggedTemplateExpression(block: TaggedTemplateExpression.() -> Unit): TaggedTemplateExpression {
+    return TaggedTemplateExpressionImpl().apply(block)
+}
+
+fun Node.templateElement(block: TemplateElement.() -> Unit): TemplateElement {
+    return TemplateElementImpl().apply(block)
+}
+
+fun Node.parenthesisExpression(block: ParenthesisExpression.() -> Unit): ParenthesisExpression {
+    return ParenthesisExpressionImpl().apply(block)
+}
+
+fun Node.privateName(block: PrivateName.() -> Unit): PrivateName {
+    return PrivateNameImpl().apply(block)
+}
+
+fun Node.tsAsExpression(block: TsAsExpression.() -> Unit): TsAsExpression {
+    return TsAsExpressionImpl().apply(block)
+}
+
+fun Node.tsSatisfiesExpression(block: TsSatisfiesExpression.() -> Unit): TsSatisfiesExpression {
+    return TsSatisfiesExpressionImpl().apply(block)
+}
+
+fun Node.tsTypeAssertion(block: TsTypeAssertion.() -> Unit): TsTypeAssertion {
+    return TsTypeAssertionImpl().apply(block)
+}
+
+fun Node.tsConstAssertion(block: TsConstAssertion.() -> Unit): TsConstAssertion {
+    return TsConstAssertionImpl().apply(block)
+}
+
+fun Node.tsNonNullExpression(block: TsNonNullExpression.() -> Unit): TsNonNullExpression {
+    return TsNonNullExpressionImpl().apply(block)
+}
+
+fun Node.spreadElement(block: SpreadElement.() -> Unit): SpreadElement {
+    return SpreadElementImpl().apply(block)
+}
+
+fun Node.jsSuper(block: Super.() -> Unit): Super {
+    return SuperImpl().apply(block)
+}
+
+fun Node.import(block: Import.() -> Unit): Import {
+    return ImportImpl().apply(block)
+}
+
+fun Node.metaProperty(block: MetaProperty.() -> Unit): MetaProperty {
+    return MetaPropertyImpl().apply(block)
+}
+
+fun Node.bindingIdentifier(block: BindingIdentifier.() -> Unit): BindingIdentifier {
+    return BindingIdentifierImpl().apply(block)
+}
+
+fun Node.arrayPattern(block: ArrayPattern.() -> Unit): ArrayPattern {
+    return ArrayPatternImpl().apply(block)
+}
+
+fun Node.objectPattern(block: ObjectPattern.() -> Unit): ObjectPattern {
+    return ObjectPatternImpl().apply(block)
+}
+
+fun Node.assignmentPattern(block: AssignmentPattern.() -> Unit): AssignmentPattern {
+    return AssignmentPatternImpl().apply(block)
+}
+
+fun Node.restElement(block: RestElement.() -> Unit): RestElement {
+    return RestElementImpl().apply(block)
+}
+
+fun Node.jSXMemberExpression(block: JSXMemberExpression.() -> Unit): JSXMemberExpression {
+    return JSXMemberExpressionImpl().apply(block)
+}
+
+fun Node.jSXNamespacedName(block: JSXNamespacedName.() -> Unit): JSXNamespacedName {
+    return JSXNamespacedNameImpl().apply(block)
+}
+
+fun Node.jSXEmptyExpression(block: JSXEmptyExpression.() -> Unit): JSXEmptyExpression {
+    return JSXEmptyExpressionImpl().apply(block)
+}
+
+fun Node.jSXExpressionContainer(block: JSXExpressionContainer.() -> Unit): JSXExpressionContainer {
+    return JSXExpressionContainerImpl().apply(block)
+}
+
+fun Node.jSXSpreadChild(block: JSXSpreadChild.() -> Unit): JSXSpreadChild {
+    return JSXSpreadChildImpl().apply(block)
+}
+
+fun Node.jSXOpeningElement(block: JSXOpeningElement.() -> Unit): JSXOpeningElement {
+    return JSXOpeningElementImpl().apply(block)
+}
+
+fun Node.jSXClosingElement(block: JSXClosingElement.() -> Unit): JSXClosingElement {
+    return JSXClosingElementImpl().apply(block)
+}
+
+fun Node.jSXAttribute(block: JSXAttribute.() -> Unit): JSXAttribute {
+    return JSXAttributeImpl().apply(block)
+}
+
+fun Node.jSXText(block: JSXText.() -> Unit): JSXText {
+    return JSXTextImpl().apply(block)
+}
+
+fun Node.jSXElement(block: JSXElement.() -> Unit): JSXElement {
+    return JSXElementImpl().apply(block)
+}
+
+fun Node.jSXFragment(block: JSXFragment.() -> Unit): JSXFragment {
+    return JSXFragmentImpl().apply(block)
+}
+
+fun Node.jSXOpeningFragment(block: JSXOpeningFragment.() -> Unit): JSXOpeningFragment {
+    return JSXOpeningFragmentImpl().apply(block)
+}
+
+fun Node.jSXClosingFragment(block: JSXClosingFragment.() -> Unit): JSXClosingFragment {
+    return JSXClosingFragmentImpl().apply(block)
+}
+
+fun Node.stringLiteral(block: StringLiteral.() -> Unit): StringLiteral {
+    return StringLiteralImpl().apply(block)
+}
+
+fun Node.booleanLiteral(block: BooleanLiteral.() -> Unit): BooleanLiteral {
+    return BooleanLiteralImpl().apply(block)
+}
+
+fun Node.nullLiteral(block: NullLiteral.() -> Unit): NullLiteral {
+    return NullLiteralImpl().apply(block)
+}
+
+fun Node.regExpLiteral(block: RegExpLiteral.() -> Unit): RegExpLiteral {
+    return RegExpLiteralImpl().apply(block)
+}
+
+fun Node.numericLiteral(block: NumericLiteral.() -> Unit): NumericLiteral {
+    return NumericLiteralImpl().apply(block)
+}
+
+fun Node.bigIntLiteral(block: BigIntLiteral.() -> Unit): BigIntLiteral {
+    return BigIntLiteralImpl().apply(block)
+}
+
+fun Node.exportDefaultExpression(block: ExportDefaultExpression.() -> Unit): ExportDefaultExpression {
+    return ExportDefaultExpressionImpl().apply(block)
+}
+
+fun Node.exportDeclaration(block: ExportDeclaration.() -> Unit): ExportDeclaration {
+    return ExportDeclarationImpl().apply(block)
+}
+
+fun Node.importDeclaration(block: ImportDeclaration.() -> Unit): ImportDeclaration {
+    return ImportDeclarationImpl().apply(block)
+}
+
+fun Node.exportAllDeclaration(block: ExportAllDeclaration.() -> Unit): ExportAllDeclaration {
+    return ExportAllDeclarationImpl().apply(block)
+}
+
+fun Node.exportNamedDeclaration(block: ExportNamedDeclaration.() -> Unit): ExportNamedDeclaration {
+    return ExportNamedDeclarationImpl().apply(block)
+}
+
+fun Node.exportDefaultDeclaration(block: ExportDefaultDeclaration.() -> Unit): ExportDefaultDeclaration {
+    return ExportDefaultDeclarationImpl().apply(block)
+}
+
+fun Node.importDefaultSpecifier(block: ImportDefaultSpecifier.() -> Unit): ImportDefaultSpecifier {
+    return ImportDefaultSpecifierImpl().apply(block)
+}
+
+fun Node.importNamespaceSpecifier(block: ImportNamespaceSpecifier.() -> Unit): ImportNamespaceSpecifier {
+    return ImportNamespaceSpecifierImpl().apply(block)
+}
+
+fun Node.namedImportSpecifier(block: NamedImportSpecifier.() -> Unit): NamedImportSpecifier {
+    return NamedImportSpecifierImpl().apply(block)
+}
+
+fun Node.exportNamespaceSpecifier(block: ExportNamespaceSpecifier.() -> Unit): ExportNamespaceSpecifier {
+    return ExportNamespaceSpecifierImpl().apply(block)
+}
+
+fun Node.exportDefaultSpecifier(block: ExportDefaultSpecifier.() -> Unit): ExportDefaultSpecifier {
+    return ExportDefaultSpecifierImpl().apply(block)
+}
+
+fun Node.namedExportSpecifier(block: NamedExportSpecifier.() -> Unit): NamedExportSpecifier {
+    return NamedExportSpecifierImpl().apply(block)
+}
+
+fun Node.module(block: Module.() -> Unit): Module {
+    return ModuleImpl().apply(block)
+}
+
+fun Node.script(block: Script.() -> Unit): Script {
+    return ScriptImpl().apply(block)
+}
+
+fun Node.keyValuePatternProperty(block: KeyValuePatternProperty.() -> Unit): KeyValuePatternProperty {
+    return KeyValuePatternPropertyImpl().apply(block)
+}
+
+fun Node.assignmentPatternProperty(block: AssignmentPatternProperty.() -> Unit): AssignmentPatternProperty {
+    return AssignmentPatternPropertyImpl().apply(block)
+}
+
+fun Node.keyValueProperty(block: KeyValueProperty.() -> Unit): KeyValueProperty {
+    return KeyValuePropertyImpl().apply(block)
+}
+
+fun Node.getterProperty(block: GetterProperty.() -> Unit): GetterProperty {
+    return GetterPropertyImpl().apply(block)
+}
+
+fun Node.setterProperty(block: SetterProperty.() -> Unit): SetterProperty {
+    return SetterPropertyImpl().apply(block)
+}
+
+fun Node.methodProperty(block: MethodProperty.() -> Unit): MethodProperty {
+    return MethodPropertyImpl().apply(block)
+}
+
+fun Node.assignmentProperty(block: AssignmentProperty.() -> Unit): AssignmentProperty {
+    return AssignmentPropertyImpl().apply(block)
+}
+
+fun Node.computedPropName(block: ComputedPropName.() -> Unit): ComputedPropName {
+    return ComputedPropNameImpl().apply(block)
+}
+
+fun Node.blockStatement(block: BlockStatement.() -> Unit): BlockStatement {
+    return BlockStatementImpl().apply(block)
+}
+
+fun Node.expressionStatement(block: ExpressionStatement.() -> Unit): ExpressionStatement {
+    return ExpressionStatementImpl().apply(block)
+}
+
+fun Node.emptyStatement(block: EmptyStatement.() -> Unit): EmptyStatement {
+    return EmptyStatementImpl().apply(block)
+}
+
+fun Node.debuggerStatement(block: DebuggerStatement.() -> Unit): DebuggerStatement {
+    return DebuggerStatementImpl().apply(block)
+}
+
+fun Node.withStatement(block: WithStatement.() -> Unit): WithStatement {
+    return WithStatementImpl().apply(block)
+}
+
+fun Node.returnStatement(block: ReturnStatement.() -> Unit): ReturnStatement {
+    return ReturnStatementImpl().apply(block)
+}
+
+fun Node.labeledStatement(block: LabeledStatement.() -> Unit): LabeledStatement {
+    return LabeledStatementImpl().apply(block)
+}
+
+fun Node.breakStatement(block: BreakStatement.() -> Unit): BreakStatement {
+    return BreakStatementImpl().apply(block)
+}
+
+fun Node.continueStatement(block: ContinueStatement.() -> Unit): ContinueStatement {
+    return ContinueStatementImpl().apply(block)
+}
+
+fun Node.ifStatement(block: IfStatement.() -> Unit): IfStatement {
+    return IfStatementImpl().apply(block)
+}
+
+fun Node.switchStatement(block: SwitchStatement.() -> Unit): SwitchStatement {
+    return SwitchStatementImpl().apply(block)
+}
+
+fun Node.throwStatement(block: ThrowStatement.() -> Unit): ThrowStatement {
+    return ThrowStatementImpl().apply(block)
+}
+
+fun Node.tryStatement(block: TryStatement.() -> Unit): TryStatement {
+    return TryStatementImpl().apply(block)
+}
+
+fun Node.whileStatement(block: WhileStatement.() -> Unit): WhileStatement {
+    return WhileStatementImpl().apply(block)
+}
+
+fun Node.doWhileStatement(block: DoWhileStatement.() -> Unit): DoWhileStatement {
+    return DoWhileStatementImpl().apply(block)
+}
+
+fun Node.forStatement(block: ForStatement.() -> Unit): ForStatement {
+    return ForStatementImpl().apply(block)
+}
+
+fun Node.forInStatement(block: ForInStatement.() -> Unit): ForInStatement {
+    return ForInStatementImpl().apply(block)
+}
+
+fun Node.forOfStatement(block: ForOfStatement.() -> Unit): ForOfStatement {
+    return ForOfStatementImpl().apply(block)
+}
+
+fun Node.switchCase(block: SwitchCase.() -> Unit): SwitchCase {
+    return SwitchCaseImpl().apply(block)
+}
+
+fun Node.catchClause(block: CatchClause.() -> Unit): CatchClause {
+    return CatchClauseImpl().apply(block)
+}
+
+fun Node.tsTypeAnnotation(block: TsTypeAnnotation.() -> Unit): TsTypeAnnotation {
+    return TsTypeAnnotationImpl().apply(block)
+}
+
+fun Node.tsTypeParameterDeclaration(block: TsTypeParameterDeclaration.() -> Unit): TsTypeParameterDeclaration {
+    return TsTypeParameterDeclarationImpl().apply(block)
+}
+
+fun Node.tsTypeParameter(block: TsTypeParameter.() -> Unit): TsTypeParameter {
+    return TsTypeParameterImpl().apply(block)
+}
+
+fun Node.tsTypeParameterInstantiation(block: TsTypeParameterInstantiation.() -> Unit): TsTypeParameterInstantiation {
+    return TsTypeParameterInstantiationImpl().apply(block)
+}
+
+fun Node.tsParameterProperty(block: TsParameterProperty.() -> Unit): TsParameterProperty {
+    return TsParameterPropertyImpl().apply(block)
+}
+
+fun Node.tsQualifiedName(block: TsQualifiedName.() -> Unit): TsQualifiedName {
+    return TsQualifiedNameImpl().apply(block)
+}
+
+fun Node.tsCallSignatureDeclaration(block: TsCallSignatureDeclaration.() -> Unit): TsCallSignatureDeclaration {
+    return TsCallSignatureDeclarationImpl().apply(block)
+}
+
+fun Node.tsConstructSignatureDeclaration(block: TsConstructSignatureDeclaration.() -> Unit): TsConstructSignatureDeclaration {
+    return TsConstructSignatureDeclarationImpl().apply(block)
+}
+
+fun Node.tsPropertySignature(block: TsPropertySignature.() -> Unit): TsPropertySignature {
+    return TsPropertySignatureImpl().apply(block)
+}
+
+fun Node.tsGetterSignature(block: TsGetterSignature.() -> Unit): TsGetterSignature {
+    return TsGetterSignatureImpl().apply(block)
+}
+
+fun Node.tsSetterSignature(block: TsSetterSignature.() -> Unit): TsSetterSignature {
+    return TsSetterSignatureImpl().apply(block)
+}
+
+fun Node.tsMethodSignature(block: TsMethodSignature.() -> Unit): TsMethodSignature {
+    return TsMethodSignatureImpl().apply(block)
+}
+
+fun Node.tsIndexSignature(block: TsIndexSignature.() -> Unit): TsIndexSignature {
+    return TsIndexSignatureImpl().apply(block)
+}
+
+fun Node.tsKeywordType(block: TsKeywordType.() -> Unit): TsKeywordType {
+    return TsKeywordTypeImpl().apply(block)
+}
+
+fun Node.tsThisType(block: TsThisType.() -> Unit): TsThisType {
+    return TsThisTypeImpl().apply(block)
+}
+
+fun Node.tsFunctionType(block: TsFunctionType.() -> Unit): TsFunctionType {
+    return TsFunctionTypeImpl().apply(block)
+}
+
+fun Node.tsConstructorType(block: TsConstructorType.() -> Unit): TsConstructorType {
+    return TsConstructorTypeImpl().apply(block)
+}
+
+fun Node.tsTypeReference(block: TsTypeReference.() -> Unit): TsTypeReference {
+    return TsTypeReferenceImpl().apply(block)
+}
+
+fun Node.tsTypePredicate(block: TsTypePredicate.() -> Unit): TsTypePredicate {
+    return TsTypePredicateImpl().apply(block)
+}
+
+fun Node.tsImportType(block: TsImportType.() -> Unit): TsImportType {
+    return TsImportTypeImpl().apply(block)
+}
+
+fun Node.tsTypeQuery(block: TsTypeQuery.() -> Unit): TsTypeQuery {
+    return TsTypeQueryImpl().apply(block)
+}
+
+fun Node.tsTypeLiteral(block: TsTypeLiteral.() -> Unit): TsTypeLiteral {
+    return TsTypeLiteralImpl().apply(block)
+}
+
+fun Node.tsArrayType(block: TsArrayType.() -> Unit): TsArrayType {
+    return TsArrayTypeImpl().apply(block)
+}
+
+fun Node.tsTupleType(block: TsTupleType.() -> Unit): TsTupleType {
+    return TsTupleTypeImpl().apply(block)
+}
+
+fun Node.tsTupleElement(block: TsTupleElement.() -> Unit): TsTupleElement {
+    return TsTupleElementImpl().apply(block)
+}
+
+fun Node.tsOptionalType(block: TsOptionalType.() -> Unit): TsOptionalType {
+    return TsOptionalTypeImpl().apply(block)
+}
+
+fun Node.tsRestType(block: TsRestType.() -> Unit): TsRestType {
+    return TsRestTypeImpl().apply(block)
+}
+
+fun Node.tsUnionType(block: TsUnionType.() -> Unit): TsUnionType {
+    return TsUnionTypeImpl().apply(block)
+}
+
+fun Node.tsIntersectionType(block: TsIntersectionType.() -> Unit): TsIntersectionType {
+    return TsIntersectionTypeImpl().apply(block)
+}
+
+fun Node.tsConditionalType(block: TsConditionalType.() -> Unit): TsConditionalType {
+    return TsConditionalTypeImpl().apply(block)
+}
+
+fun Node.tsInferType(block: TsInferType.() -> Unit): TsInferType {
+    return TsInferTypeImpl().apply(block)
+}
+
+fun Node.tsParenthesizedType(block: TsParenthesizedType.() -> Unit): TsParenthesizedType {
+    return TsParenthesizedTypeImpl().apply(block)
+}
+
+fun Node.tsTypeOperator(block: TsTypeOperator.() -> Unit): TsTypeOperator {
+    return TsTypeOperatorImpl().apply(block)
+}
+
+fun Node.tsIndexedAccessType(block: TsIndexedAccessType.() -> Unit): TsIndexedAccessType {
+    return TsIndexedAccessTypeImpl().apply(block)
+}
+
+fun Node.tsMappedType(block: TsMappedType.() -> Unit): TsMappedType {
+    return TsMappedTypeImpl().apply(block)
+}
+
+fun Node.tsLiteralType(block: TsLiteralType.() -> Unit): TsLiteralType {
+    return TsLiteralTypeImpl().apply(block)
+}
+
+fun Node.tsTemplateLiteralType(block: TsTemplateLiteralType.() -> Unit): TsTemplateLiteralType {
+    return TsTemplateLiteralTypeImpl().apply(block)
+}
+
+fun Node.tsInterfaceDeclaration(block: TsInterfaceDeclaration.() -> Unit): TsInterfaceDeclaration {
+    return TsInterfaceDeclarationImpl().apply(block)
+}
+
+fun Node.tsInterfaceBody(block: TsInterfaceBody.() -> Unit): TsInterfaceBody {
+    return TsInterfaceBodyImpl().apply(block)
+}
+
+fun Node.tsExpressionWithTypeArguments(block: TsExpressionWithTypeArguments.() -> Unit): TsExpressionWithTypeArguments {
+    return TsExpressionWithTypeArgumentsImpl().apply(block)
+}
+
+fun Node.tsTypeAliasDeclaration(block: TsTypeAliasDeclaration.() -> Unit): TsTypeAliasDeclaration {
+    return TsTypeAliasDeclarationImpl().apply(block)
+}
+
+fun Node.tsEnumDeclaration(block: TsEnumDeclaration.() -> Unit): TsEnumDeclaration {
+    return TsEnumDeclarationImpl().apply(block)
+}
+
+fun Node.tsEnumMember(block: TsEnumMember.() -> Unit): TsEnumMember {
+    return TsEnumMemberImpl().apply(block)
+}
+
+fun Node.tsModuleDeclaration(block: TsModuleDeclaration.() -> Unit): TsModuleDeclaration {
+    return TsModuleDeclarationImpl().apply(block)
+}
+
+fun Node.tsModuleBlock(block: TsModuleBlock.() -> Unit): TsModuleBlock {
+    return TsModuleBlockImpl().apply(block)
+}
+
+fun Node.tsNamespaceDeclaration(block: TsNamespaceDeclaration.() -> Unit): TsNamespaceDeclaration {
+    return TsNamespaceDeclarationImpl().apply(block)
+}
+
+fun Node.tsImportEqualsDeclaration(block: TsImportEqualsDeclaration.() -> Unit): TsImportEqualsDeclaration {
+    return TsImportEqualsDeclarationImpl().apply(block)
+}
+
+fun Node.tsExternalModuleReference(block: TsExternalModuleReference.() -> Unit): TsExternalModuleReference {
+    return TsExternalModuleReferenceImpl().apply(block)
+}
+
+fun Node.tsExportAssignment(block: TsExportAssignment.() -> Unit): TsExportAssignment {
+    return TsExportAssignmentImpl().apply(block)
+}
+
+fun Node.tsNamespaceExportDeclaration(block: TsNamespaceExportDeclaration.() -> Unit): TsNamespaceExportDeclaration {
+    return TsNamespaceExportDeclarationImpl().apply(block)
+}
+
+fun Node.tsInstantiation(block: TsInstantiation.() -> Unit): TsInstantiation {
+    return TsInstantiationImpl().apply(block)
+}
+
+fun Node.invalid(block: Invalid.() -> Unit): Invalid {
+    return InvalidImpl().apply(block)
+}
+
+fun HasSpan.classDeclaration(block: ClassDeclaration.() -> Unit): ClassDeclaration {
+    return ClassDeclarationImpl().apply(block)
+}
+
+fun HasSpan.classExpression(block: ClassExpression.() -> Unit): ClassExpression {
+    return ClassExpressionImpl().apply(block)
+}
+
+fun HasSpan.jsClass(block: Class.() -> Unit): Class {
+    return ClassImpl().apply(block)
+}
+
+fun HasSpan.classProperty(block: ClassProperty.() -> Unit): ClassProperty {
+    return ClassPropertyImpl().apply(block)
+}
+
+fun HasSpan.privateProperty(block: PrivateProperty.() -> Unit): PrivateProperty {
+    return PrivatePropertyImpl().apply(block)
+}
+
+fun HasSpan.param(block: Param.() -> Unit): Param {
+    return ParamImpl().apply(block)
+}
+
+fun HasSpan.constructor(block: Constructor.() -> Unit): Constructor {
+    return ConstructorImpl().apply(block)
+}
+
+fun HasSpan.classMethod(block: ClassMethod.() -> Unit): ClassMethod {
+    return ClassMethodImpl().apply(block)
+}
+
+fun HasSpan.privateMethod(block: PrivateMethod.() -> Unit): PrivateMethod {
+    return PrivateMethodImpl().apply(block)
+}
+
+fun HasSpan.staticBlock(block: StaticBlock.() -> Unit): StaticBlock {
+    return StaticBlockImpl().apply(block)
+}
+
+fun HasSpan.decorator(block: Decorator.() -> Unit): Decorator {
+    return DecoratorImpl().apply(block)
+}
+
+fun HasSpan.variableDeclaration(block: VariableDeclaration.() -> Unit): VariableDeclaration {
+    return VariableDeclarationImpl().apply(block)
+}
+
+fun HasSpan.variableDeclarator(block: VariableDeclarator.() -> Unit): VariableDeclarator {
+    return VariableDeclaratorImpl().apply(block)
+}
+
+fun HasSpan.identifier(block: Identifier.() -> Unit): Identifier {
+    return IdentifierImpl().apply(block)
+}
+
+fun HasSpan.optionalChainingExpression(block: OptionalChainingExpression.() -> Unit): OptionalChainingExpression {
+    return OptionalChainingExpressionImpl().apply(block)
+}
+
+fun HasSpan.optionalChainingCall(block: OptionalChainingCall.() -> Unit): OptionalChainingCall {
+    return OptionalChainingCallImpl().apply(block)
+}
+
+fun HasSpan.thisExpression(block: ThisExpression.() -> Unit): ThisExpression {
+    return ThisExpressionImpl().apply(block)
+}
+
+fun HasSpan.arrayExpression(block: ArrayExpression.() -> Unit): ArrayExpression {
+    return ArrayExpressionImpl().apply(block)
+}
+
+fun HasSpan.objectExpression(block: ObjectExpression.() -> Unit): ObjectExpression {
+    return ObjectExpressionImpl().apply(block)
+}
+
+fun HasSpan.unaryExpression(block: UnaryExpression.() -> Unit): UnaryExpression {
+    return UnaryExpressionImpl().apply(block)
+}
+
+fun HasSpan.updateExpression(block: UpdateExpression.() -> Unit): UpdateExpression {
+    return UpdateExpressionImpl().apply(block)
+}
+
+fun HasSpan.binaryExpression(block: BinaryExpression.() -> Unit): BinaryExpression {
+    return BinaryExpressionImpl().apply(block)
+}
+
+fun HasSpan.functionExpression(block: FunctionExpression.() -> Unit): FunctionExpression {
+    return FunctionExpressionImpl().apply(block)
+}
+
+fun HasSpan.assignmentExpression(block: AssignmentExpression.() -> Unit): AssignmentExpression {
+    return AssignmentExpressionImpl().apply(block)
+}
+
+fun HasSpan.memberExpression(block: MemberExpression.() -> Unit): MemberExpression {
+    return MemberExpressionImpl().apply(block)
+}
+
+fun HasSpan.superPropExpression(block: SuperPropExpression.() -> Unit): SuperPropExpression {
+    return SuperPropExpressionImpl().apply(block)
+}
+
+fun HasSpan.conditionalExpression(block: ConditionalExpression.() -> Unit): ConditionalExpression {
+    return ConditionalExpressionImpl().apply(block)
+}
+
+fun HasSpan.callExpression(block: CallExpression.() -> Unit): CallExpression {
+    return CallExpressionImpl().apply(block)
+}
+
+fun HasSpan.newExpression(block: NewExpression.() -> Unit): NewExpression {
+    return NewExpressionImpl().apply(block)
+}
+
+fun HasSpan.sequenceExpression(block: SequenceExpression.() -> Unit): SequenceExpression {
+    return SequenceExpressionImpl().apply(block)
+}
+
+fun HasSpan.arrowFunctionExpression(block: ArrowFunctionExpression.() -> Unit): ArrowFunctionExpression {
+    return ArrowFunctionExpressionImpl().apply(block)
+}
+
+fun HasSpan.yieldExpression(block: YieldExpression.() -> Unit): YieldExpression {
+    return YieldExpressionImpl().apply(block)
+}
+
+fun HasSpan.awaitExpression(block: AwaitExpression.() -> Unit): AwaitExpression {
+    return AwaitExpressionImpl().apply(block)
+}
+
+fun HasSpan.templateLiteral(block: TemplateLiteral.() -> Unit): TemplateLiteral {
+    return TemplateLiteralImpl().apply(block)
+}
+
+fun HasSpan.taggedTemplateExpression(block: TaggedTemplateExpression.() -> Unit): TaggedTemplateExpression {
+    return TaggedTemplateExpressionImpl().apply(block)
+}
+
+fun HasSpan.templateElement(block: TemplateElement.() -> Unit): TemplateElement {
+    return TemplateElementImpl().apply(block)
+}
+
+fun HasSpan.parenthesisExpression(block: ParenthesisExpression.() -> Unit): ParenthesisExpression {
+    return ParenthesisExpressionImpl().apply(block)
+}
+
+fun HasSpan.privateName(block: PrivateName.() -> Unit): PrivateName {
+    return PrivateNameImpl().apply(block)
+}
+
+fun HasSpan.tsAsExpression(block: TsAsExpression.() -> Unit): TsAsExpression {
+    return TsAsExpressionImpl().apply(block)
+}
+
+fun HasSpan.tsSatisfiesExpression(block: TsSatisfiesExpression.() -> Unit): TsSatisfiesExpression {
+    return TsSatisfiesExpressionImpl().apply(block)
+}
+
+fun HasSpan.tsTypeAssertion(block: TsTypeAssertion.() -> Unit): TsTypeAssertion {
+    return TsTypeAssertionImpl().apply(block)
+}
+
+fun HasSpan.tsConstAssertion(block: TsConstAssertion.() -> Unit): TsConstAssertion {
+    return TsConstAssertionImpl().apply(block)
+}
+
+fun HasSpan.tsNonNullExpression(block: TsNonNullExpression.() -> Unit): TsNonNullExpression {
+    return TsNonNullExpressionImpl().apply(block)
+}
+
+fun HasSpan.jsSuper(block: Super.() -> Unit): Super {
+    return SuperImpl().apply(block)
+}
+
+fun HasSpan.import(block: Import.() -> Unit): Import {
+    return ImportImpl().apply(block)
+}
+
+fun HasSpan.metaProperty(block: MetaProperty.() -> Unit): MetaProperty {
+    return MetaPropertyImpl().apply(block)
+}
+
+fun HasSpan.functionDeclaration(block: FunctionDeclaration.() -> Unit): FunctionDeclaration {
+    return FunctionDeclarationImpl().apply(block)
+}
+
+fun HasSpan.methodProperty(block: MethodProperty.() -> Unit): MethodProperty {
+    return MethodPropertyImpl().apply(block)
+}
+
+fun HasSpan.bindingIdentifier(block: BindingIdentifier.() -> Unit): BindingIdentifier {
+    return BindingIdentifierImpl().apply(block)
+}
+
+fun HasSpan.arrayPattern(block: ArrayPattern.() -> Unit): ArrayPattern {
+    return ArrayPatternImpl().apply(block)
+}
+
+fun HasSpan.objectPattern(block: ObjectPattern.() -> Unit): ObjectPattern {
+    return ObjectPatternImpl().apply(block)
+}
+
+fun HasSpan.assignmentPattern(block: AssignmentPattern.() -> Unit): AssignmentPattern {
+    return AssignmentPatternImpl().apply(block)
+}
+
+fun HasSpan.restElement(block: RestElement.() -> Unit): RestElement {
+    return RestElementImpl().apply(block)
+}
+
+fun HasSpan.jSXEmptyExpression(block: JSXEmptyExpression.() -> Unit): JSXEmptyExpression {
+    return JSXEmptyExpressionImpl().apply(block)
+}
+
+fun HasSpan.jSXExpressionContainer(block: JSXExpressionContainer.() -> Unit): JSXExpressionContainer {
+    return JSXExpressionContainerImpl().apply(block)
+}
+
+fun HasSpan.jSXSpreadChild(block: JSXSpreadChild.() -> Unit): JSXSpreadChild {
+    return JSXSpreadChildImpl().apply(block)
+}
+
+fun HasSpan.jSXOpeningElement(block: JSXOpeningElement.() -> Unit): JSXOpeningElement {
+    return JSXOpeningElementImpl().apply(block)
+}
+
+fun HasSpan.jSXClosingElement(block: JSXClosingElement.() -> Unit): JSXClosingElement {
+    return JSXClosingElementImpl().apply(block)
+}
+
+fun HasSpan.jSXAttribute(block: JSXAttribute.() -> Unit): JSXAttribute {
+    return JSXAttributeImpl().apply(block)
+}
+
+fun HasSpan.jSXText(block: JSXText.() -> Unit): JSXText {
+    return JSXTextImpl().apply(block)
+}
+
+fun HasSpan.jSXElement(block: JSXElement.() -> Unit): JSXElement {
+    return JSXElementImpl().apply(block)
+}
+
+fun HasSpan.jSXFragment(block: JSXFragment.() -> Unit): JSXFragment {
+    return JSXFragmentImpl().apply(block)
+}
+
+fun HasSpan.jSXOpeningFragment(block: JSXOpeningFragment.() -> Unit): JSXOpeningFragment {
+    return JSXOpeningFragmentImpl().apply(block)
+}
+
+fun HasSpan.jSXClosingFragment(block: JSXClosingFragment.() -> Unit): JSXClosingFragment {
+    return JSXClosingFragmentImpl().apply(block)
+}
+
+fun HasSpan.stringLiteral(block: StringLiteral.() -> Unit): StringLiteral {
+    return StringLiteralImpl().apply(block)
+}
+
+fun HasSpan.booleanLiteral(block: BooleanLiteral.() -> Unit): BooleanLiteral {
+    return BooleanLiteralImpl().apply(block)
+}
+
+fun HasSpan.nullLiteral(block: NullLiteral.() -> Unit): NullLiteral {
+    return NullLiteralImpl().apply(block)
+}
+
+fun HasSpan.regExpLiteral(block: RegExpLiteral.() -> Unit): RegExpLiteral {
+    return RegExpLiteralImpl().apply(block)
+}
+
+fun HasSpan.numericLiteral(block: NumericLiteral.() -> Unit): NumericLiteral {
+    return NumericLiteralImpl().apply(block)
+}
+
+fun HasSpan.bigIntLiteral(block: BigIntLiteral.() -> Unit): BigIntLiteral {
+    return BigIntLiteralImpl().apply(block)
+}
+
+fun HasSpan.exportDefaultExpression(block: ExportDefaultExpression.() -> Unit): ExportDefaultExpression {
+    return ExportDefaultExpressionImpl().apply(block)
+}
+
+fun HasSpan.exportDeclaration(block: ExportDeclaration.() -> Unit): ExportDeclaration {
+    return ExportDeclarationImpl().apply(block)
+}
+
+fun HasSpan.importDeclaration(block: ImportDeclaration.() -> Unit): ImportDeclaration {
+    return ImportDeclarationImpl().apply(block)
+}
+
+fun HasSpan.exportAllDeclaration(block: ExportAllDeclaration.() -> Unit): ExportAllDeclaration {
+    return ExportAllDeclarationImpl().apply(block)
+}
+
+fun HasSpan.exportNamedDeclaration(block: ExportNamedDeclaration.() -> Unit): ExportNamedDeclaration {
+    return ExportNamedDeclarationImpl().apply(block)
+}
+
+fun HasSpan.exportDefaultDeclaration(block: ExportDefaultDeclaration.() -> Unit): ExportDefaultDeclaration {
+    return ExportDefaultDeclarationImpl().apply(block)
+}
+
+fun HasSpan.importDefaultSpecifier(block: ImportDefaultSpecifier.() -> Unit): ImportDefaultSpecifier {
+    return ImportDefaultSpecifierImpl().apply(block)
+}
+
+fun HasSpan.importNamespaceSpecifier(block: ImportNamespaceSpecifier.() -> Unit): ImportNamespaceSpecifier {
+    return ImportNamespaceSpecifierImpl().apply(block)
+}
+
+fun HasSpan.namedImportSpecifier(block: NamedImportSpecifier.() -> Unit): NamedImportSpecifier {
+    return NamedImportSpecifierImpl().apply(block)
+}
+
+fun HasSpan.exportNamespaceSpecifier(block: ExportNamespaceSpecifier.() -> Unit): ExportNamespaceSpecifier {
+    return ExportNamespaceSpecifierImpl().apply(block)
+}
+
+fun HasSpan.exportDefaultSpecifier(block: ExportDefaultSpecifier.() -> Unit): ExportDefaultSpecifier {
+    return ExportDefaultSpecifierImpl().apply(block)
+}
+
+fun HasSpan.namedExportSpecifier(block: NamedExportSpecifier.() -> Unit): NamedExportSpecifier {
+    return NamedExportSpecifierImpl().apply(block)
+}
+
+fun HasSpan.module(block: Module.() -> Unit): Module {
+    return ModuleImpl().apply(block)
+}
+
+fun HasSpan.script(block: Script.() -> Unit): Script {
+    return ScriptImpl().apply(block)
+}
+
+fun HasSpan.assignmentPatternProperty(block: AssignmentPatternProperty.() -> Unit): AssignmentPatternProperty {
+    return AssignmentPatternPropertyImpl().apply(block)
+}
+
+fun HasSpan.getterProperty(block: GetterProperty.() -> Unit): GetterProperty {
+    return GetterPropertyImpl().apply(block)
+}
+
+fun HasSpan.setterProperty(block: SetterProperty.() -> Unit): SetterProperty {
+    return SetterPropertyImpl().apply(block)
+}
+
+fun HasSpan.computedPropName(block: ComputedPropName.() -> Unit): ComputedPropName {
+    return ComputedPropNameImpl().apply(block)
+}
+
+fun HasSpan.blockStatement(block: BlockStatement.() -> Unit): BlockStatement {
+    return BlockStatementImpl().apply(block)
+}
+
+fun HasSpan.expressionStatement(block: ExpressionStatement.() -> Unit): ExpressionStatement {
+    return ExpressionStatementImpl().apply(block)
+}
+
+fun HasSpan.emptyStatement(block: EmptyStatement.() -> Unit): EmptyStatement {
+    return EmptyStatementImpl().apply(block)
+}
+
+fun HasSpan.debuggerStatement(block: DebuggerStatement.() -> Unit): DebuggerStatement {
+    return DebuggerStatementImpl().apply(block)
+}
+
+fun HasSpan.withStatement(block: WithStatement.() -> Unit): WithStatement {
+    return WithStatementImpl().apply(block)
+}
+
+fun HasSpan.returnStatement(block: ReturnStatement.() -> Unit): ReturnStatement {
+    return ReturnStatementImpl().apply(block)
+}
+
+fun HasSpan.labeledStatement(block: LabeledStatement.() -> Unit): LabeledStatement {
+    return LabeledStatementImpl().apply(block)
+}
+
+fun HasSpan.breakStatement(block: BreakStatement.() -> Unit): BreakStatement {
+    return BreakStatementImpl().apply(block)
+}
+
+fun HasSpan.continueStatement(block: ContinueStatement.() -> Unit): ContinueStatement {
+    return ContinueStatementImpl().apply(block)
+}
+
+fun HasSpan.ifStatement(block: IfStatement.() -> Unit): IfStatement {
+    return IfStatementImpl().apply(block)
+}
+
+fun HasSpan.switchStatement(block: SwitchStatement.() -> Unit): SwitchStatement {
+    return SwitchStatementImpl().apply(block)
+}
+
+fun HasSpan.throwStatement(block: ThrowStatement.() -> Unit): ThrowStatement {
+    return ThrowStatementImpl().apply(block)
+}
+
+fun HasSpan.tryStatement(block: TryStatement.() -> Unit): TryStatement {
+    return TryStatementImpl().apply(block)
+}
+
+fun HasSpan.whileStatement(block: WhileStatement.() -> Unit): WhileStatement {
+    return WhileStatementImpl().apply(block)
+}
+
+fun HasSpan.doWhileStatement(block: DoWhileStatement.() -> Unit): DoWhileStatement {
+    return DoWhileStatementImpl().apply(block)
+}
+
+fun HasSpan.forStatement(block: ForStatement.() -> Unit): ForStatement {
+    return ForStatementImpl().apply(block)
+}
+
+fun HasSpan.forInStatement(block: ForInStatement.() -> Unit): ForInStatement {
+    return ForInStatementImpl().apply(block)
+}
+
+fun HasSpan.forOfStatement(block: ForOfStatement.() -> Unit): ForOfStatement {
+    return ForOfStatementImpl().apply(block)
+}
+
+fun HasSpan.switchCase(block: SwitchCase.() -> Unit): SwitchCase {
+    return SwitchCaseImpl().apply(block)
+}
+
+fun HasSpan.catchClause(block: CatchClause.() -> Unit): CatchClause {
+    return CatchClauseImpl().apply(block)
+}
+
+fun HasSpan.tsTypeAnnotation(block: TsTypeAnnotation.() -> Unit): TsTypeAnnotation {
+    return TsTypeAnnotationImpl().apply(block)
+}
+
+fun HasSpan.tsTypeParameterDeclaration(block: TsTypeParameterDeclaration.() -> Unit): TsTypeParameterDeclaration {
+    return TsTypeParameterDeclarationImpl().apply(block)
+}
+
+fun HasSpan.tsTypeParameter(block: TsTypeParameter.() -> Unit): TsTypeParameter {
+    return TsTypeParameterImpl().apply(block)
+}
+
+fun HasSpan.tsTypeParameterInstantiation(block: TsTypeParameterInstantiation.() -> Unit): TsTypeParameterInstantiation {
+    return TsTypeParameterInstantiationImpl().apply(block)
+}
+
+fun HasSpan.tsParameterProperty(block: TsParameterProperty.() -> Unit): TsParameterProperty {
+    return TsParameterPropertyImpl().apply(block)
+}
+
+fun HasSpan.tsCallSignatureDeclaration(block: TsCallSignatureDeclaration.() -> Unit): TsCallSignatureDeclaration {
+    return TsCallSignatureDeclarationImpl().apply(block)
+}
+
+fun HasSpan.tsConstructSignatureDeclaration(block: TsConstructSignatureDeclaration.() -> Unit): TsConstructSignatureDeclaration {
+    return TsConstructSignatureDeclarationImpl().apply(block)
+}
+
+fun HasSpan.tsPropertySignature(block: TsPropertySignature.() -> Unit): TsPropertySignature {
+    return TsPropertySignatureImpl().apply(block)
+}
+
+fun HasSpan.tsGetterSignature(block: TsGetterSignature.() -> Unit): TsGetterSignature {
+    return TsGetterSignatureImpl().apply(block)
+}
+
+fun HasSpan.tsSetterSignature(block: TsSetterSignature.() -> Unit): TsSetterSignature {
+    return TsSetterSignatureImpl().apply(block)
+}
+
+fun HasSpan.tsMethodSignature(block: TsMethodSignature.() -> Unit): TsMethodSignature {
+    return TsMethodSignatureImpl().apply(block)
+}
+
+fun HasSpan.tsIndexSignature(block: TsIndexSignature.() -> Unit): TsIndexSignature {
+    return TsIndexSignatureImpl().apply(block)
+}
+
+fun HasSpan.tsKeywordType(block: TsKeywordType.() -> Unit): TsKeywordType {
+    return TsKeywordTypeImpl().apply(block)
+}
+
+fun HasSpan.tsThisType(block: TsThisType.() -> Unit): TsThisType {
+    return TsThisTypeImpl().apply(block)
+}
+
+fun HasSpan.tsFunctionType(block: TsFunctionType.() -> Unit): TsFunctionType {
+    return TsFunctionTypeImpl().apply(block)
+}
+
+fun HasSpan.tsConstructorType(block: TsConstructorType.() -> Unit): TsConstructorType {
+    return TsConstructorTypeImpl().apply(block)
+}
+
+fun HasSpan.tsTypeReference(block: TsTypeReference.() -> Unit): TsTypeReference {
+    return TsTypeReferenceImpl().apply(block)
+}
+
+fun HasSpan.tsTypePredicate(block: TsTypePredicate.() -> Unit): TsTypePredicate {
+    return TsTypePredicateImpl().apply(block)
+}
+
+fun HasSpan.tsImportType(block: TsImportType.() -> Unit): TsImportType {
+    return TsImportTypeImpl().apply(block)
+}
+
+fun HasSpan.tsTypeQuery(block: TsTypeQuery.() -> Unit): TsTypeQuery {
+    return TsTypeQueryImpl().apply(block)
+}
+
+fun HasSpan.tsTypeLiteral(block: TsTypeLiteral.() -> Unit): TsTypeLiteral {
+    return TsTypeLiteralImpl().apply(block)
+}
+
+fun HasSpan.tsArrayType(block: TsArrayType.() -> Unit): TsArrayType {
+    return TsArrayTypeImpl().apply(block)
+}
+
+fun HasSpan.tsTupleType(block: TsTupleType.() -> Unit): TsTupleType {
+    return TsTupleTypeImpl().apply(block)
+}
+
+fun HasSpan.tsTupleElement(block: TsTupleElement.() -> Unit): TsTupleElement {
+    return TsTupleElementImpl().apply(block)
+}
+
+fun HasSpan.tsOptionalType(block: TsOptionalType.() -> Unit): TsOptionalType {
+    return TsOptionalTypeImpl().apply(block)
+}
+
+fun HasSpan.tsRestType(block: TsRestType.() -> Unit): TsRestType {
+    return TsRestTypeImpl().apply(block)
+}
+
+fun HasSpan.tsUnionType(block: TsUnionType.() -> Unit): TsUnionType {
+    return TsUnionTypeImpl().apply(block)
+}
+
+fun HasSpan.tsIntersectionType(block: TsIntersectionType.() -> Unit): TsIntersectionType {
+    return TsIntersectionTypeImpl().apply(block)
+}
+
+fun HasSpan.tsConditionalType(block: TsConditionalType.() -> Unit): TsConditionalType {
+    return TsConditionalTypeImpl().apply(block)
+}
+
+fun HasSpan.tsInferType(block: TsInferType.() -> Unit): TsInferType {
+    return TsInferTypeImpl().apply(block)
+}
+
+fun HasSpan.tsParenthesizedType(block: TsParenthesizedType.() -> Unit): TsParenthesizedType {
+    return TsParenthesizedTypeImpl().apply(block)
+}
+
+fun HasSpan.tsTypeOperator(block: TsTypeOperator.() -> Unit): TsTypeOperator {
+    return TsTypeOperatorImpl().apply(block)
+}
+
+fun HasSpan.tsIndexedAccessType(block: TsIndexedAccessType.() -> Unit): TsIndexedAccessType {
+    return TsIndexedAccessTypeImpl().apply(block)
+}
+
+fun HasSpan.tsMappedType(block: TsMappedType.() -> Unit): TsMappedType {
+    return TsMappedTypeImpl().apply(block)
+}
+
+fun HasSpan.tsLiteralType(block: TsLiteralType.() -> Unit): TsLiteralType {
+    return TsLiteralTypeImpl().apply(block)
+}
+
+fun HasSpan.tsTemplateLiteralType(block: TsTemplateLiteralType.() -> Unit): TsTemplateLiteralType {
+    return TsTemplateLiteralTypeImpl().apply(block)
+}
+
+fun HasSpan.tsInterfaceDeclaration(block: TsInterfaceDeclaration.() -> Unit): TsInterfaceDeclaration {
+    return TsInterfaceDeclarationImpl().apply(block)
+}
+
+fun HasSpan.tsInterfaceBody(block: TsInterfaceBody.() -> Unit): TsInterfaceBody {
+    return TsInterfaceBodyImpl().apply(block)
+}
+
+fun HasSpan.tsExpressionWithTypeArguments(block: TsExpressionWithTypeArguments.() -> Unit): TsExpressionWithTypeArguments {
+    return TsExpressionWithTypeArgumentsImpl().apply(block)
+}
+
+fun HasSpan.tsTypeAliasDeclaration(block: TsTypeAliasDeclaration.() -> Unit): TsTypeAliasDeclaration {
+    return TsTypeAliasDeclarationImpl().apply(block)
+}
+
+fun HasSpan.tsEnumDeclaration(block: TsEnumDeclaration.() -> Unit): TsEnumDeclaration {
+    return TsEnumDeclarationImpl().apply(block)
+}
+
+fun HasSpan.tsEnumMember(block: TsEnumMember.() -> Unit): TsEnumMember {
+    return TsEnumMemberImpl().apply(block)
+}
+
+fun HasSpan.tsModuleDeclaration(block: TsModuleDeclaration.() -> Unit): TsModuleDeclaration {
+    return TsModuleDeclarationImpl().apply(block)
+}
+
+fun HasSpan.tsModuleBlock(block: TsModuleBlock.() -> Unit): TsModuleBlock {
+    return TsModuleBlockImpl().apply(block)
+}
+
+fun HasSpan.tsNamespaceDeclaration(block: TsNamespaceDeclaration.() -> Unit): TsNamespaceDeclaration {
+    return TsNamespaceDeclarationImpl().apply(block)
+}
+
+fun HasSpan.tsImportEqualsDeclaration(block: TsImportEqualsDeclaration.() -> Unit): TsImportEqualsDeclaration {
+    return TsImportEqualsDeclarationImpl().apply(block)
+}
+
+fun HasSpan.tsExternalModuleReference(block: TsExternalModuleReference.() -> Unit): TsExternalModuleReference {
+    return TsExternalModuleReferenceImpl().apply(block)
+}
+
+fun HasSpan.tsExportAssignment(block: TsExportAssignment.() -> Unit): TsExportAssignment {
+    return TsExportAssignmentImpl().apply(block)
+}
+
+fun HasSpan.tsNamespaceExportDeclaration(block: TsNamespaceExportDeclaration.() -> Unit): TsNamespaceExportDeclaration {
+    return TsNamespaceExportDeclarationImpl().apply(block)
+}
+
+fun HasSpan.tsInstantiation(block: TsInstantiation.() -> Unit): TsInstantiation {
+    return TsInstantiationImpl().apply(block)
+}
+
+fun HasSpan.invalid(block: Invalid.() -> Unit): Invalid {
+    return InvalidImpl().apply(block)
+}
+
+fun HasDecorator.classDeclaration(block: ClassDeclaration.() -> Unit): ClassDeclaration {
+    return ClassDeclarationImpl().apply(block)
+}
+
+fun HasDecorator.classExpression(block: ClassExpression.() -> Unit): ClassExpression {
+    return ClassExpressionImpl().apply(block)
+}
+
+fun HasDecorator.jsClass(block: Class.() -> Unit): Class {
+    return ClassImpl().apply(block)
+}
+
+fun HasDecorator.classProperty(block: ClassProperty.() -> Unit): ClassProperty {
+    return ClassPropertyImpl().apply(block)
+}
+
+fun HasDecorator.privateProperty(block: PrivateProperty.() -> Unit): PrivateProperty {
+    return PrivatePropertyImpl().apply(block)
+}
+
+fun HasDecorator.param(block: Param.() -> Unit): Param {
+    return ParamImpl().apply(block)
+}
+
+fun HasDecorator.functionDeclaration(block: FunctionDeclaration.() -> Unit): FunctionDeclaration {
+    return FunctionDeclarationImpl().apply(block)
+}
+
+fun HasDecorator.functionExpression(block: FunctionExpression.() -> Unit): FunctionExpression {
+    return FunctionExpressionImpl().apply(block)
+}
+
+fun HasDecorator.methodProperty(block: MethodProperty.() -> Unit): MethodProperty {
+    return MethodPropertyImpl().apply(block)
+}
+
+fun HasDecorator.tsParameterProperty(block: TsParameterProperty.() -> Unit): TsParameterProperty {
+    return TsParameterPropertyImpl().apply(block)
+}
+
+fun Class.classDeclaration(block: ClassDeclaration.() -> Unit): ClassDeclaration {
+    return ClassDeclarationImpl().apply(block)
+}
+
+fun Class.classExpression(block: ClassExpression.() -> Unit): ClassExpression {
+    return ClassExpressionImpl().apply(block)
+}
+
+fun Class.jsClass(block: Class.() -> Unit): Class {
+    return ClassImpl().apply(block)
+}
+
+fun ClassPropertyBase.classProperty(block: ClassProperty.() -> Unit): ClassProperty {
+    return ClassPropertyImpl().apply(block)
+}
+
+fun ClassPropertyBase.privateProperty(block: PrivateProperty.() -> Unit): PrivateProperty {
+    return PrivatePropertyImpl().apply(block)
+}
+
+fun ClassProperty.classProperty(block: ClassProperty.() -> Unit): ClassProperty {
+    return ClassPropertyImpl().apply(block)
+}
+
+fun PrivateProperty.privateProperty(block: PrivateProperty.() -> Unit): PrivateProperty {
+    return PrivatePropertyImpl().apply(block)
+}
+
+fun Param.param(block: Param.() -> Unit): Param {
+    return ParamImpl().apply(block)
+}
+
+fun Constructor.constructor(block: Constructor.() -> Unit): Constructor {
+    return ConstructorImpl().apply(block)
+}
+
+fun ClassMethodBase.classMethod(block: ClassMethod.() -> Unit): ClassMethod {
+    return ClassMethodImpl().apply(block)
+}
+
+fun ClassMethodBase.privateMethod(block: PrivateMethod.() -> Unit): PrivateMethod {
+    return PrivateMethodImpl().apply(block)
+}
+
+fun ClassMethod.classMethod(block: ClassMethod.() -> Unit): ClassMethod {
+    return ClassMethodImpl().apply(block)
+}
+
+fun PrivateMethod.privateMethod(block: PrivateMethod.() -> Unit): PrivateMethod {
+    return PrivateMethodImpl().apply(block)
+}
+
+fun StaticBlock.staticBlock(block: StaticBlock.() -> Unit): StaticBlock {
+    return StaticBlockImpl().apply(block)
+}
+
+fun Decorator.decorator(block: Decorator.() -> Unit): Decorator {
+    return DecoratorImpl().apply(block)
+}
+
+fun FunctionDeclaration.functionDeclaration(block: FunctionDeclaration.() -> Unit): FunctionDeclaration {
+    return FunctionDeclarationImpl().apply(block)
+}
+
+fun ClassDeclaration.classDeclaration(block: ClassDeclaration.() -> Unit): ClassDeclaration {
+    return ClassDeclarationImpl().apply(block)
+}
+
+fun VariableDeclaration.variableDeclaration(block: VariableDeclaration.() -> Unit): VariableDeclaration {
+    return VariableDeclarationImpl().apply(block)
+}
+
+fun VariableDeclarator.variableDeclarator(block: VariableDeclarator.() -> Unit): VariableDeclarator {
+    return VariableDeclaratorImpl().apply(block)
+}
+
+fun ExpressionBase.identifier(block: Identifier.() -> Unit): Identifier {
+    return IdentifierImpl().apply(block)
+}
+
+fun ExpressionBase.optionalChainingExpression(block: OptionalChainingExpression.() -> Unit): OptionalChainingExpression {
+    return OptionalChainingExpressionImpl().apply(block)
+}
+
+fun ExpressionBase.optionalChainingCall(block: OptionalChainingCall.() -> Unit): OptionalChainingCall {
+    return OptionalChainingCallImpl().apply(block)
+}
+
+fun ExpressionBase.thisExpression(block: ThisExpression.() -> Unit): ThisExpression {
+    return ThisExpressionImpl().apply(block)
+}
+
+fun ExpressionBase.arrayExpression(block: ArrayExpression.() -> Unit): ArrayExpression {
+    return ArrayExpressionImpl().apply(block)
+}
+
+fun ExpressionBase.objectExpression(block: ObjectExpression.() -> Unit): ObjectExpression {
+    return ObjectExpressionImpl().apply(block)
+}
+
+fun ExpressionBase.unaryExpression(block: UnaryExpression.() -> Unit): UnaryExpression {
+    return UnaryExpressionImpl().apply(block)
+}
+
+fun ExpressionBase.updateExpression(block: UpdateExpression.() -> Unit): UpdateExpression {
+    return UpdateExpressionImpl().apply(block)
+}
+
+fun ExpressionBase.binaryExpression(block: BinaryExpression.() -> Unit): BinaryExpression {
+    return BinaryExpressionImpl().apply(block)
+}
+
+fun ExpressionBase.functionExpression(block: FunctionExpression.() -> Unit): FunctionExpression {
+    return FunctionExpressionImpl().apply(block)
+}
+
+fun ExpressionBase.classExpression(block: ClassExpression.() -> Unit): ClassExpression {
+    return ClassExpressionImpl().apply(block)
+}
+
+fun ExpressionBase.assignmentExpression(block: AssignmentExpression.() -> Unit): AssignmentExpression {
+    return AssignmentExpressionImpl().apply(block)
+}
+
+fun ExpressionBase.memberExpression(block: MemberExpression.() -> Unit): MemberExpression {
+    return MemberExpressionImpl().apply(block)
+}
+
+fun ExpressionBase.superPropExpression(block: SuperPropExpression.() -> Unit): SuperPropExpression {
+    return SuperPropExpressionImpl().apply(block)
+}
+
+fun ExpressionBase.conditionalExpression(block: ConditionalExpression.() -> Unit): ConditionalExpression {
+    return ConditionalExpressionImpl().apply(block)
+}
+
+fun ExpressionBase.callExpression(block: CallExpression.() -> Unit): CallExpression {
+    return CallExpressionImpl().apply(block)
+}
+
+fun ExpressionBase.newExpression(block: NewExpression.() -> Unit): NewExpression {
+    return NewExpressionImpl().apply(block)
+}
+
+fun ExpressionBase.sequenceExpression(block: SequenceExpression.() -> Unit): SequenceExpression {
+    return SequenceExpressionImpl().apply(block)
+}
+
+fun ExpressionBase.arrowFunctionExpression(block: ArrowFunctionExpression.() -> Unit): ArrowFunctionExpression {
+    return ArrowFunctionExpressionImpl().apply(block)
+}
+
+fun ExpressionBase.yieldExpression(block: YieldExpression.() -> Unit): YieldExpression {
+    return YieldExpressionImpl().apply(block)
+}
+
+fun ExpressionBase.awaitExpression(block: AwaitExpression.() -> Unit): AwaitExpression {
+    return AwaitExpressionImpl().apply(block)
+}
+
+fun ExpressionBase.templateLiteral(block: TemplateLiteral.() -> Unit): TemplateLiteral {
+    return TemplateLiteralImpl().apply(block)
+}
+
+fun ExpressionBase.taggedTemplateExpression(block: TaggedTemplateExpression.() -> Unit): TaggedTemplateExpression {
+    return TaggedTemplateExpressionImpl().apply(block)
+}
+
+fun ExpressionBase.templateElement(block: TemplateElement.() -> Unit): TemplateElement {
+    return TemplateElementImpl().apply(block)
+}
+
+fun ExpressionBase.parenthesisExpression(block: ParenthesisExpression.() -> Unit): ParenthesisExpression {
+    return ParenthesisExpressionImpl().apply(block)
+}
+
+fun ExpressionBase.privateName(block: PrivateName.() -> Unit): PrivateName {
+    return PrivateNameImpl().apply(block)
+}
+
+fun ExpressionBase.tsAsExpression(block: TsAsExpression.() -> Unit): TsAsExpression {
+    return TsAsExpressionImpl().apply(block)
+}
+
+fun ExpressionBase.tsSatisfiesExpression(block: TsSatisfiesExpression.() -> Unit): TsSatisfiesExpression {
+    return TsSatisfiesExpressionImpl().apply(block)
+}
+
+fun ExpressionBase.tsTypeAssertion(block: TsTypeAssertion.() -> Unit): TsTypeAssertion {
+    return TsTypeAssertionImpl().apply(block)
+}
+
+fun ExpressionBase.tsConstAssertion(block: TsConstAssertion.() -> Unit): TsConstAssertion {
+    return TsConstAssertionImpl().apply(block)
+}
+
+fun ExpressionBase.tsNonNullExpression(block: TsNonNullExpression.() -> Unit): TsNonNullExpression {
+    return TsNonNullExpressionImpl().apply(block)
+}
+
+fun Identifier.identifier(block: Identifier.() -> Unit): Identifier {
+    return IdentifierImpl().apply(block)
+}
+
+fun OptionalChainingExpression.optionalChainingExpression(block: OptionalChainingExpression.() -> Unit): OptionalChainingExpression {
+    return OptionalChainingExpressionImpl().apply(block)
+}
+
+fun OptionalChainingCall.optionalChainingCall(block: OptionalChainingCall.() -> Unit): OptionalChainingCall {
+    return OptionalChainingCallImpl().apply(block)
+}
+
+fun ThisExpression.thisExpression(block: ThisExpression.() -> Unit): ThisExpression {
+    return ThisExpressionImpl().apply(block)
+}
+
+fun ArrayExpression.arrayExpression(block: ArrayExpression.() -> Unit): ArrayExpression {
+    return ArrayExpressionImpl().apply(block)
+}
+
+fun ObjectExpression.objectExpression(block: ObjectExpression.() -> Unit): ObjectExpression {
+    return ObjectExpressionImpl().apply(block)
+}
+
+fun SpreadElement.spreadElement(block: SpreadElement.() -> Unit): SpreadElement {
+    return SpreadElementImpl().apply(block)
+}
+
+fun UnaryExpression.unaryExpression(block: UnaryExpression.() -> Unit): UnaryExpression {
+    return UnaryExpressionImpl().apply(block)
+}
+
+fun UpdateExpression.updateExpression(block: UpdateExpression.() -> Unit): UpdateExpression {
+    return UpdateExpressionImpl().apply(block)
+}
+
+fun BinaryExpression.binaryExpression(block: BinaryExpression.() -> Unit): BinaryExpression {
+    return BinaryExpressionImpl().apply(block)
+}
+
+fun FunctionExpression.functionExpression(block: FunctionExpression.() -> Unit): FunctionExpression {
+    return FunctionExpressionImpl().apply(block)
+}
+
+fun ClassExpression.classExpression(block: ClassExpression.() -> Unit): ClassExpression {
+    return ClassExpressionImpl().apply(block)
+}
+
+fun AssignmentExpression.assignmentExpression(block: AssignmentExpression.() -> Unit): AssignmentExpression {
+    return AssignmentExpressionImpl().apply(block)
+}
+
+fun MemberExpression.memberExpression(block: MemberExpression.() -> Unit): MemberExpression {
+    return MemberExpressionImpl().apply(block)
+}
+
+fun SuperPropExpression.superPropExpression(block: SuperPropExpression.() -> Unit): SuperPropExpression {
+    return SuperPropExpressionImpl().apply(block)
+}
+
+fun ConditionalExpression.conditionalExpression(block: ConditionalExpression.() -> Unit): ConditionalExpression {
+    return ConditionalExpressionImpl().apply(block)
+}
+
+fun Super.jsSuper(block: Super.() -> Unit): Super {
+    return SuperImpl().apply(block)
+}
+
+fun Import.import(block: Import.() -> Unit): Import {
+    return ImportImpl().apply(block)
+}
+
+fun CallExpression.callExpression(block: CallExpression.() -> Unit): CallExpression {
+    return CallExpressionImpl().apply(block)
+}
+
+fun NewExpression.newExpression(block: NewExpression.() -> Unit): NewExpression {
+    return NewExpressionImpl().apply(block)
+}
+
+fun SequenceExpression.sequenceExpression(block: SequenceExpression.() -> Unit): SequenceExpression {
+    return SequenceExpressionImpl().apply(block)
+}
+
+fun ArrowFunctionExpression.arrowFunctionExpression(block: ArrowFunctionExpression.() -> Unit): ArrowFunctionExpression {
+    return ArrowFunctionExpressionImpl().apply(block)
+}
+
+fun YieldExpression.yieldExpression(block: YieldExpression.() -> Unit): YieldExpression {
+    return YieldExpressionImpl().apply(block)
+}
+
+fun MetaProperty.metaProperty(block: MetaProperty.() -> Unit): MetaProperty {
+    return MetaPropertyImpl().apply(block)
+}
+
+fun AwaitExpression.awaitExpression(block: AwaitExpression.() -> Unit): AwaitExpression {
+    return AwaitExpressionImpl().apply(block)
+}
+
+fun TemplateLiteral.templateLiteral(block: TemplateLiteral.() -> Unit): TemplateLiteral {
+    return TemplateLiteralImpl().apply(block)
+}
+
+fun TaggedTemplateExpression.taggedTemplateExpression(block: TaggedTemplateExpression.() -> Unit): TaggedTemplateExpression {
+    return TaggedTemplateExpressionImpl().apply(block)
+}
+
+fun TemplateElement.templateElement(block: TemplateElement.() -> Unit): TemplateElement {
+    return TemplateElementImpl().apply(block)
+}
+
+fun ParenthesisExpression.parenthesisExpression(block: ParenthesisExpression.() -> Unit): ParenthesisExpression {
+    return ParenthesisExpressionImpl().apply(block)
+}
+
+fun Fn.functionDeclaration(block: FunctionDeclaration.() -> Unit): FunctionDeclaration {
+    return FunctionDeclarationImpl().apply(block)
+}
+
+fun Fn.functionExpression(block: FunctionExpression.() -> Unit): FunctionExpression {
+    return FunctionExpressionImpl().apply(block)
+}
+
+fun Fn.methodProperty(block: MethodProperty.() -> Unit): MethodProperty {
+    return MethodPropertyImpl().apply(block)
+}
+
+fun PatternBase.bindingIdentifier(block: BindingIdentifier.() -> Unit): BindingIdentifier {
+    return BindingIdentifierImpl().apply(block)
+}
+
+fun PatternBase.arrayPattern(block: ArrayPattern.() -> Unit): ArrayPattern {
+    return ArrayPatternImpl().apply(block)
+}
+
+fun PatternBase.objectPattern(block: ObjectPattern.() -> Unit): ObjectPattern {
+    return ObjectPatternImpl().apply(block)
+}
+
+fun PatternBase.assignmentPattern(block: AssignmentPattern.() -> Unit): AssignmentPattern {
+    return AssignmentPatternImpl().apply(block)
+}
+
+fun PatternBase.restElement(block: RestElement.() -> Unit): RestElement {
+    return RestElementImpl().apply(block)
+}
+
+fun PrivateName.privateName(block: PrivateName.() -> Unit): PrivateName {
+    return PrivateNameImpl().apply(block)
+}
+
+fun JSXMemberExpression.jSXMemberExpression(block: JSXMemberExpression.() -> Unit): JSXMemberExpression {
+    return JSXMemberExpressionImpl().apply(block)
+}
+
+fun JSXNamespacedName.jSXNamespacedName(block: JSXNamespacedName.() -> Unit): JSXNamespacedName {
+    return JSXNamespacedNameImpl().apply(block)
+}
+
+fun JSXEmptyExpression.jSXEmptyExpression(block: JSXEmptyExpression.() -> Unit): JSXEmptyExpression {
+    return JSXEmptyExpressionImpl().apply(block)
+}
+
+fun JSXExpressionContainer.jSXExpressionContainer(block: JSXExpressionContainer.() -> Unit): JSXExpressionContainer {
+    return JSXExpressionContainerImpl().apply(block)
+}
+
+fun JSXSpreadChild.jSXSpreadChild(block: JSXSpreadChild.() -> Unit): JSXSpreadChild {
+    return JSXSpreadChildImpl().apply(block)
+}
+
+fun JSXOpeningElement.jSXOpeningElement(block: JSXOpeningElement.() -> Unit): JSXOpeningElement {
+    return JSXOpeningElementImpl().apply(block)
+}
+
+fun JSXClosingElement.jSXClosingElement(block: JSXClosingElement.() -> Unit): JSXClosingElement {
+    return JSXClosingElementImpl().apply(block)
+}
+
+fun JSXAttribute.jSXAttribute(block: JSXAttribute.() -> Unit): JSXAttribute {
+    return JSXAttributeImpl().apply(block)
+}
+
+fun JSXText.jSXText(block: JSXText.() -> Unit): JSXText {
+    return JSXTextImpl().apply(block)
+}
+
+fun JSXElement.jSXElement(block: JSXElement.() -> Unit): JSXElement {
+    return JSXElementImpl().apply(block)
+}
+
+fun JSXFragment.jSXFragment(block: JSXFragment.() -> Unit): JSXFragment {
+    return JSXFragmentImpl().apply(block)
+}
+
+fun JSXOpeningFragment.jSXOpeningFragment(block: JSXOpeningFragment.() -> Unit): JSXOpeningFragment {
+    return JSXOpeningFragmentImpl().apply(block)
+}
+
+fun JSXClosingFragment.jSXClosingFragment(block: JSXClosingFragment.() -> Unit): JSXClosingFragment {
+    return JSXClosingFragmentImpl().apply(block)
+}
+
+fun StringLiteral.stringLiteral(block: StringLiteral.() -> Unit): StringLiteral {
+    return StringLiteralImpl().apply(block)
+}
+
+fun BooleanLiteral.booleanLiteral(block: BooleanLiteral.() -> Unit): BooleanLiteral {
+    return BooleanLiteralImpl().apply(block)
+}
+
+fun NullLiteral.nullLiteral(block: NullLiteral.() -> Unit): NullLiteral {
+    return NullLiteralImpl().apply(block)
+}
+
+fun RegExpLiteral.regExpLiteral(block: RegExpLiteral.() -> Unit): RegExpLiteral {
+    return RegExpLiteralImpl().apply(block)
+}
+
+fun NumericLiteral.numericLiteral(block: NumericLiteral.() -> Unit): NumericLiteral {
+    return NumericLiteralImpl().apply(block)
+}
+
+fun BigIntLiteral.bigIntLiteral(block: BigIntLiteral.() -> Unit): BigIntLiteral {
+    return BigIntLiteralImpl().apply(block)
+}
+
+fun ExportDefaultExpression.exportDefaultExpression(block: ExportDefaultExpression.() -> Unit): ExportDefaultExpression {
+    return ExportDefaultExpressionImpl().apply(block)
+}
+
+fun ExportDeclaration.exportDeclaration(block: ExportDeclaration.() -> Unit): ExportDeclaration {
+    return ExportDeclarationImpl().apply(block)
+}
+
+fun ImportDeclaration.importDeclaration(block: ImportDeclaration.() -> Unit): ImportDeclaration {
+    return ImportDeclarationImpl().apply(block)
+}
+
+fun ExportAllDeclaration.exportAllDeclaration(block: ExportAllDeclaration.() -> Unit): ExportAllDeclaration {
+    return ExportAllDeclarationImpl().apply(block)
+}
+
+fun ExportNamedDeclaration.exportNamedDeclaration(block: ExportNamedDeclaration.() -> Unit): ExportNamedDeclaration {
+    return ExportNamedDeclarationImpl().apply(block)
+}
+
+fun ExportDefaultDeclaration.exportDefaultDeclaration(block: ExportDefaultDeclaration.() -> Unit): ExportDefaultDeclaration {
+    return ExportDefaultDeclarationImpl().apply(block)
+}
+
+fun ImportDefaultSpecifier.importDefaultSpecifier(block: ImportDefaultSpecifier.() -> Unit): ImportDefaultSpecifier {
+    return ImportDefaultSpecifierImpl().apply(block)
+}
+
+fun ImportNamespaceSpecifier.importNamespaceSpecifier(block: ImportNamespaceSpecifier.() -> Unit): ImportNamespaceSpecifier {
+    return ImportNamespaceSpecifierImpl().apply(block)
+}
+
+fun NamedImportSpecifier.namedImportSpecifier(block: NamedImportSpecifier.() -> Unit): NamedImportSpecifier {
+    return NamedImportSpecifierImpl().apply(block)
+}
+
+fun ExportNamespaceSpecifier.exportNamespaceSpecifier(block: ExportNamespaceSpecifier.() -> Unit): ExportNamespaceSpecifier {
+    return ExportNamespaceSpecifierImpl().apply(block)
+}
+
+fun ExportDefaultSpecifier.exportDefaultSpecifier(block: ExportDefaultSpecifier.() -> Unit): ExportDefaultSpecifier {
+    return ExportDefaultSpecifierImpl().apply(block)
+}
+
+fun NamedExportSpecifier.namedExportSpecifier(block: NamedExportSpecifier.() -> Unit): NamedExportSpecifier {
+    return NamedExportSpecifierImpl().apply(block)
+}
+
+fun HasInterpreter.module(block: Module.() -> Unit): Module {
+    return ModuleImpl().apply(block)
+}
+
+fun HasInterpreter.script(block: Script.() -> Unit): Script {
+    return ScriptImpl().apply(block)
+}
+
+fun HasInterpreter.hasInterpreter(block: HasInterpreter.() -> Unit): HasInterpreter {
+    return HasInterpreterImpl().apply(block)
+}
+
+fun Module.module(block: Module.() -> Unit): Module {
+    return ModuleImpl().apply(block)
+}
+
+fun Script.script(block: Script.() -> Unit): Script {
+    return ScriptImpl().apply(block)
+}
+
+fun BindingIdentifier.bindingIdentifier(block: BindingIdentifier.() -> Unit): BindingIdentifier {
+    return BindingIdentifierImpl().apply(block)
+}
+
+fun ArrayPattern.arrayPattern(block: ArrayPattern.() -> Unit): ArrayPattern {
+    return ArrayPatternImpl().apply(block)
+}
+
+fun ObjectPattern.objectPattern(block: ObjectPattern.() -> Unit): ObjectPattern {
+    return ObjectPatternImpl().apply(block)
+}
+
+fun AssignmentPattern.assignmentPattern(block: AssignmentPattern.() -> Unit): AssignmentPattern {
+    return AssignmentPatternImpl().apply(block)
+}
+
+fun RestElement.restElement(block: RestElement.() -> Unit): RestElement {
+    return RestElementImpl().apply(block)
+}
+
+fun KeyValuePatternProperty.keyValuePatternProperty(block: KeyValuePatternProperty.() -> Unit): KeyValuePatternProperty {
+    return KeyValuePatternPropertyImpl().apply(block)
+}
+
+fun AssignmentPatternProperty.assignmentPatternProperty(block: AssignmentPatternProperty.() -> Unit): AssignmentPatternProperty {
+    return AssignmentPatternPropertyImpl().apply(block)
+}
+
+fun PropBase.keyValueProperty(block: KeyValueProperty.() -> Unit): KeyValueProperty {
+    return KeyValuePropertyImpl().apply(block)
+}
+
+fun PropBase.getterProperty(block: GetterProperty.() -> Unit): GetterProperty {
+    return GetterPropertyImpl().apply(block)
+}
+
+fun PropBase.setterProperty(block: SetterProperty.() -> Unit): SetterProperty {
+    return SetterPropertyImpl().apply(block)
+}
+
+fun PropBase.methodProperty(block: MethodProperty.() -> Unit): MethodProperty {
+    return MethodPropertyImpl().apply(block)
+}
+
+fun KeyValueProperty.keyValueProperty(block: KeyValueProperty.() -> Unit): KeyValueProperty {
+    return KeyValuePropertyImpl().apply(block)
+}
+
+fun AssignmentProperty.assignmentProperty(block: AssignmentProperty.() -> Unit): AssignmentProperty {
+    return AssignmentPropertyImpl().apply(block)
+}
+
+fun GetterProperty.getterProperty(block: GetterProperty.() -> Unit): GetterProperty {
+    return GetterPropertyImpl().apply(block)
+}
+
+fun SetterProperty.setterProperty(block: SetterProperty.() -> Unit): SetterProperty {
+    return SetterPropertyImpl().apply(block)
+}
+
+fun MethodProperty.methodProperty(block: MethodProperty.() -> Unit): MethodProperty {
+    return MethodPropertyImpl().apply(block)
+}
+
+fun ComputedPropName.computedPropName(block: ComputedPropName.() -> Unit): ComputedPropName {
+    return ComputedPropNameImpl().apply(block)
+}
+
+fun BlockStatement.blockStatement(block: BlockStatement.() -> Unit): BlockStatement {
+    return BlockStatementImpl().apply(block)
+}
+
+fun ExpressionStatement.expressionStatement(block: ExpressionStatement.() -> Unit): ExpressionStatement {
+    return ExpressionStatementImpl().apply(block)
+}
+
+fun EmptyStatement.emptyStatement(block: EmptyStatement.() -> Unit): EmptyStatement {
+    return EmptyStatementImpl().apply(block)
+}
+
+fun DebuggerStatement.debuggerStatement(block: DebuggerStatement.() -> Unit): DebuggerStatement {
+    return DebuggerStatementImpl().apply(block)
+}
+
+fun WithStatement.withStatement(block: WithStatement.() -> Unit): WithStatement {
+    return WithStatementImpl().apply(block)
+}
+
+fun ReturnStatement.returnStatement(block: ReturnStatement.() -> Unit): ReturnStatement {
+    return ReturnStatementImpl().apply(block)
+}
+
+fun LabeledStatement.labeledStatement(block: LabeledStatement.() -> Unit): LabeledStatement {
+    return LabeledStatementImpl().apply(block)
+}
+
+fun BreakStatement.breakStatement(block: BreakStatement.() -> Unit): BreakStatement {
+    return BreakStatementImpl().apply(block)
+}
+
+fun ContinueStatement.continueStatement(block: ContinueStatement.() -> Unit): ContinueStatement {
+    return ContinueStatementImpl().apply(block)
+}
+
+fun IfStatement.ifStatement(block: IfStatement.() -> Unit): IfStatement {
+    return IfStatementImpl().apply(block)
+}
+
+fun SwitchStatement.switchStatement(block: SwitchStatement.() -> Unit): SwitchStatement {
+    return SwitchStatementImpl().apply(block)
+}
+
+fun ThrowStatement.throwStatement(block: ThrowStatement.() -> Unit): ThrowStatement {
+    return ThrowStatementImpl().apply(block)
+}
+
+fun TryStatement.tryStatement(block: TryStatement.() -> Unit): TryStatement {
+    return TryStatementImpl().apply(block)
+}
+
+fun WhileStatement.whileStatement(block: WhileStatement.() -> Unit): WhileStatement {
+    return WhileStatementImpl().apply(block)
+}
+
+fun DoWhileStatement.doWhileStatement(block: DoWhileStatement.() -> Unit): DoWhileStatement {
+    return DoWhileStatementImpl().apply(block)
+}
+
+fun ForStatement.forStatement(block: ForStatement.() -> Unit): ForStatement {
+    return ForStatementImpl().apply(block)
+}
+
+fun ForInStatement.forInStatement(block: ForInStatement.() -> Unit): ForInStatement {
+    return ForInStatementImpl().apply(block)
+}
+
+fun ForOfStatement.forOfStatement(block: ForOfStatement.() -> Unit): ForOfStatement {
+    return ForOfStatementImpl().apply(block)
+}
+
+fun SwitchCase.switchCase(block: SwitchCase.() -> Unit): SwitchCase {
+    return SwitchCaseImpl().apply(block)
+}
+
+fun CatchClause.catchClause(block: CatchClause.() -> Unit): CatchClause {
+    return CatchClauseImpl().apply(block)
+}
+
+fun TsTypeAnnotation.tsTypeAnnotation(block: TsTypeAnnotation.() -> Unit): TsTypeAnnotation {
+    return TsTypeAnnotationImpl().apply(block)
+}
+
+fun TsTypeParameterDeclaration.tsTypeParameterDeclaration(block: TsTypeParameterDeclaration.() -> Unit): TsTypeParameterDeclaration {
+    return TsTypeParameterDeclarationImpl().apply(block)
+}
+
+fun TsTypeParameter.tsTypeParameter(block: TsTypeParameter.() -> Unit): TsTypeParameter {
+    return TsTypeParameterImpl().apply(block)
+}
+
+fun TsTypeParameterInstantiation.tsTypeParameterInstantiation(
+    block: TsTypeParameterInstantiation.() -> Unit,
+): TsTypeParameterInstantiation {
+    return TsTypeParameterInstantiationImpl().apply(block)
+}
+
+fun TsParameterProperty.tsParameterProperty(block: TsParameterProperty.() -> Unit): TsParameterProperty {
+    return TsParameterPropertyImpl().apply(block)
+}
+
+fun TsQualifiedName.tsQualifiedName(block: TsQualifiedName.() -> Unit): TsQualifiedName {
+    return TsQualifiedNameImpl().apply(block)
+}
+
+fun TsCallSignatureDeclaration.tsCallSignatureDeclaration(block: TsCallSignatureDeclaration.() -> Unit): TsCallSignatureDeclaration {
+    return TsCallSignatureDeclarationImpl().apply(block)
+}
+
+fun TsConstructSignatureDeclaration.tsConstructSignatureDeclaration(
+    block: TsConstructSignatureDeclaration.() -> Unit,
+): TsConstructSignatureDeclaration {
+    return TsConstructSignatureDeclarationImpl().apply(block)
+}
+
+fun TsPropertySignature.tsPropertySignature(block: TsPropertySignature.() -> Unit): TsPropertySignature {
+    return TsPropertySignatureImpl().apply(block)
+}
+
+fun TsGetterSignature.tsGetterSignature(block: TsGetterSignature.() -> Unit): TsGetterSignature {
+    return TsGetterSignatureImpl().apply(block)
+}
+
+fun TsSetterSignature.tsSetterSignature(block: TsSetterSignature.() -> Unit): TsSetterSignature {
+    return TsSetterSignatureImpl().apply(block)
+}
+
+fun TsMethodSignature.tsMethodSignature(block: TsMethodSignature.() -> Unit): TsMethodSignature {
+    return TsMethodSignatureImpl().apply(block)
+}
+
+fun TsIndexSignature.tsIndexSignature(block: TsIndexSignature.() -> Unit): TsIndexSignature {
+    return TsIndexSignatureImpl().apply(block)
+}
+
+fun TsKeywordType.tsKeywordType(block: TsKeywordType.() -> Unit): TsKeywordType {
+    return TsKeywordTypeImpl().apply(block)
+}
+
+fun TsThisType.tsThisType(block: TsThisType.() -> Unit): TsThisType {
+    return TsThisTypeImpl().apply(block)
+}
+
+fun TsFunctionType.tsFunctionType(block: TsFunctionType.() -> Unit): TsFunctionType {
+    return TsFunctionTypeImpl().apply(block)
+}
+
+fun TsConstructorType.tsConstructorType(block: TsConstructorType.() -> Unit): TsConstructorType {
+    return TsConstructorTypeImpl().apply(block)
+}
+
+fun TsTypeReference.tsTypeReference(block: TsTypeReference.() -> Unit): TsTypeReference {
+    return TsTypeReferenceImpl().apply(block)
+}
+
+fun TsTypePredicate.tsTypePredicate(block: TsTypePredicate.() -> Unit): TsTypePredicate {
+    return TsTypePredicateImpl().apply(block)
+}
+
+fun TsImportType.tsImportType(block: TsImportType.() -> Unit): TsImportType {
+    return TsImportTypeImpl().apply(block)
+}
+
+fun TsTypeQuery.tsTypeQuery(block: TsTypeQuery.() -> Unit): TsTypeQuery {
+    return TsTypeQueryImpl().apply(block)
+}
+
+fun TsTypeLiteral.tsTypeLiteral(block: TsTypeLiteral.() -> Unit): TsTypeLiteral {
+    return TsTypeLiteralImpl().apply(block)
+}
+
+fun TsArrayType.tsArrayType(block: TsArrayType.() -> Unit): TsArrayType {
+    return TsArrayTypeImpl().apply(block)
+}
+
+fun TsTupleType.tsTupleType(block: TsTupleType.() -> Unit): TsTupleType {
+    return TsTupleTypeImpl().apply(block)
+}
+
+fun TsTupleElement.tsTupleElement(block: TsTupleElement.() -> Unit): TsTupleElement {
+    return TsTupleElementImpl().apply(block)
+}
+
+fun TsOptionalType.tsOptionalType(block: TsOptionalType.() -> Unit): TsOptionalType {
+    return TsOptionalTypeImpl().apply(block)
+}
+
+fun TsRestType.tsRestType(block: TsRestType.() -> Unit): TsRestType {
+    return TsRestTypeImpl().apply(block)
+}
+
+fun TsUnionType.tsUnionType(block: TsUnionType.() -> Unit): TsUnionType {
+    return TsUnionTypeImpl().apply(block)
+}
+
+fun TsIntersectionType.tsIntersectionType(block: TsIntersectionType.() -> Unit): TsIntersectionType {
+    return TsIntersectionTypeImpl().apply(block)
+}
+
+fun TsConditionalType.tsConditionalType(block: TsConditionalType.() -> Unit): TsConditionalType {
+    return TsConditionalTypeImpl().apply(block)
+}
+
+fun TsInferType.tsInferType(block: TsInferType.() -> Unit): TsInferType {
+    return TsInferTypeImpl().apply(block)
+}
+
+fun TsParenthesizedType.tsParenthesizedType(block: TsParenthesizedType.() -> Unit): TsParenthesizedType {
+    return TsParenthesizedTypeImpl().apply(block)
+}
+
+fun TsTypeOperator.tsTypeOperator(block: TsTypeOperator.() -> Unit): TsTypeOperator {
+    return TsTypeOperatorImpl().apply(block)
+}
+
+fun TsIndexedAccessType.tsIndexedAccessType(block: TsIndexedAccessType.() -> Unit): TsIndexedAccessType {
+    return TsIndexedAccessTypeImpl().apply(block)
+}
+
+fun TsMappedType.tsMappedType(block: TsMappedType.() -> Unit): TsMappedType {
+    return TsMappedTypeImpl().apply(block)
+}
+
+fun TsLiteralType.tsLiteralType(block: TsLiteralType.() -> Unit): TsLiteralType {
+    return TsLiteralTypeImpl().apply(block)
+}
+
+fun TsTemplateLiteralType.tsTemplateLiteralType(block: TsTemplateLiteralType.() -> Unit): TsTemplateLiteralType {
+    return TsTemplateLiteralTypeImpl().apply(block)
+}
+
+fun TsInterfaceDeclaration.tsInterfaceDeclaration(block: TsInterfaceDeclaration.() -> Unit): TsInterfaceDeclaration {
+    return TsInterfaceDeclarationImpl().apply(block)
+}
+
+fun TsInterfaceBody.tsInterfaceBody(block: TsInterfaceBody.() -> Unit): TsInterfaceBody {
+    return TsInterfaceBodyImpl().apply(block)
+}
+
+fun TsExpressionWithTypeArguments.tsExpressionWithTypeArguments(
+    block: TsExpressionWithTypeArguments.() -> Unit,
+): TsExpressionWithTypeArguments {
+    return TsExpressionWithTypeArgumentsImpl().apply(block)
+}
+
+fun TsTypeAliasDeclaration.tsTypeAliasDeclaration(block: TsTypeAliasDeclaration.() -> Unit): TsTypeAliasDeclaration {
+    return TsTypeAliasDeclarationImpl().apply(block)
+}
+
+fun TsEnumDeclaration.tsEnumDeclaration(block: TsEnumDeclaration.() -> Unit): TsEnumDeclaration {
+    return TsEnumDeclarationImpl().apply(block)
+}
+
+fun TsEnumMember.tsEnumMember(block: TsEnumMember.() -> Unit): TsEnumMember {
+    return TsEnumMemberImpl().apply(block)
+}
+
+fun TsModuleDeclaration.tsModuleDeclaration(block: TsModuleDeclaration.() -> Unit): TsModuleDeclaration {
+    return TsModuleDeclarationImpl().apply(block)
+}
+
+fun TsModuleBlock.tsModuleBlock(block: TsModuleBlock.() -> Unit): TsModuleBlock {
+    return TsModuleBlockImpl().apply(block)
+}
+
+fun TsNamespaceDeclaration.tsNamespaceDeclaration(block: TsNamespaceDeclaration.() -> Unit): TsNamespaceDeclaration {
+    return TsNamespaceDeclarationImpl().apply(block)
+}
+
+fun TsImportEqualsDeclaration.tsImportEqualsDeclaration(block: TsImportEqualsDeclaration.() -> Unit): TsImportEqualsDeclaration {
+    return TsImportEqualsDeclarationImpl().apply(block)
+}
+
+fun TsExternalModuleReference.tsExternalModuleReference(block: TsExternalModuleReference.() -> Unit): TsExternalModuleReference {
+    return TsExternalModuleReferenceImpl().apply(block)
+}
+
+fun TsExportAssignment.tsExportAssignment(block: TsExportAssignment.() -> Unit): TsExportAssignment {
+    return TsExportAssignmentImpl().apply(block)
+}
+
+fun TsNamespaceExportDeclaration.tsNamespaceExportDeclaration(
+    block: TsNamespaceExportDeclaration.() -> Unit,
+): TsNamespaceExportDeclaration {
+    return TsNamespaceExportDeclarationImpl().apply(block)
+}
+
+fun TsAsExpression.tsAsExpression(block: TsAsExpression.() -> Unit): TsAsExpression {
+    return TsAsExpressionImpl().apply(block)
+}
+
+fun TsSatisfiesExpression.tsSatisfiesExpression(block: TsSatisfiesExpression.() -> Unit): TsSatisfiesExpression {
+    return TsSatisfiesExpressionImpl().apply(block)
+}
+
+fun TsInstantiation.tsInstantiation(block: TsInstantiation.() -> Unit): TsInstantiation {
+    return TsInstantiationImpl().apply(block)
+}
+
+fun TsTypeAssertion.tsTypeAssertion(block: TsTypeAssertion.() -> Unit): TsTypeAssertion {
+    return TsTypeAssertionImpl().apply(block)
+}
+
+fun TsConstAssertion.tsConstAssertion(block: TsConstAssertion.() -> Unit): TsConstAssertion {
+    return TsConstAssertionImpl().apply(block)
+}
+
+fun TsNonNullExpression.tsNonNullExpression(block: TsNonNullExpression.() -> Unit): TsNonNullExpression {
+    return TsNonNullExpressionImpl().apply(block)
+}
+
+fun Invalid.invalid(block: Invalid.() -> Unit): Invalid {
+    return InvalidImpl().apply(block)
+}
+
 fun JsMinifyOptions.jsFormatOptions(block: JsFormatOptions.() -> Unit): JsFormatOptions {
-    return JsFormatOptionsImpl().apply(block)
+    return JsFormatOptions().apply(block)
 }
 
 fun TerserMangleOptions.terserManglePropertiesOptions(block: TerserManglePropertiesOptions.() -> Unit): TerserManglePropertiesOptions {
-    return TerserManglePropertiesOptionsImpl().apply(block)
+    return TerserManglePropertiesOptions().apply(block)
 }
 
 fun Options.callerOptions(block: CallerOptions.() -> Unit): CallerOptions {
-    return CallerOptionsImpl().apply(block)
+    return CallerOptions().apply(block)
 }
 
 fun Options.plugin(block: Plugin.() -> Unit): Plugin {
-    return PluginImpl().apply(block)
+    return Plugin().apply(block)
 }
 
 fun Options.envConfig(block: EnvConfig.() -> Unit): EnvConfig {
-    return EnvConfigImpl().apply(block)
+    return EnvConfig().apply(block)
 }
 
 fun Options.jscConfig(block: JscConfig.() -> Unit): JscConfig {
@@ -47,11 +3679,403 @@ fun Options.nodeNextConfig(block: NodeNextConfig.() -> Unit): NodeNextConfig {
 }
 
 fun Options.systemjsConfig(block: SystemjsConfig.() -> Unit): SystemjsConfig {
-    return SystemjsConfigImpl().apply(block)
+    return SystemjsConfig().apply(block)
+}
+
+fun JscConfig.tsParserConfig(block: TsParserConfig.() -> Unit): TsParserConfig {
+    return TsParserConfig().apply(block)
+}
+
+fun JscConfig.esParserConfig(block: EsParserConfig.() -> Unit): EsParserConfig {
+    return EsParserConfig().apply(block)
+}
+
+fun JscConfig.transformConfig(block: TransformConfig.() -> Unit): TransformConfig {
+    return TransformConfig().apply(block)
+}
+
+fun JscConfig.jsMinifyOptions(block: JsMinifyOptions.() -> Unit): JsMinifyOptions {
+    return JsMinifyOptions().apply(block)
+}
+
+fun TransformConfig.reactConfig(block: ReactConfig.() -> Unit): ReactConfig {
+    return ReactConfig().apply(block)
+}
+
+fun TransformConfig.constModulesConfig(block: ConstModulesConfig.() -> Unit): ConstModulesConfig {
+    return ConstModulesConfig().apply(block)
+}
+
+fun TransformConfig.optimizerConfig(block: OptimizerConfig.() -> Unit): OptimizerConfig {
+    return OptimizerConfig().apply(block)
+}
+
+fun OptimizerConfig.globalPassOption(block: GlobalPassOption.() -> Unit): GlobalPassOption {
+    return GlobalPassOption().apply(block)
+}
+
+fun ExprOrSpread.span(block: Span.() -> Unit): Span {
+    return Span().apply(block)
+}
+
+fun ExprOrSpread.thisExpression(block: ThisExpression.() -> Unit): ThisExpression {
+    return ThisExpressionImpl().apply(block)
+}
+
+fun ExprOrSpread.arrayExpression(block: ArrayExpression.() -> Unit): ArrayExpression {
+    return ArrayExpressionImpl().apply(block)
+}
+
+fun ExprOrSpread.objectExpression(block: ObjectExpression.() -> Unit): ObjectExpression {
+    return ObjectExpressionImpl().apply(block)
+}
+
+fun ExprOrSpread.functionExpression(block: FunctionExpression.() -> Unit): FunctionExpression {
+    return FunctionExpressionImpl().apply(block)
+}
+
+fun ExprOrSpread.unaryExpression(block: UnaryExpression.() -> Unit): UnaryExpression {
+    return UnaryExpressionImpl().apply(block)
+}
+
+fun ExprOrSpread.updateExpression(block: UpdateExpression.() -> Unit): UpdateExpression {
+    return UpdateExpressionImpl().apply(block)
+}
+
+fun ExprOrSpread.binaryExpression(block: BinaryExpression.() -> Unit): BinaryExpression {
+    return BinaryExpressionImpl().apply(block)
+}
+
+fun ExprOrSpread.assignmentExpression(block: AssignmentExpression.() -> Unit): AssignmentExpression {
+    return AssignmentExpressionImpl().apply(block)
+}
+
+fun ExprOrSpread.memberExpression(block: MemberExpression.() -> Unit): MemberExpression {
+    return MemberExpressionImpl().apply(block)
+}
+
+fun ExprOrSpread.superPropExpression(block: SuperPropExpression.() -> Unit): SuperPropExpression {
+    return SuperPropExpressionImpl().apply(block)
+}
+
+fun ExprOrSpread.conditionalExpression(block: ConditionalExpression.() -> Unit): ConditionalExpression {
+    return ConditionalExpressionImpl().apply(block)
+}
+
+fun ExprOrSpread.callExpression(block: CallExpression.() -> Unit): CallExpression {
+    return CallExpressionImpl().apply(block)
+}
+
+fun ExprOrSpread.newExpression(block: NewExpression.() -> Unit): NewExpression {
+    return NewExpressionImpl().apply(block)
+}
+
+fun ExprOrSpread.sequenceExpression(block: SequenceExpression.() -> Unit): SequenceExpression {
+    return SequenceExpressionImpl().apply(block)
+}
+
+fun ExprOrSpread.identifier(block: Identifier.() -> Unit): Identifier {
+    return IdentifierImpl().apply(block)
+}
+
+fun ExprOrSpread.stringLiteral(block: StringLiteral.() -> Unit): StringLiteral {
+    return StringLiteralImpl().apply(block)
+}
+
+fun ExprOrSpread.booleanLiteral(block: BooleanLiteral.() -> Unit): BooleanLiteral {
+    return BooleanLiteralImpl().apply(block)
+}
+
+fun ExprOrSpread.nullLiteral(block: NullLiteral.() -> Unit): NullLiteral {
+    return NullLiteralImpl().apply(block)
+}
+
+fun ExprOrSpread.numericLiteral(block: NumericLiteral.() -> Unit): NumericLiteral {
+    return NumericLiteralImpl().apply(block)
+}
+
+fun ExprOrSpread.bigIntLiteral(block: BigIntLiteral.() -> Unit): BigIntLiteral {
+    return BigIntLiteralImpl().apply(block)
+}
+
+fun ExprOrSpread.regExpLiteral(block: RegExpLiteral.() -> Unit): RegExpLiteral {
+    return RegExpLiteralImpl().apply(block)
+}
+
+fun ExprOrSpread.jSXText(block: JSXText.() -> Unit): JSXText {
+    return JSXTextImpl().apply(block)
+}
+
+fun ExprOrSpread.templateLiteral(block: TemplateLiteral.() -> Unit): TemplateLiteral {
+    return TemplateLiteralImpl().apply(block)
+}
+
+fun ExprOrSpread.taggedTemplateExpression(block: TaggedTemplateExpression.() -> Unit): TaggedTemplateExpression {
+    return TaggedTemplateExpressionImpl().apply(block)
+}
+
+fun ExprOrSpread.arrowFunctionExpression(block: ArrowFunctionExpression.() -> Unit): ArrowFunctionExpression {
+    return ArrowFunctionExpressionImpl().apply(block)
+}
+
+fun ExprOrSpread.classExpression(block: ClassExpression.() -> Unit): ClassExpression {
+    return ClassExpressionImpl().apply(block)
+}
+
+fun ExprOrSpread.yieldExpression(block: YieldExpression.() -> Unit): YieldExpression {
+    return YieldExpressionImpl().apply(block)
+}
+
+fun ExprOrSpread.metaProperty(block: MetaProperty.() -> Unit): MetaProperty {
+    return MetaPropertyImpl().apply(block)
+}
+
+fun ExprOrSpread.awaitExpression(block: AwaitExpression.() -> Unit): AwaitExpression {
+    return AwaitExpressionImpl().apply(block)
+}
+
+fun ExprOrSpread.parenthesisExpression(block: ParenthesisExpression.() -> Unit): ParenthesisExpression {
+    return ParenthesisExpressionImpl().apply(block)
+}
+
+fun ExprOrSpread.jSXMemberExpression(block: JSXMemberExpression.() -> Unit): JSXMemberExpression {
+    return JSXMemberExpressionImpl().apply(block)
+}
+
+fun ExprOrSpread.jSXNamespacedName(block: JSXNamespacedName.() -> Unit): JSXNamespacedName {
+    return JSXNamespacedNameImpl().apply(block)
+}
+
+fun ExprOrSpread.jSXEmptyExpression(block: JSXEmptyExpression.() -> Unit): JSXEmptyExpression {
+    return JSXEmptyExpressionImpl().apply(block)
+}
+
+fun ExprOrSpread.jSXElement(block: JSXElement.() -> Unit): JSXElement {
+    return JSXElementImpl().apply(block)
+}
+
+fun ExprOrSpread.jSXFragment(block: JSXFragment.() -> Unit): JSXFragment {
+    return JSXFragmentImpl().apply(block)
+}
+
+fun ExprOrSpread.tsTypeAssertion(block: TsTypeAssertion.() -> Unit): TsTypeAssertion {
+    return TsTypeAssertionImpl().apply(block)
+}
+
+fun ExprOrSpread.tsConstAssertion(block: TsConstAssertion.() -> Unit): TsConstAssertion {
+    return TsConstAssertionImpl().apply(block)
+}
+
+fun ExprOrSpread.tsNonNullExpression(block: TsNonNullExpression.() -> Unit): TsNonNullExpression {
+    return TsNonNullExpressionImpl().apply(block)
+}
+
+fun ExprOrSpread.tsAsExpression(block: TsAsExpression.() -> Unit): TsAsExpression {
+    return TsAsExpressionImpl().apply(block)
+}
+
+fun ExprOrSpread.tsSatisfiesExpression(block: TsSatisfiesExpression.() -> Unit): TsSatisfiesExpression {
+    return TsSatisfiesExpressionImpl().apply(block)
+}
+
+fun ExprOrSpread.tsInstantiation(block: TsInstantiation.() -> Unit): TsInstantiation {
+    return TsInstantiationImpl().apply(block)
+}
+
+fun ExprOrSpread.privateName(block: PrivateName.() -> Unit): PrivateName {
+    return PrivateNameImpl().apply(block)
+}
+
+fun ExprOrSpread.optionalChainingExpression(block: OptionalChainingExpression.() -> Unit): OptionalChainingExpression {
+    return OptionalChainingExpressionImpl().apply(block)
+}
+
+fun ExprOrSpread.invalid(block: Invalid.() -> Unit): Invalid {
+    return InvalidImpl().apply(block)
+}
+
+fun Argument.span(block: Span.() -> Unit): Span {
+    return Span().apply(block)
+}
+
+fun Argument.thisExpression(block: ThisExpression.() -> Unit): ThisExpression {
+    return ThisExpressionImpl().apply(block)
+}
+
+fun Argument.arrayExpression(block: ArrayExpression.() -> Unit): ArrayExpression {
+    return ArrayExpressionImpl().apply(block)
+}
+
+fun Argument.objectExpression(block: ObjectExpression.() -> Unit): ObjectExpression {
+    return ObjectExpressionImpl().apply(block)
+}
+
+fun Argument.functionExpression(block: FunctionExpression.() -> Unit): FunctionExpression {
+    return FunctionExpressionImpl().apply(block)
+}
+
+fun Argument.unaryExpression(block: UnaryExpression.() -> Unit): UnaryExpression {
+    return UnaryExpressionImpl().apply(block)
+}
+
+fun Argument.updateExpression(block: UpdateExpression.() -> Unit): UpdateExpression {
+    return UpdateExpressionImpl().apply(block)
+}
+
+fun Argument.binaryExpression(block: BinaryExpression.() -> Unit): BinaryExpression {
+    return BinaryExpressionImpl().apply(block)
+}
+
+fun Argument.assignmentExpression(block: AssignmentExpression.() -> Unit): AssignmentExpression {
+    return AssignmentExpressionImpl().apply(block)
+}
+
+fun Argument.memberExpression(block: MemberExpression.() -> Unit): MemberExpression {
+    return MemberExpressionImpl().apply(block)
+}
+
+fun Argument.superPropExpression(block: SuperPropExpression.() -> Unit): SuperPropExpression {
+    return SuperPropExpressionImpl().apply(block)
+}
+
+fun Argument.conditionalExpression(block: ConditionalExpression.() -> Unit): ConditionalExpression {
+    return ConditionalExpressionImpl().apply(block)
+}
+
+fun Argument.callExpression(block: CallExpression.() -> Unit): CallExpression {
+    return CallExpressionImpl().apply(block)
+}
+
+fun Argument.newExpression(block: NewExpression.() -> Unit): NewExpression {
+    return NewExpressionImpl().apply(block)
+}
+
+fun Argument.sequenceExpression(block: SequenceExpression.() -> Unit): SequenceExpression {
+    return SequenceExpressionImpl().apply(block)
+}
+
+fun Argument.identifier(block: Identifier.() -> Unit): Identifier {
+    return IdentifierImpl().apply(block)
+}
+
+fun Argument.stringLiteral(block: StringLiteral.() -> Unit): StringLiteral {
+    return StringLiteralImpl().apply(block)
+}
+
+fun Argument.booleanLiteral(block: BooleanLiteral.() -> Unit): BooleanLiteral {
+    return BooleanLiteralImpl().apply(block)
+}
+
+fun Argument.nullLiteral(block: NullLiteral.() -> Unit): NullLiteral {
+    return NullLiteralImpl().apply(block)
+}
+
+fun Argument.numericLiteral(block: NumericLiteral.() -> Unit): NumericLiteral {
+    return NumericLiteralImpl().apply(block)
+}
+
+fun Argument.bigIntLiteral(block: BigIntLiteral.() -> Unit): BigIntLiteral {
+    return BigIntLiteralImpl().apply(block)
+}
+
+fun Argument.regExpLiteral(block: RegExpLiteral.() -> Unit): RegExpLiteral {
+    return RegExpLiteralImpl().apply(block)
+}
+
+fun Argument.jSXText(block: JSXText.() -> Unit): JSXText {
+    return JSXTextImpl().apply(block)
+}
+
+fun Argument.templateLiteral(block: TemplateLiteral.() -> Unit): TemplateLiteral {
+    return TemplateLiteralImpl().apply(block)
+}
+
+fun Argument.taggedTemplateExpression(block: TaggedTemplateExpression.() -> Unit): TaggedTemplateExpression {
+    return TaggedTemplateExpressionImpl().apply(block)
+}
+
+fun Argument.arrowFunctionExpression(block: ArrowFunctionExpression.() -> Unit): ArrowFunctionExpression {
+    return ArrowFunctionExpressionImpl().apply(block)
+}
+
+fun Argument.classExpression(block: ClassExpression.() -> Unit): ClassExpression {
+    return ClassExpressionImpl().apply(block)
+}
+
+fun Argument.yieldExpression(block: YieldExpression.() -> Unit): YieldExpression {
+    return YieldExpressionImpl().apply(block)
+}
+
+fun Argument.metaProperty(block: MetaProperty.() -> Unit): MetaProperty {
+    return MetaPropertyImpl().apply(block)
+}
+
+fun Argument.awaitExpression(block: AwaitExpression.() -> Unit): AwaitExpression {
+    return AwaitExpressionImpl().apply(block)
+}
+
+fun Argument.parenthesisExpression(block: ParenthesisExpression.() -> Unit): ParenthesisExpression {
+    return ParenthesisExpressionImpl().apply(block)
+}
+
+fun Argument.jSXMemberExpression(block: JSXMemberExpression.() -> Unit): JSXMemberExpression {
+    return JSXMemberExpressionImpl().apply(block)
+}
+
+fun Argument.jSXNamespacedName(block: JSXNamespacedName.() -> Unit): JSXNamespacedName {
+    return JSXNamespacedNameImpl().apply(block)
+}
+
+fun Argument.jSXEmptyExpression(block: JSXEmptyExpression.() -> Unit): JSXEmptyExpression {
+    return JSXEmptyExpressionImpl().apply(block)
+}
+
+fun Argument.jSXElement(block: JSXElement.() -> Unit): JSXElement {
+    return JSXElementImpl().apply(block)
+}
+
+fun Argument.jSXFragment(block: JSXFragment.() -> Unit): JSXFragment {
+    return JSXFragmentImpl().apply(block)
+}
+
+fun Argument.tsTypeAssertion(block: TsTypeAssertion.() -> Unit): TsTypeAssertion {
+    return TsTypeAssertionImpl().apply(block)
+}
+
+fun Argument.tsConstAssertion(block: TsConstAssertion.() -> Unit): TsConstAssertion {
+    return TsConstAssertionImpl().apply(block)
+}
+
+fun Argument.tsNonNullExpression(block: TsNonNullExpression.() -> Unit): TsNonNullExpression {
+    return TsNonNullExpressionImpl().apply(block)
+}
+
+fun Argument.tsAsExpression(block: TsAsExpression.() -> Unit): TsAsExpression {
+    return TsAsExpressionImpl().apply(block)
+}
+
+fun Argument.tsSatisfiesExpression(block: TsSatisfiesExpression.() -> Unit): TsSatisfiesExpression {
+    return TsSatisfiesExpressionImpl().apply(block)
+}
+
+fun Argument.tsInstantiation(block: TsInstantiation.() -> Unit): TsInstantiation {
+    return TsInstantiationImpl().apply(block)
+}
+
+fun Argument.privateName(block: PrivateName.() -> Unit): PrivateName {
+    return PrivateNameImpl().apply(block)
+}
+
+fun Argument.optionalChainingExpression(block: OptionalChainingExpression.() -> Unit): OptionalChainingExpression {
+    return OptionalChainingExpressionImpl().apply(block)
+}
+
+fun Argument.invalid(block: Invalid.() -> Unit): Invalid {
+    return InvalidImpl().apply(block)
 }
 
 fun Config.envConfig(block: EnvConfig.() -> Unit): EnvConfig {
-    return EnvConfigImpl().apply(block)
+    return EnvConfig().apply(block)
 }
 
 fun Config.jscConfig(block: JscConfig.() -> Unit): JscConfig {
@@ -79,43 +4103,7 @@ fun Config.nodeNextConfig(block: NodeNextConfig.() -> Unit): NodeNextConfig {
 }
 
 fun Config.systemjsConfig(block: SystemjsConfig.() -> Unit): SystemjsConfig {
-    return SystemjsConfigImpl().apply(block)
-}
-
-fun JscConfig.parseOptions(block: ParseOptions.() -> Unit): ParseOptions {
-    return ParseOptions().apply(block)
-}
-
-fun JscConfig.tsParserConfig(block: TsParserConfig.() -> Unit): TsParserConfig {
-    return TsParserConfig().apply(block)
-}
-
-fun JscConfig.esParserConfig(block: EsParserConfig.() -> Unit): EsParserConfig {
-    return EsParserConfig().apply(block)
-}
-
-fun JscConfig.transformConfig(block: TransformConfig.() -> Unit): TransformConfig {
-    return TransformConfigImpl().apply(block)
-}
-
-fun JscConfig.jsMinifyOptions(block: JsMinifyOptions.() -> Unit): JsMinifyOptions {
-    return JsMinifyOptionsImpl().apply(block)
-}
-
-fun TransformConfig.reactConfig(block: ReactConfig.() -> Unit): ReactConfig {
-    return ReactConfigImpl().apply(block)
-}
-
-fun TransformConfig.constModulesConfig(block: ConstModulesConfig.() -> Unit): ConstModulesConfig {
-    return ConstModulesConfigImpl().apply(block)
-}
-
-fun TransformConfig.optimizerConfig(block: OptimizerConfig.() -> Unit): OptimizerConfig {
-    return OptimizerConfigImpl().apply(block)
-}
-
-fun OptimizerConfig.globalPassOption(block: GlobalPassOption.() -> Unit): GlobalPassOption {
-    return GlobalPassOptionImpl().apply(block)
+    return SystemjsConfig().apply(block)
 }
 
 fun HasSpan.span(block: Span.() -> Unit): Span {
@@ -220,10 +4208,6 @@ fun Class.taggedTemplateExpression(block: TaggedTemplateExpression.() -> Unit): 
 
 fun Class.arrowFunctionExpression(block: ArrowFunctionExpression.() -> Unit): ArrowFunctionExpression {
     return ArrowFunctionExpressionImpl().apply(block)
-}
-
-fun Class.classExpression(block: ClassExpression.() -> Unit): ClassExpression {
-    return ClassExpressionImpl().apply(block)
 }
 
 fun Class.yieldExpression(block: YieldExpression.() -> Unit): YieldExpression {
@@ -1374,22 +5358,6 @@ fun FunctionDeclaration.span(block: Span.() -> Unit): Span {
     return Span().apply(block)
 }
 
-fun Fn.blockStatement(block: BlockStatement.() -> Unit): BlockStatement {
-    return BlockStatementImpl().apply(block)
-}
-
-fun Fn.tsTypeParameterDeclaration(block: TsTypeParameterDeclaration.() -> Unit): TsTypeParameterDeclaration {
-    return TsTypeParameterDeclarationImpl().apply(block)
-}
-
-fun Fn.tsTypeAnnotation(block: TsTypeAnnotation.() -> Unit): TsTypeAnnotation {
-    return TsTypeAnnotationImpl().apply(block)
-}
-
-fun Fn.span(block: Span.() -> Unit): Span {
-    return Span().apply(block)
-}
-
 fun ClassDeclaration.identifier(block: Identifier.() -> Unit): Identifier {
     return IdentifierImpl().apply(block)
 }
@@ -1986,368 +5954,8 @@ fun ArrayExpression.span(block: Span.() -> Unit): Span {
     return Span().apply(block)
 }
 
-fun ExprOrSpread.span(block: Span.() -> Unit): Span {
-    return Span().apply(block)
-}
-
-fun ExprOrSpread.thisExpression(block: ThisExpression.() -> Unit): ThisExpression {
-    return ThisExpressionImpl().apply(block)
-}
-
-fun ExprOrSpread.arrayExpression(block: ArrayExpression.() -> Unit): ArrayExpression {
-    return ArrayExpressionImpl().apply(block)
-}
-
-fun ExprOrSpread.objectExpression(block: ObjectExpression.() -> Unit): ObjectExpression {
-    return ObjectExpressionImpl().apply(block)
-}
-
-fun ExprOrSpread.functionExpression(block: FunctionExpression.() -> Unit): FunctionExpression {
-    return FunctionExpressionImpl().apply(block)
-}
-
-fun ExprOrSpread.unaryExpression(block: UnaryExpression.() -> Unit): UnaryExpression {
-    return UnaryExpressionImpl().apply(block)
-}
-
-fun ExprOrSpread.updateExpression(block: UpdateExpression.() -> Unit): UpdateExpression {
-    return UpdateExpressionImpl().apply(block)
-}
-
-fun ExprOrSpread.binaryExpression(block: BinaryExpression.() -> Unit): BinaryExpression {
-    return BinaryExpressionImpl().apply(block)
-}
-
-fun ExprOrSpread.assignmentExpression(block: AssignmentExpression.() -> Unit): AssignmentExpression {
-    return AssignmentExpressionImpl().apply(block)
-}
-
-fun ExprOrSpread.memberExpression(block: MemberExpression.() -> Unit): MemberExpression {
-    return MemberExpressionImpl().apply(block)
-}
-
-fun ExprOrSpread.superPropExpression(block: SuperPropExpression.() -> Unit): SuperPropExpression {
-    return SuperPropExpressionImpl().apply(block)
-}
-
-fun ExprOrSpread.conditionalExpression(block: ConditionalExpression.() -> Unit): ConditionalExpression {
-    return ConditionalExpressionImpl().apply(block)
-}
-
-fun ExprOrSpread.callExpression(block: CallExpression.() -> Unit): CallExpression {
-    return CallExpressionImpl().apply(block)
-}
-
-fun ExprOrSpread.newExpression(block: NewExpression.() -> Unit): NewExpression {
-    return NewExpressionImpl().apply(block)
-}
-
-fun ExprOrSpread.sequenceExpression(block: SequenceExpression.() -> Unit): SequenceExpression {
-    return SequenceExpressionImpl().apply(block)
-}
-
-fun ExprOrSpread.identifier(block: Identifier.() -> Unit): Identifier {
-    return IdentifierImpl().apply(block)
-}
-
-fun ExprOrSpread.stringLiteral(block: StringLiteral.() -> Unit): StringLiteral {
-    return StringLiteralImpl().apply(block)
-}
-
-fun ExprOrSpread.booleanLiteral(block: BooleanLiteral.() -> Unit): BooleanLiteral {
-    return BooleanLiteralImpl().apply(block)
-}
-
-fun ExprOrSpread.nullLiteral(block: NullLiteral.() -> Unit): NullLiteral {
-    return NullLiteralImpl().apply(block)
-}
-
-fun ExprOrSpread.numericLiteral(block: NumericLiteral.() -> Unit): NumericLiteral {
-    return NumericLiteralImpl().apply(block)
-}
-
-fun ExprOrSpread.bigIntLiteral(block: BigIntLiteral.() -> Unit): BigIntLiteral {
-    return BigIntLiteralImpl().apply(block)
-}
-
-fun ExprOrSpread.regExpLiteral(block: RegExpLiteral.() -> Unit): RegExpLiteral {
-    return RegExpLiteralImpl().apply(block)
-}
-
-fun ExprOrSpread.jSXText(block: JSXText.() -> Unit): JSXText {
-    return JSXTextImpl().apply(block)
-}
-
-fun ExprOrSpread.templateLiteral(block: TemplateLiteral.() -> Unit): TemplateLiteral {
-    return TemplateLiteralImpl().apply(block)
-}
-
-fun ExprOrSpread.taggedTemplateExpression(block: TaggedTemplateExpression.() -> Unit): TaggedTemplateExpression {
-    return TaggedTemplateExpressionImpl().apply(block)
-}
-
-fun ExprOrSpread.arrowFunctionExpression(block: ArrowFunctionExpression.() -> Unit): ArrowFunctionExpression {
-    return ArrowFunctionExpressionImpl().apply(block)
-}
-
-fun ExprOrSpread.classExpression(block: ClassExpression.() -> Unit): ClassExpression {
-    return ClassExpressionImpl().apply(block)
-}
-
-fun ExprOrSpread.yieldExpression(block: YieldExpression.() -> Unit): YieldExpression {
-    return YieldExpressionImpl().apply(block)
-}
-
-fun ExprOrSpread.metaProperty(block: MetaProperty.() -> Unit): MetaProperty {
-    return MetaPropertyImpl().apply(block)
-}
-
-fun ExprOrSpread.awaitExpression(block: AwaitExpression.() -> Unit): AwaitExpression {
-    return AwaitExpressionImpl().apply(block)
-}
-
-fun ExprOrSpread.parenthesisExpression(block: ParenthesisExpression.() -> Unit): ParenthesisExpression {
-    return ParenthesisExpressionImpl().apply(block)
-}
-
-fun ExprOrSpread.jSXMemberExpression(block: JSXMemberExpression.() -> Unit): JSXMemberExpression {
-    return JSXMemberExpressionImpl().apply(block)
-}
-
-fun ExprOrSpread.jSXNamespacedName(block: JSXNamespacedName.() -> Unit): JSXNamespacedName {
-    return JSXNamespacedNameImpl().apply(block)
-}
-
-fun ExprOrSpread.jSXEmptyExpression(block: JSXEmptyExpression.() -> Unit): JSXEmptyExpression {
-    return JSXEmptyExpressionImpl().apply(block)
-}
-
-fun ExprOrSpread.jSXElement(block: JSXElement.() -> Unit): JSXElement {
-    return JSXElementImpl().apply(block)
-}
-
-fun ExprOrSpread.jSXFragment(block: JSXFragment.() -> Unit): JSXFragment {
-    return JSXFragmentImpl().apply(block)
-}
-
-fun ExprOrSpread.tsTypeAssertion(block: TsTypeAssertion.() -> Unit): TsTypeAssertion {
-    return TsTypeAssertionImpl().apply(block)
-}
-
-fun ExprOrSpread.tsConstAssertion(block: TsConstAssertion.() -> Unit): TsConstAssertion {
-    return TsConstAssertionImpl().apply(block)
-}
-
-fun ExprOrSpread.tsNonNullExpression(block: TsNonNullExpression.() -> Unit): TsNonNullExpression {
-    return TsNonNullExpressionImpl().apply(block)
-}
-
-fun ExprOrSpread.tsAsExpression(block: TsAsExpression.() -> Unit): TsAsExpression {
-    return TsAsExpressionImpl().apply(block)
-}
-
-fun ExprOrSpread.tsSatisfiesExpression(block: TsSatisfiesExpression.() -> Unit): TsSatisfiesExpression {
-    return TsSatisfiesExpressionImpl().apply(block)
-}
-
-fun ExprOrSpread.tsInstantiation(block: TsInstantiation.() -> Unit): TsInstantiation {
-    return TsInstantiationImpl().apply(block)
-}
-
-fun ExprOrSpread.privateName(block: PrivateName.() -> Unit): PrivateName {
-    return PrivateNameImpl().apply(block)
-}
-
-fun ExprOrSpread.optionalChainingExpression(block: OptionalChainingExpression.() -> Unit): OptionalChainingExpression {
-    return OptionalChainingExpressionImpl().apply(block)
-}
-
-fun ExprOrSpread.invalid(block: Invalid.() -> Unit): Invalid {
-    return InvalidImpl().apply(block)
-}
-
 fun ObjectExpression.span(block: Span.() -> Unit): Span {
     return Span().apply(block)
-}
-
-fun Argument.span(block: Span.() -> Unit): Span {
-    return Span().apply(block)
-}
-
-fun Argument.thisExpression(block: ThisExpression.() -> Unit): ThisExpression {
-    return ThisExpressionImpl().apply(block)
-}
-
-fun Argument.arrayExpression(block: ArrayExpression.() -> Unit): ArrayExpression {
-    return ArrayExpressionImpl().apply(block)
-}
-
-fun Argument.objectExpression(block: ObjectExpression.() -> Unit): ObjectExpression {
-    return ObjectExpressionImpl().apply(block)
-}
-
-fun Argument.functionExpression(block: FunctionExpression.() -> Unit): FunctionExpression {
-    return FunctionExpressionImpl().apply(block)
-}
-
-fun Argument.unaryExpression(block: UnaryExpression.() -> Unit): UnaryExpression {
-    return UnaryExpressionImpl().apply(block)
-}
-
-fun Argument.updateExpression(block: UpdateExpression.() -> Unit): UpdateExpression {
-    return UpdateExpressionImpl().apply(block)
-}
-
-fun Argument.binaryExpression(block: BinaryExpression.() -> Unit): BinaryExpression {
-    return BinaryExpressionImpl().apply(block)
-}
-
-fun Argument.assignmentExpression(block: AssignmentExpression.() -> Unit): AssignmentExpression {
-    return AssignmentExpressionImpl().apply(block)
-}
-
-fun Argument.memberExpression(block: MemberExpression.() -> Unit): MemberExpression {
-    return MemberExpressionImpl().apply(block)
-}
-
-fun Argument.superPropExpression(block: SuperPropExpression.() -> Unit): SuperPropExpression {
-    return SuperPropExpressionImpl().apply(block)
-}
-
-fun Argument.conditionalExpression(block: ConditionalExpression.() -> Unit): ConditionalExpression {
-    return ConditionalExpressionImpl().apply(block)
-}
-
-fun Argument.callExpression(block: CallExpression.() -> Unit): CallExpression {
-    return CallExpressionImpl().apply(block)
-}
-
-fun Argument.newExpression(block: NewExpression.() -> Unit): NewExpression {
-    return NewExpressionImpl().apply(block)
-}
-
-fun Argument.sequenceExpression(block: SequenceExpression.() -> Unit): SequenceExpression {
-    return SequenceExpressionImpl().apply(block)
-}
-
-fun Argument.identifier(block: Identifier.() -> Unit): Identifier {
-    return IdentifierImpl().apply(block)
-}
-
-fun Argument.stringLiteral(block: StringLiteral.() -> Unit): StringLiteral {
-    return StringLiteralImpl().apply(block)
-}
-
-fun Argument.booleanLiteral(block: BooleanLiteral.() -> Unit): BooleanLiteral {
-    return BooleanLiteralImpl().apply(block)
-}
-
-fun Argument.nullLiteral(block: NullLiteral.() -> Unit): NullLiteral {
-    return NullLiteralImpl().apply(block)
-}
-
-fun Argument.numericLiteral(block: NumericLiteral.() -> Unit): NumericLiteral {
-    return NumericLiteralImpl().apply(block)
-}
-
-fun Argument.bigIntLiteral(block: BigIntLiteral.() -> Unit): BigIntLiteral {
-    return BigIntLiteralImpl().apply(block)
-}
-
-fun Argument.regExpLiteral(block: RegExpLiteral.() -> Unit): RegExpLiteral {
-    return RegExpLiteralImpl().apply(block)
-}
-
-fun Argument.jSXText(block: JSXText.() -> Unit): JSXText {
-    return JSXTextImpl().apply(block)
-}
-
-fun Argument.templateLiteral(block: TemplateLiteral.() -> Unit): TemplateLiteral {
-    return TemplateLiteralImpl().apply(block)
-}
-
-fun Argument.taggedTemplateExpression(block: TaggedTemplateExpression.() -> Unit): TaggedTemplateExpression {
-    return TaggedTemplateExpressionImpl().apply(block)
-}
-
-fun Argument.arrowFunctionExpression(block: ArrowFunctionExpression.() -> Unit): ArrowFunctionExpression {
-    return ArrowFunctionExpressionImpl().apply(block)
-}
-
-fun Argument.classExpression(block: ClassExpression.() -> Unit): ClassExpression {
-    return ClassExpressionImpl().apply(block)
-}
-
-fun Argument.yieldExpression(block: YieldExpression.() -> Unit): YieldExpression {
-    return YieldExpressionImpl().apply(block)
-}
-
-fun Argument.metaProperty(block: MetaProperty.() -> Unit): MetaProperty {
-    return MetaPropertyImpl().apply(block)
-}
-
-fun Argument.awaitExpression(block: AwaitExpression.() -> Unit): AwaitExpression {
-    return AwaitExpressionImpl().apply(block)
-}
-
-fun Argument.parenthesisExpression(block: ParenthesisExpression.() -> Unit): ParenthesisExpression {
-    return ParenthesisExpressionImpl().apply(block)
-}
-
-fun Argument.jSXMemberExpression(block: JSXMemberExpression.() -> Unit): JSXMemberExpression {
-    return JSXMemberExpressionImpl().apply(block)
-}
-
-fun Argument.jSXNamespacedName(block: JSXNamespacedName.() -> Unit): JSXNamespacedName {
-    return JSXNamespacedNameImpl().apply(block)
-}
-
-fun Argument.jSXEmptyExpression(block: JSXEmptyExpression.() -> Unit): JSXEmptyExpression {
-    return JSXEmptyExpressionImpl().apply(block)
-}
-
-fun Argument.jSXElement(block: JSXElement.() -> Unit): JSXElement {
-    return JSXElementImpl().apply(block)
-}
-
-fun Argument.jSXFragment(block: JSXFragment.() -> Unit): JSXFragment {
-    return JSXFragmentImpl().apply(block)
-}
-
-fun Argument.tsTypeAssertion(block: TsTypeAssertion.() -> Unit): TsTypeAssertion {
-    return TsTypeAssertionImpl().apply(block)
-}
-
-fun Argument.tsConstAssertion(block: TsConstAssertion.() -> Unit): TsConstAssertion {
-    return TsConstAssertionImpl().apply(block)
-}
-
-fun Argument.tsNonNullExpression(block: TsNonNullExpression.() -> Unit): TsNonNullExpression {
-    return TsNonNullExpressionImpl().apply(block)
-}
-
-fun Argument.tsAsExpression(block: TsAsExpression.() -> Unit): TsAsExpression {
-    return TsAsExpressionImpl().apply(block)
-}
-
-fun Argument.tsSatisfiesExpression(block: TsSatisfiesExpression.() -> Unit): TsSatisfiesExpression {
-    return TsSatisfiesExpressionImpl().apply(block)
-}
-
-fun Argument.tsInstantiation(block: TsInstantiation.() -> Unit): TsInstantiation {
-    return TsInstantiationImpl().apply(block)
-}
-
-fun Argument.privateName(block: PrivateName.() -> Unit): PrivateName {
-    return PrivateNameImpl().apply(block)
-}
-
-fun Argument.optionalChainingExpression(block: OptionalChainingExpression.() -> Unit): OptionalChainingExpression {
-    return OptionalChainingExpressionImpl().apply(block)
-}
-
-fun Argument.invalid(block: Invalid.() -> Unit): Invalid {
-    return InvalidImpl().apply(block)
 }
 
 fun SpreadElement.span(block: Span.() -> Unit): Span {
@@ -2546,10 +6154,6 @@ fun UnaryExpression.functionExpression(block: FunctionExpression.() -> Unit): Fu
     return FunctionExpressionImpl().apply(block)
 }
 
-fun UnaryExpression.unaryExpression(block: UnaryExpression.() -> Unit): UnaryExpression {
-    return UnaryExpressionImpl().apply(block)
-}
-
 fun UnaryExpression.updateExpression(block: UpdateExpression.() -> Unit): UpdateExpression {
     return UpdateExpressionImpl().apply(block)
 }
@@ -2730,10 +6334,6 @@ fun UpdateExpression.unaryExpression(block: UnaryExpression.() -> Unit): UnaryEx
     return UnaryExpressionImpl().apply(block)
 }
 
-fun UpdateExpression.updateExpression(block: UpdateExpression.() -> Unit): UpdateExpression {
-    return UpdateExpressionImpl().apply(block)
-}
-
 fun UpdateExpression.binaryExpression(block: BinaryExpression.() -> Unit): BinaryExpression {
     return BinaryExpressionImpl().apply(block)
 }
@@ -2912,10 +6512,6 @@ fun BinaryExpression.unaryExpression(block: UnaryExpression.() -> Unit): UnaryEx
 
 fun BinaryExpression.updateExpression(block: UpdateExpression.() -> Unit): UpdateExpression {
     return UpdateExpressionImpl().apply(block)
-}
-
-fun BinaryExpression.binaryExpression(block: BinaryExpression.() -> Unit): BinaryExpression {
-    return BinaryExpressionImpl().apply(block)
 }
 
 fun BinaryExpression.assignmentExpression(block: AssignmentExpression.() -> Unit): AssignmentExpression {
@@ -3190,10 +6786,6 @@ fun ClassExpression.arrowFunctionExpression(block: ArrowFunctionExpression.() ->
     return ArrowFunctionExpressionImpl().apply(block)
 }
 
-fun ClassExpression.classExpression(block: ClassExpression.() -> Unit): ClassExpression {
-    return ClassExpressionImpl().apply(block)
-}
-
 fun ClassExpression.yieldExpression(block: YieldExpression.() -> Unit): YieldExpression {
     return YieldExpressionImpl().apply(block)
 }
@@ -3304,10 +6896,6 @@ fun AssignmentExpression.updateExpression(block: UpdateExpression.() -> Unit): U
 
 fun AssignmentExpression.binaryExpression(block: BinaryExpression.() -> Unit): BinaryExpression {
     return BinaryExpressionImpl().apply(block)
-}
-
-fun AssignmentExpression.assignmentExpression(block: AssignmentExpression.() -> Unit): AssignmentExpression {
-    return AssignmentExpressionImpl().apply(block)
 }
 
 fun AssignmentExpression.memberExpression(block: MemberExpression.() -> Unit): MemberExpression {
@@ -3488,10 +7076,6 @@ fun MemberExpression.binaryExpression(block: BinaryExpression.() -> Unit): Binar
 
 fun MemberExpression.assignmentExpression(block: AssignmentExpression.() -> Unit): AssignmentExpression {
     return AssignmentExpressionImpl().apply(block)
-}
-
-fun MemberExpression.memberExpression(block: MemberExpression.() -> Unit): MemberExpression {
-    return MemberExpressionImpl().apply(block)
 }
 
 fun MemberExpression.superPropExpression(block: SuperPropExpression.() -> Unit): SuperPropExpression {
@@ -3684,10 +7268,6 @@ fun ConditionalExpression.memberExpression(block: MemberExpression.() -> Unit): 
 
 fun ConditionalExpression.superPropExpression(block: SuperPropExpression.() -> Unit): SuperPropExpression {
     return SuperPropExpressionImpl().apply(block)
-}
-
-fun ConditionalExpression.conditionalExpression(block: ConditionalExpression.() -> Unit): ConditionalExpression {
-    return ConditionalExpressionImpl().apply(block)
 }
 
 fun ConditionalExpression.callExpression(block: CallExpression.() -> Unit): CallExpression {
@@ -3888,10 +7468,6 @@ fun NewExpression.conditionalExpression(block: ConditionalExpression.() -> Unit)
 
 fun NewExpression.callExpression(block: CallExpression.() -> Unit): CallExpression {
     return CallExpressionImpl().apply(block)
-}
-
-fun NewExpression.newExpression(block: NewExpression.() -> Unit): NewExpression {
-    return NewExpressionImpl().apply(block)
 }
 
 fun NewExpression.sequenceExpression(block: SequenceExpression.() -> Unit): SequenceExpression {
@@ -4146,10 +7722,6 @@ fun YieldExpression.classExpression(block: ClassExpression.() -> Unit): ClassExp
     return ClassExpressionImpl().apply(block)
 }
 
-fun YieldExpression.yieldExpression(block: YieldExpression.() -> Unit): YieldExpression {
-    return YieldExpressionImpl().apply(block)
-}
-
 fun YieldExpression.metaProperty(block: MetaProperty.() -> Unit): MetaProperty {
     return MetaPropertyImpl().apply(block)
 }
@@ -4338,10 +7910,6 @@ fun AwaitExpression.metaProperty(block: MetaProperty.() -> Unit): MetaProperty {
     return MetaPropertyImpl().apply(block)
 }
 
-fun AwaitExpression.awaitExpression(block: AwaitExpression.() -> Unit): AwaitExpression {
-    return AwaitExpressionImpl().apply(block)
-}
-
 fun AwaitExpression.parenthesisExpression(block: ParenthesisExpression.() -> Unit): ParenthesisExpression {
     return ParenthesisExpressionImpl().apply(block)
 }
@@ -4500,10 +8068,6 @@ fun TaggedTemplateExpression.jSXText(block: JSXText.() -> Unit): JSXText {
 
 fun TaggedTemplateExpression.templateLiteral(block: TemplateLiteral.() -> Unit): TemplateLiteral {
     return TemplateLiteralImpl().apply(block)
-}
-
-fun TaggedTemplateExpression.taggedTemplateExpression(block: TaggedTemplateExpression.() -> Unit): TaggedTemplateExpression {
-    return TaggedTemplateExpressionImpl().apply(block)
 }
 
 fun TaggedTemplateExpression.arrowFunctionExpression(block: ArrowFunctionExpression.() -> Unit): ArrowFunctionExpression {
@@ -4714,10 +8278,6 @@ fun ParenthesisExpression.awaitExpression(block: AwaitExpression.() -> Unit): Aw
     return AwaitExpressionImpl().apply(block)
 }
 
-fun ParenthesisExpression.parenthesisExpression(block: ParenthesisExpression.() -> Unit): ParenthesisExpression {
-    return ParenthesisExpressionImpl().apply(block)
-}
-
 fun ParenthesisExpression.jSXMemberExpression(block: JSXMemberExpression.() -> Unit): JSXMemberExpression {
     return JSXMemberExpressionImpl().apply(block)
 }
@@ -4778,6 +8338,22 @@ fun ParenthesisExpression.span(block: Span.() -> Unit): Span {
     return Span().apply(block)
 }
 
+fun Fn.blockStatement(block: BlockStatement.() -> Unit): BlockStatement {
+    return BlockStatementImpl().apply(block)
+}
+
+fun Fn.tsTypeParameterDeclaration(block: TsTypeParameterDeclaration.() -> Unit): TsTypeParameterDeclaration {
+    return TsTypeParameterDeclarationImpl().apply(block)
+}
+
+fun Fn.tsTypeAnnotation(block: TsTypeAnnotation.() -> Unit): TsTypeAnnotation {
+    return TsTypeAnnotationImpl().apply(block)
+}
+
+fun Fn.span(block: Span.() -> Unit): Span {
+    return Span().apply(block)
+}
+
 fun PatternBase.tsTypeAnnotation(block: TsTypeAnnotation.() -> Unit): TsTypeAnnotation {
     return TsTypeAnnotationImpl().apply(block)
 }
@@ -4792,10 +8368,6 @@ fun PrivateName.identifier(block: Identifier.() -> Unit): Identifier {
 
 fun PrivateName.span(block: Span.() -> Unit): Span {
     return Span().apply(block)
-}
-
-fun JSXMemberExpression.jSXMemberExpression(block: JSXMemberExpression.() -> Unit): JSXMemberExpression {
-    return JSXMemberExpressionImpl().apply(block)
 }
 
 fun JSXMemberExpression.identifier(block: Identifier.() -> Unit): Identifier {
@@ -5690,10 +9262,6 @@ fun AssignmentPattern.objectPattern(block: ObjectPattern.() -> Unit): ObjectPatt
     return ObjectPatternImpl().apply(block)
 }
 
-fun AssignmentPattern.assignmentPattern(block: AssignmentPattern.() -> Unit): AssignmentPattern {
-    return AssignmentPatternImpl().apply(block)
-}
-
 fun AssignmentPattern.invalid(block: Invalid.() -> Unit): Invalid {
     return InvalidImpl().apply(block)
 }
@@ -5888,10 +9456,6 @@ fun RestElement.bindingIdentifier(block: BindingIdentifier.() -> Unit): BindingI
 
 fun RestElement.arrayPattern(block: ArrayPattern.() -> Unit): ArrayPattern {
     return ArrayPatternImpl().apply(block)
-}
-
-fun RestElement.restElement(block: RestElement.() -> Unit): RestElement {
-    return RestElementImpl().apply(block)
 }
 
 fun RestElement.objectPattern(block: ObjectPattern.() -> Unit): ObjectPattern {
@@ -7674,10 +11238,6 @@ fun WithStatement.debuggerStatement(block: DebuggerStatement.() -> Unit): Debugg
     return DebuggerStatementImpl().apply(block)
 }
 
-fun WithStatement.withStatement(block: WithStatement.() -> Unit): WithStatement {
-    return WithStatementImpl().apply(block)
-}
-
 fun WithStatement.returnStatement(block: ReturnStatement.() -> Unit): ReturnStatement {
     return ReturnStatementImpl().apply(block)
 }
@@ -7968,10 +11528,6 @@ fun LabeledStatement.withStatement(block: WithStatement.() -> Unit): WithStateme
 
 fun LabeledStatement.returnStatement(block: ReturnStatement.() -> Unit): ReturnStatement {
     return ReturnStatementImpl().apply(block)
-}
-
-fun LabeledStatement.labeledStatement(block: LabeledStatement.() -> Unit): LabeledStatement {
-    return LabeledStatementImpl().apply(block)
 }
 
 fun LabeledStatement.breakStatement(block: BreakStatement.() -> Unit): BreakStatement {
@@ -8276,10 +11832,6 @@ fun IfStatement.breakStatement(block: BreakStatement.() -> Unit): BreakStatement
 
 fun IfStatement.continueStatement(block: ContinueStatement.() -> Unit): ContinueStatement {
     return ContinueStatementImpl().apply(block)
-}
-
-fun IfStatement.ifStatement(block: IfStatement.() -> Unit): IfStatement {
-    return IfStatementImpl().apply(block)
 }
 
 fun IfStatement.switchStatement(block: SwitchStatement.() -> Unit): SwitchStatement {
@@ -8946,10 +12498,6 @@ fun WhileStatement.tryStatement(block: TryStatement.() -> Unit): TryStatement {
     return TryStatementImpl().apply(block)
 }
 
-fun WhileStatement.whileStatement(block: WhileStatement.() -> Unit): WhileStatement {
-    return WhileStatementImpl().apply(block)
-}
-
 fun WhileStatement.doWhileStatement(block: DoWhileStatement.() -> Unit): DoWhileStatement {
     return DoWhileStatementImpl().apply(block)
 }
@@ -9228,10 +12776,6 @@ fun DoWhileStatement.tryStatement(block: TryStatement.() -> Unit): TryStatement 
 
 fun DoWhileStatement.whileStatement(block: WhileStatement.() -> Unit): WhileStatement {
     return WhileStatementImpl().apply(block)
-}
-
-fun DoWhileStatement.doWhileStatement(block: DoWhileStatement.() -> Unit): DoWhileStatement {
-    return DoWhileStatementImpl().apply(block)
 }
 
 fun DoWhileStatement.forStatement(block: ForStatement.() -> Unit): ForStatement {
@@ -9514,10 +13058,6 @@ fun ForStatement.doWhileStatement(block: DoWhileStatement.() -> Unit): DoWhileSt
     return DoWhileStatementImpl().apply(block)
 }
 
-fun ForStatement.forStatement(block: ForStatement.() -> Unit): ForStatement {
-    return ForStatementImpl().apply(block)
-}
-
 fun ForStatement.forInStatement(block: ForInStatement.() -> Unit): ForInStatement {
     return ForInStatementImpl().apply(block)
 }
@@ -9796,10 +13336,6 @@ fun ForInStatement.doWhileStatement(block: DoWhileStatement.() -> Unit): DoWhile
 
 fun ForInStatement.forStatement(block: ForStatement.() -> Unit): ForStatement {
     return ForStatementImpl().apply(block)
-}
-
-fun ForInStatement.forInStatement(block: ForInStatement.() -> Unit): ForInStatement {
-    return ForInStatementImpl().apply(block)
 }
 
 fun ForInStatement.forOfStatement(block: ForOfStatement.() -> Unit): ForOfStatement {
@@ -10084,10 +13620,6 @@ fun ForOfStatement.forStatement(block: ForStatement.() -> Unit): ForStatement {
 
 fun ForOfStatement.forInStatement(block: ForInStatement.() -> Unit): ForInStatement {
     return ForInStatementImpl().apply(block)
-}
-
-fun ForOfStatement.forOfStatement(block: ForOfStatement.() -> Unit): ForOfStatement {
-    return ForOfStatementImpl().apply(block)
 }
 
 fun ForOfStatement.classDeclaration(block: ClassDeclaration.() -> Unit): ClassDeclaration {
@@ -10712,10 +14244,6 @@ fun TsParameterProperty.assignmentPattern(block: AssignmentPattern.() -> Unit): 
 
 fun TsParameterProperty.span(block: Span.() -> Unit): Span {
     return Span().apply(block)
-}
-
-fun TsQualifiedName.tsQualifiedName(block: TsQualifiedName.() -> Unit): TsQualifiedName {
-    return TsQualifiedNameImpl().apply(block)
 }
 
 fun TsQualifiedName.identifier(block: Identifier.() -> Unit): Identifier {
@@ -11646,10 +15174,6 @@ fun TsArrayType.tsTypeLiteral(block: TsTypeLiteral.() -> Unit): TsTypeLiteral {
     return TsTypeLiteralImpl().apply(block)
 }
 
-fun TsArrayType.tsArrayType(block: TsArrayType.() -> Unit): TsArrayType {
-    return TsArrayTypeImpl().apply(block)
-}
-
 fun TsArrayType.tsTupleType(block: TsTupleType.() -> Unit): TsTupleType {
     return TsTupleTypeImpl().apply(block)
 }
@@ -12038,10 +15562,6 @@ fun TsOptionalType.tsTupleType(block: TsTupleType.() -> Unit): TsTupleType {
     return TsTupleTypeImpl().apply(block)
 }
 
-fun TsOptionalType.tsOptionalType(block: TsOptionalType.() -> Unit): TsOptionalType {
-    return TsOptionalTypeImpl().apply(block)
-}
-
 fun TsOptionalType.tsRestType(block: TsRestType.() -> Unit): TsRestType {
     return TsRestTypeImpl().apply(block)
 }
@@ -12132,10 +15652,6 @@ fun TsRestType.tsTupleType(block: TsTupleType.() -> Unit): TsTupleType {
 
 fun TsRestType.tsOptionalType(block: TsOptionalType.() -> Unit): TsOptionalType {
     return TsOptionalTypeImpl().apply(block)
-}
-
-fun TsRestType.tsRestType(block: TsRestType.() -> Unit): TsRestType {
-    return TsRestTypeImpl().apply(block)
 }
 
 fun TsRestType.tsUnionType(block: TsUnionType.() -> Unit): TsUnionType {
@@ -12246,10 +15762,6 @@ fun TsConditionalType.tsIntersectionType(block: TsIntersectionType.() -> Unit): 
     return TsIntersectionTypeImpl().apply(block)
 }
 
-fun TsConditionalType.tsConditionalType(block: TsConditionalType.() -> Unit): TsConditionalType {
-    return TsConditionalTypeImpl().apply(block)
-}
-
 fun TsConditionalType.tsInferType(block: TsInferType.() -> Unit): TsInferType {
     return TsInferTypeImpl().apply(block)
 }
@@ -12354,10 +15866,6 @@ fun TsParenthesizedType.tsInferType(block: TsInferType.() -> Unit): TsInferType 
     return TsInferTypeImpl().apply(block)
 }
 
-fun TsParenthesizedType.tsParenthesizedType(block: TsParenthesizedType.() -> Unit): TsParenthesizedType {
-    return TsParenthesizedTypeImpl().apply(block)
-}
-
 fun TsParenthesizedType.tsTypeOperator(block: TsTypeOperator.() -> Unit): TsTypeOperator {
     return TsTypeOperatorImpl().apply(block)
 }
@@ -12450,10 +15958,6 @@ fun TsTypeOperator.tsParenthesizedType(block: TsParenthesizedType.() -> Unit): T
     return TsParenthesizedTypeImpl().apply(block)
 }
 
-fun TsTypeOperator.tsTypeOperator(block: TsTypeOperator.() -> Unit): TsTypeOperator {
-    return TsTypeOperatorImpl().apply(block)
-}
-
 fun TsTypeOperator.tsIndexedAccessType(block: TsIndexedAccessType.() -> Unit): TsIndexedAccessType {
     return TsIndexedAccessTypeImpl().apply(block)
 }
@@ -12544,10 +16048,6 @@ fun TsIndexedAccessType.tsParenthesizedType(block: TsParenthesizedType.() -> Uni
 
 fun TsIndexedAccessType.tsTypeOperator(block: TsTypeOperator.() -> Unit): TsTypeOperator {
     return TsTypeOperatorImpl().apply(block)
-}
-
-fun TsIndexedAccessType.tsIndexedAccessType(block: TsIndexedAccessType.() -> Unit): TsIndexedAccessType {
-    return TsIndexedAccessTypeImpl().apply(block)
 }
 
 fun TsIndexedAccessType.tsMappedType(block: TsMappedType.() -> Unit): TsMappedType {
@@ -12644,10 +16144,6 @@ fun TsMappedType.tsTypeOperator(block: TsTypeOperator.() -> Unit): TsTypeOperato
 
 fun TsMappedType.tsIndexedAccessType(block: TsIndexedAccessType.() -> Unit): TsIndexedAccessType {
     return TsIndexedAccessTypeImpl().apply(block)
-}
-
-fun TsMappedType.tsMappedType(block: TsMappedType.() -> Unit): TsMappedType {
-    return TsMappedTypeImpl().apply(block)
 }
 
 fun TsMappedType.tsLiteralType(block: TsLiteralType.() -> Unit): TsLiteralType {
@@ -12890,7 +16386,9 @@ fun TsExpressionWithTypeArguments.invalid(block: Invalid.() -> Unit): Invalid {
     return InvalidImpl().apply(block)
 }
 
-fun TsExpressionWithTypeArguments.tsTypeParameterInstantiation(block: TsTypeParameterInstantiation.() -> Unit): TsTypeParameterInstantiation {
+fun TsExpressionWithTypeArguments.tsTypeParameterInstantiation(
+    block: TsTypeParameterInstantiation.() -> Unit,
+): TsTypeParameterInstantiation {
     return TsTypeParameterInstantiationImpl().apply(block)
 }
 
@@ -13216,10 +16714,6 @@ fun TsNamespaceDeclaration.identifier(block: Identifier.() -> Unit): Identifier 
 
 fun TsNamespaceDeclaration.tsModuleBlock(block: TsModuleBlock.() -> Unit): TsModuleBlock {
     return TsModuleBlockImpl().apply(block)
-}
-
-fun TsNamespaceDeclaration.tsNamespaceDeclaration(block: TsNamespaceDeclaration.() -> Unit): TsNamespaceDeclaration {
-    return TsNamespaceDeclarationImpl().apply(block)
 }
 
 fun TsNamespaceDeclaration.span(block: Span.() -> Unit): Span {
@@ -13590,10 +17084,6 @@ fun TsAsExpression.tsNonNullExpression(block: TsNonNullExpression.() -> Unit): T
     return TsNonNullExpressionImpl().apply(block)
 }
 
-fun TsAsExpression.tsAsExpression(block: TsAsExpression.() -> Unit): TsAsExpression {
-    return TsAsExpressionImpl().apply(block)
-}
-
 fun TsAsExpression.tsSatisfiesExpression(block: TsSatisfiesExpression.() -> Unit): TsSatisfiesExpression {
     return TsSatisfiesExpressionImpl().apply(block)
 }
@@ -13860,10 +17350,6 @@ fun TsSatisfiesExpression.tsNonNullExpression(block: TsNonNullExpression.() -> U
 
 fun TsSatisfiesExpression.tsAsExpression(block: TsAsExpression.() -> Unit): TsAsExpression {
     return TsAsExpressionImpl().apply(block)
-}
-
-fun TsSatisfiesExpression.tsSatisfiesExpression(block: TsSatisfiesExpression.() -> Unit): TsSatisfiesExpression {
-    return TsSatisfiesExpressionImpl().apply(block)
 }
 
 fun TsSatisfiesExpression.tsInstantiation(block: TsInstantiation.() -> Unit): TsInstantiation {
@@ -14134,10 +17620,6 @@ fun TsInstantiation.tsSatisfiesExpression(block: TsSatisfiesExpression.() -> Uni
     return TsSatisfiesExpressionImpl().apply(block)
 }
 
-fun TsInstantiation.tsInstantiation(block: TsInstantiation.() -> Unit): TsInstantiation {
-    return TsInstantiationImpl().apply(block)
-}
-
 fun TsInstantiation.privateName(block: PrivateName.() -> Unit): PrivateName {
     return PrivateNameImpl().apply(block)
 }
@@ -14296,10 +17778,6 @@ fun TsTypeAssertion.jSXElement(block: JSXElement.() -> Unit): JSXElement {
 
 fun TsTypeAssertion.jSXFragment(block: JSXFragment.() -> Unit): JSXFragment {
     return JSXFragmentImpl().apply(block)
-}
-
-fun TsTypeAssertion.tsTypeAssertion(block: TsTypeAssertion.() -> Unit): TsTypeAssertion {
-    return TsTypeAssertionImpl().apply(block)
 }
 
 fun TsTypeAssertion.tsConstAssertion(block: TsConstAssertion.() -> Unit): TsConstAssertion {
@@ -14570,10 +18048,6 @@ fun TsConstAssertion.tsTypeAssertion(block: TsTypeAssertion.() -> Unit): TsTypeA
     return TsTypeAssertionImpl().apply(block)
 }
 
-fun TsConstAssertion.tsConstAssertion(block: TsConstAssertion.() -> Unit): TsConstAssertion {
-    return TsConstAssertionImpl().apply(block)
-}
-
 fun TsConstAssertion.tsNonNullExpression(block: TsNonNullExpression.() -> Unit): TsNonNullExpression {
     return TsNonNullExpressionImpl().apply(block)
 }
@@ -14754,10 +18228,6 @@ fun TsNonNullExpression.tsConstAssertion(block: TsConstAssertion.() -> Unit): Ts
     return TsConstAssertionImpl().apply(block)
 }
 
-fun TsNonNullExpression.tsNonNullExpression(block: TsNonNullExpression.() -> Unit): TsNonNullExpression {
-    return TsNonNullExpressionImpl().apply(block)
-}
-
 fun TsNonNullExpression.tsAsExpression(block: TsAsExpression.() -> Unit): TsAsExpression {
     return TsAsExpressionImpl().apply(block)
 }
@@ -14788,1112 +18258,4 @@ fun TsNonNullExpression.span(block: Span.() -> Unit): Span {
 
 fun Invalid.span(block: Span.() -> Unit): Span {
     return Span().apply(block)
-}
-
-fun ParserConfig.parseOptions(block: ParseOptions.() -> Unit): ParseOptions {
-    return ParseOptions().apply(block)
-}
-
-fun ParserConfig.tsParserConfig(block: TsParserConfig.() -> Unit): TsParserConfig {
-    return TsParserConfig().apply(block)
-}
-
-fun ParserConfig.esParserConfig(block: EsParserConfig.() -> Unit): EsParserConfig {
-    return EsParserConfig().apply(block)
-}
-
-fun SystemjsConfig.systemjsConfig(block: SystemjsConfig.() -> Unit): SystemjsConfig {
-    return SystemjsConfigImpl().apply(block)
-}
-
-fun Constructor.constructor(block: Constructor.() -> Unit): Constructor {
-    return ConstructorImpl().apply(block)
-}
-
-fun ClassMethod.classMethod(block: ClassMethod.() -> Unit): ClassMethod {
-    return ClassMethodImpl().apply(block)
-}
-
-fun PrivateMethod.privateMethod(block: PrivateMethod.() -> Unit): PrivateMethod {
-    return PrivateMethodImpl().apply(block)
-}
-
-fun ClassProperty.classProperty(block: ClassProperty.() -> Unit): ClassProperty {
-    return ClassPropertyImpl().apply(block)
-}
-
-fun PrivateProperty.privateProperty(block: PrivateProperty.() -> Unit): PrivateProperty {
-    return PrivatePropertyImpl().apply(block)
-}
-
-fun TsIndexSignature.tsIndexSignature(block: TsIndexSignature.() -> Unit): TsIndexSignature {
-    return TsIndexSignatureImpl().apply(block)
-}
-
-fun EmptyStatement.emptyStatement(block: EmptyStatement.() -> Unit): EmptyStatement {
-    return EmptyStatementImpl().apply(block)
-}
-
-fun StaticBlock.staticBlock(block: StaticBlock.() -> Unit): StaticBlock {
-    return StaticBlockImpl().apply(block)
-}
-
-fun ClassDeclaration.classDeclaration(block: ClassDeclaration.() -> Unit): ClassDeclaration {
-    return ClassDeclarationImpl().apply(block)
-}
-
-fun FunctionDeclaration.functionDeclaration(block: FunctionDeclaration.() -> Unit): FunctionDeclaration {
-    return FunctionDeclarationImpl().apply(block)
-}
-
-fun VariableDeclaration.variableDeclaration(block: VariableDeclaration.() -> Unit): VariableDeclaration {
-    return VariableDeclarationImpl().apply(block)
-}
-
-fun TsInterfaceDeclaration.tsInterfaceDeclaration(block: TsInterfaceDeclaration.() -> Unit): TsInterfaceDeclaration {
-    return TsInterfaceDeclarationImpl().apply(block)
-}
-
-fun TsTypeAliasDeclaration.tsTypeAliasDeclaration(block: TsTypeAliasDeclaration.() -> Unit): TsTypeAliasDeclaration {
-    return TsTypeAliasDeclarationImpl().apply(block)
-}
-
-fun TsEnumDeclaration.tsEnumDeclaration(block: TsEnumDeclaration.() -> Unit): TsEnumDeclaration {
-    return TsEnumDeclarationImpl().apply(block)
-}
-
-fun TsModuleDeclaration.tsModuleDeclaration(block: TsModuleDeclaration.() -> Unit): TsModuleDeclaration {
-    return TsModuleDeclarationImpl().apply(block)
-}
-
-fun ThisExpression.thisExpression(block: ThisExpression.() -> Unit): ThisExpression {
-    return ThisExpressionImpl().apply(block)
-}
-
-fun ArrayExpression.arrayExpression(block: ArrayExpression.() -> Unit): ArrayExpression {
-    return ArrayExpressionImpl().apply(block)
-}
-
-fun ObjectExpression.objectExpression(block: ObjectExpression.() -> Unit): ObjectExpression {
-    return ObjectExpressionImpl().apply(block)
-}
-
-fun FunctionExpression.functionExpression(block: FunctionExpression.() -> Unit): FunctionExpression {
-    return FunctionExpressionImpl().apply(block)
-}
-
-fun SuperPropExpression.superPropExpression(block: SuperPropExpression.() -> Unit): SuperPropExpression {
-    return SuperPropExpressionImpl().apply(block)
-}
-
-fun CallExpression.callExpression(block: CallExpression.() -> Unit): CallExpression {
-    return CallExpressionImpl().apply(block)
-}
-
-fun SequenceExpression.sequenceExpression(block: SequenceExpression.() -> Unit): SequenceExpression {
-    return SequenceExpressionImpl().apply(block)
-}
-
-fun Identifier.identifier(block: Identifier.() -> Unit): Identifier {
-    return IdentifierImpl().apply(block)
-}
-
-fun Literal.stringLiteral(block: StringLiteral.() -> Unit): StringLiteral {
-    return StringLiteralImpl().apply(block)
-}
-
-fun Literal.booleanLiteral(block: BooleanLiteral.() -> Unit): BooleanLiteral {
-    return BooleanLiteralImpl().apply(block)
-}
-
-fun Literal.nullLiteral(block: NullLiteral.() -> Unit): NullLiteral {
-    return NullLiteralImpl().apply(block)
-}
-
-fun Literal.numericLiteral(block: NumericLiteral.() -> Unit): NumericLiteral {
-    return NumericLiteralImpl().apply(block)
-}
-
-fun Literal.bigIntLiteral(block: BigIntLiteral.() -> Unit): BigIntLiteral {
-    return BigIntLiteralImpl().apply(block)
-}
-
-fun Literal.regExpLiteral(block: RegExpLiteral.() -> Unit): RegExpLiteral {
-    return RegExpLiteralImpl().apply(block)
-}
-
-fun Literal.jSXText(block: JSXText.() -> Unit): JSXText {
-    return JSXTextImpl().apply(block)
-}
-
-fun TemplateLiteral.templateLiteral(block: TemplateLiteral.() -> Unit): TemplateLiteral {
-    return TemplateLiteralImpl().apply(block)
-}
-
-fun ArrowFunctionExpression.arrowFunctionExpression(block: ArrowFunctionExpression.() -> Unit): ArrowFunctionExpression {
-    return ArrowFunctionExpressionImpl().apply(block)
-}
-
-fun MetaProperty.metaProperty(block: MetaProperty.() -> Unit): MetaProperty {
-    return MetaPropertyImpl().apply(block)
-}
-
-fun JSXNamespacedName.jSXNamespacedName(block: JSXNamespacedName.() -> Unit): JSXNamespacedName {
-    return JSXNamespacedNameImpl().apply(block)
-}
-
-fun JSXEmptyExpression.jSXEmptyExpression(block: JSXEmptyExpression.() -> Unit): JSXEmptyExpression {
-    return JSXEmptyExpressionImpl().apply(block)
-}
-
-fun JSXElement.jSXElement(block: JSXElement.() -> Unit): JSXElement {
-    return JSXElementImpl().apply(block)
-}
-
-fun JSXFragment.jSXFragment(block: JSXFragment.() -> Unit): JSXFragment {
-    return JSXFragmentImpl().apply(block)
-}
-
-fun PrivateName.privateName(block: PrivateName.() -> Unit): PrivateName {
-    return PrivateNameImpl().apply(block)
-}
-
-fun OptionalChainingExpression.optionalChainingExpression(block: OptionalChainingExpression.() -> Unit): OptionalChainingExpression {
-    return OptionalChainingExpressionImpl().apply(block)
-}
-
-fun Invalid.invalid(block: Invalid.() -> Unit): Invalid {
-    return InvalidImpl().apply(block)
-}
-
-fun Expression.thisExpression(block: ThisExpression.() -> Unit): ThisExpression {
-    return ThisExpressionImpl().apply(block)
-}
-
-fun Expression.arrayExpression(block: ArrayExpression.() -> Unit): ArrayExpression {
-    return ArrayExpressionImpl().apply(block)
-}
-
-fun Expression.objectExpression(block: ObjectExpression.() -> Unit): ObjectExpression {
-    return ObjectExpressionImpl().apply(block)
-}
-
-fun Expression.functionExpression(block: FunctionExpression.() -> Unit): FunctionExpression {
-    return FunctionExpressionImpl().apply(block)
-}
-
-fun Expression.unaryExpression(block: UnaryExpression.() -> Unit): UnaryExpression {
-    return UnaryExpressionImpl().apply(block)
-}
-
-fun Expression.updateExpression(block: UpdateExpression.() -> Unit): UpdateExpression {
-    return UpdateExpressionImpl().apply(block)
-}
-
-fun Expression.binaryExpression(block: BinaryExpression.() -> Unit): BinaryExpression {
-    return BinaryExpressionImpl().apply(block)
-}
-
-fun Expression.assignmentExpression(block: AssignmentExpression.() -> Unit): AssignmentExpression {
-    return AssignmentExpressionImpl().apply(block)
-}
-
-fun Expression.memberExpression(block: MemberExpression.() -> Unit): MemberExpression {
-    return MemberExpressionImpl().apply(block)
-}
-
-fun Expression.superPropExpression(block: SuperPropExpression.() -> Unit): SuperPropExpression {
-    return SuperPropExpressionImpl().apply(block)
-}
-
-fun Expression.conditionalExpression(block: ConditionalExpression.() -> Unit): ConditionalExpression {
-    return ConditionalExpressionImpl().apply(block)
-}
-
-fun Expression.callExpression(block: CallExpression.() -> Unit): CallExpression {
-    return CallExpressionImpl().apply(block)
-}
-
-fun Expression.newExpression(block: NewExpression.() -> Unit): NewExpression {
-    return NewExpressionImpl().apply(block)
-}
-
-fun Expression.sequenceExpression(block: SequenceExpression.() -> Unit): SequenceExpression {
-    return SequenceExpressionImpl().apply(block)
-}
-
-fun Expression.identifier(block: Identifier.() -> Unit): Identifier {
-    return IdentifierImpl().apply(block)
-}
-
-fun Expression.stringLiteral(block: StringLiteral.() -> Unit): StringLiteral {
-    return StringLiteralImpl().apply(block)
-}
-
-fun Expression.booleanLiteral(block: BooleanLiteral.() -> Unit): BooleanLiteral {
-    return BooleanLiteralImpl().apply(block)
-}
-
-fun Expression.nullLiteral(block: NullLiteral.() -> Unit): NullLiteral {
-    return NullLiteralImpl().apply(block)
-}
-
-fun Expression.numericLiteral(block: NumericLiteral.() -> Unit): NumericLiteral {
-    return NumericLiteralImpl().apply(block)
-}
-
-fun Expression.bigIntLiteral(block: BigIntLiteral.() -> Unit): BigIntLiteral {
-    return BigIntLiteralImpl().apply(block)
-}
-
-fun Expression.regExpLiteral(block: RegExpLiteral.() -> Unit): RegExpLiteral {
-    return RegExpLiteralImpl().apply(block)
-}
-
-fun Expression.jSXText(block: JSXText.() -> Unit): JSXText {
-    return JSXTextImpl().apply(block)
-}
-
-fun Expression.templateLiteral(block: TemplateLiteral.() -> Unit): TemplateLiteral {
-    return TemplateLiteralImpl().apply(block)
-}
-
-fun Expression.taggedTemplateExpression(block: TaggedTemplateExpression.() -> Unit): TaggedTemplateExpression {
-    return TaggedTemplateExpressionImpl().apply(block)
-}
-
-fun Expression.arrowFunctionExpression(block: ArrowFunctionExpression.() -> Unit): ArrowFunctionExpression {
-    return ArrowFunctionExpressionImpl().apply(block)
-}
-
-fun Expression.classExpression(block: ClassExpression.() -> Unit): ClassExpression {
-    return ClassExpressionImpl().apply(block)
-}
-
-fun Expression.yieldExpression(block: YieldExpression.() -> Unit): YieldExpression {
-    return YieldExpressionImpl().apply(block)
-}
-
-fun Expression.metaProperty(block: MetaProperty.() -> Unit): MetaProperty {
-    return MetaPropertyImpl().apply(block)
-}
-
-fun Expression.awaitExpression(block: AwaitExpression.() -> Unit): AwaitExpression {
-    return AwaitExpressionImpl().apply(block)
-}
-
-fun Expression.parenthesisExpression(block: ParenthesisExpression.() -> Unit): ParenthesisExpression {
-    return ParenthesisExpressionImpl().apply(block)
-}
-
-fun Expression.jSXMemberExpression(block: JSXMemberExpression.() -> Unit): JSXMemberExpression {
-    return JSXMemberExpressionImpl().apply(block)
-}
-
-fun Expression.jSXNamespacedName(block: JSXNamespacedName.() -> Unit): JSXNamespacedName {
-    return JSXNamespacedNameImpl().apply(block)
-}
-
-fun Expression.jSXEmptyExpression(block: JSXEmptyExpression.() -> Unit): JSXEmptyExpression {
-    return JSXEmptyExpressionImpl().apply(block)
-}
-
-fun Expression.jSXElement(block: JSXElement.() -> Unit): JSXElement {
-    return JSXElementImpl().apply(block)
-}
-
-fun Expression.jSXFragment(block: JSXFragment.() -> Unit): JSXFragment {
-    return JSXFragmentImpl().apply(block)
-}
-
-fun Expression.tsTypeAssertion(block: TsTypeAssertion.() -> Unit): TsTypeAssertion {
-    return TsTypeAssertionImpl().apply(block)
-}
-
-fun Expression.tsConstAssertion(block: TsConstAssertion.() -> Unit): TsConstAssertion {
-    return TsConstAssertionImpl().apply(block)
-}
-
-fun Expression.tsNonNullExpression(block: TsNonNullExpression.() -> Unit): TsNonNullExpression {
-    return TsNonNullExpressionImpl().apply(block)
-}
-
-fun Expression.tsAsExpression(block: TsAsExpression.() -> Unit): TsAsExpression {
-    return TsAsExpressionImpl().apply(block)
-}
-
-fun Expression.tsSatisfiesExpression(block: TsSatisfiesExpression.() -> Unit): TsSatisfiesExpression {
-    return TsSatisfiesExpressionImpl().apply(block)
-}
-
-fun Expression.tsInstantiation(block: TsInstantiation.() -> Unit): TsInstantiation {
-    return TsInstantiationImpl().apply(block)
-}
-
-fun Expression.privateName(block: PrivateName.() -> Unit): PrivateName {
-    return PrivateNameImpl().apply(block)
-}
-
-fun Expression.optionalChainingExpression(block: OptionalChainingExpression.() -> Unit): OptionalChainingExpression {
-    return OptionalChainingExpressionImpl().apply(block)
-}
-
-fun Expression.invalid(block: Invalid.() -> Unit): Invalid {
-    return InvalidImpl().apply(block)
-}
-
-fun JSXAttribute.jSXAttribute(block: JSXAttribute.() -> Unit): JSXAttribute {
-    return JSXAttributeImpl().apply(block)
-}
-
-fun SpreadElement.spreadElement(block: SpreadElement.() -> Unit): SpreadElement {
-    return SpreadElementImpl().apply(block)
-}
-
-fun JSXExpressionContainer.jSXExpressionContainer(block: JSXExpressionContainer.() -> Unit): JSXExpressionContainer {
-    return JSXExpressionContainerImpl().apply(block)
-}
-
-fun JSXText.jSXText(block: JSXText.() -> Unit): JSXText {
-    return JSXTextImpl().apply(block)
-}
-
-fun JSXSpreadChild.jSXSpreadChild(block: JSXSpreadChild.() -> Unit): JSXSpreadChild {
-    return JSXSpreadChildImpl().apply(block)
-}
-
-fun StringLiteral.stringLiteral(block: StringLiteral.() -> Unit): StringLiteral {
-    return StringLiteralImpl().apply(block)
-}
-
-fun BooleanLiteral.booleanLiteral(block: BooleanLiteral.() -> Unit): BooleanLiteral {
-    return BooleanLiteralImpl().apply(block)
-}
-
-fun NullLiteral.nullLiteral(block: NullLiteral.() -> Unit): NullLiteral {
-    return NullLiteralImpl().apply(block)
-}
-
-fun NumericLiteral.numericLiteral(block: NumericLiteral.() -> Unit): NumericLiteral {
-    return NumericLiteralImpl().apply(block)
-}
-
-fun BigIntLiteral.bigIntLiteral(block: BigIntLiteral.() -> Unit): BigIntLiteral {
-    return BigIntLiteralImpl().apply(block)
-}
-
-fun RegExpLiteral.regExpLiteral(block: RegExpLiteral.() -> Unit): RegExpLiteral {
-    return RegExpLiteralImpl().apply(block)
-}
-
-fun ImportDeclaration.importDeclaration(block: ImportDeclaration.() -> Unit): ImportDeclaration {
-    return ImportDeclarationImpl().apply(block)
-}
-
-fun ExportDeclaration.exportDeclaration(block: ExportDeclaration.() -> Unit): ExportDeclaration {
-    return ExportDeclarationImpl().apply(block)
-}
-
-fun ExportNamedDeclaration.exportNamedDeclaration(block: ExportNamedDeclaration.() -> Unit): ExportNamedDeclaration {
-    return ExportNamedDeclarationImpl().apply(block)
-}
-
-fun ExportDefaultDeclaration.exportDefaultDeclaration(block: ExportDefaultDeclaration.() -> Unit): ExportDefaultDeclaration {
-    return ExportDefaultDeclarationImpl().apply(block)
-}
-
-fun ExportDefaultExpression.exportDefaultExpression(block: ExportDefaultExpression.() -> Unit): ExportDefaultExpression {
-    return ExportDefaultExpressionImpl().apply(block)
-}
-
-fun ExportAllDeclaration.exportAllDeclaration(block: ExportAllDeclaration.() -> Unit): ExportAllDeclaration {
-    return ExportAllDeclarationImpl().apply(block)
-}
-
-fun TsImportEqualsDeclaration.tsImportEqualsDeclaration(block: TsImportEqualsDeclaration.() -> Unit): TsImportEqualsDeclaration {
-    return TsImportEqualsDeclarationImpl().apply(block)
-}
-
-fun TsExportAssignment.tsExportAssignment(block: TsExportAssignment.() -> Unit): TsExportAssignment {
-    return TsExportAssignmentImpl().apply(block)
-}
-
-fun TsNamespaceExportDeclaration.tsNamespaceExportDeclaration(block: TsNamespaceExportDeclaration.() -> Unit): TsNamespaceExportDeclaration {
-    return TsNamespaceExportDeclarationImpl().apply(block)
-}
-
-fun NamedImportSpecifier.namedImportSpecifier(block: NamedImportSpecifier.() -> Unit): NamedImportSpecifier {
-    return NamedImportSpecifierImpl().apply(block)
-}
-
-fun ImportDefaultSpecifier.importDefaultSpecifier(block: ImportDefaultSpecifier.() -> Unit): ImportDefaultSpecifier {
-    return ImportDefaultSpecifierImpl().apply(block)
-}
-
-fun ImportNamespaceSpecifier.importNamespaceSpecifier(block: ImportNamespaceSpecifier.() -> Unit): ImportNamespaceSpecifier {
-    return ImportNamespaceSpecifierImpl().apply(block)
-}
-
-fun ExportNamespaceSpecifier.exportNamespaceSpecifier(block: ExportNamespaceSpecifier.() -> Unit): ExportNamespaceSpecifier {
-    return ExportNamespaceSpecifierImpl().apply(block)
-}
-
-fun ExportDefaultSpecifier.exportDefaultSpecifier(block: ExportDefaultSpecifier.() -> Unit): ExportDefaultSpecifier {
-    return ExportDefaultSpecifierImpl().apply(block)
-}
-
-fun NamedExportSpecifier.namedExportSpecifier(block: NamedExportSpecifier.() -> Unit): NamedExportSpecifier {
-    return NamedExportSpecifierImpl().apply(block)
-}
-
-fun Module.module(block: Module.() -> Unit): Module {
-    return ModuleImpl().apply(block)
-}
-
-fun Script.script(block: Script.() -> Unit): Script {
-    return ScriptImpl().apply(block)
-}
-
-fun ModuleDeclaration.importDeclaration(block: ImportDeclaration.() -> Unit): ImportDeclaration {
-    return ImportDeclarationImpl().apply(block)
-}
-
-fun ModuleDeclaration.exportDeclaration(block: ExportDeclaration.() -> Unit): ExportDeclaration {
-    return ExportDeclarationImpl().apply(block)
-}
-
-fun ModuleDeclaration.exportNamedDeclaration(block: ExportNamedDeclaration.() -> Unit): ExportNamedDeclaration {
-    return ExportNamedDeclarationImpl().apply(block)
-}
-
-fun ModuleDeclaration.exportDefaultDeclaration(block: ExportDefaultDeclaration.() -> Unit): ExportDefaultDeclaration {
-    return ExportDefaultDeclarationImpl().apply(block)
-}
-
-fun ModuleDeclaration.exportDefaultExpression(block: ExportDefaultExpression.() -> Unit): ExportDefaultExpression {
-    return ExportDefaultExpressionImpl().apply(block)
-}
-
-fun ModuleDeclaration.exportAllDeclaration(block: ExportAllDeclaration.() -> Unit): ExportAllDeclaration {
-    return ExportAllDeclarationImpl().apply(block)
-}
-
-fun ModuleDeclaration.tsImportEqualsDeclaration(block: TsImportEqualsDeclaration.() -> Unit): TsImportEqualsDeclaration {
-    return TsImportEqualsDeclarationImpl().apply(block)
-}
-
-fun ModuleDeclaration.tsExportAssignment(block: TsExportAssignment.() -> Unit): TsExportAssignment {
-    return TsExportAssignmentImpl().apply(block)
-}
-
-fun ModuleDeclaration.tsNamespaceExportDeclaration(block: TsNamespaceExportDeclaration.() -> Unit): TsNamespaceExportDeclaration {
-    return TsNamespaceExportDeclarationImpl().apply(block)
-}
-
-fun Statement.blockStatement(block: BlockStatement.() -> Unit): BlockStatement {
-    return BlockStatementImpl().apply(block)
-}
-
-fun Statement.emptyStatement(block: EmptyStatement.() -> Unit): EmptyStatement {
-    return EmptyStatementImpl().apply(block)
-}
-
-fun Statement.debuggerStatement(block: DebuggerStatement.() -> Unit): DebuggerStatement {
-    return DebuggerStatementImpl().apply(block)
-}
-
-fun Statement.withStatement(block: WithStatement.() -> Unit): WithStatement {
-    return WithStatementImpl().apply(block)
-}
-
-fun Statement.returnStatement(block: ReturnStatement.() -> Unit): ReturnStatement {
-    return ReturnStatementImpl().apply(block)
-}
-
-fun Statement.labeledStatement(block: LabeledStatement.() -> Unit): LabeledStatement {
-    return LabeledStatementImpl().apply(block)
-}
-
-fun Statement.breakStatement(block: BreakStatement.() -> Unit): BreakStatement {
-    return BreakStatementImpl().apply(block)
-}
-
-fun Statement.continueStatement(block: ContinueStatement.() -> Unit): ContinueStatement {
-    return ContinueStatementImpl().apply(block)
-}
-
-fun Statement.ifStatement(block: IfStatement.() -> Unit): IfStatement {
-    return IfStatementImpl().apply(block)
-}
-
-fun Statement.switchStatement(block: SwitchStatement.() -> Unit): SwitchStatement {
-    return SwitchStatementImpl().apply(block)
-}
-
-fun Statement.throwStatement(block: ThrowStatement.() -> Unit): ThrowStatement {
-    return ThrowStatementImpl().apply(block)
-}
-
-fun Statement.tryStatement(block: TryStatement.() -> Unit): TryStatement {
-    return TryStatementImpl().apply(block)
-}
-
-fun Statement.whileStatement(block: WhileStatement.() -> Unit): WhileStatement {
-    return WhileStatementImpl().apply(block)
-}
-
-fun Statement.doWhileStatement(block: DoWhileStatement.() -> Unit): DoWhileStatement {
-    return DoWhileStatementImpl().apply(block)
-}
-
-fun Statement.forStatement(block: ForStatement.() -> Unit): ForStatement {
-    return ForStatementImpl().apply(block)
-}
-
-fun Statement.forInStatement(block: ForInStatement.() -> Unit): ForInStatement {
-    return ForInStatementImpl().apply(block)
-}
-
-fun Statement.forOfStatement(block: ForOfStatement.() -> Unit): ForOfStatement {
-    return ForOfStatementImpl().apply(block)
-}
-
-fun Statement.classDeclaration(block: ClassDeclaration.() -> Unit): ClassDeclaration {
-    return ClassDeclarationImpl().apply(block)
-}
-
-fun Statement.functionDeclaration(block: FunctionDeclaration.() -> Unit): FunctionDeclaration {
-    return FunctionDeclarationImpl().apply(block)
-}
-
-fun Statement.variableDeclaration(block: VariableDeclaration.() -> Unit): VariableDeclaration {
-    return VariableDeclarationImpl().apply(block)
-}
-
-fun Statement.tsInterfaceDeclaration(block: TsInterfaceDeclaration.() -> Unit): TsInterfaceDeclaration {
-    return TsInterfaceDeclarationImpl().apply(block)
-}
-
-fun Statement.tsTypeAliasDeclaration(block: TsTypeAliasDeclaration.() -> Unit): TsTypeAliasDeclaration {
-    return TsTypeAliasDeclarationImpl().apply(block)
-}
-
-fun Statement.tsEnumDeclaration(block: TsEnumDeclaration.() -> Unit): TsEnumDeclaration {
-    return TsEnumDeclarationImpl().apply(block)
-}
-
-fun Statement.tsModuleDeclaration(block: TsModuleDeclaration.() -> Unit): TsModuleDeclaration {
-    return TsModuleDeclarationImpl().apply(block)
-}
-
-fun Statement.expressionStatement(block: ExpressionStatement.() -> Unit): ExpressionStatement {
-    return ExpressionStatementImpl().apply(block)
-}
-
-fun BindingIdentifier.bindingIdentifier(block: BindingIdentifier.() -> Unit): BindingIdentifier {
-    return BindingIdentifierImpl().apply(block)
-}
-
-fun ArrayPattern.arrayPattern(block: ArrayPattern.() -> Unit): ArrayPattern {
-    return ArrayPatternImpl().apply(block)
-}
-
-fun ObjectPattern.objectPattern(block: ObjectPattern.() -> Unit): ObjectPattern {
-    return ObjectPatternImpl().apply(block)
-}
-
-fun KeyValuePatternProperty.keyValuePatternProperty(block: KeyValuePatternProperty.() -> Unit): KeyValuePatternProperty {
-    return KeyValuePatternPropertyImpl().apply(block)
-}
-
-fun AssignmentPatternProperty.assignmentPatternProperty(block: AssignmentPatternProperty.() -> Unit): AssignmentPatternProperty {
-    return AssignmentPatternPropertyImpl().apply(block)
-}
-
-fun KeyValueProperty.keyValueProperty(block: KeyValueProperty.() -> Unit): KeyValueProperty {
-    return KeyValuePropertyImpl().apply(block)
-}
-
-fun AssignmentProperty.assignmentProperty(block: AssignmentProperty.() -> Unit): AssignmentProperty {
-    return AssignmentPropertyImpl().apply(block)
-}
-
-fun GetterProperty.getterProperty(block: GetterProperty.() -> Unit): GetterProperty {
-    return GetterPropertyImpl().apply(block)
-}
-
-fun SetterProperty.setterProperty(block: SetterProperty.() -> Unit): SetterProperty {
-    return SetterPropertyImpl().apply(block)
-}
-
-fun MethodProperty.methodProperty(block: MethodProperty.() -> Unit): MethodProperty {
-    return MethodPropertyImpl().apply(block)
-}
-
-fun ComputedPropName.computedPropName(block: ComputedPropName.() -> Unit): ComputedPropName {
-    return ComputedPropNameImpl().apply(block)
-}
-
-fun BlockStatement.blockStatement(block: BlockStatement.() -> Unit): BlockStatement {
-    return BlockStatementImpl().apply(block)
-}
-
-fun DebuggerStatement.debuggerStatement(block: DebuggerStatement.() -> Unit): DebuggerStatement {
-    return DebuggerStatementImpl().apply(block)
-}
-
-fun ReturnStatement.returnStatement(block: ReturnStatement.() -> Unit): ReturnStatement {
-    return ReturnStatementImpl().apply(block)
-}
-
-fun BreakStatement.breakStatement(block: BreakStatement.() -> Unit): BreakStatement {
-    return BreakStatementImpl().apply(block)
-}
-
-fun ContinueStatement.continueStatement(block: ContinueStatement.() -> Unit): ContinueStatement {
-    return ContinueStatementImpl().apply(block)
-}
-
-fun SwitchStatement.switchStatement(block: SwitchStatement.() -> Unit): SwitchStatement {
-    return SwitchStatementImpl().apply(block)
-}
-
-fun ThrowStatement.throwStatement(block: ThrowStatement.() -> Unit): ThrowStatement {
-    return ThrowStatementImpl().apply(block)
-}
-
-fun TryStatement.tryStatement(block: TryStatement.() -> Unit): TryStatement {
-    return TryStatementImpl().apply(block)
-}
-
-fun Declaration.classDeclaration(block: ClassDeclaration.() -> Unit): ClassDeclaration {
-    return ClassDeclarationImpl().apply(block)
-}
-
-fun Declaration.functionDeclaration(block: FunctionDeclaration.() -> Unit): FunctionDeclaration {
-    return FunctionDeclarationImpl().apply(block)
-}
-
-fun Declaration.variableDeclaration(block: VariableDeclaration.() -> Unit): VariableDeclaration {
-    return VariableDeclarationImpl().apply(block)
-}
-
-fun Declaration.tsInterfaceDeclaration(block: TsInterfaceDeclaration.() -> Unit): TsInterfaceDeclaration {
-    return TsInterfaceDeclarationImpl().apply(block)
-}
-
-fun Declaration.tsTypeAliasDeclaration(block: TsTypeAliasDeclaration.() -> Unit): TsTypeAliasDeclaration {
-    return TsTypeAliasDeclarationImpl().apply(block)
-}
-
-fun Declaration.tsEnumDeclaration(block: TsEnumDeclaration.() -> Unit): TsEnumDeclaration {
-    return TsEnumDeclarationImpl().apply(block)
-}
-
-fun Declaration.tsModuleDeclaration(block: TsModuleDeclaration.() -> Unit): TsModuleDeclaration {
-    return TsModuleDeclarationImpl().apply(block)
-}
-
-fun ExpressionStatement.expressionStatement(block: ExpressionStatement.() -> Unit): ExpressionStatement {
-    return ExpressionStatementImpl().apply(block)
-}
-
-fun TsCallSignatureDeclaration.tsCallSignatureDeclaration(block: TsCallSignatureDeclaration.() -> Unit): TsCallSignatureDeclaration {
-    return TsCallSignatureDeclarationImpl().apply(block)
-}
-
-fun TsConstructSignatureDeclaration.tsConstructSignatureDeclaration(block: TsConstructSignatureDeclaration.() -> Unit): TsConstructSignatureDeclaration {
-    return TsConstructSignatureDeclarationImpl().apply(block)
-}
-
-fun TsPropertySignature.tsPropertySignature(block: TsPropertySignature.() -> Unit): TsPropertySignature {
-    return TsPropertySignatureImpl().apply(block)
-}
-
-fun TsGetterSignature.tsGetterSignature(block: TsGetterSignature.() -> Unit): TsGetterSignature {
-    return TsGetterSignatureImpl().apply(block)
-}
-
-fun TsSetterSignature.tsSetterSignature(block: TsSetterSignature.() -> Unit): TsSetterSignature {
-    return TsSetterSignatureImpl().apply(block)
-}
-
-fun TsMethodSignature.tsMethodSignature(block: TsMethodSignature.() -> Unit): TsMethodSignature {
-    return TsMethodSignatureImpl().apply(block)
-}
-
-fun TsKeywordType.tsKeywordType(block: TsKeywordType.() -> Unit): TsKeywordType {
-    return TsKeywordTypeImpl().apply(block)
-}
-
-fun TsThisType.tsThisType(block: TsThisType.() -> Unit): TsThisType {
-    return TsThisTypeImpl().apply(block)
-}
-
-fun TsFnOrConstructorType.tsFunctionType(block: TsFunctionType.() -> Unit): TsFunctionType {
-    return TsFunctionTypeImpl().apply(block)
-}
-
-fun TsFnOrConstructorType.tsConstructorType(block: TsConstructorType.() -> Unit): TsConstructorType {
-    return TsConstructorTypeImpl().apply(block)
-}
-
-fun TsTypeReference.tsTypeReference(block: TsTypeReference.() -> Unit): TsTypeReference {
-    return TsTypeReferenceImpl().apply(block)
-}
-
-fun TsTypeQuery.tsTypeQuery(block: TsTypeQuery.() -> Unit): TsTypeQuery {
-    return TsTypeQueryImpl().apply(block)
-}
-
-fun TsTypeLiteral.tsTypeLiteral(block: TsTypeLiteral.() -> Unit): TsTypeLiteral {
-    return TsTypeLiteralImpl().apply(block)
-}
-
-fun TsTupleType.tsTupleType(block: TsTupleType.() -> Unit): TsTupleType {
-    return TsTupleTypeImpl().apply(block)
-}
-
-fun TsUnionOrIntersectionType.tsUnionType(block: TsUnionType.() -> Unit): TsUnionType {
-    return TsUnionTypeImpl().apply(block)
-}
-
-fun TsUnionOrIntersectionType.tsIntersectionType(block: TsIntersectionType.() -> Unit): TsIntersectionType {
-    return TsIntersectionTypeImpl().apply(block)
-}
-
-fun TsInferType.tsInferType(block: TsInferType.() -> Unit): TsInferType {
-    return TsInferTypeImpl().apply(block)
-}
-
-fun TsLiteralType.tsLiteralType(block: TsLiteralType.() -> Unit): TsLiteralType {
-    return TsLiteralTypeImpl().apply(block)
-}
-
-fun TsTypePredicate.tsTypePredicate(block: TsTypePredicate.() -> Unit): TsTypePredicate {
-    return TsTypePredicateImpl().apply(block)
-}
-
-fun TsImportType.tsImportType(block: TsImportType.() -> Unit): TsImportType {
-    return TsImportTypeImpl().apply(block)
-}
-
-fun TsFunctionType.tsFunctionType(block: TsFunctionType.() -> Unit): TsFunctionType {
-    return TsFunctionTypeImpl().apply(block)
-}
-
-fun TsConstructorType.tsConstructorType(block: TsConstructorType.() -> Unit): TsConstructorType {
-    return TsConstructorTypeImpl().apply(block)
-}
-
-fun TsEntityName.tsQualifiedName(block: TsQualifiedName.() -> Unit): TsQualifiedName {
-    return TsQualifiedNameImpl().apply(block)
-}
-
-fun TsEntityName.identifier(block: Identifier.() -> Unit): Identifier {
-    return IdentifierImpl().apply(block)
-}
-
-fun TsUnionType.tsUnionType(block: TsUnionType.() -> Unit): TsUnionType {
-    return TsUnionTypeImpl().apply(block)
-}
-
-fun TsIntersectionType.tsIntersectionType(block: TsIntersectionType.() -> Unit): TsIntersectionType {
-    return TsIntersectionTypeImpl().apply(block)
-}
-
-fun TsTemplateLiteralType.tsTemplateLiteralType(block: TsTemplateLiteralType.() -> Unit): TsTemplateLiteralType {
-    return TsTemplateLiteralTypeImpl().apply(block)
-}
-
-fun TsModuleBlock.tsModuleBlock(block: TsModuleBlock.() -> Unit): TsModuleBlock {
-    return TsModuleBlockImpl().apply(block)
-}
-
-fun TsExternalModuleReference.tsExternalModuleReference(block: TsExternalModuleReference.() -> Unit): TsExternalModuleReference {
-    return TsExternalModuleReferenceImpl().apply(block)
-}
-
-fun Class.classDeclaration(block: ClassDeclaration.() -> Unit): ClassDeclaration {
-    return ClassDeclarationImpl().apply(block)
-}
-
-fun Class.jsClass(block: Class.() -> Unit): Class {
-    return ClassImpl().apply(block)
-}
-
-fun ClassPropertyBase.classProperty(block: ClassProperty.() -> Unit): ClassProperty {
-    return ClassPropertyImpl().apply(block)
-}
-
-fun ClassPropertyBase.privateProperty(block: PrivateProperty.() -> Unit): PrivateProperty {
-    return PrivatePropertyImpl().apply(block)
-}
-
-fun Param.param(block: Param.() -> Unit): Param {
-    return ParamImpl().apply(block)
-}
-
-fun ClassMethodBase.classMethod(block: ClassMethod.() -> Unit): ClassMethod {
-    return ClassMethodImpl().apply(block)
-}
-
-fun ClassMethodBase.privateMethod(block: PrivateMethod.() -> Unit): PrivateMethod {
-    return PrivateMethodImpl().apply(block)
-}
-
-fun Decorator.decorator(block: Decorator.() -> Unit): Decorator {
-    return DecoratorImpl().apply(block)
-}
-
-fun VariableDeclarator.variableDeclarator(block: VariableDeclarator.() -> Unit): VariableDeclarator {
-    return VariableDeclaratorImpl().apply(block)
-}
-
-fun ExpressionBase.identifier(block: Identifier.() -> Unit): Identifier {
-    return IdentifierImpl().apply(block)
-}
-
-fun ExpressionBase.optionalChainingExpression(block: OptionalChainingExpression.() -> Unit): OptionalChainingExpression {
-    return OptionalChainingExpressionImpl().apply(block)
-}
-
-fun ExpressionBase.optionalChainingCall(block: OptionalChainingCall.() -> Unit): OptionalChainingCall {
-    return OptionalChainingCallImpl().apply(block)
-}
-
-fun ExpressionBase.thisExpression(block: ThisExpression.() -> Unit): ThisExpression {
-    return ThisExpressionImpl().apply(block)
-}
-
-fun ExpressionBase.arrayExpression(block: ArrayExpression.() -> Unit): ArrayExpression {
-    return ArrayExpressionImpl().apply(block)
-}
-
-fun ExpressionBase.objectExpression(block: ObjectExpression.() -> Unit): ObjectExpression {
-    return ObjectExpressionImpl().apply(block)
-}
-
-fun ExpressionBase.unaryExpression(block: UnaryExpression.() -> Unit): UnaryExpression {
-    return UnaryExpressionImpl().apply(block)
-}
-
-fun ExpressionBase.updateExpression(block: UpdateExpression.() -> Unit): UpdateExpression {
-    return UpdateExpressionImpl().apply(block)
-}
-
-fun ExpressionBase.binaryExpression(block: BinaryExpression.() -> Unit): BinaryExpression {
-    return BinaryExpressionImpl().apply(block)
-}
-
-fun ExpressionBase.functionExpression(block: FunctionExpression.() -> Unit): FunctionExpression {
-    return FunctionExpressionImpl().apply(block)
-}
-
-fun ExpressionBase.classExpression(block: ClassExpression.() -> Unit): ClassExpression {
-    return ClassExpressionImpl().apply(block)
-}
-
-fun ExpressionBase.assignmentExpression(block: AssignmentExpression.() -> Unit): AssignmentExpression {
-    return AssignmentExpressionImpl().apply(block)
-}
-
-fun ExpressionBase.memberExpression(block: MemberExpression.() -> Unit): MemberExpression {
-    return MemberExpressionImpl().apply(block)
-}
-
-fun ExpressionBase.superPropExpression(block: SuperPropExpression.() -> Unit): SuperPropExpression {
-    return SuperPropExpressionImpl().apply(block)
-}
-
-fun ExpressionBase.conditionalExpression(block: ConditionalExpression.() -> Unit): ConditionalExpression {
-    return ConditionalExpressionImpl().apply(block)
-}
-
-fun ExpressionBase.callExpression(block: CallExpression.() -> Unit): CallExpression {
-    return CallExpressionImpl().apply(block)
-}
-
-fun ExpressionBase.newExpression(block: NewExpression.() -> Unit): NewExpression {
-    return NewExpressionImpl().apply(block)
-}
-
-fun ExpressionBase.sequenceExpression(block: SequenceExpression.() -> Unit): SequenceExpression {
-    return SequenceExpressionImpl().apply(block)
-}
-
-fun ExpressionBase.arrowFunctionExpression(block: ArrowFunctionExpression.() -> Unit): ArrowFunctionExpression {
-    return ArrowFunctionExpressionImpl().apply(block)
-}
-
-fun ExpressionBase.yieldExpression(block: YieldExpression.() -> Unit): YieldExpression {
-    return YieldExpressionImpl().apply(block)
-}
-
-fun ExpressionBase.awaitExpression(block: AwaitExpression.() -> Unit): AwaitExpression {
-    return AwaitExpressionImpl().apply(block)
-}
-
-fun ExpressionBase.templateLiteral(block: TemplateLiteral.() -> Unit): TemplateLiteral {
-    return TemplateLiteralImpl().apply(block)
-}
-
-fun ExpressionBase.taggedTemplateExpression(block: TaggedTemplateExpression.() -> Unit): TaggedTemplateExpression {
-    return TaggedTemplateExpressionImpl().apply(block)
-}
-
-fun ExpressionBase.templateElement(block: TemplateElement.() -> Unit): TemplateElement {
-    return TemplateElementImpl().apply(block)
-}
-
-fun ExpressionBase.parenthesisExpression(block: ParenthesisExpression.() -> Unit): ParenthesisExpression {
-    return ParenthesisExpressionImpl().apply(block)
-}
-
-fun ExpressionBase.privateName(block: PrivateName.() -> Unit): PrivateName {
-    return PrivateNameImpl().apply(block)
-}
-
-fun ExpressionBase.tsAsExpression(block: TsAsExpression.() -> Unit): TsAsExpression {
-    return TsAsExpressionImpl().apply(block)
-}
-
-fun ExpressionBase.tsSatisfiesExpression(block: TsSatisfiesExpression.() -> Unit): TsSatisfiesExpression {
-    return TsSatisfiesExpressionImpl().apply(block)
-}
-
-fun ExpressionBase.tsTypeAssertion(block: TsTypeAssertion.() -> Unit): TsTypeAssertion {
-    return TsTypeAssertionImpl().apply(block)
-}
-
-fun ExpressionBase.tsConstAssertion(block: TsConstAssertion.() -> Unit): TsConstAssertion {
-    return TsConstAssertionImpl().apply(block)
-}
-
-fun ExpressionBase.tsNonNullExpression(block: TsNonNullExpression.() -> Unit): TsNonNullExpression {
-    return TsNonNullExpressionImpl().apply(block)
-}
-
-fun OptionalChainingCall.optionalChainingCall(block: OptionalChainingCall.() -> Unit): OptionalChainingCall {
-    return OptionalChainingCallImpl().apply(block)
-}
-
-fun Super.jsSuper(block: Super.() -> Unit): Super {
-    return SuperImpl().apply(block)
-}
-
-fun Import.import(block: Import.() -> Unit): Import {
-    return ImportImpl().apply(block)
-}
-
-fun TemplateElement.templateElement(block: TemplateElement.() -> Unit): TemplateElement {
-    return TemplateElementImpl().apply(block)
-}
-
-fun Fn.functionDeclaration(block: FunctionDeclaration.() -> Unit): FunctionDeclaration {
-    return FunctionDeclarationImpl().apply(block)
-}
-
-fun Fn.functionExpression(block: FunctionExpression.() -> Unit): FunctionExpression {
-    return FunctionExpressionImpl().apply(block)
-}
-
-fun Fn.methodProperty(block: MethodProperty.() -> Unit): MethodProperty {
-    return MethodPropertyImpl().apply(block)
-}
-
-fun PatternBase.bindingIdentifier(block: BindingIdentifier.() -> Unit): BindingIdentifier {
-    return BindingIdentifierImpl().apply(block)
-}
-
-fun PatternBase.arrayPattern(block: ArrayPattern.() -> Unit): ArrayPattern {
-    return ArrayPatternImpl().apply(block)
-}
-
-fun PatternBase.objectPattern(block: ObjectPattern.() -> Unit): ObjectPattern {
-    return ObjectPatternImpl().apply(block)
-}
-
-fun PatternBase.assignmentPattern(block: AssignmentPattern.() -> Unit): AssignmentPattern {
-    return AssignmentPatternImpl().apply(block)
-}
-
-fun PatternBase.restElement(block: RestElement.() -> Unit): RestElement {
-    return RestElementImpl().apply(block)
-}
-
-fun JSXOpeningElement.jSXOpeningElement(block: JSXOpeningElement.() -> Unit): JSXOpeningElement {
-    return JSXOpeningElementImpl().apply(block)
-}
-
-fun JSXClosingElement.jSXClosingElement(block: JSXClosingElement.() -> Unit): JSXClosingElement {
-    return JSXClosingElementImpl().apply(block)
-}
-
-fun JSXOpeningFragment.jSXOpeningFragment(block: JSXOpeningFragment.() -> Unit): JSXOpeningFragment {
-    return JSXOpeningFragmentImpl().apply(block)
-}
-
-fun JSXClosingFragment.jSXClosingFragment(block: JSXClosingFragment.() -> Unit): JSXClosingFragment {
-    return JSXClosingFragmentImpl().apply(block)
-}
-
-fun PropBase.keyValueProperty(block: KeyValueProperty.() -> Unit): KeyValueProperty {
-    return KeyValuePropertyImpl().apply(block)
-}
-
-fun PropBase.getterProperty(block: GetterProperty.() -> Unit): GetterProperty {
-    return GetterPropertyImpl().apply(block)
-}
-
-fun PropBase.setterProperty(block: SetterProperty.() -> Unit): SetterProperty {
-    return SetterPropertyImpl().apply(block)
-}
-
-fun PropBase.methodProperty(block: MethodProperty.() -> Unit): MethodProperty {
-    return MethodPropertyImpl().apply(block)
-}
-
-fun SwitchCase.switchCase(block: SwitchCase.() -> Unit): SwitchCase {
-    return SwitchCaseImpl().apply(block)
-}
-
-fun CatchClause.catchClause(block: CatchClause.() -> Unit): CatchClause {
-    return CatchClauseImpl().apply(block)
-}
-
-fun TsTypeAnnotation.tsTypeAnnotation(block: TsTypeAnnotation.() -> Unit): TsTypeAnnotation {
-    return TsTypeAnnotationImpl().apply(block)
-}
-
-fun TsTypeParameterDeclaration.tsTypeParameterDeclaration(block: TsTypeParameterDeclaration.() -> Unit): TsTypeParameterDeclaration {
-    return TsTypeParameterDeclarationImpl().apply(block)
-}
-
-fun TsTypeParameter.tsTypeParameter(block: TsTypeParameter.() -> Unit): TsTypeParameter {
-    return TsTypeParameterImpl().apply(block)
-}
-
-fun TsTypeParameterInstantiation.tsTypeParameterInstantiation(block: TsTypeParameterInstantiation.() -> Unit): TsTypeParameterInstantiation {
-    return TsTypeParameterInstantiationImpl().apply(block)
-}
-
-fun TsParameterProperty.tsParameterProperty(block: TsParameterProperty.() -> Unit): TsParameterProperty {
-    return TsParameterPropertyImpl().apply(block)
-}
-
-fun TsTupleElement.tsTupleElement(block: TsTupleElement.() -> Unit): TsTupleElement {
-    return TsTupleElementImpl().apply(block)
-}
-
-fun TsInterfaceBody.tsInterfaceBody(block: TsInterfaceBody.() -> Unit): TsInterfaceBody {
-    return TsInterfaceBodyImpl().apply(block)
-}
-
-fun TsExpressionWithTypeArguments.tsExpressionWithTypeArguments(block: TsExpressionWithTypeArguments.() -> Unit): TsExpressionWithTypeArguments {
-    return TsExpressionWithTypeArgumentsImpl().apply(block)
-}
-
-fun TsEnumMember.tsEnumMember(block: TsEnumMember.() -> Unit): TsEnumMember {
-    return TsEnumMemberImpl().apply(block)
 }

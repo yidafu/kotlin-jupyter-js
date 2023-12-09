@@ -4,7 +4,6 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.JsonClassDiscriminator
 
 @SwcDslMarker
-
 annotation class SwcDslMarker
 
 typealias Record<T, S> = Map<T, String>
@@ -34,35 +33,145 @@ class JsonifyLiteral {
 
 @SwcDslMarker
 @Serializable
-open class ParseOptions : ParserConfig(), BaseParseOptions {
-//    override var comments: Boolean? = null
-//    override var script: Boolean? = null
+class Plugin
 
-    /**
-     * [JscTarget]
-     */
-//    override var target: String? = null
+@SwcDslMarker
+@Serializable
+class JsMinifyOptions {
+    var compress: Union.U2<TerserCompressOptions, Boolean>? = null
+    var format: JsFormatOptions? = null
+    var mangle: Union.U2<TerserMangleOptions, Boolean>? = null
+    var ecma: TerserEcmaVersion? = null
+    var keep_classnames: Boolean? = null
+    var keep_fnames: Boolean? = null
+    var module: Boolean? = null
+    var safari10: Boolean? = null
+    var toplevel: Union.U2<String, Boolean>? = null
+    var sourceMap: Boolean? = null
+    var outputPath: String? = null
+    var inlineSourcesContent: Boolean? = null
 }
 
 /**
- * subtypes: [BaseParseOptions]
+ * These properties are mostly not implemented yet,
+ * but it exists to support passing terser config to swc minify
+ * without modification.
  */
+@SwcDslMarker
 @Serializable
-open class ParserConfig : BaseParseOptions {
-    override var comments: Boolean? = null
-    override var script: Boolean? = null
-
-    /**
-     * [JscTarget]
-     */
-    override var target: String? = null
+class JsFormatOptions {
+    var asciiOnly: Boolean? = null
+    var beautify: Boolean? = null
+    var braces: Boolean? = null
+    var comments: String? = null
+    var ecma: TerserEcmaVersion? = null
+    var indentLevel: Int? = null
+    var indentStart: Int? = null
+    var inlineScript: Int? = null
+    var keepNumbers: Int? = null
+    var keepQuotedProps: Boolean? = null
+    var maxLineLen: Union.U2<
+        Int, /**
+         *literal is: false
+         */
+        Int,
+        >? = null
+    var preamble: String? = null
+    var quoteKeys: Boolean? = null
+    var quoteStyle: Boolean? = null
+    var preserveAnnotations: Boolean? = null
+    var safari10: Boolean? = null
+    var semicolons: Boolean? = null
+    var shebang: Boolean? = null
+    var webkit: Boolean? = null
+    var wrapIife: Boolean? = null
+    var wrapFuncArgs: Boolean? = null
 }
+
+@SwcDslMarker
+@Serializable
+class TerserCompressOptions {
+    var arguments: Boolean? = null
+    var arrows: Boolean? = null
+    var booleans: Boolean? = null
+    var booleans_as_integers: Boolean? = null
+    var collapse_vars: Boolean? = null
+    var comparisons: Boolean? = null
+    var computed_props: Boolean? = null
+    var conditionals: Boolean? = null
+    var dead_code: Boolean? = null
+    var defaults: Boolean? = null
+    var directives: Boolean? = null
+    var drop_console: Boolean? = null
+    var drop_debugger: Boolean? = null
+    var ecma: TerserEcmaVersion? = null
+    var evaluate: Boolean? = null
+    var expression: Boolean? = null
+    var global_defs: Map<String, String>? = null
+    var hoist_funs: Boolean? = null
+    var hoist_props: Boolean? = null
+    var hoist_vars: Boolean? = null
+    var ie8: Boolean? = null
+    var if_return: Boolean? = null
+    var jsInline: Int? = null
+    var join_vars: Boolean? = null
+    var keep_classnames: Boolean? = null
+    var keep_fargs: Boolean? = null
+    var keep_fnames: Boolean? = null
+    var keep_infinity: Boolean? = null
+    var loops: Boolean? = null
+    var negate_iife: Boolean? = null
+    var passes: Int? = null
+    var properties: Boolean? = null
+    var pure_getters: Union.U2<String, Boolean>? = null
+    var pure_funcs: Array<String>? = null
+    var reduce_funcs: Boolean? = null
+    var reduce_vars: Boolean? = null
+    var sequences: Boolean? = null
+    var side_effects: Boolean? = null
+    var switches: Boolean? = null
+    var top_retain: Union.U2<String, Array<String>>? = null
+    var toplevel: Union.U2<String, Boolean>? = null
+    var typeofs: Boolean? = null
+    var unsafe: Boolean? = null
+    var unsafe_passes: Boolean? = null
+    var unsafe_arrows: Boolean? = null
+    var unsafe_comps: Boolean? = null
+    var unsafe_function: Boolean? = null
+    var unsafe_math: Boolean? = null
+    var unsafe_symbols: Boolean? = null
+    var unsafe_methods: Boolean? = null
+    var unsafe_proto: Boolean? = null
+    var unsafe_regexp: Boolean? = null
+    var unsafe_undefined: Boolean? = null
+    var unused: Boolean? = null
+    var const_to_let: Boolean? = null
+    var module: Boolean? = null
+}
+
+@SwcDslMarker
+@Serializable
+class TerserMangleOptions {
+    var props: TerserManglePropertiesOptions? = null
+    var toplevel: Union.U2<String, Boolean>? = null
+    var keep_classnames: Boolean? = null
+    var keep_fnames: Boolean? = null
+    var keep_private_props: Boolean? = null
+    var ie8: Boolean? = null
+    var safari10: Boolean? = null
+    var reserved: Array<String>? = null
+}
+
+@SwcDslMarker
+@Serializable
+class TerserManglePropertiesOptions
 
 /**
  * Programmatic options.
  */
+@SwcDslMarker
 @Serializable
-open class Options : Config() {
+class Options : Config {
     var script: Boolean? = null
     var cwd: String? = null
     var caller: CallerOptions? = null
@@ -77,33 +186,59 @@ open class Options : Config() {
     var sourceFileName: String? = null
     var sourceRoot: String? = null
     var plugin: Plugin? = null
-    var isModule: Union.U2<Boolean, /**
+    var isModule: Union.U2<
+        Boolean, /**
          *literal is: "unknown"
-         */String>? = null
+         */
+        String,
+        >? = null
     var outputPath: String? = null
+    override var test: Union.U2<String, Array<String>>? = null
+    override var exclude: Union.U2<String, Array<String>>? = null
+    override var env: EnvConfig? = null
+    override var jsc: JscConfig? = null
+    override var module: ModuleConfig? = null
+    override var minify: Boolean? = null
+    override var sourceMaps: Union.U2<
+        Boolean, /**
+         *literal is: "inline"
+         */
+        String,
+        >? = null
+    override var inlineSourcesContent: Boolean? = null
+}
+
+@SwcDslMarker
+@Serializable
+class CallerOptions {
+    var name: String? = null
 }
 
 /**
- * .swcrc
+ * Configuration ported from babel-preset-env
  */
+@SwcDslMarker
 @Serializable
-open class Config {
-    var test: Union.U2<String, Array<String>>? = null
-    var exclude: Union.U2<String, Array<String>>? = null
-    var env: EnvConfig? = null
-    var jsc: JscConfig? = null
-    var module: ModuleConfig? = null
-    var minify: Boolean? = null
-    var sourceMaps: Union.U2<Boolean, /**
-         *literal is: "inline"
-         */String>? = null
-    var inlineSourcesContent: Boolean? = null
+class EnvConfig {
+    var mode: String? = null
+    var debug: Boolean? = null
+    var dynamicImport: Boolean? = null
+    var loose: Boolean? = null
+    var skip: Array<String>? = null
+    var include: Array<String>? = null
+    var exclude: Array<String>? = null
+    var coreJs: String? = null
+    var targets: Union.U2<String, Map<String, String>>? = null
+    var path: String? = null
+    var shippedProposals: Boolean? = null
+    var forceAllTransforms: Boolean? = null
 }
 
+@SwcDslMarker
 @Serializable
-open class JscConfig {
+class JscConfig {
     var loose: Boolean? = null
-    var parser: TsParserConfig? = null
+    var parser: ParserConfig? = null
     var transform: TransformConfig? = null
     var externalHelpers: Boolean? = null
     var target: String? = null
@@ -115,18 +250,30 @@ open class JscConfig {
     var preserveAllComments: Boolean? = null
 }
 
+@OptIn(ExperimentalSerializationApi::class)
+@SwcDslMarker
 @Serializable
-open class TsParserConfig : ParserConfig() {
-    // conflict with @SerialName
-    var syntax: String? = "typescript"
+@SerialName("typescript")
+@JsonClassDiscriminator("syntax")
+class TsParserConfig : ParserConfig {
+//   var syntax : String? = null
     var tsx: Boolean? = null
     var decorators: Boolean? = null
     var dynamicImport: Boolean? = null
+    override var comments: Boolean? = null
+    override var script: Boolean? = null
+    override var target: /**
+     * [JscTarget]
+     */String? = null
 }
 
-open class EsParserConfig : ParserConfig() {
-    // conflict with @SerialName
-    var syntax: String? = "ecmascript"
+@OptIn(ExperimentalSerializationApi::class)
+@SwcDslMarker
+@Serializable
+@SerialName("ecmascript")
+@JsonClassDiscriminator("syntax")
+class EsParserConfig : ParserConfig {
+//   var syntax : String? = null
     var jsx: Boolean? = null
     var numericSeparator: Boolean? = null
     var classPrivateProperty: Boolean? = null
@@ -143,45 +290,193 @@ open class EsParserConfig : ParserConfig() {
     var importMeta: Boolean? = null
     var topLevelAwait: Boolean? = null
     var importAssertions: Boolean? = null
+    override var comments: Boolean? = null
+    override var script: Boolean? = null
+    override var target: /**
+     * [JscTarget]
+     */String? = null
 }
 
-open class BaseModuleConfig {
-    var strict: Boolean? = null
-    var strictMode: Boolean? = null
-    var lazy: Union.U2<Boolean, Array<String>>? = null
-    var noInterop: Boolean? = null
-    var importInterop: String? = null
-    var exportInteropAnnotation: Boolean? = null
-    var ignoreDynamic: Boolean? = null
-    var allowTopLevelThis: Boolean? = null
-    var preserveImportMeta: Boolean? = null
+/**
+ * Options for transform.
+ */
+@SwcDslMarker
+@Serializable
+class TransformConfig {
+    var react: ReactConfig? = null
+    var constModules: ConstModulesConfig? = null
+    var optimizer: OptimizerConfig? = null
+    var legacyDecorator: Boolean? = null
+    var decoratorMetadata: Boolean? = null
+    var treatConstEnumAsEnum: Boolean? = null
+    var useDefineForClassFields: Boolean? = null
 }
 
-open class Es6Config : BaseModuleConfig(), ModuleConfig {
+@SwcDslMarker
+@Serializable
+class ReactConfig {
+    var pragma: String? = null
+    var pragmaFrag: String? = null
+    var throwIfNamespace: Boolean? = null
+    var development: Boolean? = null
+    var useBuiltins: Boolean? = null
+    var refresh: Boolean? = null
+    var runtime: String? = null
+    var importSource: String? = null
+}
+
+/**
+ *  - `import { DEBUG } from '@ember/env-flags';`
+ *  - `import { FEATURE_A, FEATURE_B } from '@ember/features';`
+ *
+ * See: https://github.com/swc-project/swc/issues/18#issuecomment-466272558
+ */
+@SwcDslMarker
+@Serializable
+class ConstModulesConfig {
+    var globals: Map<String, Map<String, String>>? = null
+}
+
+@SwcDslMarker
+@Serializable
+class OptimizerConfig {
+    var simplify: Boolean? = null
+    var globals: GlobalPassOption? = null
+    var jsonify: JsonifyLiteral? = null
+}
+
+/**
+ * Options for inline-global pass.
+ */
+@SwcDslMarker
+@Serializable
+class GlobalPassOption {
+    var vars: Record<String, String>? = null
+    var envs: Array<String>? = null
+    var typeofs: Record<String, String>? = null
+}
+
+@SwcDslMarker
+@Serializable
+class Es6Config : BaseModuleConfig, ModuleConfig {
     // conflict with @SerialName
     //   var type : String? = null
+    override var strict: Boolean? = null
+    override var strictMode: Boolean? = null
+    override var lazy: Union.U2<Boolean, Array<String>>? = null
+    override var noInterop: Boolean? = null
+    override var importInterop: String? = null
+    override var exportInteropAnnotation: Boolean? = null
+    override var ignoreDynamic: Boolean? = null
+    override var allowTopLevelThis: Boolean? = null
+    override var preserveImportMeta: Boolean? = null
 }
 
-open class NodeNextConfig : BaseModuleConfig(), ModuleConfig {
+@SwcDslMarker
+@Serializable
+class NodeNextConfig : BaseModuleConfig, ModuleConfig {
     // conflict with @SerialName
     //   var type : String? = null
+    override var strict: Boolean? = null
+    override var strictMode: Boolean? = null
+    override var lazy: Union.U2<Boolean, Array<String>>? = null
+    override var noInterop: Boolean? = null
+    override var importInterop: String? = null
+    override var exportInteropAnnotation: Boolean? = null
+    override var ignoreDynamic: Boolean? = null
+    override var allowTopLevelThis: Boolean? = null
+    override var preserveImportMeta: Boolean? = null
 }
 
-open class CommonJsConfig : BaseModuleConfig(), ModuleConfig {
+@SwcDslMarker
+@Serializable
+class CommonJsConfig : BaseModuleConfig, ModuleConfig {
     // conflict with @SerialName
     //   var type : String? = null
+    override var strict: Boolean? = null
+    override var strictMode: Boolean? = null
+    override var lazy: Union.U2<Boolean, Array<String>>? = null
+    override var noInterop: Boolean? = null
+    override var importInterop: String? = null
+    override var exportInteropAnnotation: Boolean? = null
+    override var ignoreDynamic: Boolean? = null
+    override var allowTopLevelThis: Boolean? = null
+    override var preserveImportMeta: Boolean? = null
 }
 
-open class UmdConfig : BaseModuleConfig(), ModuleConfig {
+@SwcDslMarker
+@Serializable
+class UmdConfig : BaseModuleConfig, ModuleConfig {
     // conflict with @SerialName
     //   var type : String? = null
     var globals: Map<String, String>? = null
+    override var strict: Boolean? = null
+    override var strictMode: Boolean? = null
+    override var lazy: Union.U2<Boolean, Array<String>>? = null
+    override var noInterop: Boolean? = null
+    override var importInterop: String? = null
+    override var exportInteropAnnotation: Boolean? = null
+    override var ignoreDynamic: Boolean? = null
+    override var allowTopLevelThis: Boolean? = null
+    override var preserveImportMeta: Boolean? = null
 }
 
-open class AmdConfig : BaseModuleConfig(), ModuleConfig {
+@SwcDslMarker
+@Serializable
+class AmdConfig : BaseModuleConfig, ModuleConfig {
     // conflict with @SerialName
     //   var type : String? = null
     var moduleId: String? = null
+    override var strict: Boolean? = null
+    override var strictMode: Boolean? = null
+    override var lazy: Union.U2<Boolean, Array<String>>? = null
+    override var noInterop: Boolean? = null
+    override var importInterop: String? = null
+    override var exportInteropAnnotation: Boolean? = null
+    override var ignoreDynamic: Boolean? = null
+    override var allowTopLevelThis: Boolean? = null
+    override var preserveImportMeta: Boolean? = null
+}
+
+@SwcDslMarker
+@Serializable
+class SystemjsConfig : ModuleConfig {
+    // conflict with @SerialName
+    //   var type : String? = null
+    var allowTopLevelThis: Boolean? = null
+}
+
+@SwcDslMarker
+@Serializable
+class Output {
+    var code: String? = null
+    var map: String? = null
+}
+
+@SwcDslMarker
+@Serializable
+class MatchPattern
+
+@SwcDslMarker
+@Serializable
+class Span {
+    var start: Int? = null
+    var end: Int? = null
+    var ctxt: Int? = null
+}
+
+@SwcDslMarker
+@Serializable
+class ExprOrSpread {
+    var spread: Span? = null
+    var expression: Expression? = null
+}
+
+@SwcDslMarker
+@Serializable
+class Argument {
+    var spread: Span? = null
+    var expression: Expression? = null
 }
 
 /**
@@ -341,12 +636,35 @@ sealed interface BaseParseOptions {
 }
 
 @SwcDslMarker
-@Serializable
-sealed interface ModuleConfig
+interface ParseOptions : BaseParseOptions {
+    override var comments: Boolean?
+    override var script: Boolean?
+    override var target: /**
+     * [JscTarget]
+     */String?
+}
 
-@SwcDslMarker
+/**
+ * subtypes: [BaseParseOptions]
+ */
 @Serializable
-sealed interface ClassMember
+sealed interface ParserConfig : ParseOptions {
+    override var comments: Boolean?
+    override var script: Boolean?
+    override var target: /**
+     * [JscTarget]
+     */String?
+}
+
+/**
+ * subtypes: []
+ */
+interface ModuleConfig
+
+/**
+ * subtypes: []
+ */
+interface ClassMember
 
 /**
  * subtypes: [Statement]
@@ -358,33 +676,40 @@ interface Declaration : Statement
  */
 interface Expression : JSXExpression, Pattern
 
-@SwcDslMarker
-@Serializable
-sealed interface JSXObject
+/**
+ * subtypes: []
+ */
+interface JSXObject
 
-@SwcDslMarker
-@Serializable
-sealed interface JSXExpression
+/**
+ * subtypes: []
+ */
+interface JSXExpression
 
-@SwcDslMarker
-@Serializable
-sealed interface JSXElementName
+/**
+ * subtypes: []
+ */
+interface JSXElementName
 
-@SwcDslMarker
-@Serializable
-sealed interface JSXAttributeOrSpread
+/**
+ * subtypes: []
+ */
+interface JSXAttributeOrSpread
 
-@SwcDslMarker
-@Serializable
-sealed interface JSXAttributeName
+/**
+ * subtypes: []
+ */
+interface JSXAttributeName
 
-@SwcDslMarker
-@Serializable
-sealed interface JSXAttrValue
+/**
+ * subtypes: []
+ */
+interface JSXAttrValue
 
-@SwcDslMarker
-@Serializable
-sealed interface JSXElementChild
+/**
+ * subtypes: []
+ */
+interface JSXElementChild
 
 /**
  * subtypes: [Expression], [JSXAttrValue]
@@ -396,800 +721,366 @@ interface Literal : Expression, JSXAttrValue
  */
 interface ModuleDeclaration : ModuleItem
 
-@SwcDslMarker
-@Serializable
-sealed interface DefaultDecl
+/**
+ * subtypes: []
+ */
+interface DefaultDecl
 
-@SwcDslMarker
-@Serializable
-sealed interface ImportSpecifier
+/**
+ * subtypes: []
+ */
+interface ImportSpecifier
 
-@SwcDslMarker
-@Serializable
-sealed interface ModuleExportName
+/**
+ * subtypes: []
+ */
+interface ModuleExportName
 
-@SwcDslMarker
-@Serializable
-sealed interface ExportSpecifier
+/**
+ * subtypes: []
+ */
+interface ExportSpecifier
 
-@SwcDslMarker
-@Serializable
-sealed interface Program
+/**
+ * subtypes: []
+ */
+interface Program
 
-@SwcDslMarker
-@Serializable
-sealed interface ModuleItem
+/**
+ * subtypes: []
+ */
+interface ModuleItem
 
-@SwcDslMarker
-@Serializable
-sealed interface Pattern
+/**
+ * subtypes: []
+ */
+interface Pattern
 
-@SwcDslMarker
-@Serializable
-sealed interface ObjectPatternProperty
+/**
+ * subtypes: []
+ */
+interface ObjectPatternProperty
 
-@SwcDslMarker
-@Serializable
-sealed interface Property
+/**
+ * subtypes: []
+ */
+interface Property
 
-@SwcDslMarker
-@Serializable
-sealed interface PropertyName
+/**
+ * subtypes: []
+ */
+interface PropertyName
 
 /**
  * subtypes: [ModuleItem]
  */
 interface Statement : ModuleItem
 
-@SwcDslMarker
-@Serializable
-sealed interface TsParameterPropertyParameter
+/**
+ * subtypes: []
+ */
+interface TsParameterPropertyParameter
 
 /**
  * subtypes: [TsTypeQueryExpr], [TsModuleReference]
  */
 interface TsEntityName : TsTypeQueryExpr, TsModuleReference
 
-@SwcDslMarker
-@Serializable
-sealed interface TsTypeElement
+/**
+ * subtypes: []
+ */
+interface TsTypeElement
 
-@SwcDslMarker
-@Serializable
-sealed interface TsType
+/**
+ * subtypes: []
+ */
+interface TsType
 
 /**
  * subtypes: [TsType]
  */
 interface TsFnOrConstructorType : TsType
 
-@SwcDslMarker
-@Serializable
-sealed interface TsFnParameter
+/**
+ * subtypes: []
+ */
+interface TsFnParameter
 
-@SwcDslMarker
-@Serializable
-sealed interface TsThisTypeOrIdent
+/**
+ * subtypes: []
+ */
+interface TsThisTypeOrIdent
 
-@SwcDslMarker
-@Serializable
-sealed interface TsTypeQueryExpr
+/**
+ * subtypes: []
+ */
+interface TsTypeQueryExpr
 
 /**
  * subtypes: [TsType]
  */
 interface TsUnionOrIntersectionType : TsType
 
-@SwcDslMarker
-@Serializable
-sealed interface TsLiteral
+/**
+ * subtypes: []
+ */
+interface TsLiteral
 
-@SwcDslMarker
-@Serializable
-sealed interface TsEnumMemberId
+/**
+ * subtypes: []
+ */
+interface TsEnumMemberId
 
-@SwcDslMarker
-@Serializable
-sealed interface TsNamespaceBody
+/**
+ * subtypes: []
+ */
+interface TsNamespaceBody
 
-@SwcDslMarker
-@Serializable
-sealed interface TsModuleName
+/**
+ * subtypes: []
+ */
+interface TsModuleName
 
-@SwcDslMarker
-@Serializable
-sealed interface TsModuleReference
+/**
+ * subtypes: []
+ */
+interface TsModuleReference
 
-interface Plugin
+/**
+ * .swcrc
+ */
+interface Config {
+/**
+     * Note: The type is string because it follows rust's regex syntax.
+     */
+    var test: Union.U2<String, Array<String>>?
 
-@OptIn(ExperimentalSerializationApi::class)
-@SwcDslMarker
-@Serializable
-@JsonClassDiscriminator("type")
-@SerialName("Plugin")
-class PluginImpl : Plugin
+/**
+     * Note: The type is string because it follows rust's regex syntax.
+     */
+    var exclude: Union.U2<String, Array<String>>?
+    var env: EnvConfig?
+    var jsc: JscConfig?
+    var module: ModuleConfig?
+    var minify: Boolean?
 
-interface JsMinifyOptions {
-    var compress: Union.U2<TerserCompressOptions, Boolean>?
-    var format: JsFormatOptions?
-    var mangle: Union.U2<TerserMangleOptions, Boolean>?
-    var ecma: TerserEcmaVersion?
-    var keep_classnames: Boolean?
-    var keep_fnames: Boolean?
-    var module: Boolean?
-    var safari10: Boolean?
-    var toplevel: Union.U2<String, Boolean>?
-    var sourceMap: Boolean?
-    var outputPath: String?
+/**
+     * - true to generate a sourcemap for the code and include it in the result object.
+     * - "inline" to generate a sourcemap and append it as a data URL to the end of the code, but not include it in the result object.
+     *
+     * `swc-cli` overloads some of these to also affect how maps are written to disk:
+     *
+     * - true will write the map to a .map file on disk
+     * - "inline" will write the file directly, so it will have a data: containing the map
+     * - Note: These options are bit weird, so it may make the most sense to just use true
+     *  and handle the rest in your own code, depending on your use case.
+     */
+    var sourceMaps: Union.U2<
+        Boolean, /**
+         *literal is: "inline"
+         */
+        String,
+        >?
     var inlineSourcesContent: Boolean?
 }
 
+/**
+ * .swcrc
+ */
 @OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-@JsonClassDiscriminator("type")
-@SerialName("JsMinifyOptions")
-class JsMinifyOptionsImpl : JsMinifyOptions {
-    override var compress: Union.U2<TerserCompressOptions, Boolean>? = null
-    override var format: JsFormatOptions? = null
-    override var mangle: Union.U2<TerserMangleOptions, Boolean>? = null
-    override var ecma: TerserEcmaVersion? = null
-    override var keep_classnames: Boolean? = null
-    override var keep_fnames: Boolean? = null
-    override var module: Boolean? = null
-    override var safari10: Boolean? = null
-    override var toplevel: Union.U2<String, Boolean>? = null
-    override var sourceMap: Boolean? = null
-    override var outputPath: String? = null
+@JsonClassDiscriminator("source")
+@SerialName("Config")
+class ConfigImpl : Config {
+    override var test: Union.U2<String, Array<String>>? = null
+    override var exclude: Union.U2<String, Array<String>>? = null
+    override var env: EnvConfig? = null
+    override var jsc: JscConfig? = null
+    override var module: ModuleConfig? = null
+    override var minify: Boolean? = null
+    override var sourceMaps: Union.U2<
+        Boolean, /**
+         *literal is: "inline"
+         */
+        String,
+        >? = null
     override var inlineSourcesContent: Boolean? = null
 }
 
+interface BaseModuleConfig {
 /**
- * These properties are mostly not implemented yet,
- * but it exists to support passing terser config to swc minify
- * without modification.
- */
-interface JsFormatOptions {
-/**
-     * Currently noop.
-     * @default false
-     * @alias ascii_only
-     */
-    var asciiOnly: Boolean?
-
-/**
-     * Currently noop.
-     * @default false
-     */
-    var beautify: Boolean?
-
-/**
-     * Currently noop.
-     * @default false
-     */
-    var braces: Boolean?
-
-/**
-     * - `false`: removes all comments
-     * - `'some'`: preserves some comments
-     * - `'all'`: preserves all comments
-     * @default false
-     */
-    var comments: String?
-
-/**
-     * Currently noop.
-     * @default 5
-     */
-    var ecma: TerserEcmaVersion?
-
-/**
-     * Currently noop.
-     * @alias indent_level
-     */
-    var indentLevel: Int?
-
-/**
-     * Currently noop.
-     * @alias indent_start
-     */
-    var indentStart: Int?
-
-/**
-     * Currently noop.
-     * @alias inline_script
-     */
-    var inlineScript: Int?
-
-/**
-     * Currently noop.
-     * @alias keep_numbers
-     */
-    var keepNumbers: Int?
-
-/**
-     * Currently noop.
-     * @alias keep_quoted_props
-     */
-    var keepQuotedProps: Boolean?
-
-/**
-     * Currently noop.
-     * @alias max_line_len
-     */
-    var maxLineLen: Union.U2<Int, /**
-         *literal is: false
-         */Int>?
-
-/**
-     * Currently noop.
-     */
-    var preamble: String?
-
-/**
-     * Currently noop.
-     * @alias quote_keys
-     */
-    var quoteKeys: Boolean?
-
-/**
-     * Currently noop.
-     * @alias quote_style
-     */
-    var quoteStyle: Boolean?
-
-/**
-     * Currently noop.
-     * @alias preserve_annotations
-     */
-    var preserveAnnotations: Boolean?
-
-/**
-     * Currently noop.
-     */
-    var safari10: Boolean?
-
-/**
-     * Currently noop.
-     */
-    var semicolons: Boolean?
-
-/**
-     * Currently noop.
-     */
-    var shebang: Boolean?
-
-/**
-     * Currently noop.
-     */
-    var webkit: Boolean?
-
-/**
-     * Currently noop.
-     * @alias wrap_iife
-     */
-    var wrapIife: Boolean?
-
-/**
-     * Currently noop.
-     * @alias wrap_func_args
-     */
-    var wrapFuncArgs: Boolean?
-}
-
-/**
- * These properties are mostly not implemented yet,
- * but it exists to support passing terser config to swc minify
- * without modification.
- */
-@OptIn(ExperimentalSerializationApi::class)
-@SwcDslMarker
-@Serializable
-@JsonClassDiscriminator("type")
-@SerialName("JsFormatOptions")
-class JsFormatOptionsImpl : JsFormatOptions {
-    override var asciiOnly: Boolean? = null
-    override var beautify: Boolean? = null
-    override var braces: Boolean? = null
-    override var comments: String? = null
-    override var ecma: TerserEcmaVersion? = null
-    override var indentLevel: Int? = null
-    override var indentStart: Int? = null
-    override var inlineScript: Int? = null
-    override var keepNumbers: Int? = null
-    override var keepQuotedProps: Boolean? = null
-    override var maxLineLen: Union.U2<Int, /**
-         *literal is: false
-         */Int>? = null
-    override var preamble: String? = null
-    override var quoteKeys: Boolean? = null
-    override var quoteStyle: Boolean? = null
-    override var preserveAnnotations: Boolean? = null
-    override var safari10: Boolean? = null
-    override var semicolons: Boolean? = null
-    override var shebang: Boolean? = null
-    override var webkit: Boolean? = null
-    override var wrapIife: Boolean? = null
-    override var wrapFuncArgs: Boolean? = null
-}
-
-interface TerserCompressOptions {
-    var arguments: Boolean?
-    var arrows: Boolean?
-    var booleans: Boolean?
-    var booleans_as_integers: Boolean?
-    var collapse_vars: Boolean?
-    var comparisons: Boolean?
-    var computed_props: Boolean?
-    var conditionals: Boolean?
-    var dead_code: Boolean?
-    var defaults: Boolean?
-    var directives: Boolean?
-    var drop_console: Boolean?
-    var drop_debugger: Boolean?
-    var ecma: TerserEcmaVersion?
-    var evaluate: Boolean?
-    var expression: Boolean?
-    var global_defs: Map<String, String>?
-    var hoist_funs: Boolean?
-    var hoist_props: Boolean?
-    var hoist_vars: Boolean?
-    var ie8: Boolean?
-    var if_return: Boolean?
-    var jsInline: Int?
-    var join_vars: Boolean?
-    var keep_classnames: Boolean?
-    var keep_fargs: Boolean?
-    var keep_fnames: Boolean?
-    var keep_infinity: Boolean?
-    var loops: Boolean?
-    var negate_iife: Boolean?
-    var passes: Int?
-    var properties: Boolean?
-    var pure_getters: Union.U2<String, Boolean>?
-    var pure_funcs: Array<String>?
-    var reduce_funcs: Boolean?
-    var reduce_vars: Boolean?
-    var sequences: Boolean?
-    var side_effects: Boolean?
-    var switches: Boolean?
-    var top_retain: Union.U2<String, Array<String>>?
-    var toplevel: Union.U2<String, Boolean>?
-    var typeofs: Boolean?
-    var unsafe: Boolean?
-    var unsafe_passes: Boolean?
-    var unsafe_arrows: Boolean?
-    var unsafe_comps: Boolean?
-    var unsafe_function: Boolean?
-    var unsafe_math: Boolean?
-    var unsafe_symbols: Boolean?
-    var unsafe_methods: Boolean?
-    var unsafe_proto: Boolean?
-    var unsafe_regexp: Boolean?
-    var unsafe_undefined: Boolean?
-    var unused: Boolean?
-    var const_to_let: Boolean?
-    var module: Boolean?
-}
-
-@OptIn(ExperimentalSerializationApi::class)
-@SwcDslMarker
-@Serializable
-@JsonClassDiscriminator("type")
-@SerialName("TerserCompressOptions")
-class TerserCompressOptionsImpl : TerserCompressOptions {
-    override var arguments: Boolean? = null
-    override var arrows: Boolean? = null
-    override var booleans: Boolean? = null
-    override var booleans_as_integers: Boolean? = null
-    override var collapse_vars: Boolean? = null
-    override var comparisons: Boolean? = null
-    override var computed_props: Boolean? = null
-    override var conditionals: Boolean? = null
-    override var dead_code: Boolean? = null
-    override var defaults: Boolean? = null
-    override var directives: Boolean? = null
-    override var drop_console: Boolean? = null
-    override var drop_debugger: Boolean? = null
-    override var ecma: TerserEcmaVersion? = null
-    override var evaluate: Boolean? = null
-    override var expression: Boolean? = null
-    override var global_defs: Map<String, String>? = null
-    override var hoist_funs: Boolean? = null
-    override var hoist_props: Boolean? = null
-    override var hoist_vars: Boolean? = null
-    override var ie8: Boolean? = null
-    override var if_return: Boolean? = null
-    override var jsInline: Int? = null
-    override var join_vars: Boolean? = null
-    override var keep_classnames: Boolean? = null
-    override var keep_fargs: Boolean? = null
-    override var keep_fnames: Boolean? = null
-    override var keep_infinity: Boolean? = null
-    override var loops: Boolean? = null
-    override var negate_iife: Boolean? = null
-    override var passes: Int? = null
-    override var properties: Boolean? = null
-    override var pure_getters: Union.U2<String, Boolean>? = null
-    override var pure_funcs: Array<String>? = null
-    override var reduce_funcs: Boolean? = null
-    override var reduce_vars: Boolean? = null
-    override var sequences: Boolean? = null
-    override var side_effects: Boolean? = null
-    override var switches: Boolean? = null
-    override var top_retain: Union.U2<String, Array<String>>? = null
-    override var toplevel: Union.U2<String, Boolean>? = null
-    override var typeofs: Boolean? = null
-    override var unsafe: Boolean? = null
-    override var unsafe_passes: Boolean? = null
-    override var unsafe_arrows: Boolean? = null
-    override var unsafe_comps: Boolean? = null
-    override var unsafe_function: Boolean? = null
-    override var unsafe_math: Boolean? = null
-    override var unsafe_symbols: Boolean? = null
-    override var unsafe_methods: Boolean? = null
-    override var unsafe_proto: Boolean? = null
-    override var unsafe_regexp: Boolean? = null
-    override var unsafe_undefined: Boolean? = null
-    override var unused: Boolean? = null
-    override var const_to_let: Boolean? = null
-    override var module: Boolean? = null
-}
-
-interface TerserMangleOptions {
-    var props: TerserManglePropertiesOptions?
-    var toplevel: Union.U2<String, Boolean>?
-    var keep_classnames: Boolean?
-    var keep_fnames: Boolean?
-    var keep_private_props: Boolean?
-    var ie8: Boolean?
-    var safari10: Boolean?
-    var reserved: Array<String>?
-}
-
-@OptIn(ExperimentalSerializationApi::class)
-@SwcDslMarker
-@Serializable
-@JsonClassDiscriminator("type")
-@SerialName("TerserMangleOptions")
-class TerserMangleOptionsImpl : TerserMangleOptions {
-    override var props: TerserManglePropertiesOptions? = null
-    override var toplevel: Union.U2<String, Boolean>? = null
-    override var keep_classnames: Boolean? = null
-    override var keep_fnames: Boolean? = null
-    override var keep_private_props: Boolean? = null
-    override var ie8: Boolean? = null
-    override var safari10: Boolean? = null
-    override var reserved: Array<String>? = null
-}
-
-interface TerserManglePropertiesOptions
-
-@OptIn(ExperimentalSerializationApi::class)
-@SwcDslMarker
-@Serializable
-@JsonClassDiscriminator("type")
-@SerialName("TerserManglePropertiesOptions")
-class TerserManglePropertiesOptionsImpl : TerserManglePropertiesOptions
-
-interface CallerOptions {
-    var name: String?
-}
-
-@OptIn(ExperimentalSerializationApi::class)
-@SwcDslMarker
-@Serializable
-@JsonClassDiscriminator("type")
-@SerialName("CallerOptions")
-class CallerOptionsImpl : CallerOptions {
-    override var name: String? = null
-}
-
-/**
- * Configuration ported from babel-preset-env
- */
-interface EnvConfig {
-    var mode: String?
-    var debug: Boolean?
-    var dynamicImport: Boolean?
-    var loose: Boolean?
-    var skip: Array<String>?
-    var include: Array<String>?
-    var exclude: Array<String>?
-
-/**
-     * The version of the used core js.
+     * By default, when using exports with babel a non-enumerable `__esModule`
+     * property is exported. In some cases this property is used to determine
+     * if the import is the default export or if it contains the default export.
      *
-     */
-    var coreJs: String?
-    var targets: Union.U2<String, Map<String, String>>?
-    var path: String?
-    var shippedProposals: Boolean?
-
-/**
-     * Enable all transforms
-     */
-    var forceAllTransforms: Boolean?
-}
-
-/**
- * Configuration ported from babel-preset-env
- */
-@OptIn(ExperimentalSerializationApi::class)
-@SwcDslMarker
-@Serializable
-@JsonClassDiscriminator("type")
-@SerialName("EnvConfig")
-class EnvConfigImpl : EnvConfig {
-    override var mode: String? = null
-    override var debug: Boolean? = null
-    override var dynamicImport: Boolean? = null
-    override var loose: Boolean? = null
-    override var skip: Array<String>? = null
-    override var include: Array<String>? = null
-    override var exclude: Array<String>? = null
-    override var coreJs: String? = null
-    override var targets: Union.U2<String, Map<String, String>>? = null
-    override var path: String? = null
-    override var shippedProposals: Boolean? = null
-    override var forceAllTransforms: Boolean? = null
-}
-
-/**
- * Options for transform.
- */
-interface TransformConfig {
-/**
-     * Effective only if `syntax` supports ƒ.
-     */
-    var react: ReactConfig?
-    var constModules: ConstModulesConfig?
-
-/**
-     * Defaults to null, which skips optimizer pass.
-     */
-    var optimizer: OptimizerConfig?
-
-/**
-     * https://swc.rs/docs/configuring-swc.html#jsctransformlegacydecorator
-     */
-    var legacyDecorator: Boolean?
-
-/**
-     * https://swc.rs/docs/configuring-swc.html#jsctransformdecoratormetadata
-     */
-    var decoratorMetadata: Boolean?
-    var treatConstEnumAsEnum: Boolean?
-    var useDefineForClassFields: Boolean?
-}
-
-/**
- * Options for transform.
- */
-@OptIn(ExperimentalSerializationApi::class)
-@SwcDslMarker
-@Serializable
-@JsonClassDiscriminator("type")
-@SerialName("TransformConfig")
-class TransformConfigImpl : TransformConfig {
-    override var react: ReactConfig? = null
-    override var constModules: ConstModulesConfig? = null
-    override var optimizer: OptimizerConfig? = null
-    override var legacyDecorator: Boolean? = null
-    override var decoratorMetadata: Boolean? = null
-    override var treatConstEnumAsEnum: Boolean? = null
-    override var useDefineForClassFields: Boolean? = null
-}
-
-interface ReactConfig {
-/**
-     * Replace the function used when compiling JSX expressions.
+     * In order to prevent the __esModule property from being exported, you
+     *  can set the strict option to true.
      *
-     * Defaults to `React.createElement`.
+     * Defaults to `false`.
      */
-    var pragma: String?
+    var strict: Boolean?
 
 /**
-     * Replace the component used when compiling JSX fragments.
+     * Emits 'use strict' directive.
      *
-     * Defaults to `React.Fragment`
+     * Defaults to `true`.
      */
-    var pragmaFrag: String?
+    var strictMode: Boolean?
 
 /**
-     * Toggles whether or not to throw an error if a XML namespaced tag name is used. For example:
-     * `<f:image />`
+     * Changes Babel's compiled import statements to be lazily evaluated when their imported bindings are used for the first time.
      *
-     * Though the JSX spec allows this, it is disabled by default since React's
-     * JSX does not currently have support for it.
+     * This can improve initial load time of your module because evaluating dependencies up
+     *  front is sometimes entirely un-necessary. This is especially the case when implementing
+     *  a library module.
      *
-     */
-    var throwIfNamespace: Boolean?
-
-/**
-     * Toggles plugins that aid in development, such as @swc/plugin-transform-react-jsx-self
-     * and @swc/plugin-transform-react-jsx-source.
      *
-     * Defaults to `false`,
+     * The value of `lazy` has a few possible effects:
      *
-     */
-    var development: Boolean?
-
-/**
-     * Use `Object.assign()` instead of `_extends`. Defaults to false.
-     * @deprecated
-     */
-    var useBuiltins: Boolean?
-
-/**
-     * Enable fast refresh feature for React app
-     */
-    var refresh: Boolean?
-
-/**
-     * jsx runtime
-     */
-    var runtime: String?
-
-/**
-     * Declares the module specifier to be used for importing the `jsx` and `jsxs` factory functions when using `runtime` 'automatic'
-     */
-    var importSource: String?
-}
-
-@OptIn(ExperimentalSerializationApi::class)
-@SwcDslMarker
-@Serializable
-@JsonClassDiscriminator("type")
-@SerialName("ReactConfig")
-class ReactConfigImpl : ReactConfig {
-    override var pragma: String? = null
-    override var pragmaFrag: String? = null
-    override var throwIfNamespace: Boolean? = null
-    override var development: Boolean? = null
-    override var useBuiltins: Boolean? = null
-    override var refresh: Boolean? = null
-    override var runtime: String? = null
-    override var importSource: String? = null
-}
-
-/**
- *  - `import { DEBUG } from '@ember/env-flags';`
- *  - `import { FEATURE_A, FEATURE_B } from '@ember/features';`
- *
- * See: https://github.com/swc-project/swc/issues/18#issuecomment-466272558
- */
-interface ConstModulesConfig {
-    var globals: Map<String, Map<String, String>>?
-}
-
-/**
- *  - `import { DEBUG } from '@ember/env-flags';`
- *  - `import { FEATURE_A, FEATURE_B } from '@ember/features';`
- *
- * See: https://github.com/swc-project/swc/issues/18#issuecomment-466272558
- */
-@OptIn(ExperimentalSerializationApi::class)
-@SwcDslMarker
-@Serializable
-@JsonClassDiscriminator("type")
-@SerialName("ConstModulesConfig")
-class ConstModulesConfigImpl : ConstModulesConfig {
-    override var globals: Map<String, Map<String, String>>? = null
-}
-
-interface OptimizerConfig {
-    var simplify: Boolean?
-    var globals: GlobalPassOption?
-    var jsonify: JsonifyLiteral?
-}
-
-@OptIn(ExperimentalSerializationApi::class)
-@SwcDslMarker
-@Serializable
-@JsonClassDiscriminator("type")
-@SerialName("OptimizerConfig")
-class OptimizerConfigImpl : OptimizerConfig {
-    override var simplify: Boolean? = null
-    override var globals: GlobalPassOption? = null
-    override var jsonify: JsonifyLiteral? = null
-}
-
-/**
- * Options for inline-global pass.
- */
-interface GlobalPassOption {
-/**
-     * Global variables that should be inlined with passed value.
+     *  - `false` - No lazy initialization of any imported module.
+     *  - `true` - Do not lazy-initialize local `./foo` imports, but lazy-init `foo` dependencies.
      *
-     * e.g. `{ __DEBUG__: true }`
-     */
-    var vars: Record<String, String>?
-
-/**
-     * Names of environment variables that should be inlined with the value of corresponding env during build.
+     * Local paths are much more likely to have circular dependencies, which may break if loaded lazily,
+     * so they are not lazy by default, whereas dependencies between independent modules are rarely cyclical.
      *
-     * Defaults to `["NODE_ENV", "SWC_ENV"]`
-     */
-    var envs: Array<String>?
-
-/**
-     * Replaces typeof calls for passed variables with corresponding value
+     *  - `Array<string>` - Lazy-initialize all imports with source matching one of the given strings.
      *
-     * e.g. `{ window: 'object' }`
+     * -----
+     *
+     * The two cases where imports can never be lazy are:
+     *
+     *  - `import "foo";`
+     *
+     * Side-effect imports are automatically non-lazy since their very existence means
+     *  that there is no binding to later kick off initialization.
+     *
+     *  - `export * from "foo"`
+     *
+     * Re-exporting all names requires up-front execution because otherwise there is no
+     * way to know what names need to be exported.
+     *
+     * Defaults to `false`.
      */
-    var typeofs: Record<String, String>?
-}
+    var lazy: Union.U2<Boolean, Array<String>>?
 
 /**
- * Options for inline-global pass.
- */
-@OptIn(ExperimentalSerializationApi::class)
-@SwcDslMarker
-@Serializable
-@JsonClassDiscriminator("type")
-@SerialName("GlobalPassOption")
-class GlobalPassOptionImpl : GlobalPassOption {
-    override var vars: Record<String, String>? = null
-    override var envs: Array<String>? = null
-    override var typeofs: Record<String, String>? = null
-}
+     * @deprecated Use the `importInterop` option instead.
+     *
+     * By default, when using exports with swc a non-enumerable __esModule property is exported.
+     * This property is then used to determine if the import is the default export or if
+     *  it contains the default export.
+     *
+     * In cases where the auto-unwrapping of default is not needed, you can set the noInterop option
+     *  to true to avoid the usage of the interopRequireDefault helper (shown in inline form above).
+     *
+     * Defaults to `false`.
+     */
+    var noInterop: Boolean?
 
-interface SystemjsConfig : ModuleConfig {
-    // conflict with @SerialName
-    //  var type: String?
+/**
+     * Defaults to `swc`.
+     *
+     * CommonJS modules and ECMAScript modules are not fully compatible.
+     * However, compilers, bundlers and JavaScript runtimes developed different strategies
+     * to make them work together as well as possible.
+     *
+     * - `swc` (alias: `babel`)
+     *
+     * When using exports with `swc` a non-enumerable `__esModule` property is exported
+     * This property is then used to determine if the import is the default export
+     * or if it contains the default export.
+     *
+     * ```javascript
+     * import foo from "foo";
+     * import { bar } from "bar";
+     * foo;
+     * bar;
+     *
+     * // Is compiled to ...
+     *
+     * "use strict";
+     *
+     * function _interop_require_default(obj) {
+     *   return obj && obj.__esModule ? obj : { default: obj };
+     * }
+     *
+     * var _foo = _interop_require_default(require("foo"));
+     * var _bar = require("bar");
+     *
+     * _foo.default;
+     * _bar.bar;
+     * ```
+     *
+     * When this import interop is used, if both the imported and the importer module are compiled
+     * with swc they behave as if none of them was compiled.
+     *
+     * This is the default behavior.
+     *
+     * - `node`
+     *
+     * When importing CommonJS files (either directly written in CommonJS, or generated with a compiler)
+     * Node.js always binds the `default` export to the value of `module.exports`.
+     *
+     * ```javascript
+     * import foo from "foo";
+     * import { bar } from "bar";
+     * foo;
+     * bar;
+     *
+     * // Is compiled to ...
+     *
+     * "use strict";
+     *
+     * var _foo = require("foo");
+     * var _bar = require("bar");
+     *
+     * _foo;
+     * _bar.bar;
+     * ```
+     * This is not exactly the same as what Node.js does since swc allows accessing any property of `module.exports`
+     * as a named export, while Node.js only allows importing statically analyzable properties of `module.exports`.
+     * However, any import working in Node.js will also work when compiled with swc using `importInterop: "node"`.
+     *
+     * - `none`
+     *
+     * If you know that the imported file has been transformed with a compiler that stores the `default` export on
+     * `exports.default` (such as swc or Babel), you can safely omit the `_interop_require_default` helper.
+     *
+     * ```javascript
+     * import foo from "foo";
+     * import { bar } from "bar";
+     * foo;
+     * bar;
+     *
+     * // Is compiled to ...
+     *
+     * "use strict";
+     *
+     * var _foo = require("foo");
+     * var _bar = require("bar");
+     *
+     * _foo.default;
+     * _bar.bar;
+     * ```
+     */
+    var importInterop: String?
+
+/**
+     * Emits `cjs-module-lexer` annotation
+     * `cjs-module-lexer` is used in Node.js core for detecting the named exports available when importing a CJS module into ESM.
+     * swc will emit `cjs-module-lexer` detectable annotation with this option enabled.
+     *
+     * Defaults to `true` if import_interop is Node, else `false`
+     */
+    var exportInteropAnnotation: Boolean?
+
+/**
+     * If set to true, dynamic imports will be preserved.
+     */
+    var ignoreDynamic: Boolean?
     var allowTopLevelThis: Boolean?
-}
-
-@OptIn(ExperimentalSerializationApi::class)
-@SwcDslMarker
-@Serializable
-@JsonClassDiscriminator("type")
-@SerialName("systemjs")
-class SystemjsConfigImpl : SystemjsConfig {
-    // conflict with @SerialName
-    //  override var type : String? = "systemjs"
-    override var allowTopLevelThis: Boolean? = null
-}
-
-interface Output {
-/**
-     * Transformed code
-     */
-    var code: String?
-
-/**
-     * Sourcemap (**not** base64 encoded)
-     */
-    var map: String?
-}
-
-@OptIn(ExperimentalSerializationApi::class)
-@SwcDslMarker
-@Serializable
-@JsonClassDiscriminator("type")
-@SerialName("Output")
-class OutputImpl : Output {
-    override var code: String? = null
-    override var map: String? = null
-}
-
-interface MatchPattern
-
-@OptIn(ExperimentalSerializationApi::class)
-@SwcDslMarker
-@Serializable
-@JsonClassDiscriminator("type")
-@SerialName("MatchPattern")
-class MatchPatternImpl : MatchPattern
-
-@SwcDslMarker
-@Serializable
-@SerialName("Span")
-class Span {
-    var start: Int? = null
-    var end: Int? = null
-    var ctxt: Int? = null
+    var preserveImportMeta: Boolean?
 }
 
 sealed interface Node {
@@ -1719,21 +1610,6 @@ class ArrayExpressionImpl : ArrayExpression {
     override var span: Span? = null
 }
 
-interface ExprOrSpread {
-    var spread: Span?
-    var expression: Expression?
-}
-
-@OptIn(ExperimentalSerializationApi::class)
-@SwcDslMarker
-@Serializable
-@JsonClassDiscriminator("type")
-@SerialName("ExprOrSpread")
-class ExprOrSpreadImpl : ExprOrSpread {
-    override var spread: Span? = null
-    override var expression: Expression? = null
-}
-
 interface ObjectExpression : ExpressionBase, Expression {
     // conflict with @SerialName
     //  var type: String?
@@ -1751,21 +1627,6 @@ class ObjectExpressionImpl : ObjectExpression {
     //  override var type : String? = "ObjectExpression"
     override var properties: Array<Union.U2<SpreadElement, Property>>? = null
     override var span: Span? = null
-}
-
-interface Argument {
-    var spread: Span?
-    var expression: Expression?
-}
-
-@OptIn(ExperimentalSerializationApi::class)
-@SwcDslMarker
-@Serializable
-@JsonClassDiscriminator("type")
-@SerialName("Argument")
-class ArgumentImpl : Argument {
-    override var spread: Span? = null
-    override var expression: Expression? = null
 }
 
 interface SpreadElement : Node, JSXAttributeOrSpread {
