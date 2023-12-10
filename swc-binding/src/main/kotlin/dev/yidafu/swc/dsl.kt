@@ -1,4 +1,4 @@
-package dev.yidafu.swc.dsl
+package dev.yidafu.swc
 
 import dev.yidafu.swc.types.*
 
