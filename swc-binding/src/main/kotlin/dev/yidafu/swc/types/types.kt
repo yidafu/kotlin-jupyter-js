@@ -1,5 +1,6 @@
 package dev.yidafu.swc.types
 
+import dev.yidafu.swc.booleanable.*
 import kotlinx.serialization.*
 import kotlinx.serialization.json.JsonClassDiscriminator
 
@@ -8,9 +9,11 @@ annotation class SwcDslMarker
 
 typealias Record<T, S> = Map<T, String>
 
-typealias TerserEcmaVersion = Union.U2<Int, String>
+typealias TerserEcmaVersion = String
 
-typealias TruePlusMinus = Union.U2<Int, String>
+typealias JscTarget = String
+
+typealias TruePlusMinus = BooleanableString
 
 @SwcDslMarker
 @Serializable
@@ -20,7 +23,7 @@ class ExperimentalLiteral {
     var keepImportAttributes: Boolean? = null
     var emitAssertForImportAttributes: Boolean? = null
     var cacheRoot: String? = null
-    var plugins: Array<Union.U2<String, Record<String, Any>>>? = null
+    var plugins: Array<Map<String, Record<String, Any>>>? = null
     var disableBuiltinTransformsForInternalTesting: Boolean? = null
 }
 
@@ -28,7 +31,7 @@ class ExperimentalLiteral {
 @Serializable
 @SerialName("JsonifyLiteral")
 class JsonifyLiteral {
-    var minCost: Int? = null
+    var minCost: Float? = null
 }
 
 @SwcDslMarker
@@ -38,15 +41,20 @@ class Plugin
 @SwcDslMarker
 @Serializable
 class JsMinifyOptions {
-    var compress: Union.U2<TerserCompressOptions, Boolean>? = null
+    @Serializable(BooleanableTerserCompressOptionsSerializer::class)
+    var compress: BooleanableTerserCompressOptions? = null
     var format: JsFormatOptions? = null
-    var mangle: Union.U2<TerserMangleOptions, Boolean>? = null
+
+    @Serializable(BooleanableTerserMangleOptionsSerializer::class)
+    var mangle: BooleanableTerserMangleOptions? = null
     var ecma: TerserEcmaVersion? = null
     var keep_classnames: Boolean? = null
     var keep_fnames: Boolean? = null
     var module: Boolean? = null
     var safari10: Boolean? = null
-    var toplevel: Union.U2<String, Boolean>? = null
+
+    @Serializable(BooleanableStringSerializer::class)
+    var toplevel: BooleanableString? = null
     var sourceMap: Boolean? = null
     var outputPath: String? = null
     var inlineSourcesContent: Boolean? = null
@@ -65,17 +73,14 @@ class JsFormatOptions {
     var braces: Boolean? = null
     var comments: String? = null
     var ecma: TerserEcmaVersion? = null
-    var indentLevel: Int? = null
-    var indentStart: Int? = null
-    var inlineScript: Int? = null
-    var keepNumbers: Int? = null
+    var indentLevel: Float? = null
+    var indentStart: Float? = null
+    var inlineScript: Float? = null
+    var keepNumbers: Float? = null
     var keepQuotedProps: Boolean? = null
-    var maxLineLen: Union.U2<
-        Int, /**
-         *literal is: false
-         */
-        Int,
-        >? = null
+
+    @Serializable(BooleanableFloatSerializer::class)
+    var maxLineLen: BooleanableFloat? = null
     var preamble: String? = null
     var quoteKeys: Boolean? = null
     var quoteStyle: Boolean? = null
@@ -121,17 +126,23 @@ class TerserCompressOptions {
     var keep_infinity: Boolean? = null
     var loops: Boolean? = null
     var negate_iife: Boolean? = null
-    var passes: Int? = null
+    var passes: Float? = null
     var properties: Boolean? = null
-    var pure_getters: Union.U2<String, Boolean>? = null
+
+    @Serializable(BooleanableStringSerializer::class)
+    var pure_getters: BooleanableString? = null
     var pure_funcs: Array<String>? = null
     var reduce_funcs: Boolean? = null
     var reduce_vars: Boolean? = null
     var sequences: Boolean? = null
     var side_effects: Boolean? = null
     var switches: Boolean? = null
-    var top_retain: Union.U2<String, Array<String>>? = null
-    var toplevel: Union.U2<String, Boolean>? = null
+
+    @Serializable(BooleanableStringSerializer::class)
+    var top_retain: BooleanableString? = null
+
+    @Serializable(BooleanableStringSerializer::class)
+    var toplevel: BooleanableString? = null
     var typeofs: Boolean? = null
     var unsafe: Boolean? = null
     var unsafe_passes: Boolean? = null
@@ -153,7 +164,9 @@ class TerserCompressOptions {
 @Serializable
 class TerserMangleOptions {
     var props: TerserManglePropertiesOptions? = null
-    var toplevel: Union.U2<String, Boolean>? = null
+
+    @Serializable(BooleanableStringSerializer::class)
+    var toplevel: BooleanableString? = null
     var keep_classnames: Boolean? = null
     var keep_fnames: Boolean? = null
     var keep_private_props: Boolean? = null
@@ -179,32 +192,32 @@ class Options : Config {
     var root: String? = null
     var rootMode: String? = null
     var envName: String? = null
-    var configFile: Union.U2<String, Boolean>? = null
+
+    @Serializable(BooleanableStringSerializer::class)
+    var configFile: BooleanableString? = null
     var swcrc: Boolean? = null
-    var swcrcRoots: Union.U3<Boolean, MatchPattern, Array<MatchPattern>>? = null
-    var inputSourceMap: Union.U2<Boolean, String>? = null
+
+    @Serializable(BooleanableArrayMatchPatternSerializer::class)
+    var swcrcRoots: BooleanableArrayMatchPattern? = null
+
+    @Serializable(BooleanableStringSerializer::class)
+    var inputSourceMap: BooleanableString? = null
     var sourceFileName: String? = null
     var sourceRoot: String? = null
     var plugin: Plugin? = null
-    var isModule: Union.U2<
-        Boolean, /**
-         *literal is: "unknown"
-         */
-        String,
-        >? = null
+
+    @Serializable(BooleanableStringSerializer::class)
+    var isModule: BooleanableString? = null
     var outputPath: String? = null
-    override var test: Union.U2<String, Array<String>>? = null
-    override var exclude: Union.U2<String, Array<String>>? = null
+    override var test: Array<String>? = null
+    override var exclude: Array<String>? = null
     override var env: EnvConfig? = null
     override var jsc: JscConfig? = null
     override var module: ModuleConfig? = null
     override var minify: Boolean? = null
-    override var sourceMaps: Union.U2<
-        Boolean, /**
-         *literal is: "inline"
-         */
-        String,
-        >? = null
+
+    @Serializable(BooleanableStringSerializer::class)
+    override var sourceMaps: BooleanableString? = null
     override var inlineSourcesContent: Boolean? = null
 }
 
@@ -228,7 +241,7 @@ class EnvConfig {
     var include: Array<String>? = null
     var exclude: Array<String>? = null
     var coreJs: String? = null
-    var targets: Union.U2<String, Map<String, String>>? = null
+    var targets: Map<String, String>? = null
     var path: String? = null
     var shippedProposals: Boolean? = null
     var forceAllTransforms: Boolean? = null
@@ -241,7 +254,7 @@ class JscConfig {
     var parser: ParserConfig? = null
     var transform: TransformConfig? = null
     var externalHelpers: Boolean? = null
-    var target: String? = null
+    var target: JscTarget? = null
     var keepClassNames: Boolean? = null
     var experimental: ExperimentalLiteral? = null
     var baseUrl: String? = null
@@ -250,30 +263,22 @@ class JscConfig {
     var preserveAllComments: Boolean? = null
 }
 
-@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-@SerialName("typescript")
-@JsonClassDiscriminator("syntax")
 class TsParserConfig : ParserConfig {
-//   var syntax : String? = null
+    var syntax: String? = null
     var tsx: Boolean? = null
     var decorators: Boolean? = null
     var dynamicImport: Boolean? = null
     override var comments: Boolean? = null
     override var script: Boolean? = null
-    override var target: /**
-     * [JscTarget]
-     */String? = null
+    override var target: JscTarget? = null
 }
 
-@OptIn(ExperimentalSerializationApi::class)
 @SwcDslMarker
 @Serializable
-@SerialName("ecmascript")
-@JsonClassDiscriminator("syntax")
 class EsParserConfig : ParserConfig {
-//   var syntax : String? = null
+    var syntax: String? = null
     var jsx: Boolean? = null
     var numericSeparator: Boolean? = null
     var classPrivateProperty: Boolean? = null
@@ -292,9 +297,7 @@ class EsParserConfig : ParserConfig {
     var importAssertions: Boolean? = null
     override var comments: Boolean? = null
     override var script: Boolean? = null
-    override var target: /**
-     * [JscTarget]
-     */String? = null
+    override var target: JscTarget? = null
 }
 
 /**
@@ -360,10 +363,12 @@ class GlobalPassOption {
 @Serializable
 class Es6Config : BaseModuleConfig, ModuleConfig {
     // conflict with @SerialName
-    //   var type : String? = null
+    //   var type : Float? = null
     override var strict: Boolean? = null
     override var strictMode: Boolean? = null
-    override var lazy: Union.U2<Boolean, Array<String>>? = null
+
+    @Serializable(BooleanableArrayStringSerializer::class)
+    override var lazy: BooleanableArrayString? = null
     override var noInterop: Boolean? = null
     override var importInterop: String? = null
     override var exportInteropAnnotation: Boolean? = null
@@ -379,7 +384,9 @@ class NodeNextConfig : BaseModuleConfig, ModuleConfig {
     //   var type : String? = null
     override var strict: Boolean? = null
     override var strictMode: Boolean? = null
-    override var lazy: Union.U2<Boolean, Array<String>>? = null
+
+    @Serializable(BooleanableArrayStringSerializer::class)
+    override var lazy: BooleanableArrayString? = null
     override var noInterop: Boolean? = null
     override var importInterop: String? = null
     override var exportInteropAnnotation: Boolean? = null
@@ -395,7 +402,9 @@ class CommonJsConfig : BaseModuleConfig, ModuleConfig {
     //   var type : String? = null
     override var strict: Boolean? = null
     override var strictMode: Boolean? = null
-    override var lazy: Union.U2<Boolean, Array<String>>? = null
+
+    @Serializable(BooleanableArrayStringSerializer::class)
+    override var lazy: BooleanableArrayString? = null
     override var noInterop: Boolean? = null
     override var importInterop: String? = null
     override var exportInteropAnnotation: Boolean? = null
@@ -412,7 +421,9 @@ class UmdConfig : BaseModuleConfig, ModuleConfig {
     var globals: Map<String, String>? = null
     override var strict: Boolean? = null
     override var strictMode: Boolean? = null
-    override var lazy: Union.U2<Boolean, Array<String>>? = null
+
+    @Serializable(BooleanableArrayStringSerializer::class)
+    override var lazy: BooleanableArrayString? = null
     override var noInterop: Boolean? = null
     override var importInterop: String? = null
     override var exportInteropAnnotation: Boolean? = null
@@ -429,7 +440,9 @@ class AmdConfig : BaseModuleConfig, ModuleConfig {
     var moduleId: String? = null
     override var strict: Boolean? = null
     override var strictMode: Boolean? = null
-    override var lazy: Union.U2<Boolean, Array<String>>? = null
+
+    @Serializable(BooleanableArrayStringSerializer::class)
+    override var lazy: BooleanableArrayString? = null
     override var noInterop: Boolean? = null
     override var importInterop: String? = null
     override var exportInteropAnnotation: Boolean? = null
@@ -460,9 +473,9 @@ class MatchPattern
 @SwcDslMarker
 @Serializable
 class Span {
-    var start: Int? = null
-    var end: Int? = null
-    var ctxt: Int? = null
+    var start: Float? = null
+    var end: Float? = null
+    var ctxt: Float? = null
 }
 
 @SwcDslMarker
@@ -477,23 +490,6 @@ class ExprOrSpread {
 class Argument {
     var spread: Span? = null
     var expression: Expression? = null
-}
-
-/**
- * "es3" | "es5" | "es2015" | "es2016" | "es2017" | "es2018" | "es2019" | "es2020" | "es2021" | "es2022" | "esnext"
- */
-object JscTarget {
-    var ES3 = "es3"
-    var ES5 = "es5"
-    var ES2015 = "es2015"
-    var ES2016 = "es2016"
-    var ES2017 = "es2017"
-    var ES2018 = "es2018"
-    var ES2019 = "es2019"
-    var ES2020 = "es2020"
-    var ES2021 = "es2021"
-    var ES2022 = "es2022"
-    var ESNEXT = "esnext"
 }
 
 /**
@@ -630,235 +626,269 @@ object Accessibility {
 sealed interface BaseParseOptions {
     var comments: Boolean?
     var script: Boolean?
-    var target: /**
-     * [JscTarget]
-     */String?
+    var target: JscTarget?
 }
 
 @SwcDslMarker
-interface ParseOptions : BaseParseOptions {
-    override var comments: Boolean?
-    override var script: Boolean?
-    override var target: /**
-     * [JscTarget]
-     */String?
+@Serializable
+open class ParseOptions : ParserConfig, BaseParseOptions {
+    override var comments: Boolean? = null
+    override var script: Boolean? = null
+    override var target: JscTarget? = null
 }
 
 /**
  * subtypes: [BaseParseOptions]
  */
-@Serializable
-sealed interface ParserConfig : ParseOptions {
+@SwcDslMarker
+interface ParserConfig : BaseParseOptions {
     override var comments: Boolean?
     override var script: Boolean?
-    override var target: /**
-     * [JscTarget]
-     */String?
+    override var target: JscTarget?
 }
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface ModuleConfig
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface ClassMember
 
 /**
  * subtypes: [Statement]
  */
+@SwcDslMarker
 interface Declaration : Statement
 
 /**
  * subtypes: [JSXExpression], [Pattern]
  */
+@SwcDslMarker
 interface Expression : JSXExpression, Pattern
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface JSXObject
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface JSXExpression
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface JSXElementName
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface JSXAttributeOrSpread
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface JSXAttributeName
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface JSXAttrValue
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface JSXElementChild
 
 /**
  * subtypes: [Expression], [JSXAttrValue]
  */
+@SwcDslMarker
 interface Literal : Expression, JSXAttrValue
 
 /**
  * subtypes: [ModuleItem]
  */
+@SwcDslMarker
 interface ModuleDeclaration : ModuleItem
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface DefaultDecl
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface ImportSpecifier
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface ModuleExportName
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface ExportSpecifier
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface Program
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface ModuleItem
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface Pattern
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface ObjectPatternProperty
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface Property
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface PropertyName
 
 /**
  * subtypes: [ModuleItem]
  */
+@SwcDslMarker
 interface Statement : ModuleItem
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface TsParameterPropertyParameter
 
 /**
  * subtypes: [TsTypeQueryExpr], [TsModuleReference]
  */
+@SwcDslMarker
 interface TsEntityName : TsTypeQueryExpr, TsModuleReference
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface TsTypeElement
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface TsType
 
 /**
  * subtypes: [TsType]
  */
+@SwcDslMarker
 interface TsFnOrConstructorType : TsType
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface TsFnParameter
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface TsThisTypeOrIdent
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface TsTypeQueryExpr
 
 /**
  * subtypes: [TsType]
  */
+@SwcDslMarker
 interface TsUnionOrIntersectionType : TsType
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface TsLiteral
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface TsEnumMemberId
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface TsNamespaceBody
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface TsModuleName
 
 /**
  * subtypes: []
  */
+@SwcDslMarker
 interface TsModuleReference
 
 /**
  * .swcrc
  */
+@SwcDslMarker
 interface Config {
 /**
      * Note: The type is string because it follows rust's regex syntax.
      */
-    var test: Union.U2<String, Array<String>>?
+    var test: Array<String>?
 
 /**
      * Note: The type is string because it follows rust's regex syntax.
      */
-    var exclude: Union.U2<String, Array<String>>?
+    var exclude: Array<String>?
     var env: EnvConfig?
     var jsc: JscConfig?
     var module: ModuleConfig?
@@ -875,12 +905,8 @@ interface Config {
      * - Note: These options are bit weird, so it may make the most sense to just use true
      *  and handle the rest in your own code, depending on your use case.
      */
-    var sourceMaps: Union.U2<
-        Boolean, /**
-         *literal is: "inline"
-         */
-        String,
-        >?
+    @Serializable(BooleanableStringSerializer::class)
+    var sourceMaps: BooleanableString?
     var inlineSourcesContent: Boolean?
 }
 
@@ -893,21 +919,19 @@ interface Config {
 @JsonClassDiscriminator("source")
 @SerialName("Config")
 class ConfigImpl : Config {
-    override var test: Union.U2<String, Array<String>>? = null
-    override var exclude: Union.U2<String, Array<String>>? = null
+    override var test: Array<String>? = null
+    override var exclude: Array<String>? = null
     override var env: EnvConfig? = null
     override var jsc: JscConfig? = null
     override var module: ModuleConfig? = null
     override var minify: Boolean? = null
-    override var sourceMaps: Union.U2<
-        Boolean, /**
-         *literal is: "inline"
-         */
-        String,
-        >? = null
+
+    @Serializable(BooleanableStringSerializer::class)
+    override var sourceMaps: BooleanableString? = null
     override var inlineSourcesContent: Boolean? = null
 }
 
+@SwcDslMarker
 interface BaseModuleConfig {
 /**
      * By default, when using exports with babel a non-enumerable `__esModule`
@@ -962,7 +986,8 @@ interface BaseModuleConfig {
      *
      * Defaults to `false`.
      */
-    var lazy: Union.U2<Boolean, Array<String>>?
+    @Serializable(BooleanableArrayStringSerializer::class)
+    var lazy: BooleanableArrayString?
 
 /**
      * @deprecated Use the `importInterop` option instead.
@@ -1083,19 +1108,23 @@ interface BaseModuleConfig {
     var preserveImportMeta: Boolean?
 }
 
+@SwcDslMarker
 sealed interface Node {
     // conflict with @SerialName
     //  var type: String?
 }
 
+@SwcDslMarker
 interface HasSpan {
     var span: Span?
 }
 
+@SwcDslMarker
 interface HasDecorator {
     var decorators: Array<Decorator>?
 }
 
+@SwcDslMarker
 interface Class : HasSpan, HasDecorator {
     var body: Array<ClassMember>?
     var superClass: Expression?
@@ -1123,6 +1152,7 @@ class ClassImpl : Class {
     override var decorators: Array<Decorator>? = null
 }
 
+@SwcDslMarker
 interface ClassPropertyBase : Node, HasSpan, HasDecorator {
     var value: Expression?
     var typeAnnotation: TsTypeAnnotation?
@@ -1134,11 +1164,12 @@ interface ClassPropertyBase : Node, HasSpan, HasDecorator {
     var definite: Boolean?
 
     // conflict with @SerialName
-    //  override var type: String?
+    // override  var type: String?
     override var span: Span?
     override var decorators: Array<Decorator>?
 }
 
+@SwcDslMarker
 interface ClassProperty : ClassPropertyBase, ClassMember {
     // conflict with @SerialName
     //  var type: String?
@@ -1180,6 +1211,7 @@ class ClassPropertyImpl : ClassProperty {
     override var decorators: Array<Decorator>? = null
 }
 
+@SwcDslMarker
 interface PrivateProperty : ClassPropertyBase, ClassMember {
     // conflict with @SerialName
     //  var type: String?
@@ -1217,6 +1249,7 @@ class PrivatePropertyImpl : PrivateProperty {
     override var decorators: Array<Decorator>? = null
 }
 
+@SwcDslMarker
 interface Param : Node, HasSpan, HasDecorator {
     // conflict with @SerialName
     //  var type: String?
@@ -1238,11 +1271,12 @@ class ParamImpl : Param {
     override var decorators: Array<Decorator>? = null
 }
 
+@SwcDslMarker
 interface Constructor : Node, HasSpan, ClassMember {
     // conflict with @SerialName
     //  var type: String?
     var key: PropertyName?
-    var params: Array<Union.U2<TsParameterProperty, Param>>?
+    var params: Array<HasDecorator>?
     var body: BlockStatement?
     var accessibility: String?
     var isOptional: Boolean?
@@ -1258,13 +1292,14 @@ class ConstructorImpl : Constructor {
     // conflict with @SerialName
     //  override var type : String? = "Constructor"
     override var key: PropertyName? = null
-    override var params: Array<Union.U2<TsParameterProperty, Param>>? = null
+    override var params: Array<HasDecorator>? = null
     override var body: BlockStatement? = null
     override var accessibility: String? = null
     override var isOptional: Boolean? = null
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface ClassMethodBase : Node, HasSpan {
     var function: Fn?
     var kind: String?
@@ -1275,10 +1310,11 @@ interface ClassMethodBase : Node, HasSpan {
     var isOverride: Boolean?
 
     // conflict with @SerialName
-    //  override var type: String?
+    // override  var type: String?
     override var span: Span?
 }
 
+@SwcDslMarker
 interface ClassMethod : ClassMethodBase, ClassMember {
     // conflict with @SerialName
     //  var type: String?
@@ -1312,6 +1348,7 @@ class ClassMethodImpl : ClassMethod {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface PrivateMethod : ClassMethodBase, ClassMember {
     // conflict with @SerialName
     //  var type: String?
@@ -1345,6 +1382,7 @@ class PrivateMethodImpl : PrivateMethod {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface StaticBlock : Node, HasSpan, ClassMember {
     // conflict with @SerialName
     //  var type: String?
@@ -1364,6 +1402,7 @@ class StaticBlockImpl : StaticBlock {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface Decorator : Node, HasSpan {
     // conflict with @SerialName
     //  var type: String?
@@ -1383,6 +1422,7 @@ class DecoratorImpl : Decorator {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface FunctionDeclaration : Fn, Declaration {
     // conflict with @SerialName
     //  var type: String?
@@ -1418,6 +1458,7 @@ class FunctionDeclarationImpl : FunctionDeclaration {
     override var decorators: Array<Decorator>? = null
 }
 
+@SwcDslMarker
 interface ClassDeclaration : Class, Node, Declaration {
     // conflict with @SerialName
     //  var type: String?
@@ -1453,6 +1494,7 @@ class ClassDeclarationImpl : ClassDeclaration {
     override var decorators: Array<Decorator>? = null
 }
 
+@SwcDslMarker
 interface VariableDeclaration : Node, HasSpan, Declaration {
     // conflict with @SerialName
     //  var type: String?
@@ -1476,6 +1518,7 @@ class VariableDeclarationImpl : VariableDeclaration {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface VariableDeclarator : Node, HasSpan {
     // conflict with @SerialName
     //  var type: String?
@@ -1499,12 +1542,14 @@ class VariableDeclaratorImpl : VariableDeclarator {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface ExpressionBase : Node, HasSpan {
     // conflict with @SerialName
-    //  override var type: String?
+    // override  var type: String?
     override var span: Span?
 }
 
+@SwcDslMarker
 interface Identifier : ExpressionBase, Expression, JSXObject, JSXElementName, JSXAttributeName, ModuleExportName, Property, PropertyName, TsEntityName, TsThisTypeOrIdent, TsEnumMemberId, TsModuleName {
     // conflict with @SerialName
     //  var type: String?
@@ -1526,6 +1571,7 @@ class IdentifierImpl : Identifier {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface OptionalChainingExpression : ExpressionBase, Expression {
     // conflict with @SerialName
     //  var type: String?
@@ -1534,7 +1580,7 @@ interface OptionalChainingExpression : ExpressionBase, Expression {
 /**
      * Call expression or member expression.
      */
-    var base: Union.U2<MemberExpression, OptionalChainingCall>?
+    var base: Expression?
     override var span: Span?
 }
 
@@ -1547,10 +1593,11 @@ class OptionalChainingExpressionImpl : OptionalChainingExpression {
     // conflict with @SerialName
     //  override var type : String? = "OptionalChainingExpression"
     override var questionDotToken: Span? = null
-    override var base: Union.U2<MemberExpression, OptionalChainingCall>? = null
+    override var base: Expression? = null
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface OptionalChainingCall : ExpressionBase {
     // conflict with @SerialName
     //  var type: String?
@@ -1574,6 +1621,7 @@ class OptionalChainingCallImpl : OptionalChainingCall {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface ThisExpression : ExpressionBase, Expression {
     // conflict with @SerialName
     //  var type: String?
@@ -1591,6 +1639,7 @@ class ThisExpressionImpl : ThisExpression {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface ArrayExpression : ExpressionBase, Expression {
     // conflict with @SerialName
     //  var type: String?
@@ -1610,10 +1659,11 @@ class ArrayExpressionImpl : ArrayExpression {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface ObjectExpression : ExpressionBase, Expression {
     // conflict with @SerialName
     //  var type: String?
-    var properties: Array<Union.U2<SpreadElement, Property>>?
+    var properties: Array<Property>?
     override var span: Span?
 }
 
@@ -1625,10 +1675,11 @@ interface ObjectExpression : ExpressionBase, Expression {
 class ObjectExpressionImpl : ObjectExpression {
     // conflict with @SerialName
     //  override var type : String? = "ObjectExpression"
-    override var properties: Array<Union.U2<SpreadElement, Property>>? = null
+    override var properties: Array<Property>? = null
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface SpreadElement : Node, JSXAttributeOrSpread {
     // conflict with @SerialName
     //  var type: String?
@@ -1648,6 +1699,7 @@ class SpreadElementImpl : SpreadElement {
     override var arguments: Expression? = null
 }
 
+@SwcDslMarker
 interface UnaryExpression : ExpressionBase, Expression {
     // conflict with @SerialName
     //  var type: String?
@@ -1669,6 +1721,7 @@ class UnaryExpressionImpl : UnaryExpression {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface UpdateExpression : ExpressionBase, Expression {
     // conflict with @SerialName
     //  var type: String?
@@ -1692,6 +1745,7 @@ class UpdateExpressionImpl : UpdateExpression {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface BinaryExpression : ExpressionBase, Expression {
     // conflict with @SerialName
     //  var type: String?
@@ -1715,6 +1769,7 @@ class BinaryExpressionImpl : BinaryExpression {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface FunctionExpression : Fn, ExpressionBase, Expression, DefaultDecl {
     // conflict with @SerialName
     //  var type: String?
@@ -1748,6 +1803,7 @@ class FunctionExpressionImpl : FunctionExpression {
     override var decorators: Array<Decorator>? = null
 }
 
+@SwcDslMarker
 interface ClassExpression : Class, ExpressionBase, Expression, DefaultDecl {
     // conflict with @SerialName
     //  var type: String?
@@ -1781,11 +1837,12 @@ class ClassExpressionImpl : ClassExpression {
     override var decorators: Array<Decorator>? = null
 }
 
+@SwcDslMarker
 interface AssignmentExpression : ExpressionBase, Expression {
     // conflict with @SerialName
     //  var type: String?
     var operator: String?
-    var left: Union.U2<Expression, Pattern>?
+    var left: Pattern?
     var right: Expression?
     override var span: Span?
 }
@@ -1799,16 +1856,17 @@ class AssignmentExpressionImpl : AssignmentExpression {
     // conflict with @SerialName
     //  override var type : String? = "AssignmentExpression"
     override var operator: String? = null
-    override var left: Union.U2<Expression, Pattern>? = null
+    override var left: Pattern? = null
     override var right: Expression? = null
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface MemberExpression : ExpressionBase, Expression {
     // conflict with @SerialName
     //  var type: String?
     var jsObject: Expression?
-    var property: Union.U3<Identifier, PrivateName, ComputedPropName>?
+    var property: TsModuleName?
     override var span: Span?
 }
 
@@ -1821,15 +1879,16 @@ class MemberExpressionImpl : MemberExpression {
     // conflict with @SerialName
     //  override var type : String? = "MemberExpression"
     override var jsObject: Expression? = null
-    override var property: Union.U3<Identifier, PrivateName, ComputedPropName>? = null
+    override var property: TsModuleName? = null
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface SuperPropExpression : ExpressionBase, Expression {
     // conflict with @SerialName
     //  var type: String?
     var obj: Super?
-    var property: Union.U2<Identifier, ComputedPropName>?
+    var property: TsModuleName?
     override var span: Span?
 }
 
@@ -1842,10 +1901,11 @@ class SuperPropExpressionImpl : SuperPropExpression {
     // conflict with @SerialName
     //  override var type : String? = "SuperPropExpression"
     override var obj: Super? = null
-    override var property: Union.U2<Identifier, ComputedPropName>? = null
+    override var property: TsModuleName? = null
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface ConditionalExpression : ExpressionBase, Expression {
     // conflict with @SerialName
     //  var type: String?
@@ -1869,6 +1929,7 @@ class ConditionalExpressionImpl : ConditionalExpression {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface Super : Node, HasSpan {
     // conflict with @SerialName
     //  var type: String?
@@ -1886,6 +1947,7 @@ class SuperImpl : Super {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface Import : Node, HasSpan {
     // conflict with @SerialName
     //  var type: String?
@@ -1903,10 +1965,11 @@ class ImportImpl : Import {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface CallExpression : ExpressionBase, Expression {
     // conflict with @SerialName
     //  var type: String?
-    var callee: Union.U3<Super, Import, Expression>?
+    var callee: Pattern?
     var arguments: Array<Argument>?
     var typeArguments: TsTypeParameterInstantiation?
     override var span: Span?
@@ -1920,12 +1983,13 @@ interface CallExpression : ExpressionBase, Expression {
 class CallExpressionImpl : CallExpression {
     // conflict with @SerialName
     //  override var type : String? = "CallExpression"
-    override var callee: Union.U3<Super, Import, Expression>? = null
+    override var callee: Pattern? = null
     override var arguments: Array<Argument>? = null
     override var typeArguments: TsTypeParameterInstantiation? = null
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface NewExpression : ExpressionBase, Expression {
     // conflict with @SerialName
     //  var type: String?
@@ -1949,6 +2013,7 @@ class NewExpressionImpl : NewExpression {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface SequenceExpression : ExpressionBase, Expression {
     // conflict with @SerialName
     //  var type: String?
@@ -1968,11 +2033,12 @@ class SequenceExpressionImpl : SequenceExpression {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface ArrowFunctionExpression : ExpressionBase, Expression {
     // conflict with @SerialName
     //  var type: String?
     var params: Array<Pattern>?
-    var body: Union.U2<BlockStatement, Expression>?
+    var body: Pattern?
     var async: Boolean?
     var generator: Boolean?
     var typeParameters: TsTypeParameterDeclaration?
@@ -1989,7 +2055,7 @@ class ArrowFunctionExpressionImpl : ArrowFunctionExpression {
     // conflict with @SerialName
     //  override var type : String? = "ArrowFunctionExpression"
     override var params: Array<Pattern>? = null
-    override var body: Union.U2<BlockStatement, Expression>? = null
+    override var body: Pattern? = null
     override var async: Boolean? = null
     override var generator: Boolean? = null
     override var typeParameters: TsTypeParameterDeclaration? = null
@@ -1997,6 +2063,7 @@ class ArrowFunctionExpressionImpl : ArrowFunctionExpression {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface YieldExpression : ExpressionBase, Expression {
     // conflict with @SerialName
     //  var type: String?
@@ -2018,6 +2085,7 @@ class YieldExpressionImpl : YieldExpression {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface MetaProperty : Node, HasSpan, Expression {
     // conflict with @SerialName
     //  var type: String?
@@ -2037,6 +2105,7 @@ class MetaPropertyImpl : MetaProperty {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface AwaitExpression : ExpressionBase, Expression {
     // conflict with @SerialName
     //  var type: String?
@@ -2056,6 +2125,7 @@ class AwaitExpressionImpl : AwaitExpression {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TemplateLiteral : ExpressionBase, Expression {
     // conflict with @SerialName
     //  var type: String?
@@ -2077,6 +2147,7 @@ class TemplateLiteralImpl : TemplateLiteral {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TaggedTemplateExpression : ExpressionBase, Expression {
     // conflict with @SerialName
     //  var type: String?
@@ -2100,6 +2171,7 @@ class TaggedTemplateExpressionImpl : TaggedTemplateExpression {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TemplateElement : ExpressionBase {
     // conflict with @SerialName
     //  var type: String?
@@ -2123,6 +2195,7 @@ class TemplateElementImpl : TemplateElement {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface ParenthesisExpression : ExpressionBase, Expression {
     // conflict with @SerialName
     //  var type: String?
@@ -2142,6 +2215,7 @@ class ParenthesisExpressionImpl : ParenthesisExpression {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface Fn : HasSpan, HasDecorator {
     var params: Array<Param>?
     var body: BlockStatement?
@@ -2153,14 +2227,16 @@ interface Fn : HasSpan, HasDecorator {
     override var decorators: Array<Decorator>?
 }
 
+@SwcDslMarker
 interface PatternBase : Node, HasSpan {
     var typeAnnotation: TsTypeAnnotation?
 
     // conflict with @SerialName
-    //  override var type: String?
+    // override  var type: String?
     override var span: Span?
 }
 
+@SwcDslMarker
 interface PrivateName : ExpressionBase, Expression {
     // conflict with @SerialName
     //  var type: String?
@@ -2180,6 +2256,7 @@ class PrivateNameImpl : PrivateName {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface JSXMemberExpression : Node, Expression, JSXObject, JSXElementName {
     // conflict with @SerialName
     //  var type: String?
@@ -2202,6 +2279,7 @@ class JSXMemberExpressionImpl : JSXMemberExpression {
 /**
  * XML-based namespace syntax:
  */
+@SwcDslMarker
 interface JSXNamespacedName : Node, Expression, JSXElementName, JSXAttributeName {
     // conflict with @SerialName
     //  var type: String?
@@ -2224,6 +2302,7 @@ class JSXNamespacedNameImpl : JSXNamespacedName {
     override var name: Identifier? = null
 }
 
+@SwcDslMarker
 interface JSXEmptyExpression : Node, HasSpan, Expression, JSXExpression {
     // conflict with @SerialName
     //  var type: String?
@@ -2241,6 +2320,7 @@ class JSXEmptyExpressionImpl : JSXEmptyExpression {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface JSXExpressionContainer : Node, HasSpan, JSXAttrValue, JSXElementChild {
     // conflict with @SerialName
     //  var type: String?
@@ -2260,6 +2340,7 @@ class JSXExpressionContainerImpl : JSXExpressionContainer {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface JSXSpreadChild : Node, HasSpan, JSXElementChild {
     // conflict with @SerialName
     //  var type: String?
@@ -2279,6 +2360,7 @@ class JSXSpreadChildImpl : JSXSpreadChild {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface JSXOpeningElement : Node, HasSpan {
     // conflict with @SerialName
     //  var type: String?
@@ -2304,6 +2386,7 @@ class JSXOpeningElementImpl : JSXOpeningElement {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface JSXClosingElement : Node, HasSpan {
     // conflict with @SerialName
     //  var type: String?
@@ -2323,6 +2406,7 @@ class JSXClosingElementImpl : JSXClosingElement {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface JSXAttribute : Node, HasSpan, JSXAttributeOrSpread {
     // conflict with @SerialName
     //  var type: String?
@@ -2344,6 +2428,7 @@ class JSXAttributeImpl : JSXAttribute {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface JSXText : Node, HasSpan, JSXElementChild, Literal {
     // conflict with @SerialName
     //  var type: String?
@@ -2365,6 +2450,7 @@ class JSXTextImpl : JSXText {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface JSXElement : Node, HasSpan, Expression, JSXAttrValue, JSXElementChild {
     // conflict with @SerialName
     //  var type: String?
@@ -2388,6 +2474,7 @@ class JSXElementImpl : JSXElement {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface JSXFragment : Node, HasSpan, Expression, JSXAttrValue, JSXElementChild {
     // conflict with @SerialName
     //  var type: String?
@@ -2411,6 +2498,7 @@ class JSXFragmentImpl : JSXFragment {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface JSXOpeningFragment : Node, HasSpan {
     // conflict with @SerialName
     //  var type: String?
@@ -2428,6 +2516,7 @@ class JSXOpeningFragmentImpl : JSXOpeningFragment {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface JSXClosingFragment : Node, HasSpan {
     // conflict with @SerialName
     //  var type: String?
@@ -2445,6 +2534,7 @@ class JSXClosingFragmentImpl : JSXClosingFragment {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface StringLiteral : Node, HasSpan, Literal, ModuleExportName, PropertyName, TsLiteral, TsEnumMemberId, TsModuleName {
     // conflict with @SerialName
     //  var type: String?
@@ -2466,6 +2556,7 @@ class StringLiteralImpl : StringLiteral {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface BooleanLiteral : Node, HasSpan, Literal, TsLiteral {
     // conflict with @SerialName
     //  var type: String?
@@ -2485,6 +2576,7 @@ class BooleanLiteralImpl : BooleanLiteral {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface NullLiteral : Node, HasSpan, Literal {
     // conflict with @SerialName
     //  var type: String?
@@ -2502,6 +2594,7 @@ class NullLiteralImpl : NullLiteral {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface RegExpLiteral : Node, HasSpan, Literal {
     // conflict with @SerialName
     //  var type: String?
@@ -2523,10 +2616,11 @@ class RegExpLiteralImpl : RegExpLiteral {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface NumericLiteral : Node, HasSpan, Literal, PropertyName, TsLiteral {
     // conflict with @SerialName
     //  var type: String?
-    var value: Int?
+    var value: Float?
     var raw: String?
     override var span: Span?
 }
@@ -2539,11 +2633,12 @@ interface NumericLiteral : Node, HasSpan, Literal, PropertyName, TsLiteral {
 class NumericLiteralImpl : NumericLiteral {
     // conflict with @SerialName
     //  override var type : String? = "NumericLiteral"
-    override var value: Int? = null
+    override var value: Float? = null
     override var raw: String? = null
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface BigIntLiteral : Node, HasSpan, Literal, PropertyName, TsLiteral {
     // conflict with @SerialName
     //  var type: String?
@@ -2565,6 +2660,7 @@ class BigIntLiteralImpl : BigIntLiteral {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface ExportDefaultExpression : Node, HasSpan, ModuleDeclaration {
     // conflict with @SerialName
     //  var type: String?
@@ -2584,6 +2680,7 @@ class ExportDefaultExpressionImpl : ExportDefaultExpression {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface ExportDeclaration : Node, HasSpan, ModuleDeclaration {
     // conflict with @SerialName
     //  var type: String?
@@ -2603,6 +2700,7 @@ class ExportDeclarationImpl : ExportDeclaration {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface ImportDeclaration : Node, HasSpan, ModuleDeclaration {
     // conflict with @SerialName
     //  var type: String?
@@ -2628,6 +2726,7 @@ class ImportDeclarationImpl : ImportDeclaration {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface ExportAllDeclaration : Node, HasSpan, ModuleDeclaration {
     // conflict with @SerialName
     //  var type: String?
@@ -2653,6 +2752,7 @@ class ExportAllDeclarationImpl : ExportAllDeclaration {
  * - `export { foo } from 'mod'`
  * - `export { foo as bar } from 'mod'`
  */
+@SwcDslMarker
 interface ExportNamedDeclaration : Node, HasSpan, ModuleDeclaration {
     // conflict with @SerialName
     //  var type: String?
@@ -2682,6 +2782,7 @@ class ExportNamedDeclarationImpl : ExportNamedDeclaration {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface ExportDefaultDeclaration : Node, HasSpan, ModuleDeclaration {
     // conflict with @SerialName
     //  var type: String?
@@ -2704,6 +2805,7 @@ class ExportDefaultDeclarationImpl : ExportDefaultDeclaration {
 /**
  * e.g. `import foo from 'mod.js'`
  */
+@SwcDslMarker
 interface ImportDefaultSpecifier : Node, HasSpan, ImportSpecifier {
     // conflict with @SerialName
     //  var type: String?
@@ -2729,6 +2831,7 @@ class ImportDefaultSpecifierImpl : ImportDefaultSpecifier {
 /**
  * e.g. `import * as foo from 'mod.js'`.
  */
+@SwcDslMarker
 interface ImportNamespaceSpecifier : Node, HasSpan, ImportSpecifier {
     // conflict with @SerialName
     //  var type: String?
@@ -2760,6 +2863,7 @@ class ImportNamespaceSpecifierImpl : ImportNamespaceSpecifier {
  *
  * local = bar, imported = Some(foo) for
  */
+@SwcDslMarker
 interface NamedImportSpecifier : Node, HasSpan, ImportSpecifier {
     // conflict with @SerialName
     //  var type: String?
@@ -2795,6 +2899,7 @@ class NamedImportSpecifierImpl : NamedImportSpecifier {
 /**
  * `export * as foo from 'src';`
  */
+@SwcDslMarker
 interface ExportNamespaceSpecifier : Node, HasSpan, ExportSpecifier {
     // conflict with @SerialName
     //  var type: String?
@@ -2817,6 +2922,7 @@ class ExportNamespaceSpecifierImpl : ExportNamespaceSpecifier {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface ExportDefaultSpecifier : Node, HasSpan, ExportSpecifier {
     // conflict with @SerialName
     //  var type: String?
@@ -2836,6 +2942,7 @@ class ExportDefaultSpecifierImpl : ExportDefaultSpecifier {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface NamedExportSpecifier : Node, HasSpan, ExportSpecifier {
     // conflict with @SerialName
     //  var type: String?
@@ -2863,6 +2970,7 @@ class NamedExportSpecifierImpl : NamedExportSpecifier {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface HasInterpreter {
 /**
      * e.g. `/usr/bin/node` for `#!/usr/bin/node`
@@ -2879,6 +2987,7 @@ class HasInterpreterImpl : HasInterpreter {
     override var interpreter: String? = null
 }
 
+@SwcDslMarker
 interface Module : Node, HasSpan, HasInterpreter, Program {
     // conflict with @SerialName
     //  var type: String?
@@ -2904,6 +3013,7 @@ class ModuleImpl : Module {
     override var interpreter: String? = null
 }
 
+@SwcDslMarker
 interface Script : Node, HasSpan, HasInterpreter, Program {
     // conflict with @SerialName
     //  var type: String?
@@ -2929,6 +3039,7 @@ class ScriptImpl : Script {
     override var interpreter: String? = null
 }
 
+@SwcDslMarker
 interface BindingIdentifier : PatternBase, Pattern, TsParameterPropertyParameter, TsFnParameter {
     // conflict with @SerialName
     //  var type: String?
@@ -2952,6 +3063,7 @@ class BindingIdentifierImpl : BindingIdentifier {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface ArrayPattern : PatternBase, Pattern, TsFnParameter {
     // conflict with @SerialName
     //  var type: String?
@@ -2975,6 +3087,7 @@ class ArrayPatternImpl : ArrayPattern {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface ObjectPattern : PatternBase, Pattern, TsFnParameter {
     // conflict with @SerialName
     //  var type: String?
@@ -2998,6 +3111,7 @@ class ObjectPatternImpl : ObjectPattern {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface AssignmentPattern : PatternBase, Pattern, TsParameterPropertyParameter {
     // conflict with @SerialName
     //  var type: String?
@@ -3021,6 +3135,7 @@ class AssignmentPatternImpl : AssignmentPattern {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface RestElement : PatternBase, Pattern, ObjectPatternProperty, TsFnParameter {
     // conflict with @SerialName
     //  var type: String?
@@ -3047,6 +3162,7 @@ class RestElementImpl : RestElement {
 /**
  * `{key: value}`
  */
+@SwcDslMarker
 interface KeyValuePatternProperty : Node, ObjectPatternProperty {
     // conflict with @SerialName
     //  var type: String?
@@ -3072,6 +3188,7 @@ class KeyValuePatternPropertyImpl : KeyValuePatternProperty {
 /**
  * `{key}` or `{key = value}`
  */
+@SwcDslMarker
 interface AssignmentPatternProperty : Node, HasSpan, ObjectPatternProperty {
     // conflict with @SerialName
     //  var type: String?
@@ -3096,12 +3213,14 @@ class AssignmentPatternPropertyImpl : AssignmentPatternProperty {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface PropBase : Node {
     var key: PropertyName?
     // conflict with @SerialName
-    //  override var type: String?
+    // override  var type: String?
 }
 
+@SwcDslMarker
 interface KeyValueProperty : PropBase, Property {
     // conflict with @SerialName
     //  var type: String?
@@ -3121,6 +3240,7 @@ class KeyValuePropertyImpl : KeyValueProperty {
     override var key: PropertyName? = null
 }
 
+@SwcDslMarker
 interface AssignmentProperty : Node, Property {
     // conflict with @SerialName
     //  var type: String?
@@ -3140,6 +3260,7 @@ class AssignmentPropertyImpl : AssignmentProperty {
     override var value: Expression? = null
 }
 
+@SwcDslMarker
 interface GetterProperty : PropBase, HasSpan, Property {
     // conflict with @SerialName
     //  var type: String?
@@ -3163,6 +3284,7 @@ class GetterPropertyImpl : GetterProperty {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface SetterProperty : PropBase, HasSpan, Property {
     // conflict with @SerialName
     //  var type: String?
@@ -3186,6 +3308,7 @@ class SetterPropertyImpl : SetterProperty {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface MethodProperty : PropBase, Fn, Property {
     // conflict with @SerialName
     //  var type: String?
@@ -3219,6 +3342,7 @@ class MethodPropertyImpl : MethodProperty {
     override var decorators: Array<Decorator>? = null
 }
 
+@SwcDslMarker
 interface ComputedPropName : Node, HasSpan, PropertyName {
     // conflict with @SerialName
     //  var type: String?
@@ -3238,6 +3362,7 @@ class ComputedPropNameImpl : ComputedPropName {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface BlockStatement : Node, HasSpan, Statement {
     // conflict with @SerialName
     //  var type: String?
@@ -3257,6 +3382,7 @@ class BlockStatementImpl : BlockStatement {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface ExpressionStatement : Node, HasSpan, Statement {
     // conflict with @SerialName
     //  var type: String?
@@ -3276,6 +3402,7 @@ class ExpressionStatementImpl : ExpressionStatement {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface EmptyStatement : Node, HasSpan, ClassMember, Statement {
     // conflict with @SerialName
     //  var type: String?
@@ -3293,6 +3420,7 @@ class EmptyStatementImpl : EmptyStatement {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface DebuggerStatement : Node, HasSpan, Statement {
     // conflict with @SerialName
     //  var type: String?
@@ -3310,6 +3438,7 @@ class DebuggerStatementImpl : DebuggerStatement {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface WithStatement : Node, HasSpan, Statement {
     // conflict with @SerialName
     //  var type: String?
@@ -3331,6 +3460,7 @@ class WithStatementImpl : WithStatement {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface ReturnStatement : Node, HasSpan, Statement {
     // conflict with @SerialName
     //  var type: String?
@@ -3350,6 +3480,7 @@ class ReturnStatementImpl : ReturnStatement {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface LabeledStatement : Node, HasSpan, Statement {
     // conflict with @SerialName
     //  var type: String?
@@ -3371,6 +3502,7 @@ class LabeledStatementImpl : LabeledStatement {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface BreakStatement : Node, HasSpan, Statement {
     // conflict with @SerialName
     //  var type: String?
@@ -3390,6 +3522,7 @@ class BreakStatementImpl : BreakStatement {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface ContinueStatement : Node, HasSpan, Statement {
     // conflict with @SerialName
     //  var type: String?
@@ -3409,6 +3542,7 @@ class ContinueStatementImpl : ContinueStatement {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface IfStatement : Node, HasSpan, Statement {
     // conflict with @SerialName
     //  var type: String?
@@ -3432,6 +3566,7 @@ class IfStatementImpl : IfStatement {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface SwitchStatement : Node, HasSpan, Statement {
     // conflict with @SerialName
     //  var type: String?
@@ -3453,6 +3588,7 @@ class SwitchStatementImpl : SwitchStatement {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface ThrowStatement : Node, HasSpan, Statement {
     // conflict with @SerialName
     //  var type: String?
@@ -3472,6 +3608,7 @@ class ThrowStatementImpl : ThrowStatement {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TryStatement : Node, HasSpan, Statement {
     // conflict with @SerialName
     //  var type: String?
@@ -3495,6 +3632,7 @@ class TryStatementImpl : TryStatement {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface WhileStatement : Node, HasSpan, Statement {
     // conflict with @SerialName
     //  var type: String?
@@ -3516,6 +3654,7 @@ class WhileStatementImpl : WhileStatement {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface DoWhileStatement : Node, HasSpan, Statement {
     // conflict with @SerialName
     //  var type: String?
@@ -3537,10 +3676,11 @@ class DoWhileStatementImpl : DoWhileStatement {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface ForStatement : Node, HasSpan, Statement {
     // conflict with @SerialName
     //  var type: String?
-    var init: Union.U2<VariableDeclaration, Expression>?
+    var init: Pattern?
     var test: Expression?
     var update: Expression?
     var body: Statement?
@@ -3555,17 +3695,18 @@ interface ForStatement : Node, HasSpan, Statement {
 class ForStatementImpl : ForStatement {
     // conflict with @SerialName
     //  override var type : String? = "ForStatement"
-    override var init: Union.U2<VariableDeclaration, Expression>? = null
+    override var init: Pattern? = null
     override var test: Expression? = null
     override var update: Expression? = null
     override var body: Statement? = null
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface ForInStatement : Node, HasSpan, Statement {
     // conflict with @SerialName
     //  var type: String?
-    var left: Union.U2<VariableDeclaration, Pattern>?
+    var left: Pattern?
     var right: Expression?
     var body: Statement?
     override var span: Span?
@@ -3579,12 +3720,13 @@ interface ForInStatement : Node, HasSpan, Statement {
 class ForInStatementImpl : ForInStatement {
     // conflict with @SerialName
     //  override var type : String? = "ForInStatement"
-    override var left: Union.U2<VariableDeclaration, Pattern>? = null
+    override var left: Pattern? = null
     override var right: Expression? = null
     override var body: Statement? = null
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface ForOfStatement : Node, HasSpan, Statement {
     // conflict with @SerialName
     //  var type: String?
@@ -3594,7 +3736,7 @@ interface ForOfStatement : Node, HasSpan, Statement {
      *  es2018 for-await-of statements, e.g., `for await (const x of xs) {`
      */
     var await: Span?
-    var left: Union.U2<VariableDeclaration, Pattern>?
+    var left: Pattern?
     var right: Expression?
     var body: Statement?
     override var span: Span?
@@ -3609,12 +3751,13 @@ class ForOfStatementImpl : ForOfStatement {
     // conflict with @SerialName
     //  override var type : String? = "ForOfStatement"
     override var await: Span? = null
-    override var left: Union.U2<VariableDeclaration, Pattern>? = null
+    override var left: Pattern? = null
     override var right: Expression? = null
     override var body: Statement? = null
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface SwitchCase : Node, HasSpan {
     // conflict with @SerialName
     //  var type: String?
@@ -3639,6 +3782,7 @@ class SwitchCaseImpl : SwitchCase {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface CatchClause : Node, HasSpan {
     // conflict with @SerialName
     //  var type: String?
@@ -3663,6 +3807,7 @@ class CatchClauseImpl : CatchClause {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsTypeAnnotation : Node, HasSpan {
     // conflict with @SerialName
     //  var type: String?
@@ -3682,6 +3827,7 @@ class TsTypeAnnotationImpl : TsTypeAnnotation {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsTypeParameterDeclaration : Node, HasSpan {
     // conflict with @SerialName
     //  var type: String?
@@ -3701,6 +3847,7 @@ class TsTypeParameterDeclarationImpl : TsTypeParameterDeclaration {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsTypeParameter : Node, HasSpan {
     // conflict with @SerialName
     //  var type: String?
@@ -3728,6 +3875,7 @@ class TsTypeParameterImpl : TsTypeParameter {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsTypeParameterInstantiation : Node, HasSpan {
     // conflict with @SerialName
     //  var type: String?
@@ -3747,6 +3895,7 @@ class TsTypeParameterInstantiationImpl : TsTypeParameterInstantiation {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsParameterProperty : Node, HasSpan, HasDecorator {
     // conflict with @SerialName
     //  var type: String?
@@ -3774,6 +3923,7 @@ class TsParameterPropertyImpl : TsParameterProperty {
     override var decorators: Array<Decorator>? = null
 }
 
+@SwcDslMarker
 interface TsQualifiedName : Node, TsEntityName {
     // conflict with @SerialName
     //  var type: String?
@@ -3793,6 +3943,7 @@ class TsQualifiedNameImpl : TsQualifiedName {
     override var right: Identifier? = null
 }
 
+@SwcDslMarker
 interface TsCallSignatureDeclaration : Node, HasSpan, TsTypeElement {
     // conflict with @SerialName
     //  var type: String?
@@ -3816,6 +3967,7 @@ class TsCallSignatureDeclarationImpl : TsCallSignatureDeclaration {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsConstructSignatureDeclaration : Node, HasSpan, TsTypeElement {
     // conflict with @SerialName
     //  var type: String?
@@ -3839,6 +3991,7 @@ class TsConstructSignatureDeclarationImpl : TsConstructSignatureDeclaration {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsPropertySignature : Node, HasSpan, TsTypeElement {
     // conflict with @SerialName
     //  var type: String?
@@ -3872,6 +4025,7 @@ class TsPropertySignatureImpl : TsPropertySignature {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsGetterSignature : Node, HasSpan, TsTypeElement {
     // conflict with @SerialName
     //  var type: String?
@@ -3899,6 +4053,7 @@ class TsGetterSignatureImpl : TsGetterSignature {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsSetterSignature : Node, HasSpan, TsTypeElement {
     // conflict with @SerialName
     //  var type: String?
@@ -3926,6 +4081,7 @@ class TsSetterSignatureImpl : TsSetterSignature {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsMethodSignature : Node, HasSpan, TsTypeElement {
     // conflict with @SerialName
     //  var type: String?
@@ -3957,6 +4113,7 @@ class TsMethodSignatureImpl : TsMethodSignature {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsIndexSignature : Node, HasSpan, ClassMember, TsTypeElement {
     // conflict with @SerialName
     //  var type: String?
@@ -3982,6 +4139,7 @@ class TsIndexSignatureImpl : TsIndexSignature {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsKeywordType : Node, HasSpan, TsType {
     // conflict with @SerialName
     //  var type: String?
@@ -4001,6 +4159,7 @@ class TsKeywordTypeImpl : TsKeywordType {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsThisType : Node, HasSpan, TsType, TsThisTypeOrIdent {
     // conflict with @SerialName
     //  var type: String?
@@ -4018,6 +4177,7 @@ class TsThisTypeImpl : TsThisType {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsFunctionType : Node, HasSpan, TsFnOrConstructorType {
     // conflict with @SerialName
     //  var type: String?
@@ -4041,6 +4201,7 @@ class TsFunctionTypeImpl : TsFunctionType {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsConstructorType : Node, HasSpan, TsFnOrConstructorType {
     // conflict with @SerialName
     //  var type: String?
@@ -4066,6 +4227,7 @@ class TsConstructorTypeImpl : TsConstructorType {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsTypeReference : Node, HasSpan, TsType {
     // conflict with @SerialName
     //  var type: String?
@@ -4087,6 +4249,7 @@ class TsTypeReferenceImpl : TsTypeReference {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsTypePredicate : Node, HasSpan, TsType {
     // conflict with @SerialName
     //  var type: String?
@@ -4110,6 +4273,7 @@ class TsTypePredicateImpl : TsTypePredicate {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsImportType : Node, HasSpan, TsType, TsTypeQueryExpr {
     // conflict with @SerialName
     //  var type: String?
@@ -4136,6 +4300,7 @@ class TsImportTypeImpl : TsImportType {
 /**
  * `typeof` operator
  */
+@SwcDslMarker
 interface TsTypeQuery : Node, HasSpan, TsType {
     // conflict with @SerialName
     //  var type: String?
@@ -4160,6 +4325,7 @@ class TsTypeQueryImpl : TsTypeQuery {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsTypeLiteral : Node, HasSpan, TsType {
     // conflict with @SerialName
     //  var type: String?
@@ -4179,6 +4345,7 @@ class TsTypeLiteralImpl : TsTypeLiteral {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsArrayType : Node, HasSpan, TsType {
     // conflict with @SerialName
     //  var type: String?
@@ -4198,6 +4365,7 @@ class TsArrayTypeImpl : TsArrayType {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsTupleType : Node, HasSpan, TsType {
     // conflict with @SerialName
     //  var type: String?
@@ -4217,6 +4385,7 @@ class TsTupleTypeImpl : TsTupleType {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsTupleElement : Node, HasSpan {
     // conflict with @SerialName
     //  var type: String?
@@ -4238,6 +4407,7 @@ class TsTupleElementImpl : TsTupleElement {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsOptionalType : Node, HasSpan, TsType {
     // conflict with @SerialName
     //  var type: String?
@@ -4257,6 +4427,7 @@ class TsOptionalTypeImpl : TsOptionalType {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsRestType : Node, HasSpan, TsType {
     // conflict with @SerialName
     //  var type: String?
@@ -4276,6 +4447,7 @@ class TsRestTypeImpl : TsRestType {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsUnionType : Node, HasSpan, TsUnionOrIntersectionType {
     // conflict with @SerialName
     //  var type: String?
@@ -4295,6 +4467,7 @@ class TsUnionTypeImpl : TsUnionType {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsIntersectionType : Node, HasSpan, TsUnionOrIntersectionType {
     // conflict with @SerialName
     //  var type: String?
@@ -4314,6 +4487,7 @@ class TsIntersectionTypeImpl : TsIntersectionType {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsConditionalType : Node, HasSpan, TsType {
     // conflict with @SerialName
     //  var type: String?
@@ -4339,6 +4513,7 @@ class TsConditionalTypeImpl : TsConditionalType {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsInferType : Node, HasSpan, TsType {
     // conflict with @SerialName
     //  var type: String?
@@ -4358,6 +4533,7 @@ class TsInferTypeImpl : TsInferType {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsParenthesizedType : Node, HasSpan, TsType {
     // conflict with @SerialName
     //  var type: String?
@@ -4377,6 +4553,7 @@ class TsParenthesizedTypeImpl : TsParenthesizedType {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsTypeOperator : Node, HasSpan, TsType {
     // conflict with @SerialName
     //  var type: String?
@@ -4398,6 +4575,7 @@ class TsTypeOperatorImpl : TsTypeOperator {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsIndexedAccessType : Node, HasSpan, TsType {
     // conflict with @SerialName
     //  var type: String?
@@ -4421,6 +4599,7 @@ class TsIndexedAccessTypeImpl : TsIndexedAccessType {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsMappedType : Node, HasSpan, TsType {
     // conflict with @SerialName
     //  var type: String?
@@ -4448,6 +4627,7 @@ class TsMappedTypeImpl : TsMappedType {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsLiteralType : Node, HasSpan, TsType {
     // conflict with @SerialName
     //  var type: String?
@@ -4467,6 +4647,7 @@ class TsLiteralTypeImpl : TsLiteralType {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsTemplateLiteralType : Node, HasSpan, TsLiteral {
     // conflict with @SerialName
     //  var type: String?
@@ -4479,7 +4660,7 @@ interface TsTemplateLiteralType : Node, HasSpan, TsLiteral {
 @SwcDslMarker
 @Serializable
 @JsonClassDiscriminator("type")
-@SerialName("TsTemplateLiteralType")
+@SerialName("TemplateLiteral")
 class TsTemplateLiteralTypeImpl : TsTemplateLiteralType {
     // conflict with @SerialName
     //  override var type : String? = "TemplateLiteral"
@@ -4488,6 +4669,7 @@ class TsTemplateLiteralTypeImpl : TsTemplateLiteralType {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsInterfaceDeclaration : Node, HasSpan, Declaration, DefaultDecl {
     // conflict with @SerialName
     //  var type: String?
@@ -4515,6 +4697,7 @@ class TsInterfaceDeclarationImpl : TsInterfaceDeclaration {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsInterfaceBody : Node, HasSpan {
     // conflict with @SerialName
     //  var type: String?
@@ -4534,6 +4717,7 @@ class TsInterfaceBodyImpl : TsInterfaceBody {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsExpressionWithTypeArguments : Node, HasSpan {
     // conflict with @SerialName
     //  var type: String?
@@ -4555,6 +4739,7 @@ class TsExpressionWithTypeArgumentsImpl : TsExpressionWithTypeArguments {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsTypeAliasDeclaration : Node, HasSpan, Declaration {
     // conflict with @SerialName
     //  var type: String?
@@ -4580,6 +4765,7 @@ class TsTypeAliasDeclarationImpl : TsTypeAliasDeclaration {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsEnumDeclaration : Node, HasSpan, Declaration {
     // conflict with @SerialName
     //  var type: String?
@@ -4605,6 +4791,7 @@ class TsEnumDeclarationImpl : TsEnumDeclaration {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsEnumMember : Node, HasSpan {
     // conflict with @SerialName
     //  var type: String?
@@ -4626,6 +4813,7 @@ class TsEnumMemberImpl : TsEnumMember {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsModuleDeclaration : Node, HasSpan, Declaration {
     // conflict with @SerialName
     //  var type: String?
@@ -4651,6 +4839,7 @@ class TsModuleDeclarationImpl : TsModuleDeclaration {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsModuleBlock : Node, HasSpan, TsNamespaceBody {
     // conflict with @SerialName
     //  var type: String?
@@ -4670,6 +4859,7 @@ class TsModuleBlockImpl : TsModuleBlock {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsNamespaceDeclaration : Node, HasSpan, TsNamespaceBody {
     // conflict with @SerialName
     //  var type: String?
@@ -4695,6 +4885,7 @@ class TsNamespaceDeclarationImpl : TsNamespaceDeclaration {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsImportEqualsDeclaration : Node, HasSpan, ModuleDeclaration {
     // conflict with @SerialName
     //  var type: String?
@@ -4722,6 +4913,7 @@ class TsImportEqualsDeclarationImpl : TsImportEqualsDeclaration {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsExternalModuleReference : Node, HasSpan, TsModuleReference {
     // conflict with @SerialName
     //  var type: String?
@@ -4741,6 +4933,7 @@ class TsExternalModuleReferenceImpl : TsExternalModuleReference {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsExportAssignment : Node, HasSpan, ModuleDeclaration {
     // conflict with @SerialName
     //  var type: String?
@@ -4760,6 +4953,7 @@ class TsExportAssignmentImpl : TsExportAssignment {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsNamespaceExportDeclaration : Node, HasSpan, ModuleDeclaration {
     // conflict with @SerialName
     //  var type: String?
@@ -4779,6 +4973,7 @@ class TsNamespaceExportDeclarationImpl : TsNamespaceExportDeclaration {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsAsExpression : ExpressionBase, Expression {
     // conflict with @SerialName
     //  var type: String?
@@ -4800,6 +4995,7 @@ class TsAsExpressionImpl : TsAsExpression {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsSatisfiesExpression : ExpressionBase, Expression {
     // conflict with @SerialName
     //  var type: String?
@@ -4821,6 +5017,7 @@ class TsSatisfiesExpressionImpl : TsSatisfiesExpression {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsInstantiation : Node, HasSpan, Expression {
     // conflict with @SerialName
     //  var type: String?
@@ -4842,6 +5039,7 @@ class TsInstantiationImpl : TsInstantiation {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsTypeAssertion : ExpressionBase, Expression {
     // conflict with @SerialName
     //  var type: String?
@@ -4863,6 +5061,7 @@ class TsTypeAssertionImpl : TsTypeAssertion {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsConstAssertion : ExpressionBase, Expression {
     // conflict with @SerialName
     //  var type: String?
@@ -4882,6 +5081,7 @@ class TsConstAssertionImpl : TsConstAssertion {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface TsNonNullExpression : ExpressionBase, Expression {
     // conflict with @SerialName
     //  var type: String?
@@ -4901,6 +5101,7 @@ class TsNonNullExpressionImpl : TsNonNullExpression {
     override var span: Span? = null
 }
 
+@SwcDslMarker
 interface Invalid : Node, HasSpan, Expression, Pattern {
     // conflict with @SerialName
     //  var type: String?
