@@ -82,11 +82,11 @@ export  const KeepInterface = [
 
 export const propTypeRewrite = new Map<string, string>([
     ['global_defs', 'Map<String, String>'],
-    ['top_retain', "Union.U2<String, Array<String>>"],
+    ['top_retain', "BooleanableString"],
     ['sequences', 'Boolean'],
-    ['pure_getters', "Union.U2<String, Boolean>"],
-    ['toplevel', "Union.U2<String, Boolean>"],
-    ['targets', "Union.U2<String, Map<String, String>>"]
+    ['pure_getters', "BooleanableString"],
+    ['toplevel', "BooleanableString"],
+    ['targets', "Map<String, String>"]
 ])
 
 export const noImplRootList: string[] = [

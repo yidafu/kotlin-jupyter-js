@@ -1,3 +1,4 @@
+import { removeComment } from './utils'
 import { KotlinClassProperty } from './kotlin-class'
 import {
     ArrayTypeNode, BooleanLiteral, Identifier, IndexSignatureDeclaration, InterfaceDeclaration, IntersectionTypeNode, LiteralLikeNode, LiteralTypeNode, ObjectFlags, ParenthesizedTypeNode, Project, PropertySignature, StringLiteral, TupleTypeNode, Type, TypeAliasDeclaration, TypeFormatFlags, TypeLiteralNode, TypeNode, TypeReferenceNode, UnionTypeNode, ts, NumericLiteral
@@ -12,7 +13,7 @@ const jsKotlinTypeMap = new Map([
 export const kotlinTypes = [
     'package dev.yidafu.swc.types',
     '',
-    'import dev.yidafu.swc.types.Union',
+    'import dev.yidafu.swc.booleanable.*',
     'import kotlinx.serialization.*',
     'import kotlinx.serialization.json.JsonClassDiscriminator',
     '',
@@ -35,6 +36,19 @@ export function typeLiteralGetProps(t: TypeLiteralNode) {
     })
 }
 
+export function transformTupleType(list: string[]) {
+    const types = list.map(s => removeComment(s))
+    if (types.includes('Boolean')) {
+        let anotherType = types.find(t => t !== 'Boolean') ?? 'ErrorType'
+        anotherType = anotherType.replace('<', '').replace('>', '')
+        return `Booleanable${anotherType}`
+    }
+    if (types?.includes('Float') && types.includes('String')) {
+        return "String"
+    }
+    return `Union.U2<${list[0]}, ${list[1]}>`
+}
+
 export function getType(typeNode: TypeNode<ts.TypeNode>): string {
     const typeName = typeNode?.getKindName();
     switch (typeName) {
@@ -54,6 +68,15 @@ export function getType(typeNode: TypeNode<ts.TypeNode>): string {
                     const comment = '  /** literal is: ' + typeNode?.forEachChildAsArray().map(c => c.getText()).join(",") + ' */';
                     const type = comment.includes('"') ? "String" : "Int"
                     return `${comment}${type}`
+                }
+                if (uniqueTypes.length == 2) {
+                    if (`Array<${uniqueTypes[0]}>` === uniqueTypes[1]) {
+                        return uniqueTypes[1]
+                    }
+                    const types = uniqueTypes.map(t => removeComment(t!!))
+                    if (types.includes('Boolean')) {
+                        return transformTupleType(types)
+                    }
                 }
                 return `Union.U${uniqueTypes.length}<${uniqueTypes.join(', ')}>`
             } else {
@@ -95,7 +118,10 @@ export function getType(typeNode: TypeNode<ts.TypeNode>): string {
             if (typeNode instanceof TupleTypeNode) {
                 const elements = typeNode.getElements()
                 if (elements.length == 2) {
-                    return `Union.U2<${getType(elements[0])}, ${getType(elements[1])}>`
+                    const type1 = getType(elements[0])
+                    const type2 = getType(elements[1])
+                    const list = [type1, type2].map(t => removeComment(t))
+                    return transformTupleType(list)
                 }
             }
             return 'TODO'
@@ -120,7 +146,7 @@ export function getType(typeNode: TypeNode<ts.TypeNode>): string {
 
         }
         case "NumberKeyword": {
-            return "Int"
+            return "Float"
         }
         case "StringKeyword": {
             return "String"
@@ -140,8 +166,14 @@ export function getType(typeNode: TypeNode<ts.TypeNode>): string {
             return `Array<${getType(arrNode.getElementTypeNode())}>`
         }
         case "LiteralType": {
-            const comment = '/**\n   *literal is: ' + typeNode?.forEachChildAsArray().map(c => c.getText()).join(",") + '\n   */';
-            const type = comment.includes('"') ? "String" : "Int"
+            const values = typeNode?.forEachChildAsArray().map(c => c.getText())
+            const comment = '/* literal is: ' + values.join(",") + ' */';
+            let type = "Float"
+            // console.log("literal value  ", values)
+            if (values[0].startsWith('"')) type = "String"
+            if (values[0] === 'false' || values[0] === 'true') type = "Boolean"
+            if (/\d+/.test(values[0])) type = "Float"
+            // const type = comment.includes('"') ? "String" : "Int"
             return `${comment}${type}`
             // return `String = ${typeNode.getChildAtIndex(0).getText()}`
         }

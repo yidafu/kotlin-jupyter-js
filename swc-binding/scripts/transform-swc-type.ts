@@ -1,14 +1,18 @@
 import {
-    InterfaceDeclaration, IntersectionTypeNode, LiteralTypeNode, Project, StringLiteral, TypeLiteralNode, TypeReferenceNode, UnionTypeNode, NumericLiteral
+    InterfaceDeclaration, IntersectionTypeNode, LiteralTypeNode, Project, StringLiteral, TypeLiteralNode, TypeReferenceNode, UnionTypeNode, NumericLiteral, TrueLiteral,
+    FalseLiteral,
 } from 'ts-morph'
 import fs from 'fs';
-import { TrueLiteral } from 'ts-morph';
-import { FalseLiteral } from 'ts-morph';
 import debug from 'debug';
-import { getType, kotlinTypes, typeAliasMap, typeLiteralGetProps } from './get-type';
+import { getType, kotlinTypes, transformTupleType, typeAliasMap, typeLiteralGetProps } from './get-type';
+
 import { KotlinClass, KotlinClassProperty, KotlinExtensionFun, addExtensionFun, getAllExtensionFun, kotlinPropertiesAddOverride, mergeKotlinProperties } from './kotlin-class';
-import { ToKotlinClass, kotlinKeywordMap, Literal_Name_Map, KeepInterface, propTypeRewrite, noImplRootList } from './constant';
-import { addRelation, findAllChildrenByParent, findAllGrandChildren, getAll, getAllParents, getParentsByChild, isGrandChild } from './extend-relaction';
+
+import { ToKotlinClass, kotlinKeywordMap, Literal_Name_Map, KeepInterface, propTypeRewrite } from './constant';
+
+import { addRelation, findAllChildrenByParent, findAllGrandChildren, getAll, getAllParents, findParentsByChild, isGrandChild, findAllRelativeByName, findAllDirectChildren } from './extend-relationship';
+import _ from 'lodash'
+import { removeComment } from './utils';
 
 const t = debug('swc:typealias')
 const i = debug('swc:interface')
@@ -35,22 +39,26 @@ const InputPath = [
     "./node_modules/@swc/types/index.d.ts",
     '../src/main/kotlin/dev/yidafu/swc/types/types.kt',
     '../src/main/kotlin/dev/yidafu/swc/types/serializer.kt',
-    '../src/main/kotlin/dev/yidafu/swc/dsl/dsl.kt',
+    '../src/main/kotlin/dev/yidafu/swc/dsl/',
     "./test.ts",
     './ouptput.kt',
     './serializer.kt',
-    './dsl.kt',
+    './dsl',
 ]
 const swcTypeFile = project.addSourceFileAtPath(InputPath[0]);
 
 /* ======================= 全局常量开始 ======================= */
 
-const kotlinDsl = [
-    'package dev.yidafu.swc.dsl',
-    '',
-    'import dev.yidafu.swc.types.*',
-    '',
-]
+function createKotlinDslHeader() {
+    const kotlinDsl = [
+        'package dev.yidafu.swc.dsl',
+        '',
+        'import dev.yidafu.swc.types.*',
+        '',
+    ]
+    return kotlinDsl
+}
+
 
 // const canMergeInterface: string[] = []
 
@@ -106,7 +114,7 @@ function literalUnionToObjectProps(u: UnionTypeNode): KotlinClassProperty[] {
             const value = l.getText()
             prop.defaultValue = value;
             if (n instanceof StringLiteral) {
-                const name = value.toUpperCase().replaceAll('"', '')
+                const name = value.toUpperCase()?.replaceAll('"', '')
                 prop.name = Literal_Name_Map.has(name) ? Literal_Name_Map.get(name)!! : name
                 return prop
             } else if (n instanceof TrueLiteral || n instanceof FalseLiteral) {
@@ -140,9 +148,6 @@ function isRefUnionType(typeName: string) {
     return false;
 }
 
-function removeComment(str: string) {
-    return str.replace(/\/\*(.|\r\n|\n)*?\*\//, '')
-}
 
 /* ======================= 工具函数结束 ======================= */
 
@@ -211,8 +216,12 @@ swcTypeFile.getTypeAliases()
         const uniqueType = Array.from(new Set(childTypes.map(t => removeComment(t))))
 
         if (uniqueType.length > 0) {
-            kotlinTypes.push(`typealias ${tName
-                } = Union.U${uniqueType.length}<${uniqueType.join(', ')}>`)
+            if (uniqueType.length == 2) {
+                kotlinTypes.push(`typealias ${tName} = ${transformTupleType(uniqueType)}`)
+            } else {
+                kotlinTypes.push(`typealias ${tName
+                    } = Union.U${uniqueType.length}<${uniqueType.join(', ')}>`)
+            }
         } else {
             kotlinTypes.push(`typealias ${tName} = ${uniqueType[0]}`)
         }
@@ -270,9 +279,9 @@ swcTypeFile.getTypeAliases()
     .filter(typeAlias => isRefUnionType(typeAlias.getName()))
     .forEach(typeAlias => {
         const tName = typeAlias.getName()
-        t('Union Type %s', tName)
         const typeNode = typeAlias.getTypeNode() as UnionTypeNode
         const childTypes = typeNode.getTypeNodes().map(n => getType(n))
+        t('Union Type %s  children: %s', tName, childTypes)
         const kotlinClass = new KotlinClass()
         kotlinClass.annotations.push('@SwcDslMarker', '@Serializable')
         kotlinClass.modifier = 'sealed interface'
@@ -285,16 +294,18 @@ swcTypeFile.getTypeAliases()
         })
     })
 
+// there is only type alias in 'extend-relationship`
 getAll()
     .filter(n => isRefUnionType(n))
     .forEach(n => {
-        const pTypes = getParentsByChild(n)
+        const pTypes = findParentsByChild(n)
         i('create type alias %s to interface', n, pTypes)
         let comment = Array.from(pTypes).join('], [')
         comment = `/**\n  * subtypes: [${comment}]\n  */`
         const kotlinClass = new KotlinClass()
         kotlinClass.headerComment = comment
         kotlinClass.modifier = 'interface'
+        kotlinClass.annotations.push('@SwcDslMarker')
         kotlinClass.klassName = n;
         kotlinClass.parents = Array.from(new Set(pTypes))
         kotlinClass.properties = pTypes
@@ -400,7 +411,7 @@ function getInterfaceProperties(iDeclaration: InterfaceDeclaration) {
     const props = getClassOrInterfaceProps(interfaceName)
 
     function recursiveGetProps(key: string) {
-        getParentsByChild(key)
+        findParentsByChild(key)
             .forEach(pTypeName => {
                 if (isInterface(pTypeName)) {
                     const pProps = getClassOrInterfaceProps(pTypeName)
@@ -440,7 +451,7 @@ function createInterface(iDeclaration: InterfaceDeclaration) {
     kotlinClass.headerComment = text.join('\n')
 
     const pI = iDeclaration.getHeritageClauses()
-    const pList = getParentsByChild(interfaceName)
+    const pList = findParentsByChild(interfaceName)
     const parents = pI.map(p => {
         return p.getTypeNodes().map(t => t.print())
     }).flat()
@@ -464,23 +475,22 @@ function createInterface(iDeclaration: InterfaceDeclaration) {
         )
     } else if (ToKotlinClass.includes(interfaceName)) {
         kotlinClass.modifier = 'class'
+        
         kotlinClass.annotations.push(
             '@SwcDslMarker',
             '@Serializable',
             `@SerialName("${interfaceName}")`
         )
     }
-    
+
     if (ToKotlinClass.includes(interfaceName)) {
         addKotlinClass(kotlinClass.toClass())
     } else {
         addKotlinClass(kotlinClass.toInterface())
     }
-    if (!getParentsByChild(interfaceName).some(p => noImplRootList.includes(p))) {
-        if (!ToKotlinClass.includes(interfaceName) && !KeepInterface.includes(interfaceName)) {
-            addRelation(interfaceName, `${interfaceName}Impl`)
-            addKotlinClass(kotlinClass.toImplClass())
-        }
+    if (!KeepInterface.includes(interfaceName)) {
+        addRelation(interfaceName, `${interfaceName}Impl`)
+        addKotlinClass(kotlinClass.toImplClass())
     }
 }
 
@@ -503,85 +513,58 @@ for (const i of swcTypeFile.getInterfaces()) {
 }
 
 
-const classList = new Set(noImplRootList.map(root => findAllChildrenByParent(root)).flat())
-noImplRootList.forEach(n => classList.add(n))
-console.log(classList)
-const nameSet = new Set()
+const astNodeList = Array.from(new Set([
+    ...findAllRelativeByName('Node'),
+    ...findAllRelativeByName('HasSpan')
+]))
+
+const generatedKotlinClassList: KotlinClass[] = []
+
+const notImplClassList = getAllKotlinClasses()
+    .filter(k => !astNodeList.includes(k.klassName))
+    .filter(k => {
+        const children = findAllChildrenByParent(k.klassName)
+
+        return children.length == 1 && children[0] == (k.klassName + 'Impl')
+    })
+    .map(k => {
+        const kClass = k.clone()
+        kClass.modifier = 'class'
+        kClass.annotations = [
+            '@SwcDslMarker',
+            '@Serializable',
+        ]
+        generatedKotlinClassList.push(kClass)
+        return [k.klassName, k.klassName + 'Impl']
+    }).flat()
 
 getAllKotlinClasses()
-    .filter(k => classList.has(k.klassName))
-    .filter(k => !k.klassName.endsWith('Impl'))
+    // .filter(k => !astNodeList.includes(k.klassName))
+    .filter(k => !notImplClassList.includes(k.klassName))
     .forEach(k => {
-        if (!nameSet.has(k.klassName)) {
-            const openClass = k.toClass()
-            openClass.modifier = 'open class'
-            openClass.parents = openClass.parents.map(p => {
-                if (classList.has(p)) return `${p}()`
-                return p
-            })
-            openClass.properties = openClass.properties.filter((p) => !p.isOverride)
-            kotlinTypes.push(openClass.toString())
-        }
+        generatedKotlinClassList.push(k)
     })
 
-getAllKotlinClasses()
-    .filter(k => !classList.has(k.klassName))
-    .forEach(k => {
-    if (!nameSet.has(k.klassName)) {
-        kotlinTypes.push(k.toString())
-        nameSet.add(k.klassName)
-    }
+generatedKotlinClassList.forEach(k => {
+    kotlinTypes.push(k.toString())
 })
 
 fs.writeFileSync(InputPath[1], kotlinTypes.join('\n\n'));
 
 
-// function filterChildren(key: string) {
-//     const classNameList: string[] = []
-//     const child = getParentTypeSet(key)
-//     child.forEach(p => {
-//         // if (p === key) return;
-//         const grand = nodeExtendsList.filter(c => c[0] === p).map(p => p[1])
-//         if (grand.length > 0) {
-//             classNameList.push(...filterChildren(p))
-//         } else {
-//             classNameList.push(p)
-//         }
-//     })
-//     return classNameList
-// }
-
 const classNameList = findAllGrandChildren('Node')
 
-// const skipClassList = Array.from(new Set(mergeTypeMap.values())).flat().map(s => [s, s + 'Impl']).flat()
-// console.log(skipClassList)
 const polymorphicMap = new Map<string, string[]>();
 
-['Node', ...findAllChildrenByParent('Node')]
+astNodeList
     .forEach(key => {
         const ps = findAllGrandChildren(key).filter(p => p !== key)
         if (ps.length > 0) {
             polymorphicMap.set(key, ps)
         }
-        // if (!KeepInterface.includes(key)) {
-        // }
     })
 
-// function addPolymorphicMapByRoot(key: string) {
-//     findAllChildrenByParent(key).forEach(type => {
-//         console.log(type, isGrandChild(type))
-//         if (!isGrandChild(type)) {
-//             const list = findAllGrandChildren(type).filter(p => p !== type)
-//             if (list.length > 0) {
-//                 polymorphicMap.set(type, list)
-//             }
-//         }
-//     })
-// }
-// addPolymorphicMapByRoot('BaseParseOptions')
-// addPolymorphicMapByRoot('Config')
-// addPolymorphicMapByRoot('JscConfig')
-// fs.writeFileSync('node-extends-list.json', JSON.stringify(nodeExtendsList))
+
 const NodeNodeSerializer = `
 package dev.yidafu.swc.types
 
@@ -622,36 +605,87 @@ fs.writeFileSync(InputPath[2], NodeNodeSerializer);
 
 
 /* ======================= 处理 生成 dsl 开始 ======================= */
-function createExtensionFunList(key: string) {
-    findAllGrandChildren(key).forEach(c => {
-        addExtensionFun(new KotlinExtensionFun(key, c))
-    })
-    // extensionFunMap.set(key, new Set(findAllGrandChildren(key)))
+
+const generatedClassNameList = generatedKotlinClassList.map(k => k.klassName)
+const needGenerateDslClassList = generatedKotlinClassList
+    .filter(k => findAllChildrenByParent(k.klassName).length > 0)
+    .map(k => k.klassName)
+
+function addExtensionFunWrapper(extFun: KotlinExtensionFun) {
+    if (['HasSpan', 'HasDecorator'].includes(extFun.receiver)) return;
+    
+    if (extFun.receiver === extFun.funName.replace('Impl', '')) return
+
+    if (extFun.funName.endsWith('Impl')) {
+
+        if (generatedClassNameList.includes(extFun.funName)) {
+            addExtensionFun(extFun)
+        } else {
+            addExtensionFun(new KotlinExtensionFun(extFun.receiver, extFun.funName.replace('Impl', '')))
+        }
+    } else {
+        if (isInterface(extFun.funName) || isRefUnionType(extFun.funName)) {
+            addExtensionFun(extFun)
+        }
+    }
 }
 
-Array.from(classPropertiesMap)
+function createExtensionFunList(key: string) {
+    findAllGrandChildren(key)
+        .forEach(c => {
+            // d('create extension function for %s, %s is interface: %s, is ref union: %',key, c, isInterface(c), isRefUnionType(c))
+            addExtensionFunWrapper(new KotlinExtensionFun(key, c, [
+                '/**',
+                `  * subtype of ${key}`,
+                '  */',
+            ].join('\n')))
+        })
+}
+
+needGenerateDslClassList.forEach((key) => {
+    createExtensionFunList(key)
+})
+
+needGenerateDslClassList
+    .map(klass => [klass, classAllPropertiesMap.get(klass)] as [string, KotlinClassProperty[]])
+    // Array.from(classPropertiesMap)
     .forEach(([klass, props]) => {
         props.forEach(p => {
-            d('create dsl type: %s is union? %s', p.type, isRefUnionType(p.type))
-            if (isInterface(p.type) || isRefUnionType(p.type)) {
-                // k('extra extension list %s => %s', klass, p.type)
-                findAllGrandChildren(p.type).forEach(c => {
-                    // k('\textension function %s => %s => %s', klass, p.type, c)
-                    addExtensionFun(new KotlinExtensionFun(klass, c))
+            d('create dsl type: %s is union?', p.getType())
+            // if (isInterface(p.type) || isRefUnionType(p.type) || isTypeAlias(p.type)) {
+            const actualType = p.getActualType()
+            p.getType().forEach(type => {
+                findAllGrandChildren(type).forEach(c => {
+                    addExtensionFunWrapper(new KotlinExtensionFun(klass, c, [
+                        '/**',
+                        `  * ${klass}#${p.name}: ${p.type}`,
+                        `  * extension function for create ${p.type} -> ${c}`,
+                        '  */',
+                    ].join('\n')))
                 })
-            }
+            })
+
+            // }
         })
 
     })
 
-getAllParents().forEach((key) => {
-    createExtensionFunList(key)
+
+// getAllExtensionFun()
+//     .forEach(extFun => {
+//         kotlinDsl.push(extFun.toString())
+//     })
+const groups =  _.groupBy(getAllExtensionFun(), 'receiver')
+
+if (fs.existsSync(InputPath[3])) {
+    fs.rmdirSync(InputPath[3], { recursive: true })
+}
+fs.mkdirSync(InputPath[3], { recursive: true })
+Object.entries(groups).forEach(([receiver, list]) => {
+    const kotlinDsl = createKotlinDslHeader()
+    list.forEach(k => kotlinDsl.push(k.toString()))
+    fs.writeFileSync(`${InputPath[3]}/${receiver}.kt`, kotlinDsl.join('\n\n'));
 })
 
-getAllExtensionFun()
-    .forEach(extFun => {
-        kotlinDsl.push(extFun.toString())
-    })
-fs.writeFileSync(InputPath[3], kotlinDsl.join('\n\n'));
 /* ======================= 处理 生成 dsl 结束 ======================= */
 
