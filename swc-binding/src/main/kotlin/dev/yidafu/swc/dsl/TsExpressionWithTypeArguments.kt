@@ -359,7 +359,7 @@ fun TsExpressionWithTypeArguments.invalid(block: Invalid.() -> Unit): Invalid {
  * extension function for create TsTypeParameterInstantiation -> TsTypeParameterInstantiationImpl
  */
 fun TsExpressionWithTypeArguments.tsTypeParameterInstantiation(
-    block: TsTypeParameterInstantiation.() -> Unit,
+    block: TsTypeParameterInstantiation.() -> Unit
 ): TsTypeParameterInstantiation {
     return TsTypeParameterInstantiationImpl().apply(block)
 }

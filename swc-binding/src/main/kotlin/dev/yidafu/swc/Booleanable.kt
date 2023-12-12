@@ -5,22 +5,19 @@ import dev.yidafu.swc.types.TerserCompressOptions
 import dev.yidafu.swc.types.TerserMangleOptions
 import kotlinx.serialization.*
 import kotlinx.serialization.builtins.ArraySerializer
-import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.*
-import kotlin.reflect.KClass
 
 /**
  * https://github.com/Kotlin/kotlinx.serialization/issues/1175
  */
 open class BooleanableSerializer<T : Any>(
     private val serializer: KSerializer<T>,
-    override val descriptor: SerialDescriptor = serializer.descriptor,
+    override val descriptor: SerialDescriptor = serializer.descriptor
 ) : KSerializer<Booleanable<T>> {
-
 
     override fun deserialize(decoder: Decoder): Booleanable<T> {
         val input = decoder as JsonDecoder
@@ -106,33 +103,33 @@ data class Booleanable<T : Any>(
 
 @OptIn(InternalSerializationApi::class)
 object BooleanableStringSerializer : BooleanableSerializer<String>(
-    String::class.serializer(),
+    String::class.serializer()
 //    String::class.serializer().descriptor
 )
 
 @OptIn(InternalSerializationApi::class)
 object BooleanableFloatSerializer : BooleanableSerializer<Float>(
-    Float::class.serializer(),
+    Float::class.serializer()
 )
 
 @OptIn(InternalSerializationApi::class)
 object BooleanableIntSerializer : BooleanableSerializer<Int>(
-    Int::class.serializer(),
+    Int::class.serializer()
 )
 
 @OptIn(ExperimentalSerializationApi::class)
 object BooleanableArrayStringSerializer : BooleanableSerializer<Array<String>>(
-    ArraySerializer(String::class, String.serializer()),
+    ArraySerializer(String::class, String.serializer())
 )
 
 @OptIn(InternalSerializationApi::class)
 object BooleanableTerserCompressOptionsSerializer : BooleanableSerializer<TerserCompressOptions>(
-    TerserCompressOptions::class.serializer(),
+    TerserCompressOptions::class.serializer()
 )
 
 @OptIn(InternalSerializationApi::class)
 object BooleanableTerserMangleOptionsSerializer : BooleanableSerializer<TerserMangleOptions>(
-    TerserMangleOptions::class.serializer(),
+    TerserMangleOptions::class.serializer()
 )
 
 @OptIn(ExperimentalSerializationApi::class)

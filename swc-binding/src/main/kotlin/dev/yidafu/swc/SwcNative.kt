@@ -17,59 +17,57 @@ class SwcNative {
     external fun parseSync(
         code: String,
         options: String,
-        filename: String?,
+        filename: String?
     ): String
 
     external fun parseFileSync(
         filepath: String,
-        options: String,
+        options: String
     ): String
 
     fun parseSync(
         code: String,
         options: ParserConfig,
-        filename: String?,
+        filename: String?
     ): String {
         val optStr = configJson.encodeToString(options)
-        println(optStr)
         return parseSync(code, optStr, filename)
     }
 
     fun parseFileSync(
         filepath: String,
-        options: TsParserConfig,
+        options: TsParserConfig
     ): String {
-        val res = parseFileSync(filepath, configJson.encodeToString(options))
+        val res = parseFileSync(filepath, configJson.encodeToString<ParserConfig>(options))
         return res
     }
 
     fun parseFileSync(
         filepath: String,
-        options: EsParserConfig,
+        options: EsParserConfig
     ): String {
-        val res = parseFileSync(filepath, configJson.encodeToString(options))
+        val res = parseFileSync(filepath, configJson.encodeToString<ParserConfig>(options))
         return res
     }
 
     external fun transformSync(
         code: String,
         isModule: Boolean,
-        options: String,
+        options: String
     ): String
 
     external fun transformFileSync(
         filepath: String,
         isModule: Boolean,
-        options: String,
+        options: String
     ): String
 
     fun transformSync(
         code: String,
         isModule: Boolean,
-        options: Options,
+        options: Options
     ): TransformOutput {
         val optionStr = configJson.encodeToString(options)
-        println(optionStr)
         val res = transformSync(code, isModule, optionStr)
         return astJson.decodeFromString<TransformOutput>(res)
     }
@@ -77,7 +75,7 @@ class SwcNative {
     fun transformFileSync(
         filepath: String,
         isModule: Boolean,
-        options: Options,
+        options: Options
     ): TransformOutput {
         val res = transformFileSync(filepath, isModule, configJson.encodeToString(options))
         return astJson.decodeFromString<TransformOutput>(res)
@@ -85,15 +83,14 @@ class SwcNative {
 
     external fun printSync(
         program: String,
-        options: String,
+        options: String
     ): String
 
     fun printSync(
         program: Program,
-        options: Options,
+        options: Options
     ): TransformOutput {
         val pStr = astJson.encodeToString(program)
-        println(pStr)
         val oStr = configJson.encodeToString(options)
         val res = printSync(pStr, oStr)
         return astJson.decodeFromString<TransformOutput>(res)
@@ -101,12 +98,12 @@ class SwcNative {
 
     external fun minifySync(
         program: String,
-        options: String,
+        options: String
     ): String
 
     fun minifySync(
         program: Program,
-        options: Options,
+        options: Options
     ): TransformOutput {
         val pStr = astJson.encodeToString(program)
         val oStr = configJson.encodeToString(options)

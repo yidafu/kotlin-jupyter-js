@@ -31,7 +31,7 @@ class ExperimentalLiteral {
 @Serializable
 @SerialName("JsonifyLiteral")
 class JsonifyLiteral {
-    var minCost: Float? = null
+    var minCost: Int? = null
 }
 
 @SwcDslMarker
@@ -73,14 +73,14 @@ class JsFormatOptions {
     var braces: Boolean? = null
     var comments: String? = null
     var ecma: TerserEcmaVersion? = null
-    var indentLevel: Float? = null
-    var indentStart: Float? = null
-    var inlineScript: Float? = null
-    var keepNumbers: Float? = null
+    var indentLevel: Int? = null
+    var indentStart: Int? = null
+    var inlineScript: Int? = null
+    var keepNumbers: Int? = null
     var keepQuotedProps: Boolean? = null
 
-    @Serializable(BooleanableFloatSerializer::class)
-    var maxLineLen: BooleanableFloat? = null
+    @Serializable(BooleanableIntSerializer::class)
+    var maxLineLen: BooleanableInt? = null
     var preamble: String? = null
     var quoteKeys: Boolean? = null
     var quoteStyle: Boolean? = null
@@ -126,7 +126,7 @@ class TerserCompressOptions {
     var keep_infinity: Boolean? = null
     var loops: Boolean? = null
     var negate_iife: Boolean? = null
-    var passes: Float? = null
+    var passes: Int? = null
     var properties: Boolean? = null
 
     @Serializable(BooleanableStringSerializer::class)
@@ -265,8 +265,9 @@ class JscConfig {
 
 @SwcDslMarker
 @Serializable
+@SerialName("typescript")
 class TsParserConfig : ParserConfig {
-    var syntax: String? = null
+//    var syntax: String? = null
     var tsx: Boolean? = null
     var decorators: Boolean? = null
     var dynamicImport: Boolean? = null
@@ -277,8 +278,9 @@ class TsParserConfig : ParserConfig {
 
 @SwcDslMarker
 @Serializable
+@SerialName("ecmascript")
 class EsParserConfig : ParserConfig {
-    var syntax: String? = null
+//    var syntax: String? = null
     var jsx: Boolean? = null
     var numericSeparator: Boolean? = null
     var classPrivateProperty: Boolean? = null
@@ -363,7 +365,7 @@ class GlobalPassOption {
 @Serializable
 class Es6Config : BaseModuleConfig, ModuleConfig {
     // conflict with @SerialName
-    //   var type : Float? = null
+    //   var type : Int? = null
     override var strict: Boolean? = null
     override var strictMode: Boolean? = null
 
@@ -473,9 +475,9 @@ class MatchPattern
 @SwcDslMarker
 @Serializable
 class Span {
-    var start: Float? = null
-    var end: Float? = null
-    var ctxt: Float? = null
+    var start: Int? = null
+    var end: Int? = null
+    var ctxt: Int? = null
 }
 
 @SwcDslMarker
@@ -1109,6 +1111,7 @@ interface BaseModuleConfig {
 }
 
 @SwcDslMarker
+// @Serializable(NodeSerializer::class)
 sealed interface Node {
     // conflict with @SerialName
     //  var type: String?
@@ -2620,7 +2623,7 @@ class RegExpLiteralImpl : RegExpLiteral {
 interface NumericLiteral : Node, HasSpan, Literal, PropertyName, TsLiteral {
     // conflict with @SerialName
     //  var type: String?
-    var value: Float?
+    var value: Int?
     var raw: String?
     override var span: Span?
 }
@@ -2633,7 +2636,7 @@ interface NumericLiteral : Node, HasSpan, Literal, PropertyName, TsLiteral {
 class NumericLiteralImpl : NumericLiteral {
     // conflict with @SerialName
     //  override var type : String? = "NumericLiteral"
-    override var value: Float? = null
+    override var value: Int? = null
     override var raw: String? = null
     override var span: Span? = null
 }
@@ -3383,6 +3386,7 @@ class BlockStatementImpl : BlockStatement {
 }
 
 @SwcDslMarker
+@JsonClassDiscriminator("type")
 interface ExpressionStatement : Node, HasSpan, Statement {
     // conflict with @SerialName
     //  var type: String?
@@ -4603,9 +4607,12 @@ class TsIndexedAccessTypeImpl : TsIndexedAccessType {
 interface TsMappedType : Node, HasSpan, TsType {
     // conflict with @SerialName
     //  var type: String?
+    @Serializable(BooleanableStringSerializer::class)
     var readonly: TruePlusMinus?
     var typeParam: TsTypeParameter?
     var nameType: TsType?
+
+    @Serializable(BooleanableStringSerializer::class)
     var optional: TruePlusMinus?
     var typeAnnotation: TsType?
     override var span: Span?
@@ -4619,9 +4626,12 @@ interface TsMappedType : Node, HasSpan, TsType {
 class TsMappedTypeImpl : TsMappedType {
     // conflict with @SerialName
     //  override var type : String? = "TsMappedType"
+    @Serializable(BooleanableStringSerializer::class)
     override var readonly: TruePlusMinus? = null
     override var typeParam: TsTypeParameter? = null
     override var nameType: TsType? = null
+
+    @Serializable(BooleanableStringSerializer::class)
     override var optional: TruePlusMinus? = null
     override var typeAnnotation: TsType? = null
     override var span: Span? = null
@@ -4660,7 +4670,7 @@ interface TsTemplateLiteralType : Node, HasSpan, TsLiteral {
 @SwcDslMarker
 @Serializable
 @JsonClassDiscriminator("type")
-@SerialName("TemplateLiteral")
+@SerialName("TsTemplateLiteralType")
 class TsTemplateLiteralTypeImpl : TsTemplateLiteralType {
     // conflict with @SerialName
     //  override var type : String? = "TemplateLiteral"
