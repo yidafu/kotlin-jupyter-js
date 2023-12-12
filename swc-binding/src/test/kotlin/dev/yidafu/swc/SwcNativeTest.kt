@@ -20,7 +20,7 @@ class SwcNativeTest {
                 add(1,2);
                 """.trimIndent(),
                 esParseOptions { },
-                "temp.js",
+                "temp.js"
             )
         println(ast)
         assertNotNull(ast) { "ast string can't be null " }
@@ -31,7 +31,7 @@ class SwcNativeTest {
         val ast =
             swcNative.parseFileSync(
                 SwcNativeTest::class.java.classLoader.getResource("test.js").file,
-                tsParseOptions { },
+                tsParseOptions { }
             )
         assertNotNull(ast) { "ast string can't be null " }
     }
@@ -47,7 +47,7 @@ class SwcNativeTest {
                         jscConfig {
                             parser = tsParserConfig { }
                         }
-                },
+                }
             )
         assertNotNull(ast) { "transform result can't be null " }
     }
@@ -63,7 +63,7 @@ class SwcNativeTest {
                         jscConfig {
                             parser = esParserConfig { }
                         }
-                },
+                }
             )
         assertNotNull(ast) { "transform result can't be null " }
     }
@@ -79,7 +79,7 @@ class SwcNativeTest {
                         jscConfig {
                             parser = esParserConfig { }
                         }
-                },
+                }
             )
 
         assertEquals(
@@ -89,7 +89,7 @@ class SwcNativeTest {
                 return a + b;
             }
             add(1, 2);
-            """.trimIndent(),
+            """.trimIndent()
         )
     }
 
@@ -222,7 +222,7 @@ class SwcNativeTest {
                   "interpreter": null
                 }
                 """.trimIndent(),
-                "{}",
+                "{}"
             )
 
         println(res)
@@ -232,50 +232,19 @@ class SwcNativeTest {
     fun `wrapper printSync method`() {
         val output =
             swcNative.printSync(
-                module {
-                    span =
-                        span {
-                            start = 0
-                            end = 17
-                        }
-                    body =
-                        arrayOf(
-                            variableDeclaration {
-                                span =
-                                    span {
-                                        start = 5
-                                        end = 17
-                                    }
-                                kind = VariableDeclarationKind.CONST
-                                declarations =
-                                    arrayOf(
-                                        variableDeclarator {
-                                            id =
-                                                identifier {
-                                                    value = "a"
-                                                    span =
-                                                        span {
-                                                            start = 5
-                                                            end = 6
-                                                        }
-                                                }
-                                            init =
-                                                stringLiteral {
-                                                    value = "String"
-                                                    span =
-                                                        span {
-                                                            start = 9
-                                                            end = 17
-                                                        }
-                                                }
-                                        },
-                                    )
-                            },
-                        )
-                },
-                options { },
+                esAddFunction,
+                options { }
             )
 
-        println(output.code)
+        assertEquals(
+            output.code.trim(),
+            """
+            function add(a, b) {
+                return a + b;
+            }
+            ;
+            add(1, 2);
+            """.trimIndent()
+        )
     }
 }

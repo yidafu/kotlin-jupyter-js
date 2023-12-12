@@ -67,7 +67,7 @@ val esAddFunction: Module =
                                         value = "b"
                                         optional = false
                                     }
-                            },
+                            }
                         )
                     decorators = arrayOf()
                     span =
@@ -125,7 +125,7 @@ val esAddFunction: Module =
                                                         optional = false
                                                     }
                                             }
-                                    },
+                                    }
                                 )
                         }
                     generator = false
@@ -192,10 +192,10 @@ val esAddFunction: Module =
                                                 value = 2
                                                 raw = "2"
                                             }
-                                    },
+                                    }
                                 )
                         }
-                },
+                }
             )
         interpreter = null
     }
