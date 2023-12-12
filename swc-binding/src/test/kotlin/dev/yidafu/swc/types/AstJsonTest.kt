@@ -1,43 +1,42 @@
 package dev.yidafu.swc.types
 
+import dev.yidafu.swc.astJson
 import dev.yidafu.swc.dsl.*
+import dev.yidafu.swc.module
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class AstJsonTest {
-    private val json1: Json = Json {
-        encodeDefaults = true
-        explicitNulls = false
-        classDiscriminator = "type"
-        serializersModule = swcSerializersModule
-    }
-
     @Test
-    fun `decode import default specifier`() {
-        val astJson = """
-        {"type":"ImportDefaultSpecifier","span":{"start":146,"end":147,"ctxt":0}}
-        """.trimIndent()
-        assertEquals(astJson, json1.encodeToString(json1.decodeFromString<ImportSpecifier>(astJson)))
+    fun `decode ImportSpecifier AST Node`() {
+        val astStr =
+            """
+            {"type":"ImportDefaultSpecifier","span":{"start":146,"end":147,"ctxt":0}}
+            """.trimIndent()
+        val importSpecifier = astJson.decodeFromString<ImportDefaultSpecifier>(astStr)
+        val outputStr = astJson.encodeToString(importSpecifier)
+        assertEquals(astStr, outputStr)
     }
 
     @Test
     fun `decode identifier node`() {
-        val jsonStr = """
-        {"type":"Identifier","value":"x","optional":false,"span":{"start":146,"end":147,"ctxt":2}}
-        """.trimIndent()
+        val jsonStr =
+            """
+            {"type":"Identifier","value":"x","optional":false,"span":{"start":146,"end":147,"ctxt":2}}
+            """.trimIndent()
 
-        val node = json1.decodeFromString<Identifier>(jsonStr)
+        val node = astJson.decodeFromString<Identifier>(jsonStr)
         assertEquals(node.value, "x")
-        val str = json1.encodeToString(node)
+        val str = astJson.encodeToString(node)
         assertEquals(jsonStr, str)
     }
 
     @Test
     fun `decode ast tree`() {
-        val astJson = """
+        val astStr =
+            """
             {
                 "type":"Module",
                 "span":{
@@ -162,49 +161,58 @@ class AstJsonTest {
                 ],
                 "interpreter":null
             }
-        """.trimIndent()
+            """.trimIndent()
 
-        json1.decodeFromString<Program>(astJson)
+        astJson.decodeFromString<Program>(astStr)
     }
 
     @Test
     fun `encode ast dsl`() {
-        val tree = module {
-            span = span {
-                start = 0
-                end = 17
-            }
-            body = arrayOf(
-                variableDeclaration {
-                    span = span {
-                        start = 5
+        val tree =
+            module {
+                span =
+                    span {
+                        start = 0
                         end = 17
                     }
-                    kind = VariableDeclarationKind.CONST
-                    declarations = arrayOf(
-                        variableDeclarator {
-                            id = identifier {
-                                value = "a"
-                                span = span {
+                body =
+                    arrayOf(
+                        variableDeclaration {
+                            span =
+                                span {
                                     start = 5
-                                    end = 6
-                                }
-                            }
-                            init = stringLiteral {
-                                value = "String"
-                                span = span {
-                                    start = 9
                                     end = 17
                                 }
-                            }
+                            kind = VariableDeclarationKind.CONST
+                            declarations =
+                                arrayOf(
+                                    variableDeclarator {
+                                        id =
+                                            identifier {
+                                                value = "a"
+                                                span =
+                                                    span {
+                                                        start = 5
+                                                        end = 6
+                                                    }
+                                            }
+                                        init =
+                                            stringLiteral {
+                                                value = "String"
+                                                span =
+                                                    span {
+                                                        start = 9
+                                                        end = 17
+                                                    }
+                                            }
+                                    }
+                                )
                         }
                     )
-                }
-            )
-        }
+            }
 
-        val json = json1.encodeToString(tree)
-        val mod: Module = json1.decodeFromString<Module>(json)
+        val json = astJson.encodeToString(tree)
+        val mod: Module = astJson.decodeFromString<Module>(json)
         assertTrue(mod.body!![0] is VariableDeclaration)
     }
 }

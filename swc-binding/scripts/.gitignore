@@ -215,3 +215,7 @@ gradle-app.setting
 
 # End of https://www.toptal.com/developers/gitignore/api/kotlin,gradle,rust,cargo,javascript,node
 
+test.ts
+dsl.kt
+ouptput.kt
+serializer.kt
