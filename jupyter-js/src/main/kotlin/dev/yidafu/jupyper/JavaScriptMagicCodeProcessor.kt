@@ -1,58 +1,76 @@
 package dev.yidafu.jupyper
 
+import org.slf4j.LoggerFactory
+import dev.yidafu.swc.SwcNative
+import dev.yidafu.swc.dsl.esParserConfig
+import dev.yidafu.swc.dsl.jscConfig
+import dev.yidafu.swc.options
 import org.jetbrains.kotlinx.jupyter.api.CodePreprocessor
+import org.jetbrains.kotlinx.jupyter.api.HTML
 import org.jetbrains.kotlinx.jupyter.api.KotlinKernelHost
 
 class JavaScriptMagicCodeProcessor : CodePreprocessor {
+    val log = LoggerFactory.getLogger(JavaScriptMagicCodeProcessor::class.java)
 
+    val swcCompiler: SwcNative = SwcNative()
     override fun accepts(code: String): Boolean {
-        val len = code.length
-        fun check(i: Int, char: Char): Boolean {
-            return i < len && code[i] == char
-        }
-        fun isWhitespaceOrEnd(i: Int): Boolean {
-            return if (i < len) {
-                code[i] == ' ' || code[i] == '\n' || code[i] == '\t'
-            } else {
-                true
-            }
-//            return i + 1 >= len || code[i + 1] == ' '
-        }
-        for (i in 0..< len) {
-            if (code[i] == '%' && check(i + 1, 'j')) {
-                var index = i + 2
-                if (check(index, 's')) {
-                    return isWhitespaceOrEnd(index + 1)
-                }
-                if (check(index, 'a')) {
-                    val isJavascriptMagic = listOf('v', 'a', 's', 'c', 'r', 'i', 'p', 't').all {
-                        index += 1
-                        check(index, it)
-                    }
-                    if (isJavascriptMagic) {
-                        return isWhitespaceOrEnd(index + 1)
-                    }
-                }
-                return false
-            }
-        }
-        return false
+        val matcher = JsMagicMatcher(code)
+        return matcher.match() !== JsMagicMatcher.LanguageType.Kotlin
     }
 
+    fun processJsCode(source: String): String {
+        val output = swcCompiler.transformSync(source, false, options {
+            jsc = jscConfig {
+                target = "es2020"
+                parser = esParserConfig { }
+            }
+        })
+        return output.code
+    }
+
+    fun processTsCode(source: String): String {
+
+        return ""
+    }
+
+    fun processJsxCode(source: String): String {
+
+        return ""
+    }
+
+    fun processTsxCode(source: String): String {
+
+        return ""
+    }
     /**
      * Performs code preprocessing
      */
     override fun process(code: String, host: KotlinKernelHost): CodePreprocessor.Result {
-        val codeWithOutJs = if (code.contains("%js")) {
-            println(code)
-            code.replace("%js", "")
-        } else {
-            code
-        }
-        return CodePreprocessor.Result(codeWithOutJs, emptyList())
-    }
+        val matcher = JsMagicMatcher(code)
+        val lang = matcher.match()
+        log.info("process $lang")
 
-    companion object {
-        val JAVASCRIPT_MAGIC = arrayOf("%js", "%javascript")
+        val codeWithOutJs = matcher.sourceWithoutJsMagic
+        println(codeWithOutJs)
+
+        val outputCode = try {
+            when(lang) {
+                JsMagicMatcher.LanguageType.JS -> processJsCode(codeWithOutJs)
+                JsMagicMatcher.LanguageType.JSX -> processJsxCode(codeWithOutJs)
+                JsMagicMatcher.LanguageType.TS -> processTsCode(codeWithOutJs)
+                JsMagicMatcher.LanguageType.TSX -> processTsxCode(codeWithOutJs)
+                JsMagicMatcher.LanguageType.Kotlin -> codeWithOutJs
+            }
+        } catch (e: Exception) {
+            log.error("process js code fail", e)
+            """
+            HTML("<code>${e.message}</code>")    
+            """.trimIndent()
+        }
+
+        log.info("process result ===>\n$outputCode")
+        val kotlinCode = "HTML(\"\"\"<script type=\"module\">$outputCode</script>\"\"\")"
+        println(kotlinCode)
+        return CodePreprocessor.Result(kotlinCode)
     }
 }

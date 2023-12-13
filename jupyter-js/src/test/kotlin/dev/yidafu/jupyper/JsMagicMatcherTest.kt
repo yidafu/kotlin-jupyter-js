@@ -5,20 +5,23 @@ import kotlin.test.*
 class JsMagicMatcherTest {
     fun shouldTrue(code: String) {
         assertNotEquals(
-            JsMagicMatcher().match(code),
-            JsMagicMatcher.LanguageVersion.Other
+            JsMagicMatcher(code).match(),
+            JsMagicMatcher.LanguageType.Kotlin
         )
     }
     fun shouldFalse(code: String) {
         assertEquals(
-            JsMagicMatcher().match(code),
-            JsMagicMatcher.LanguageVersion.Other
+            JsMagicMatcher(code).match(),
+            JsMagicMatcher.LanguageType.Kotlin
         )
     }
+
     @Test
     fun `match js magic word`() {
+        assertEquals(JsMagicMatcher.LanguageType.formString("%js"), JsMagicMatcher.LanguageType.JS)
+
         listOf(
-//            "%js\nvar code = 1;",
+            "%js\nvar code = 1;",
             " %javascript\n var code = 1;",
             "%jsx\nconst div = <Div></Div>",
         ).forEach {
@@ -56,6 +59,24 @@ class JsMagicMatcherTest {
             "abc%ts",
         ).forEach {
             shouldFalse(it)
+        }
+    }
+
+    @Test
+    fun `remove js magic of source code`() {
+        listOf(
+            "%js\nconst foo = 1",
+            "%jsx\nconst div = <Div></Div>",
+            "%javascript\nconst foo = 1",
+            "%ts\nconst n: number = 1",
+            "%typescript\nconst n: number = 1",
+            "%tsx\nconst div = <TDiv></TDiv>",
+        ).forEach {
+
+            val str =  listOf("%jsx", "%javascript", "%js", "%tsx", "%typescript", "%ts").fold(it) { s, k->
+                s.replace(k, "")
+            }
+            assertEquals(JsMagicMatcher(it).sourceWithoutJsMagic, str)
         }
     }
 }

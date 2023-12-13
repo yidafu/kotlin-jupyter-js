@@ -3,20 +3,19 @@
  */
 package dev.yidafu.jupyper
 
-import org.jetbrains.kotlinx.jupyter.api.ProcessingPriority
 import org.jetbrains.kotlinx.jupyter.api.annotations.JupyterLibrary
 import org.jetbrains.kotlinx.jupyter.api.libraries.JupyterIntegration
+import org.slf4j.LoggerFactory
 
 /**
  * support `%javascript` magic
  */
 @JupyterLibrary
 class KotlinKernelJsSupport : JupyterIntegration() {
+    val log = LoggerFactory.getLogger(KotlinKernelJsSupport::class.java)
+
     override fun Builder.onLoaded() {
 //        this.notebook.codePreprocessorsProcessor.register(JavaScriptMagicCodeProcessor(), ProcessingPriority.HIGHEST)
-//        beforeCellExecution {
-//
-//        }
         addCodePreprocessor(JavaScriptMagicCodeProcessor())
     }
 }

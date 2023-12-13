@@ -12,10 +12,12 @@
 plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
     id("dev.yidafu.library")
+//    kotlin("jvm")
 //    kotlin("jupyter.api")
 //    id("org.jetbrains.kotlin.jupyter.api")
 //    id("com.google.devtools.ksp")
 //    id("org.jetbrains.kotlin.libs.publisher")
+    kotlin("plugin.serialization") version "1.9.21"
     `maven-publish`
 }
 
@@ -25,7 +27,7 @@ kotlinJupyter {
 }
 
 group = "dev.yidafu.jupyter"
-version = "0.0.1"
+version = "0.0.2"
 
 val dokkaJavadocJar = tasks.register<Jar>("dokkaJavadocJar") {
     dependsOn(tasks.dokkaJavadoc)
@@ -63,15 +65,15 @@ publishing {
 //                    "myProp" to "value",
 //                    "prop.with.dots" to "anotherValue"
 //                ))
-                distributionManagement {
-                    relocation {
-                        // New artifact coordinates
-                        groupId.set("dev.yidafu.jupyter")
-                        artifactId.set("jupyter-js")
-                        version.set("0.0.1")
-                        message.set("groupId has been changed")
-                    }
-                }
+//                distributionManagement {
+//                    relocation {
+//                        // New artifact coordinates
+//                        groupId.set("dev.yidafu.jupyter")
+//                        artifactId.set("jupyter-js")
+//                        version.set("0.0.1")
+//                        message.set("groupId has been changed")
+//                    }
+//                }
 
                 licenses {
                     license {
@@ -111,6 +113,11 @@ publishing {
 dependencies {
     implementation("org.jetbrains.dokka:kotlin-analysis-compiler:1.8.20")
     testImplementation(kotlin("test"))
+    implementation("org.slf4j:slf4j-api:2.0.9")
+    implementation(project(":swc-binding"))
+    implementation(libs.kotlin.serialization.json)
+//    implementation("dev.yidafu.swc:swc-binding:0.3.1")
+
 }
 
 repositories {
