@@ -3,6 +3,7 @@
  */
 package dev.yidafu.jupyper
 
+import dev.yidafu.swc.SwcNative
 import org.jetbrains.kotlinx.jupyter.api.annotations.JupyterLibrary
 import org.jetbrains.kotlinx.jupyter.api.libraries.JupyterIntegration
 import org.slf4j.LoggerFactory
@@ -15,7 +16,14 @@ class KotlinKernelJsSupport : JupyterIntegration() {
     val log = LoggerFactory.getLogger(KotlinKernelJsSupport::class.java)
 
     override fun Builder.onLoaded() {
-//        this.notebook.codePreprocessorsProcessor.register(JavaScriptMagicCodeProcessor(), ProcessingPriority.HIGHEST)
+        import<JsCodeResult>()
+        import<SwcNative>()
+        import(
+            "dev.yidafu.swc.dsl.*",
+            "dev.yidafu.swc.types.*",
+            "dev.yidafu.swc.*",
+        )
+
         addCodePreprocessor(JavaScriptMagicCodeProcessor())
     }
 }

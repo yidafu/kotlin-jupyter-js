@@ -4,6 +4,7 @@ import org.slf4j.LoggerFactory
 import dev.yidafu.swc.SwcNative
 import dev.yidafu.swc.dsl.esParserConfig
 import dev.yidafu.swc.dsl.jscConfig
+import dev.yidafu.swc.dsl.tsParserConfig
 import dev.yidafu.swc.options
 import org.jetbrains.kotlinx.jupyter.api.CodePreprocessor
 import org.jetbrains.kotlinx.jupyter.api.HTML
@@ -25,22 +26,42 @@ class JavaScriptMagicCodeProcessor : CodePreprocessor {
                 parser = esParserConfig { }
             }
         })
-        return output.code
+        return "dev.yidafu.jupyper.JsCodeResult(\"\"\"${output.code}\"\"\")"
     }
 
     fun processTsCode(source: String): String {
-
-        return ""
+        val output = swcCompiler.transformSync(source, false, options {
+            jsc = jscConfig {
+                target = "es2020"
+                parser = tsParserConfig { }
+            }
+        })
+        return "dev.yidafu.jupyper.JsCodeResult(\"\"\"${output.code}\"\"\")"
     }
 
     fun processJsxCode(source: String): String {
+        val output = swcCompiler.transformSync(source, false, options {
 
-        return ""
+            jsc = jscConfig {
+                target = "es2020"
+                parser = esParserConfig {
+                    jsx = true
+                }
+            }
+        })
+        return "dev.yidafu.jupyper.JsxCodeResult(\"\"\"${output.code}\"\"\")"
     }
 
     fun processTsxCode(source: String): String {
-
-        return ""
+        val output = swcCompiler.transformSync(source, false, options {
+            jsc = jscConfig {
+                target = "es2020"
+                parser = tsParserConfig {
+                    tsx = true
+                }
+            }
+        })
+        return "dev.yidafu.jupyper.JsxCodeResult(\"\"\"${output.code}\"\"\")"
     }
     /**
      * Performs code preprocessing
@@ -51,8 +72,6 @@ class JavaScriptMagicCodeProcessor : CodePreprocessor {
         log.info("process $lang")
 
         val codeWithOutJs = matcher.sourceWithoutJsMagic
-        println(codeWithOutJs)
-
         val outputCode = try {
             when(lang) {
                 JsMagicMatcher.LanguageType.JS -> processJsCode(codeWithOutJs)
@@ -62,15 +81,13 @@ class JavaScriptMagicCodeProcessor : CodePreprocessor {
                 JsMagicMatcher.LanguageType.Kotlin -> codeWithOutJs
             }
         } catch (e: Exception) {
+            println(e)
             log.error("process js code fail", e)
             """
-            HTML("<code>${e.message}</code>")    
+            org.jetbrains.kotlinx.jupyter.api.HTML("<code>${e.message}</code>")    
             """.trimIndent()
         }
 
-        log.info("process result ===>\n$outputCode")
-        val kotlinCode = "HTML(\"\"\"<script type=\"module\">$outputCode</script>\"\"\")"
-        println(kotlinCode)
-        return CodePreprocessor.Result(kotlinCode)
+        return CodePreprocessor.Result(outputCode)
     }
 }

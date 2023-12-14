@@ -43,7 +43,6 @@ class JsMagicMatcher(private val source: String) {
         if (intervals.isEmpty()) return LanguageType.Kotlin
         // last js magic will work
         intervals.last {
-            println("[${source.slice(it)}]")
              return LanguageType.formString(source.slice(it))
         }
         return LanguageType.Kotlin
