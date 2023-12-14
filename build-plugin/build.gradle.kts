@@ -1,6 +1,7 @@
 plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
+    alias(libs.plugins.ktlint)
 }
 
 gradlePlugin {
@@ -20,6 +21,8 @@ repositories {
 }
 
 dependencies {
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+
     api(libs.bundles.allGradlePlugins)
 //    api(libs.plugin.kotlinJvm)
 //    api(libs.plugin.ksp)
