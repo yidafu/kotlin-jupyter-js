@@ -32,11 +32,13 @@ dependencies {
     testImplementation(kotlin("test"))
     implementation(libs.slf4j.api)
     implementation(libs.kotlin.serialization.json)
-    implementation(project(":swc-binding"))
-//    implementation("dev.yidafu.swc:swc-binding:0.3.1")
+//    implementation(project(":swc-binding"))
+    implementation(libs.swc.binding)
 }
 
 repositories {
+    maven("https://mirrors.cloud.tencent.com/nexus/repository/maven-public")
+    maven("https://s01.oss.sonatype.org/content/groups/public/")
     mavenCentral()
 }
 
