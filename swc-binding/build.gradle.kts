@@ -4,12 +4,11 @@ import java.io.ByteArrayOutputStream
 
 plugins {
     id("dev.yidafu.library")
-    id("maven-publish")
-    signing
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.21"
 }
 
 group = "dev.yidafu.swc"
-version = "0.0.3"
+version = "0.3.2"
 
 dependencies {
     testImplementation(kotlin("test"))
@@ -17,95 +16,15 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
 
     implementation(libs.kotlin.serialization.json)
-//    println(versionCatalogs.getVersion("kotlin-serialization-json"))
-//    implementation(getVersion("kotlin-serialization-json"))
 }
 
 tasks.test {
     useJUnitPlatform()
 }
 
-val dokkaJavadocJar = tasks.register<Jar>("dokkaJavadocJar") {
-    dependsOn(tasks.dokkaJavadoc)
-    from(tasks.dokkaJavadoc.flatMap { it.outputDirectory })
-    archiveClassifier.set("javadoc")
-}
-
-val ossrhUsername: String by project
-val ossrhPassword: String by project
-
-publishing {
-    publications {
-        create<MavenPublication>("mavenKotlin") {
-            pom {
-                artifactId = "swc-binding"
-                from(components["java"])
-                artifact(tasks.kotlinSourcesJar)
-                artifact(dokkaJavadocJar)
-
-                versionMapping {
-                    usage("java-api") {
-                        fromResolutionOf("runtimeClasspath")
-                    }
-                    usage("java-runtime") {
-                        fromResolutionResult()
-                    }
-                }
-
-                name.set("SWC JVM Binding")
-                description.set("swc jvm binding by kotlin")
-                url.set("https://github.com/yidafu/kotlin-jupyter-js/tree/main/swc-binding#readme")
-//                properties.set(mapOf(
-//                    "myProp" to "value",
-//                    "prop.with.dots" to "anotherValue"
-//                ))
-                distributionManagement {
-                    relocation {
-                        // New artifact coordinates
-                        groupId.set("dev.yidafu.swc")
-                        artifactId.set("swc-binding")
-                        version.set("0.0.1")
-                        message.set("groupId has been changed")
-                    }
-                }
-
-                licenses {
-                    license {
-                        name.set("The Apache License, Version 2.0")
-                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
-                    }
-                }
-                developers {
-                    developer {
-                        id.set("dovyih")
-                        name.set("Dov Yih")
-                        email.set("me@yidafu.dev")
-                    }
-                }
-                scm {
-                    connection.set("scm:git:git://github.com:yidafu/kotlin-notebook-js.git")
-                    developerConnection.set("scm:git:ssh://github.com:yidafu/kotlin-notebook-js.git")
-                    url.set("https://github.com/yidafu/kotlin-jupyter-js/tree/main/swc-binding#readme")
-                }
-            }
-        }
-    }
-
-    repositories {
-        maven {
-            url = uri("https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/")
-            println(ossrhUsername + ossrhPassword)
-            // 这里就是之前在issues.sonatype.org注册的账号
-            credentials {
-                username = ossrhUsername
-                password = ossrhPassword
-            }
-        }
-    }
-}
-
-signing {
-    sign(publishing.publications["mavenKotlin"])
+publishMan {
+    name.set("swc binding")
+    description.set("swc jvm binding by kotlin")
 }
 
 tasks.create("generateJniHeaders") {

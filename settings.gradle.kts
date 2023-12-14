@@ -10,9 +10,20 @@
 
 pluginManagement {
     repositories {
-        maven { setUrl("https://mirrors.cloud.tencent.com/nexus/repository/maven-public") }
+        maven("https://mirrors.cloud.tencent.com/nexus/repository/maven-public")
+        maven("https://s01.oss.sonatype.org/content/groups/public/")
         gradlePluginPortal()
         mavenCentral()
+    }
+}
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
+dependencyResolutionManagement {
+    versionCatalogs {
+        create("libs") {
+            from(files("./build-plugin/libs.versions.toml"))
+        }
     }
 }
 
@@ -22,3 +33,5 @@ rootProject.name = "kotlin-notebook-js"
 
 include("jupyter-js")
 include("swc-binding")
+project(":swc-binding").name = "swc-binding"
+project(":jupyter-js").name = "jupyter-js"
