@@ -1,6 +1,7 @@
 package dev.yidafu.swc
 
 import dev.yidafu.swc.types.*
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 
 class SwcNative {

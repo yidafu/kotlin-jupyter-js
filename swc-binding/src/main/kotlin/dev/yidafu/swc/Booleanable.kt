@@ -132,9 +132,9 @@ object BooleanableTerserMangleOptionsSerializer : BooleanableSerializer<TerserMa
     TerserMangleOptions::class.serializer()
 )
 
-@OptIn(ExperimentalSerializationApi::class)
+@OptIn(ExperimentalSerializationApi::class, InternalSerializationApi::class)
 object BooleanableArrayMatchPatternSerializer : BooleanableSerializer<Array<MatchPattern>>(
-    ArraySerializer(MatchPattern::class, MatchPattern.serializer())
+    ArraySerializer(MatchPattern::class, MatchPattern::class.serializer())
 )
 
 typealias BooleanableString = Booleanable<String>
