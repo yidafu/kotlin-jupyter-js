@@ -118,6 +118,8 @@ class TerserCompressOptions {
     var hoist_vars: Boolean? = null
     var ie8: Boolean? = null
     var if_return: Boolean? = null
+
+    @SerialName("inline")
     var jsInline: Int? = null
     var join_vars: Boolean? = null
     var keep_classnames: Boolean? = null
@@ -265,9 +267,9 @@ class JscConfig {
 
 @SwcDslMarker
 @Serializable
-@SerialName("typescript")
+@SerialName("ecmascript")
 class TsParserConfig : ParserConfig {
-//    var syntax: String? = null
+    // var syntax: String? = null
     var tsx: Boolean? = null
     var decorators: Boolean? = null
     var dynamicImport: Boolean? = null
@@ -278,9 +280,9 @@ class TsParserConfig : ParserConfig {
 
 @SwcDslMarker
 @Serializable
-@SerialName("ecmascript")
+@SerialName("typescript")
 class EsParserConfig : ParserConfig {
-//    var syntax: String? = null
+    // var syntax: String? = null
     var jsx: Boolean? = null
     var numericSeparator: Boolean? = null
     var classPrivateProperty: Boolean? = null
@@ -365,7 +367,7 @@ class GlobalPassOption {
 @Serializable
 class Es6Config : BaseModuleConfig, ModuleConfig {
     // conflict with @SerialName
-    //   var type : Int? = null
+    //   var type : Float? = null
     override var strict: Boolean? = null
     override var strictMode: Boolean? = null
 
@@ -1111,7 +1113,6 @@ interface BaseModuleConfig {
 }
 
 @SwcDslMarker
-// @Serializable(NodeSerializer::class)
 sealed interface Node {
     // conflict with @SerialName
     //  var type: String?
@@ -1868,6 +1869,7 @@ class AssignmentExpressionImpl : AssignmentExpression {
 interface MemberExpression : ExpressionBase, Expression {
     // conflict with @SerialName
     //  var type: String?
+    @SerialName("object")
     var jsObject: Expression?
     var property: TsModuleName?
     override var span: Span?
@@ -1881,6 +1883,7 @@ interface MemberExpression : ExpressionBase, Expression {
 class MemberExpressionImpl : MemberExpression {
     // conflict with @SerialName
     //  override var type : String? = "MemberExpression"
+    @SerialName("object")
     override var jsObject: Expression? = null
     override var property: TsModuleName? = null
     override var span: Span? = null
@@ -2263,6 +2266,7 @@ class PrivateNameImpl : PrivateName {
 interface JSXMemberExpression : Node, Expression, JSXObject, JSXElementName {
     // conflict with @SerialName
     //  var type: String?
+    @SerialName("object")
     var jsObject: JSXObject?
     var property: Identifier?
 }
@@ -2275,6 +2279,7 @@ interface JSXMemberExpression : Node, Expression, JSXObject, JSXElementName {
 class JSXMemberExpressionImpl : JSXMemberExpression {
     // conflict with @SerialName
     //  override var type : String? = "JSXMemberExpression"
+    @SerialName("object")
     override var jsObject: JSXObject? = null
     override var property: Identifier? = null
 }
@@ -2623,7 +2628,7 @@ class RegExpLiteralImpl : RegExpLiteral {
 interface NumericLiteral : Node, HasSpan, Literal, PropertyName, TsLiteral {
     // conflict with @SerialName
     //  var type: String?
-    var value: Float?
+    var value: Double?
     var raw: String?
     override var span: Span?
 }
@@ -2636,7 +2641,7 @@ interface NumericLiteral : Node, HasSpan, Literal, PropertyName, TsLiteral {
 class NumericLiteralImpl : NumericLiteral {
     // conflict with @SerialName
     //  override var type : String? = "NumericLiteral"
-    override var value: Float? = null
+    override var value: Double? = null
     override var raw: String? = null
     override var span: Span? = null
 }
@@ -3858,6 +3863,8 @@ interface TsTypeParameter : Node, HasSpan {
     // conflict with @SerialName
     //  var type: String?
     var name: Identifier?
+
+    @SerialName("in")
     var jsIn: Boolean?
     var out: Boolean?
     var constraint: TsType?
@@ -3874,6 +3881,8 @@ class TsTypeParameterImpl : TsTypeParameter {
     // conflict with @SerialName
     //  override var type : String? = "TsTypeParameter"
     override var name: Identifier? = null
+
+    @SerialName("in")
     override var jsIn: Boolean? = null
     override var out: Boolean? = null
     override var constraint: TsType? = null
