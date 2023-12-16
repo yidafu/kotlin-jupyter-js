@@ -7,13 +7,16 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import org.jetbrains.kotlinx.jupyter.api.JSON
+import org.jetbrains.kotlinx.jupyter.api.MimeTypedResult
+import org.jetbrains.kotlinx.jupyter.api.MimeTypes
 import org.jetbrains.kotlinx.jupyter.api.htmlResult
 import org.jetbrains.kotlinx.jupyter.testkit.JupyterReplTestCase
 import org.jetbrains.kotlinx.jupyter.testkit.ReplProvider
 import kotlin.test.Test
-import kotlin.test.assertTrue
+import kotlin.test.assertContains
+import kotlin.test.assertIs
 
-class LibraryTest : JupyterReplTestCase(
+class KotlinKernelJsSupportTest : JupyterReplTestCase(
     ReplProvider.withDefaultClasspathResolution(),
 ) {
 
@@ -25,7 +28,7 @@ class LibraryTest : JupyterReplTestCase(
     }
 
     @Test
-    fun someLibraryMethodReturnsTrue() {
+    fun `import variable from kotlin world`() {
         exec(
             """
             USE {
@@ -33,12 +36,8 @@ class LibraryTest : JupyterReplTestCase(
             }
             """.trimIndent(),
         )
-        exec(
-            """
-            val foo = "string"
-        """.trimIndent(),
-        )
-        exec(
+        exec(""" val foo = "string" """)
+        val result = exec(
             """
             %js
             import { foo } from "@jupyter";
@@ -48,8 +47,34 @@ class LibraryTest : JupyterReplTestCase(
             console.log(b)
         """.trimIndent(),
         )
-//        val classUnderTest = KotlinKernelJsSupport()
 
-        assertTrue(true, "someLibraryMethod should return 'true'")
+        assertIs<MimeTypedResult>(result)
+        (result[MimeTypes.HTML] as String).contains("const foo = \"string\";")
+    }
+
+    @Test
+    fun `render jsx code to js`() {
+        exec(
+            """
+            USE {
+                addCodePreprocessor(dev.yidafu.jupyper.JavaScriptMagicCodeProcessor(this.notebook));
+            }
+            """.trimIndent(),
+        )
+        exec(""" val foo = "string" """)
+
+        val result = exec(
+            """
+            %jsx
+            
+            import { foo } from "@jupyter";
+
+            export default function App() {
+                return <div>{foo}</div>
+            }
+        """.trimIndent(),
+        ) as MimeTypedResult
+        assertContains((result[MimeTypes.HTML] as String), "React.createElement")
+        println((result[MimeTypes.HTML] as String))
     }
 }

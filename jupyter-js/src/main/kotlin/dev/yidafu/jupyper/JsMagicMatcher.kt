@@ -23,7 +23,10 @@ class JsMagicMatcher(private val source: String) {
         jsMagicIntervals(source)
     }
 
-    val sourceWithoutJsMagic: String by lazy {
+    /**
+     * code without js magics
+     */
+    val cleanSourceCode: String by lazy {
             val indexList = listOf(0) +
                     intervals.map { listOf(it.first, it.last + 1) }.flatten().toMutableList() +
                     listOf(source.length - 1)
@@ -55,20 +58,24 @@ class JsMagicMatcher(private val source: String) {
             return i < len && source[i] == char
         }
 
-        fun isWhitespaceOrEnd(i: Int): Boolean {
+        fun isWhitespace(i: Int): Boolean {
             return if (i < len) {
                 source[i] == ' ' || source[i] == '\n' || source[i] == '\t'
             } else {
-                true
+                false
             }
         }
+
         val intervals = mutableListOf<IntRange>()
         var index = 0
+        fun eof(): Boolean {
+            return index >= len
+        }
         while (index < source.length) {
-            while (isWhitespaceOrEnd(index)) {
+            while (isWhitespace(index)) {
                 index += 1
             }
-            if (index >= source.length) {
+            if (eof()) {
                break
             }
             if (source[index] == '%') {
@@ -80,10 +87,10 @@ class JsMagicMatcher(private val source: String) {
                         index += 1
                         if (check(index, 'x')) {
                             index += 1
-                            if (isWhitespaceOrEnd(index)) {
+                            if (isWhitespace(index)) {
                                 intervals.add(start ..< index)
                             }
-                        } else if (isWhitespaceOrEnd(index)) {
+                        } else if (isWhitespace(index)) {
                             intervals.add(start..< index)
                         }
                     } else if (check(index, 'a')) {
@@ -92,7 +99,7 @@ class JsMagicMatcher(private val source: String) {
                             check(index, it)
                         }
                         if (isJavascriptMagic) {
-                            if (isWhitespaceOrEnd(index + 1)) {
+                            if (isWhitespace(index + 1)) {
                                 intervals.add(start..index)
                             }
                         }
@@ -103,19 +110,19 @@ class JsMagicMatcher(private val source: String) {
                         index += 1
                         if (check(index, 'x')) {
                             index += 1
-                            if (isWhitespaceOrEnd(index)) {
+                            if (isWhitespace(index)) {
                                 intervals.add(start..< index)
                             }
-                        } else if (isWhitespaceOrEnd(index)) {
+                        } else if (isWhitespace(index)) {
                             intervals.add(start..< index)
                         }
                     } else if (check(index, 'y')) {
-                        val isJavascriptMagic = listOf('p', 'e', 's', 'c', 'r', 'i', 'p', 't').all {
+                        val isTypescriptMagic = listOf('p', 'e', 's', 'c', 'r', 'i', 'p', 't').all {
                             index += 1
                             check(index, it)
                         }
-                        if (isJavascriptMagic) {
-                            if (isWhitespaceOrEnd(index + 1)) {
+                        if (isTypescriptMagic) {
+                            if (isWhitespace(index + 1)) {
                                 intervals.add(start..index)
                             }
                         }
@@ -123,7 +130,7 @@ class JsMagicMatcher(private val source: String) {
                 }
             }
             index += 1
-            while (!isWhitespaceOrEnd(index)) {
+            while (!(isWhitespace(index) || eof())) {
                 index += 1
             }
         }

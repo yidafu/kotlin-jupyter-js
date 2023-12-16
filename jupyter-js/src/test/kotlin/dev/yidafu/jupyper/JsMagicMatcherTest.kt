@@ -6,13 +6,13 @@ class JsMagicMatcherTest {
     fun shouldTrue(code: String) {
         assertNotEquals(
             JsMagicMatcher(code).match(),
-            JsMagicMatcher.LanguageType.Kotlin
+            JsMagicMatcher.LanguageType.Kotlin,
         )
     }
     fun shouldFalse(code: String) {
         assertEquals(
             JsMagicMatcher(code).match(),
-            JsMagicMatcher.LanguageType.Kotlin
+            JsMagicMatcher.LanguageType.Kotlin,
         )
     }
 
@@ -72,11 +72,34 @@ class JsMagicMatcherTest {
             "%typescript\nconst n: number = 1",
             "%tsx\nconst div = <TDiv></TDiv>",
         ).forEach {
-
-            val str =  listOf("%jsx", "%javascript", "%js", "%tsx", "%typescript", "%ts").fold(it) { s, k->
+            val str = listOf("%jsx", "%javascript", "%js", "%tsx", "%typescript", "%ts").fold(it) { s, k ->
                 s.replace(k, "")
             }
-            assertEquals(JsMagicMatcher(it).sourceWithoutJsMagic, str)
+            assertEquals(JsMagicMatcher(it).cleanSourceCode, str)
         }
+    }
+
+    @Test
+    fun `should return Kotlin`() {
+        val matcher = JsMagicMatcher(
+            """ val foo ="string"; """,
+        )
+        val type = matcher.match()
+        assertEquals(type, JsMagicMatcher.LanguageType.Kotlin)
+        assertEquals(matcher.cleanSourceCode, """ val foo ="string"; """)
+    }
+
+    @Test
+    fun `kotlin USE statement should be Kotlin`() {
+        val matcher = JsMagicMatcher(
+            """
+            USE {
+                addCodePreprocessor(dev.yidafu.jupyper.JavaScriptMagicCodeProcessor(this.notebook));
+            }
+            """.trimIndent(),
+        )
+
+        val type = matcher.match()
+        assertEquals(type, JsMagicMatcher.LanguageType.Kotlin)
     }
 }

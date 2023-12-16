@@ -1,12 +1,13 @@
 package dev.yidafu.jupyper
 
+import dev.yidafu.jupyper.processor.DefaultExportProcessor
 import dev.yidafu.jupyper.processor.JupyterImportProcessor
 import dev.yidafu.swc.SwcNative
-import dev.yidafu.swc.dsl.esParserConfig
 import dev.yidafu.swc.dsl.jscConfig
-import dev.yidafu.swc.dsl.tsParserConfig
 import dev.yidafu.swc.esParseOptions
 import dev.yidafu.swc.options
+import dev.yidafu.swc.tsParseOptions
+import dev.yidafu.swc.types.Program
 import org.jetbrains.kotlinx.jupyter.api.CodePreprocessor
 import org.jetbrains.kotlinx.jupyter.api.KotlinKernelHost
 import org.jetbrains.kotlinx.jupyter.api.Notebook
@@ -22,75 +23,143 @@ class JavaScriptMagicCodeProcessor(
         val matcher = JsMagicMatcher(code)
         return matcher.match() !== JsMagicMatcher.LanguageType.Kotlin
     }
+    private val jsParseOpt
+        get() = esParseOptions {
+            target = "es2020"
+            comments = false
+            topLevelAwait = true
+            nullishCoalescing = true
+        }
+    private val jsxParseOpt
+        get() = esParseOptions {
+            jsx = true
+            target = "es2020"
+            comments = false
+            topLevelAwait = true
+            nullishCoalescing = true
+        }
+    private val jsPrintOpt
+        get() = options {
+            jsc = jscConfig {
+                target = "es2020"
+                parser = jsParseOpt
+            }
+        }
+    private val tsParseOpt
+        get() = tsParseOptions {
+            target = "es2020"
+            comments = false
+        }
+    private val tsPrintOpt
+        get() = options {
+            jsc = jscConfig {
+                target = "es2020"
+                parser = tsParseOpt
+            }
+        }
 
-    fun processJsCode(source: String): String {
+    private val tsxParseOpt
+        get() = tsParseOptions {
+            target = "es2020"
+            comments = false
+            tsx = true
+        }
+
+    private fun executeJsProcessor(program: Program) {
+        JupyterImportProcessor(notebook).process(program)
+    }
+
+    private fun executeJsxProcessor(program: Program) {
+        JupyterImportProcessor(notebook).process(program)
+        DefaultExportProcessor().process(program)
+    }
+
+    private fun executeJsProcessor(source: String): String {
         val program = swcCompiler.parseSync(
             source,
-            esParseOptions {
-               target = "es2020"
-                comments = false
-                topLevelAwait = true
-                nullishCoalescing = true
-            },
+            jsParseOpt,
             "jupyter-cell.js",
         )
-        JupyterImportProcessor(notebook).process(program)
+
+        executeJsProcessor(program)
+
         val output = swcCompiler.printSync(
             program,
+            jsPrintOpt,
+        )
+        return "dev.yidafu.jupyper.JsCodeResult(\"\"\" ${output.code} \"\"\")"
+    }
+
+    private fun processTsCode(source: String): String {
+        val transformOutput = swcCompiler.transformSync(
+            source,
+            true,
             options {
                 jsc = jscConfig {
-                    target = "es2020"
-                    parser = esParserConfig { }
+                    parser = tsParseOpt
                 }
             },
         )
-        return "dev.yidafu.jupyper.JsCodeResult(\"\"\"${output.code}\"\"\")"
-    }
 
-    fun processTsCode(source: String): String {
-        val output = swcCompiler.transformSync(
-            source,
-            false,
-            options {
-                jsc = jscConfig {
-                    target = "es2020"
-                    parser = tsParserConfig { }
-                }
-            },
+        val program = swcCompiler.parseSync(
+            transformOutput.code,
+            tsParseOpt,
+            "jupyter-cell-js.js",
         )
-        return "dev.yidafu.jupyper.JsCodeResult(\"\"\"${output.code}\"\"\")"
+
+        executeJsProcessor(program)
+
+        val output = swcCompiler.printSync(program, tsPrintOpt)
+
+        return "dev.yidafu.jupyper.JsCodeResult(\"\"\" ${output.code} \"\"\")"
     }
 
-    fun processJsxCode(source: String): String {
-        val output = swcCompiler.transformSync(
+    private fun processJsxCode(source: String): String {
+        val transformOutput = swcCompiler.transformSync(
             source,
             false,
             options {
-                jsc = jscConfig {
-                    target = "es2020"
-                    parser = esParserConfig {
-                        jsx = true
+                    jsc = jscConfig {
+                        parser = jsxParseOpt
                     }
-                }
             },
         )
-        return "dev.yidafu.jupyper.JsxCodeResult(\"\"\"${output.code}\"\"\")"
+
+        val program = swcCompiler.parseSync(
+            transformOutput.code,
+            jsxParseOpt,
+            "jupyter-cell-jsx.js",
+        )
+
+        executeJsxProcessor(program)
+
+        val output = swcCompiler.printSync(program, jsPrintOpt)
+
+        return "dev.yidafu.jupyper.JsxCodeResult(\"\"\" ${output.code} \"\"\")"
     }
 
-    fun processTsxCode(source: String): String {
-        val output = swcCompiler.transformSync(
+    private fun processTsxCode(source: String): String {
+        val transformOutput = swcCompiler.transformSync(
             source,
-            false,
+            true,
             options {
                 jsc = jscConfig {
-                    target = "es2020"
-                    parser = tsParserConfig {
-                        tsx = true
-                    }
+                    parser = tsxParseOpt
                 }
             },
         )
-        return "dev.yidafu.jupyper.JsxCodeResult(\"\"\"${output.code}\"\"\")"
+
+        val program = swcCompiler.parseSync(
+            transformOutput.code,
+            tsxParseOpt,
+            "jupyter-cell-tsx.js",
+        )
+
+        executeJsxProcessor(program)
+
+        val output = swcCompiler.printSync(program, tsPrintOpt)
+
+        return "dev.yidafu.jupyper.JsxCodeResult(\"\"\" ${output.code} \"\"\")"
     }
 
     /**
@@ -101,21 +170,18 @@ class JavaScriptMagicCodeProcessor(
         val lang = matcher.match()
         log.info("process $lang")
 
-        val codeWithOutJs = matcher.sourceWithoutJsMagic
+        val codeWithOutJs = matcher.cleanSourceCode
         val outputCode = try {
             when (lang) {
-                JsMagicMatcher.LanguageType.JS -> processJsCode(codeWithOutJs)
-                JsMagicMatcher.LanguageType.JSX -> processJsxCode(codeWithOutJs)
+                JsMagicMatcher.LanguageType.JS -> executeJsProcessor(codeWithOutJs)
                 JsMagicMatcher.LanguageType.TS -> processTsCode(codeWithOutJs)
+                JsMagicMatcher.LanguageType.JSX -> processJsxCode(codeWithOutJs)
                 JsMagicMatcher.LanguageType.TSX -> processTsxCode(codeWithOutJs)
                 JsMagicMatcher.LanguageType.Kotlin -> codeWithOutJs
             }
         } catch (e: Exception) {
-            println(e)
             log.error("process js code fail", e)
-            """
-            org.jetbrains.kotlinx.jupyter.api.HTML("<code>${e.message}</code>")    
-            """.trimIndent()
+            "org.jetbrains.kotlinx.jupyter.api.HTML(\"\"\"<code>${e.message}</code>\"\"\")"
         }
 
         return CodePreprocessor.Result(outputCode)
