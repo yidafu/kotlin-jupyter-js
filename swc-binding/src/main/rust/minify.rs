@@ -1,15 +1,17 @@
-
-use jni::{sys::jstring, JNIEnv, objects::{JClass, JString}};
+use jni::{
+    objects::{JClass, JString},
+    sys::jstring,
+    JNIEnv,
+};
 use jni_fn::jni_fn;
 use serde::Deserialize;
 use serde_json::to_string;
 use swc::config::ErrorFormat;
-use swc_common::{collections::AHashMap, SourceMap, SourceFile, sync::Lrc, FileName};
+use swc_common::{collections::AHashMap, sync::Lrc, FileName, SourceFile, SourceMap};
 
-use crate::get_compiler;
+use crate::{get_compiler, util::process_output};
 
-use crate::util::{try_with, get_deserialized, MapErr};
-
+use crate::util::{get_deserialized, try_with, MapErr};
 
 #[derive(Deserialize)]
 #[serde(untagged)]
@@ -39,13 +41,9 @@ impl MinifyTarget {
     }
 }
 
-
 #[jni_fn("dev.yidafu.swc.SwcNative")]
-pub fn minifySync(
-      mut env: JNIEnv,
-    _: JClass,
-    code: JString, opts: JString) -> jstring {
-          let code: String = env
+pub fn minifySync(mut env: JNIEnv, _: JClass, code: JString, opts: JString) -> jstring {
+    let code: String = env
         .get_string(&code)
         .expect("Couldn't get java string!")
         .into();
@@ -70,9 +68,5 @@ pub fn minifySync(
     )
     .convert_err();
 
-
-    let output = to_string(&result.unwrap()).unwrap();
-    env.new_string(output)
-            .expect("Couldn't create Java String")
-        .into_raw()
+    process_output(env, result)
 }

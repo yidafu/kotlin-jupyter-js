@@ -10,7 +10,7 @@ use swc::config::Options;
 use swc_common::FileName;
 use swc_ecma_ast::Program;
 
-use crate::util::{try_with, get_deserialized, deserialize_json, MapErr};
+use crate::util::{deserialize_json, get_deserialized, process_output, try_with, MapErr};
 
 use crate::get_compiler;
 
@@ -66,13 +66,8 @@ pub fn transformSync(
     )
     .convert_err();
 
-    
-    let output = to_string(&result.unwrap()).unwrap();
-    env.new_string(output)
-        .expect("Couldn't create Java String")
-        .into_raw()
+    process_output(env, result)
 }
-
 
 #[jni_fn("dev.yidafu.swc.SwcNative")]
 pub fn transformFileSync(
@@ -82,7 +77,6 @@ pub fn transformFileSync(
     is_module: jboolean,
     options: JString,
 ) -> jstring {
-
     let s: String = env
         .get_string(&filepath)
         .expect("Couldn't get java string!")
@@ -121,8 +115,5 @@ pub fn transformFileSync(
     )
     .convert_err();
 
-    let output = to_string(&result.unwrap()).unwrap();
-    env.new_string(output)
-        .expect("Couldn't create Java String")
-        .into_raw()
+    process_output(env, result)
 }
