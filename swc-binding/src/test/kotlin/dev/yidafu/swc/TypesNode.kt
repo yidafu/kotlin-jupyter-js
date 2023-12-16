@@ -11,7 +11,7 @@ class AstNodeTest {
         val expr = BinaryExpressionImpl().apply {
             operator = BinaryOperator.UnaryPlus
             left = NumericLiteralImpl().apply {
-                value = 2
+                value = 2.0
                 raw = "2"
                 span = Span().apply {
                     start = 1
@@ -21,7 +21,7 @@ class AstNodeTest {
             }
 
             right = NumericLiteralImpl().apply {
-                value = 2
+                value = 2.0
                 raw = "2"
                 span = Span().apply {
                     start = 4
