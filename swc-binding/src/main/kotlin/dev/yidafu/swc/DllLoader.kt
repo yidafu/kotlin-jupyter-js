@@ -1,7 +1,6 @@
 package dev.yidafu.swc
 
 import java.nio.file.Files
-import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 
@@ -91,14 +90,12 @@ object DllLoader {
                 throw UnsatisfiedLinkError("Unsupported platform $p")
             }
         }
+        // TODO: add version postfix
         val outAbsPath = System.getProperty("java.io.tmpdir") + "/swc-jni/" + jarPath
-        if (!Files.exists(Path.of(outAbsPath))) {
-            val inStream = DllLoader::class.java.classLoader.getResourceAsStream(jarPath)!!
-            val outPath = Paths.get(outAbsPath)
-            Files.createDirectories(outPath.parent)
-            Files.copy(inStream, outPath, StandardCopyOption.ATOMIC_MOVE)
-        }
-
+        val inStream = DllLoader::class.java.classLoader.getResourceAsStream(jarPath)!!
+        val outPath = Paths.get(outAbsPath)
+        Files.createDirectories(outPath.parent)
+        Files.copy(inStream, outPath, StandardCopyOption.REPLACE_EXISTING)
         return outAbsPath
     }
 }

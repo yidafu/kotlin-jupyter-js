@@ -17,3 +17,15 @@ fun tsParseOptions(block: TsParserConfig.() -> Unit): TsParserConfig {
 fun esParseOptions(block: EsParserConfig.() -> Unit): EsParserConfig {
     return EsParserConfig().apply(block)
 }
+
+fun span(): Span {
+    return Span()
+}
+
+fun emptySpan(): Span {
+    return Span().apply {
+        start = 0
+        end = 0
+        ctxt = 0
+    }
+}

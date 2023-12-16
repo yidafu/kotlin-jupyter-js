@@ -50,24 +50,58 @@ open class BooleanableSerializer<T : Any>(
     }
 }
 
+/**
+ * value may be boolean or [T]
+ *
+ * Example Usage:
+ * ```
+ * var value: Booleanable<String>
+ * value = Booleanable.ofFalse<String>()
+ * value = Booleanable.ofTrue<String>()
+ * value = Booleanable.ofValue("string")
+ * ```
+ * @property [value] actual value
+ */
 @Serializable(BooleanableSerializer::class)
 data class Booleanable<T : Any>(
-//    val klass: KClass<T>,
     val value: T?,
     private var bool: Boolean? = null
 ) {
+    /**
+     * return true if value exist (not null)
+     */
     fun hasValue(): Boolean {
         return value == null
     }
 
+    /**
+     * is true
+     */
     fun isTrue(): Boolean {
         return bool == true
     }
 
+    /**
+     * is false
+     */
     fun isFalse(): Boolean {
         return bool == false
     }
 
+    /**
+     * call when value is not null
+     *
+     * Usage:
+     * ```
+     * Booleanable<String>.ofValue("str")
+     *  .onValue {
+     *      println(it)
+     *  }
+     *  .onBool {} // would not been called
+     * ```
+     * @param [block] callback
+     * @return object self
+     */
     fun onValue(block: (value: T) -> Unit): Booleanable<T> {
         if (value != null) {
             block(value)
@@ -75,6 +109,20 @@ data class Booleanable<T : Any>(
         return this
     }
 
+    /**
+     * call when value is not null
+     *
+     * Usage:
+     * ```
+     * Booleanable<String>.ofTrue()
+     *  .onBool {
+     *      println(it)
+     *  }
+     *  .onValue {} // would not been called
+     * ```
+     * @param [block] callback
+     * @return object self
+     */
     fun onBool(block: (value: Boolean) -> Unit): Booleanable<T> {
         val b = this.bool
         if (b != null) {

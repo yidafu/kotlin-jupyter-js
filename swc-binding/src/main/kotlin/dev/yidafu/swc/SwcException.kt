@@ -1,4 +1,3 @@
 package dev.yidafu.swc
 
-class SwcException {
-}
+class SwcException : RuntimeException()
