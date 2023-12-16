@@ -6,7 +6,7 @@ This Project still in early stage.
 
 ## Screen Snapshot
 
-![](./snapshot.jpg)
+![](./screenshot.jpg)
 
 ## TODO LIST
 
