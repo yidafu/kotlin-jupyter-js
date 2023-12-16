@@ -146,7 +146,7 @@ export function getType(typeNode: TypeNode<ts.TypeNode>): string {
 
         }
         case "NumberKeyword": {
-            return "Float"
+            return "Int"
         }
         case "StringKeyword": {
             return "String"
