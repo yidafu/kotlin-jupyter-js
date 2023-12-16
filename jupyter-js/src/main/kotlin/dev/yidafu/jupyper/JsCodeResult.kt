@@ -7,7 +7,7 @@ import org.jetbrains.kotlinx.jupyter.api.Renderable
 import org.jetbrains.kotlinx.jupyter.api.htmlResult
 
 @Serializable
-class JsCodeResult(private val jsCode: String): Renderable {
+class JsCodeResult(private val jsCode: String) : Renderable {
     private val jsCodeScriptModule: String
         get() = """
             <script type="module">

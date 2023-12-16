@@ -1,27 +1,19 @@
-
-
 use jni::objects::{JClass, JString};
-use jni::sys::{jstring};
+use jni::sys::jstring;
 use jni::JNIEnv;
 use jni_fn::jni_fn;
+use serde_json::to_string;
 use swc::config::{Options, SourceMapsConfig};
-use swc_common::{GLOBALS};
+use swc_common::GLOBALS;
 use swc_ecma_ast::Program;
 use swc_ecma_codegen::Config;
-use serde_json::to_string;
 
-use crate::util::{get_deserialized, deserialize_json, MapErr};
+use crate::util::{deserialize_json, get_deserialized, process_output, MapErr};
 
 use crate::get_compiler;
 
-
 #[jni_fn("dev.yidafu.swc.SwcNative")]
-pub fn printSync(
-    mut env: JNIEnv,
-    _: JClass,
-    program: JString,
-    options: JString,
-) -> jstring {
+pub fn printSync(mut env: JNIEnv, _: JClass, program: JString, options: JString) -> jstring {
     let program: String = env
         .get_string(&program)
         .expect("Couldn't get java string!")
@@ -30,7 +22,7 @@ pub fn printSync(
         .get_string(&options)
         .expect("Couldn't get java string!")
         .into();
-      // crate::util::init_default_trace_subscriber();
+    // crate::util::init_default_trace_subscriber();
 
     let c = get_compiler();
 
@@ -62,8 +54,5 @@ pub fn printSync(
         )
         .convert_err()
     });
-    let output = to_string(&result.unwrap()).unwrap();
-        env.new_string(output)
-        .expect("Couldn't create Java String")
-        .into_raw()
+    process_output(env, result)
 }

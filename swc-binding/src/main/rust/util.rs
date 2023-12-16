@@ -1,28 +1,36 @@
-
+use jni::{objects::JString, sys::jstring, JNIEnv};
 use serde::de::DeserializeOwned;
+use std::{
+    any::type_name,
+    panic::{catch_unwind, AssertUnwindSafe},
+};
+use swc::{config::ErrorFormat, try_with_handler, HandlerOpts, TransformOutput};
+use swc_common::{
+    errors::Handler,
+    sync::{Lrc, OnceCell},
+    SourceMap, GLOBALS,
+};
+use swc_ecma_ast::Program;
 use thiserror::Error;
-use std::{panic::{catch_unwind, AssertUnwindSafe}, any::type_name};
-use swc::{config::ErrorFormat, try_with_handler, HandlerOpts};
-use swc_common::{sync::{OnceCell, Lrc}, SourceMap, errors::Handler, GLOBALS};
 
 use anyhow::{anyhow, Error};
 
-use tracing::instrument;
 use anyhow::Context;
+use tracing::instrument;
 
 pub type SwcResult<T> = std::result::Result<T, SwcException>;
 
 #[derive(Debug, Error)]
 pub enum SwcException {
-  #[error("swc fail: {msg}")]
-  SwcAnyException {  msg: String },
+    #[error("swc fail: {msg}")]
+    SwcAnyException { msg: String },
 }
-
 
 pub trait MapErr<T>: Into<Result<T, anyhow::Error>> {
     fn convert_err(self) -> SwcResult<T> {
-        self.into()
-            .map_err(|err| SwcException::SwcAnyException { msg: format!("{:?}", err) })
+        self.into().map_err(|err| SwcException::SwcAnyException {
+            msg: format!("{:?}", err),
+        })
     }
 }
 
@@ -66,7 +74,6 @@ where
     })
 }
 
-
 pub fn deserialize_json<T>(json: &str) -> Result<T, serde_json::Error>
 where
     T: DeserializeOwned,
@@ -96,4 +103,53 @@ where
         .convert_err()?;
 
     Ok(v)
+}
+
+pub(crate) fn process_result(mut env: JNIEnv, result: Result<Program, SwcException>) -> jstring {
+    // https://github.com/jni-rs/jni-rs/issues/76
+    match result {
+        Ok(program) => {
+            let ast_json = serde_json::to_string(&program).unwrap();
+
+            let output = env
+                .new_string(ast_json)
+                .expect("Couldn't create java string!");
+            return output.into_raw();
+        }
+        Err(e) => {
+            match e {
+                SwcException::SwcAnyException { msg } => {
+                    // env.throw(("dev/yidafu/swc/SwcException", msg.to_string())).unwrap();
+                    env.throw(msg).unwrap();
+                }
+            }
+            return JString::default().into_raw();
+        }
+    }
+}
+
+pub(crate) fn process_output(
+    mut env: JNIEnv,
+    result: Result<TransformOutput, SwcException>,
+) -> jstring {
+    // https://github.com/jni-rs/jni-rs/issues/76
+    match result {
+        Ok(output) => {
+            let ast_json = serde_json::to_string(&output).unwrap();
+
+            let output = env
+                .new_string(ast_json)
+                .expect("Couldn't create java string!");
+            return output.into_raw();
+        }
+        Err(e) => {
+            match e {
+                SwcException::SwcAnyException { msg } => {
+                    // env.throw(("dev/yidafu/swc/SwcException", msg.to_string())).unwrap();
+                    env.throw(msg).unwrap();
+                }
+            }
+            return JString::default().into_raw();
+        }
+    }
 }

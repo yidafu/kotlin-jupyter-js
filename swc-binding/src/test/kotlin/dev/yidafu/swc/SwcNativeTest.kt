@@ -1,7 +1,8 @@
 package dev.yidafu.swc
 
 import dev.yidafu.swc.dsl.*
-import dev.yidafu.swc.types.*
+import dev.yidafu.swc.types.Module
+import org.junit.jupiter.api.assertThrows
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -20,7 +21,7 @@ class SwcNativeTest {
                 add(1,2);
                 """.trimIndent(),
                 esParseOptions { },
-                "temp.js"
+                "temp.js",
             )
         println(ast)
         assertNotNull(ast) { "ast string can't be null " }
@@ -30,8 +31,8 @@ class SwcNativeTest {
     fun `parse js file to ast str`() {
         val ast =
             swcNative.parseFileSync(
-                SwcNativeTest::class.java.classLoader.getResource("test.js").file,
-                tsParseOptions { }
+                SwcNativeTest::class.java.classLoader.getResource("test.js")!!.file,
+                tsParseOptions { },
             )
         assertNotNull(ast) { "ast string can't be null " }
     }
@@ -41,15 +42,23 @@ class SwcNativeTest {
         val ast =
             swcNative.transformSync(
                 "function add(a, b) {return a + b;}; add(1,2)",
-                true,
+                false,
                 options {
                     jsc =
                         jscConfig {
                             parser = tsParserConfig { }
                         }
-                }
+                },
             )
-        assertNotNull(ast) { "transform result can't be null " }
+        assertEquals(
+            ast.code.trim(),
+            """
+            function add(a, b) {
+                return a + b;
+            }
+            add(1, 2);
+            """.trimIndent(),
+        )
     }
 
     @Test
@@ -63,7 +72,7 @@ class SwcNativeTest {
                         jscConfig {
                             parser = esParserConfig { }
                         }
-                }
+                },
             )
         assertNotNull(ast) { "transform result can't be null " }
     }
@@ -79,7 +88,7 @@ class SwcNativeTest {
                         jscConfig {
                             parser = esParserConfig { }
                         }
-                }
+                },
             )
 
         assertEquals(
@@ -89,10 +98,55 @@ class SwcNativeTest {
                 return a + b;
             }
             add(1, 2);
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 
+    @Test
+    fun `parse import statements`() {
+        val module = swcNative.parseSync(
+            """
+            import { foo, getRoot, bar as baz } from '@jupyter';
+
+            import jupyter from '@jupyter';
+
+            const b = 345;
+
+            console.log(b)
+            """.trimIndent(),
+            esParseOptions {
+                target = "es2020"
+                comments = false
+                topLevelAwait = true
+                nullishCoalescing = true
+            },
+            "jupyter-cell.js",
+        ) as Module
+        val output = swcNative.printSync(
+            module,
+            options {
+                jscConfig {
+                    minify = jsMinifyOptions {
+                    }
+                }
+            },
+        )
+        println(output.code)
+        println("moduel => ${module.body?.get(0)}")
+    }
+
+    @Test
+    fun `parse invalid js code`() {
+        assertThrows<RuntimeException> {
+            val module = swcNative.parseSync(
+                """
+                    val a = 234; // kotlin code
+                """.trimIndent(),
+                esParseOptions { },
+                "test.js",
+            ) as Module
+        }
+    }
 //    @Test
 //    fun `transform ast json file to ast str`() {
 //        val ast = swcNative.transformFileSync(
@@ -222,7 +276,7 @@ class SwcNativeTest {
                   "interpreter": null
                 }
                 """.trimIndent(),
-                "{}"
+                "{}",
             )
 
         println(res)
@@ -233,7 +287,7 @@ class SwcNativeTest {
         val output =
             swcNative.printSync(
                 esAddFunction,
-                options { }
+                options { },
             )
 
         assertEquals(
@@ -244,7 +298,7 @@ class SwcNativeTest {
             }
             ;
             add(1, 2);
-            """.trimIndent()
+            """.trimIndent(),
         )
     }
 }

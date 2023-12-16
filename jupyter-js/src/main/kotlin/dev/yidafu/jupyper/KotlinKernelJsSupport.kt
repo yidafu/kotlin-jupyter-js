@@ -24,6 +24,6 @@ class KotlinKernelJsSupport : JupyterIntegration() {
             "dev.yidafu.swc.*",
         )
 
-        addCodePreprocessor(JavaScriptMagicCodeProcessor())
+        addCodePreprocessor(JavaScriptMagicCodeProcessor(this.notebook))
     }
 }

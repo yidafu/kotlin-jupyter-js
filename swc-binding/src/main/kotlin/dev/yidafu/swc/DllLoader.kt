@@ -90,8 +90,9 @@ object DllLoader {
                 throw UnsatisfiedLinkError("Unsupported platform $p")
             }
         }
-        val inStream = DllLoader::class.java.classLoader.getResourceAsStream(jarPath)!!
+        // TODO: add version postfix
         val outAbsPath = System.getProperty("java.io.tmpdir") + "/swc-jni/" + jarPath
+        val inStream = DllLoader::class.java.classLoader.getResourceAsStream(jarPath)!!
         val outPath = Paths.get(outAbsPath)
         Files.createDirectories(outPath.parent)
         Files.copy(inStream, outPath, StandardCopyOption.REPLACE_EXISTING)

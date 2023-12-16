@@ -6,7 +6,8 @@ class JsMagicMatcher(private val source: String) {
         JSX,
         TS,
         TSX,
-        Kotlin;
+        Kotlin,
+        ;
 
         companion object {
             fun formString(magic: String): LanguageType = when (magic) {
@@ -65,7 +66,7 @@ class JsMagicMatcher(private val source: String) {
         var index = 0
         while (index < source.length) {
             while (isWhitespaceOrEnd(index)) {
-                index  += 1
+                index += 1
             }
             if (index >= source.length) {
                break
@@ -92,7 +93,7 @@ class JsMagicMatcher(private val source: String) {
                         }
                         if (isJavascriptMagic) {
                             if (isWhitespaceOrEnd(index + 1)) {
-                                intervals.add(start .. index)
+                                intervals.add(start..index)
                             }
                         }
                     }
@@ -115,16 +116,15 @@ class JsMagicMatcher(private val source: String) {
                         }
                         if (isJavascriptMagic) {
                             if (isWhitespaceOrEnd(index + 1)) {
-                                intervals.add(start .. index)
+                                intervals.add(start..index)
                             }
                         }
                     }
                 }
-
             }
             index += 1
             while (!isWhitespaceOrEnd(index)) {
-                index  += 1
+                index += 1
             }
         }
 

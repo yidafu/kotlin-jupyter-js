@@ -176,7 +176,7 @@ val esAddFunction: Module =
                                                         end = 48
                                                         ctxt = 0
                                                     }
-                                                value = 1
+                                                value = 1.0
                                                 raw = "1"
                                             }
                                     },
@@ -189,7 +189,7 @@ val esAddFunction: Module =
                                                         end = 50
                                                         ctxt = 2
                                                     }
-                                                value = 2
+                                                value = 2.0
                                                 raw = "2"
                                             }
                                     }
