@@ -267,7 +267,7 @@ class JscConfig {
 
 @SwcDslMarker
 @Serializable
-@SerialName("ecmascript")
+@SerialName("typescript")
 class TsParserConfig : ParserConfig {
     // var syntax: String? = null
     var tsx: Boolean? = null
@@ -280,7 +280,7 @@ class TsParserConfig : ParserConfig {
 
 @SwcDslMarker
 @Serializable
-@SerialName("typescript")
+@SerialName("ecmascript")
 class EsParserConfig : ParserConfig {
     // var syntax: String? = null
     var jsx: Boolean? = null
