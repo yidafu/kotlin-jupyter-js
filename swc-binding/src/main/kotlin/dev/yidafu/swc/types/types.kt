@@ -2623,7 +2623,7 @@ class RegExpLiteralImpl : RegExpLiteral {
 interface NumericLiteral : Node, HasSpan, Literal, PropertyName, TsLiteral {
     // conflict with @SerialName
     //  var type: String?
-    var value: Int?
+    var value: Float?
     var raw: String?
     override var span: Span?
 }
@@ -2636,7 +2636,7 @@ interface NumericLiteral : Node, HasSpan, Literal, PropertyName, TsLiteral {
 class NumericLiteralImpl : NumericLiteral {
     // conflict with @SerialName
     //  override var type : String? = "NumericLiteral"
-    override var value: Int? = null
+    override var value: Float? = null
     override var raw: String? = null
     override var span: Span? = null
 }
@@ -3446,6 +3446,7 @@ class DebuggerStatementImpl : DebuggerStatement {
 interface WithStatement : Node, HasSpan, Statement {
     // conflict with @SerialName
     //  var type: String?
+    @SerialName("object")
     var jsObject: Expression?
     var body: Statement?
     override var span: Span?
@@ -3459,6 +3460,7 @@ interface WithStatement : Node, HasSpan, Statement {
 class WithStatementImpl : WithStatement {
     // conflict with @SerialName
     //  override var type : String? = "WithStatement"
+    @SerialName("object")
     override var jsObject: Expression? = null
     override var body: Statement? = null
     override var span: Span? = null
