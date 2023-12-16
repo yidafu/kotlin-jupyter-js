@@ -564,6 +564,26 @@ astNodeList
         }
     })
 
+// object NodeSerializer: JsonContentPolymorphicSerializer<Node>(Node:: class) {
+//     override fun selectDeserializer(element: JsonElement): DeserializationStrategy < Node > {
+//         return when {
+//         "type" in element.jsonObject -> {
+//             val nodeType = element.jsonObject["type"]?.jsonPrimitive?.contentOrNull
+//                 when(nodeType) {
+//                   ${
+//                     classNameList.map(c =>
+//                         `\n\t\t\t\t\t"${c.replace('Impl', '')}" -> ${c}.serializer()`
+//                     ).join('\n')
+//                 }
+//                     else -> throw SerializationException("$nodeType Not Ast Node Type")
+//         }
+//     }
+//             else -> {
+//         throw SerializationException("Not Valid Tree Node")
+//     }
+// }
+//     }
+// }
 
 const NodeNodeSerializer = `
 package dev.yidafu.swc.types
@@ -576,24 +596,7 @@ import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
 import kotlinx.serialization.modules.SerializersModule
 
-object NodeSerializer : JsonContentPolymorphicSerializer<Node>(Node::class) {
-    override fun selectDeserializer(element: JsonElement): DeserializationStrategy<Node> {
-        return when {
-            "type" in element.jsonObject -> {
-                val nodeType = element.jsonObject["type"]?.jsonPrimitive?.contentOrNull
-                when (nodeType) {
-                  ${classNameList.map(c =>
-    `\n\t\t\t\t\t"${c.replace('Impl', '')}" -> ${c}.serializer()`
-).join('\n')}
-                    else -> throw SerializationException("$nodeType Not Ast Node Type")
-                }
-            }
-            else -> {
-                throw SerializationException("Not Valid Tree Node")
-            }
-        }
-    }
-}
+
 val swcSerializersModule = SerializersModule {
   ${Array.from(polymorphicMap).map(([p, list]) => `
     polymorphic(${p}::class) {

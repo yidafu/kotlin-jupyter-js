@@ -42,7 +42,9 @@ export class KotlinClassProperty {
     }
     getAnnotation() {
         const actualType = removeComment(this.getActualType()).replace('<', '').replace('>', '')
-
+        if (kotlinKeywordMap.has(this.name)) {
+            return `@SerialName("${this.name}")\n`
+        }
         if (actualType.startsWith('Booleanable')) {
             return `@Serializable(${actualType}Serializer::class)\n  `
         }
@@ -161,10 +163,22 @@ export class KotlinClass {
     }
 
     toString() {
+        this.overrideNumericLiteralValueType()
+
         if (this.modifier.includes('interface')) {
             return this.toInterfaceString().join('\n')
         }
         return this.toClassString().join('\n')
+    }
+    overrideNumericLiteralValueType() {
+        if (this.klassName.includes('NumericLiteral')) {
+            this.properties = this.properties.map(p => {
+                if (p.name === 'value') {
+                    p.type = 'Double'
+                }
+                return p
+            })
+        }
     }
     toInterfaceString() {
         return [
