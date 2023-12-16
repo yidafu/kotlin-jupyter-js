@@ -13,6 +13,6 @@ This Project still in early stage.
 + [x] swc binding for compile js code
 + [x] `%js`/`%ts`magics
 + [ ] `%jsx`/`%tsx` magic
-+ [ ] import variable from Kotlin world. like this: `import { foo } from "@jupyter"`
++ [x] import variable from Kotlin world. like this: `import { foo } from "@jupyter"`
 + [ ] js syntax highlight
 + [ ] etc...
