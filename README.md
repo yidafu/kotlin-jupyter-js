@@ -6,6 +6,8 @@ This Project still in early stage.
 
 ## Screenshot
 
+see [examples//js-magic.ipynb](./examples//js-magic.ipynb)
+
 ![](./screenshot.png)
 
 ## TODO LIST
