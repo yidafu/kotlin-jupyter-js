@@ -3,11 +3,10 @@
  */
 package dev.yidafu.jupyper
 
-import dev.yidafu.swc.SwcNative
 import org.jetbrains.kotlinx.jupyter.api.annotations.JupyterLibrary
 import org.jetbrains.kotlinx.jupyter.api.libraries.JupyterIntegration
+import org.jetbrains.kotlinx.jupyter.api.libraries.resources
 import org.slf4j.LoggerFactory
-
 /**
  * support `%javascript` magic
  */
@@ -16,14 +15,39 @@ class KotlinKernelJsSupport : JupyterIntegration() {
     val log = LoggerFactory.getLogger(KotlinKernelJsSupport::class.java)
 
     override fun Builder.onLoaded() {
-        import<JsCodeResult>()
-        import<SwcNative>()
-        import(
-            "dev.yidafu.swc.dsl.*",
-            "dev.yidafu.swc.types.*",
-            "dev.yidafu.swc.*",
-        )
-
+//        import<JsCodeResult>()
+//        import<JsxCodeResult>()
+//        import<SwcNative>()
+//        import<UUID>()
+//        import(
+//            "dev.yidafu.swc.dsl.*",
+//            "dev.yidafu.swc.types.*",
+//            "dev.yidafu.swc.*",
+//        )
+        onLoaded {
+            scheduleExecution(
+                """
+                dev.yidafu.jupyper.importmap(
+                    "react" to "https://esm.sh/react@18.2.0",
+                    "react-dom" to "https://esm.sh/react-dom@18.2.0/client",
+                    "echarts" to "https://esm.sh/charts@5.4.3",
+                    "echarts-gl" to "https://esm.sh/charts-gl@2.0.9",
+                    // https://www.npmjs.com/org/visjs
+                    "vis-data" to "https://esm.sh/vis-data@7.1.9",
+                    "vis-graph3d" to "https://esm.sh/vis-graph3d@6.0.6",
+                    "vis-network" to "https://esm.sh/vis-network@9.1.9",
+                    "vis-timeline" to "https://esm.sh/vis-timeline@7.7.3",
+                    "vis-util" to "https://esm.sh/vis-util@5.0.7",
+                    "vis-uuid" to "https://esm.sh/vis-uuid@1.1.4",
+                )
+            """.trimIndent(),
+            )
+        }
+        resources {
+            js("jupyter-js") {
+                url("http://localhost:3000/add-importmap.js")
+            }
+        }
         addCodePreprocessor(JavaScriptMagicCodeProcessor(this.notebook))
     }
 }

@@ -1,8 +1,11 @@
 package dev.yidafu.jupyper
 
 import dev.yidafu.jupyper.processor.DefaultExportProcessor
+import dev.yidafu.jupyper.processor.ImportSourceMappingProcessor
+import dev.yidafu.jupyper.processor.JavascriptProcessContext
 import dev.yidafu.jupyper.processor.JupyterImportProcessor
 import dev.yidafu.swc.SwcNative
+import dev.yidafu.swc.booleanable.BooleanableString
 import dev.yidafu.swc.dsl.jscConfig
 import dev.yidafu.swc.esParseOptions
 import dev.yidafu.swc.options
@@ -11,14 +14,15 @@ import dev.yidafu.swc.types.Program
 import org.jetbrains.kotlinx.jupyter.api.CodePreprocessor
 import org.jetbrains.kotlinx.jupyter.api.KotlinKernelHost
 import org.jetbrains.kotlinx.jupyter.api.Notebook
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 class JavaScriptMagicCodeProcessor(
     private val notebook: Notebook,
     ) : CodePreprocessor {
-    val log = LoggerFactory.getLogger(JavaScriptMagicCodeProcessor::class.java)
+    private val log: Logger = LoggerFactory.getLogger(JavaScriptMagicCodeProcessor::class.java)
 
-    val swcCompiler: SwcNative = SwcNative()
+    private val swcCompiler: SwcNative = SwcNative()
     override fun accepts(code: String): Boolean {
         val matcher = JsMagicMatcher(code)
         return matcher.match() !== JsMagicMatcher.LanguageType.Kotlin
@@ -65,13 +69,21 @@ class JavaScriptMagicCodeProcessor(
             tsx = true
         }
 
-    private fun executeJsProcessor(program: Program) {
-        JupyterImportProcessor(notebook).process(program)
+    private fun executeJsProcessor(program: Program): JavascriptProcessContext {
+        val context = JavascriptProcessContext()
+        JupyterImportProcessor(notebook).process(program, context)
+        ImportSourceMappingProcessor().process(program, context)
+        return context
     }
 
-    private fun executeJsxProcessor(program: Program) {
-        JupyterImportProcessor(notebook).process(program)
-        DefaultExportProcessor().process(program)
+    private fun executeJsxProcessor(program: Program): JavascriptProcessContext {
+        val context = JavascriptProcessContext()
+
+        JupyterImportProcessor(notebook).process(program, context)
+        ImportSourceMappingProcessor().process(program, context)
+        DefaultExportProcessor().process(program, context)
+
+        return context
     }
 
     private fun executeJsProcessor(source: String): String {
@@ -81,19 +93,19 @@ class JavaScriptMagicCodeProcessor(
             "jupyter-cell.js",
         )
 
-        executeJsProcessor(program)
+        val context = executeJsProcessor(program)
 
         val output = swcCompiler.printSync(
             program,
             jsPrintOpt,
         )
-        return "dev.yidafu.jupyper.JsCodeResult(\"\"\" ${output.code} \"\"\")"
+        return "dev.yidafu.jupyper.JsCodeResult(\"\"\" $context\n ${output.code} \"\"\")"
     }
 
     private fun processTsCode(source: String): String {
         val transformOutput = swcCompiler.transformSync(
             source,
-            true,
+            false,
             options {
                 jsc = jscConfig {
                     parser = tsParseOpt
@@ -107,11 +119,11 @@ class JavaScriptMagicCodeProcessor(
             "jupyter-cell-js.js",
         )
 
-        executeJsProcessor(program)
+        val context = executeJsProcessor(program)
 
         val output = swcCompiler.printSync(program, tsPrintOpt)
 
-        return "dev.yidafu.jupyper.JsCodeResult(\"\"\" ${output.code} \"\"\")"
+        return "dev.yidafu.jupyper.JsCodeResult(\"\"\" $context\n ${output.code} \"\"\")"
     }
 
     private fun processJsxCode(source: String): String {
@@ -122,6 +134,7 @@ class JavaScriptMagicCodeProcessor(
                     jsc = jscConfig {
                         parser = jsxParseOpt
                     }
+                    isModule = BooleanableString.ofTrue()
             },
         )
 
@@ -131,17 +144,17 @@ class JavaScriptMagicCodeProcessor(
             "jupyter-cell-jsx.js",
         )
 
-        executeJsxProcessor(program)
+        val context = executeJsxProcessor(program)
 
         val output = swcCompiler.printSync(program, jsPrintOpt)
 
-        return "dev.yidafu.jupyper.JsxCodeResult(\"\"\" ${output.code} \"\"\")"
+        return "dev.yidafu.jupyper.JsxCodeResult(\"\"\" $context\n ${output.code} \"\"\")"
     }
 
     private fun processTsxCode(source: String): String {
         val transformOutput = swcCompiler.transformSync(
             source,
-            true,
+            false,
             options {
                 jsc = jscConfig {
                     parser = tsxParseOpt
@@ -155,11 +168,11 @@ class JavaScriptMagicCodeProcessor(
             "jupyter-cell-tsx.js",
         )
 
-        executeJsxProcessor(program)
+        val context = executeJsxProcessor(program)
 
         val output = swcCompiler.printSync(program, tsPrintOpt)
 
-        return "dev.yidafu.jupyper.JsxCodeResult(\"\"\" ${output.code} \"\"\")"
+        return "dev.yidafu.jupyper.JsxCodeResult(\"\"\" $context\n ${output.code} \"\"\")"
     }
 
     /**
