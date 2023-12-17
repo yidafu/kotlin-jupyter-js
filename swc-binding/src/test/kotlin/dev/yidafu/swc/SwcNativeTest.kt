@@ -147,6 +147,58 @@ class SwcNativeTest {
             ) as Module
         }
     }
+
+    @Test
+    fun `transform jsx snippet`() {
+        val output = swcNative.transformSync(
+            """
+                function App() {
+                    return <div>Text</div>
+                }
+            """.trimIndent(),
+            isModule = false,
+            options {
+                jsc = jscConfig {
+                    parser = esParseOptions {
+                        jsx = true
+                        target = "es2020"
+                        comments = false
+                        topLevelAwait = true
+                        nullishCoalescing = true
+                        optionalChaining = true
+                    }
+                }
+            },
+        )
+        println(output.code)
+        assertNotNull(output.code)
+    }
+
+    @Test
+    fun `transform ts code`() {
+        swcNative.transformSync(
+            """
+            const n: number = 123;
+            const s: string = "foo";
+            interface IUser {
+                name: string
+                id: number
+            }
+            const user: IUser = { name: "jupyter", id: 1 };
+            
+            console.log(n, s, user)
+            """.trimIndent(),
+            false,
+            options {
+                jsc = jscConfig {
+                    parser = tsParseOptions {
+                        target = "es2020"
+                        comments = false
+                    }
+                }
+            },
+        )
+    }
 //    @Test
 //    fun `transform ast json file to ast str`() {
 //        val ast = swcNative.transformFileSync(
