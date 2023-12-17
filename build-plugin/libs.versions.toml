@@ -20,7 +20,7 @@ dokka_plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version = "
 ktlint_plugin = { module = "org.jlleitschuh.gradle:ktlint-gradle", version = "11.6.1" }
 kotlin_serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.6.0"}
 slf4j_api = { module = "org.slf4j:slf4j-api", version = "2.0.9"}
-swc_binding = { module = "dev.yidafu.swc:swc-binding", version = "0.3.2" }
+swc_binding = { module = "dev.yidafu.swc:swc-binding", version = "0.4.1" }
 
 [bundles]
 allGradlePlugins = [
