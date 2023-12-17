@@ -7,7 +7,7 @@ import dev.yidafu.swc.emptySpan
 import dev.yidafu.swc.types.* // ktlint-disable no-wildcard-imports
 
 class DefaultExportProcessor : JavaScriptProcessor {
-    override fun process(program: Program) {
+    override fun process(program: Program, context: JavascriptProcessContext) {
         if (program is Module) {
             program.body?.forEachIndexed { index, moduleItem ->
                 if (moduleItem is ExportDefaultDeclaration) {

@@ -215,3 +215,9 @@ gradle-app.setting
 
 # End of https://www.toptal.com/developers/gitignore/api/kotlin,gradle,rust,cargo,javascript,node
 
+
+bin/
+local.properties
+gradle.properties
+.DS_Store
+.ipynb_checkpoints/

@@ -58,7 +58,7 @@ class SwcNative {
     ): Program {
         val optStr = configJson.encodeToString<ParserConfig>(options)
         val output = parseSync(code, optStr, filename)
-        return astJson.decodeFromString<Program>(output)
+        return parseAstTree(output)
     }
 
     /**
@@ -98,7 +98,7 @@ class SwcNative {
     ): Program {
         val optStr = configJson.encodeToString<ParserConfig>(options)
         val output = parseFileSync(filepath, optStr)
-        return astJson.decodeFromString<Program>(output)
+        return parseAstTree(output)
     }
 
 //    fun parseFileSync(
