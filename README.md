@@ -6,13 +6,7 @@ This Project still in early stage.
 
 ## Screenshot
 
-## JS
-
-![](./screenshot.jpg)
-
-## JSX support
-
-![](./screenshot-2.jpg)
+![](./screenshot.png)
 
 ## TODO LIST
 
