@@ -161,8 +161,8 @@ class KotlinKernelJsSupportTest : JupyterReplTestCase(
 
         val html = (result[MimeTypes.HTML] as String)
         println(html)
-        assertContains(html, LibsMapping["echarts"]!!)
-        assertContains(html, LibsMapping["vis-graph3d"]!!)
+        assertContains(html, LibsMapping["echarts"]!!.mainSource)
+        assertContains(html, LibsMapping["vis-graph3d"]!!.mainSource)
     }
 
     @Test
@@ -211,5 +211,26 @@ class KotlinKernelJsSupportTest : JupyterReplTestCase(
 
         val html = (result[MimeTypes.HTML] as String)
         println(html)
+    }
+
+    @Test
+    fun `import d3 package`() {
+        exec(
+            """
+            USE {
+                addCodePreprocessor(dev.yidafu.jupyper.JavaScriptMagicCodeProcessor(this.notebook));
+            }
+            """.trimIndent(),
+        )
+        val result = exec(
+            """
+            %js
+
+            import highcharts from "highcharts";
+            """
+        ) as MimeTypedResult
+        val html = (result[MimeTypes.HTML] as String)
+        assertTrue(html.contains("import highcharts from \"https://code.highcharts.com/es-modules/masters/highcharts.src.js\";"))
+        assertTrue(html.contains("https://code.highcharts.com/es-modules/masters/modules/export-data.src.js"))
     }
 }

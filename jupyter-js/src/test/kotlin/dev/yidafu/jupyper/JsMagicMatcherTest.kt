@@ -75,7 +75,10 @@ class JsMagicMatcherTest {
             val str = listOf("%jsx", "%javascript", "%js", "%tsx", "%typescript", "%ts").fold(it) { s, k ->
                 s.replace(k, "")
             }
-            assertEquals(JsMagicMatcher(it).cleanSourceCode, str)
+            val matcher = JsMagicMatcher(it)
+            assertTrue(!matcher.cleanSourceCode.contains("%"))
+
+            assertEquals(matcher.cleanSourceCode, str)
         }
     }
 
@@ -101,5 +104,21 @@ class JsMagicMatcherTest {
 
         val type = matcher.match()
         assertEquals(type, JsMagicMatcher.LanguageType.Kotlin)
+    }
+
+    @Test
+    fun `get clean code`() {
+        val matcher = JsMagicMatcher(
+            """
+            %js
+
+            import * as d3 from "d3";
+            """.trimIndent()
+        )
+
+        assertEquals( matcher.match(), JsMagicMatcher.LanguageType.JS)
+        println(matcher.cleanSourceCode)
+        assertTrue(!matcher.cleanSourceCode.contains("%"))
+
     }
 }

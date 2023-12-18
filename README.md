@@ -13,6 +13,7 @@ This Project still in early stage.
 
 + `%js`
 + `%javacript`
++ `%jsx`
 + `%ts`
 + `%typescript`
 + `%tsx`
@@ -112,7 +113,11 @@ see: [libs-mapping.json](jupyter-js/src/main/resources/libs-mapping.json)
 
 + react
 + react-dom
++ lodash
 + echarts
++ d3
++ highcharts
++ visjs
 
 Adding your favorite pakcage, submit a PR/Issue.
 
@@ -163,7 +168,7 @@ option && myChart.setOption(option);
 
 ![image](https://github.com/yidafu/kotlin-jupyter-js/assets/22773923/b5aa06d3-24dc-4e3e-a020-8bd7ac5b1bae)
 
-full example see [examples//js-magic.ipynb](./examples//js-magic.ipynb)
+full example see [examples/js-magic.ipynb](./examples//js-magic.ipynb)
 
 ## TODO LIST
 
