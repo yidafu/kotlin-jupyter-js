@@ -18,8 +18,8 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 class JavaScriptMagicCodeProcessor(
-    private val notebook: Notebook,
-    ) : CodePreprocessor {
+    private val notebook: Notebook
+) : CodePreprocessor {
     private val log: Logger = LoggerFactory.getLogger(JavaScriptMagicCodeProcessor::class.java)
 
     private val swcCompiler: SwcNative = SwcNative()
@@ -90,14 +90,14 @@ class JavaScriptMagicCodeProcessor(
         val program = swcCompiler.parseSync(
             source,
             jsParseOpt,
-            "jupyter-cell.js",
+            "jupyter-cell.js"
         )
 
         val context = executeJsProcessor(program)
 
         val output = swcCompiler.printSync(
             program,
-            jsPrintOpt,
+            jsPrintOpt
         )
         return "dev.yidafu.jupyper.JsCodeResult(\"\"\" $context\n ${output.code} \"\"\")"
     }
@@ -110,13 +110,13 @@ class JavaScriptMagicCodeProcessor(
                 jsc = jscConfig {
                     parser = tsParseOpt
                 }
-            },
+            }
         )
 
         val program = swcCompiler.parseSync(
             transformOutput.code,
             tsParseOpt,
-            "jupyter-cell-js.js",
+            "jupyter-cell-js.js"
         )
 
         val context = executeJsProcessor(program)
@@ -131,17 +131,17 @@ class JavaScriptMagicCodeProcessor(
             source,
             false,
             options {
-                    jsc = jscConfig {
-                        parser = jsxParseOpt
-                    }
-                    isModule = BooleanableString.ofTrue()
-            },
+                jsc = jscConfig {
+                    parser = jsxParseOpt
+                }
+                isModule = BooleanableString.ofTrue()
+            }
         )
 
         val program = swcCompiler.parseSync(
             transformOutput.code,
             jsxParseOpt,
-            "jupyter-cell-jsx.js",
+            "jupyter-cell-jsx.js"
         )
 
         val context = executeJsxProcessor(program)
@@ -159,13 +159,13 @@ class JavaScriptMagicCodeProcessor(
                 jsc = jscConfig {
                     parser = tsxParseOpt
                 }
-            },
+            }
         )
 
         val program = swcCompiler.parseSync(
             transformOutput.code,
             tsxParseOpt,
-            "jupyter-cell-tsx.js",
+            "jupyter-cell-tsx.js"
         )
 
         val context = executeJsxProcessor(program)

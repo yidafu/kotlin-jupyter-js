@@ -81,7 +81,7 @@ object DllLoader {
 
     fun copyDll2Temp(libName: String): String {
         val jarPath = when (val p = Platform.current) {
-            is Platform.Linux -> (if (p.isArm()) "linux-arm-gnueabihf" else "linux-x64-musl") + "/lib$libName.so"
+            is Platform.Linux -> (if (p.isArm()) "linux-arm-gnueabihf" else "linux-x64-gnu") + "/lib$libName.so"
             is Platform.Mac -> (if (p.isIntel()) "darwin-x64" else "darwin-arm64") + "/lib$libName.dylib"
             is Platform.Windows -> "win32-x64-msvc/$libName.dll"
 //            Platform.SOLARIS -> TODO()

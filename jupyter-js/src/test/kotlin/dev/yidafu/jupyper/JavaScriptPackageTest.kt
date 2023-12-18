@@ -6,13 +6,13 @@ import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-
 class JavaScriptPackageTest {
     @Test
     fun `JavaScriptPackage serialize`() {
-         val json = Json.encodeToString(JavaScriptPackage("source", listOf("extra1", "extra2")))
+        val json = Json.encodeToString(JavaScriptPackage("source", listOf("extra1", "extra2")))
         assertEquals(json, """{"main":"source","extra":["extra1","extra2"]}""")
     }
+
     @Test
     fun `JavaScriptPackage deserialize`() {
         val pkgs = Json.decodeFromString<List<JavaScriptPackage>>(

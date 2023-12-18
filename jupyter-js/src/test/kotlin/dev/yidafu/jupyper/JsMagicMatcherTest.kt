@@ -6,13 +6,13 @@ class JsMagicMatcherTest {
     fun shouldTrue(code: String) {
         assertNotEquals(
             JsMagicMatcher(code).match(),
-            JsMagicMatcher.LanguageType.Kotlin,
+            JsMagicMatcher.LanguageType.Kotlin
         )
     }
     fun shouldFalse(code: String) {
         assertEquals(
             JsMagicMatcher(code).match(),
-            JsMagicMatcher.LanguageType.Kotlin,
+            JsMagicMatcher.LanguageType.Kotlin
         )
     }
 
@@ -23,7 +23,7 @@ class JsMagicMatcherTest {
         listOf(
             "%js\nvar code = 1;",
             " %javascript\n var code = 1;",
-            "%jsx\nconst div = <Div></Div>",
+            "%jsx\nconst div = <Div></Div>"
         ).forEach {
             shouldTrue(it)
         }
@@ -34,7 +34,7 @@ class JsMagicMatcherTest {
             "%jp",
             "%jsxx",
             "%%js",
-            "abc%js",
+            "abc%js"
         ).forEach {
             shouldFalse(it)
         }
@@ -45,7 +45,7 @@ class JsMagicMatcherTest {
         listOf(
             "%ts\nvar code = 1;",
             " %typescript\n var code = 1;",
-            " %tsx\nconst div = <Div></Div>",
+            " %tsx\nconst div = <Div></Div>"
         ).forEach {
             shouldTrue(it)
         }
@@ -56,7 +56,7 @@ class JsMagicMatcherTest {
             "%txp",
             "%tsxx",
             "%%ts",
-            "abc%ts",
+            "abc%ts"
         ).forEach {
             shouldFalse(it)
         }
@@ -70,7 +70,7 @@ class JsMagicMatcherTest {
             "%javascript\nconst foo = 1",
             "%ts\nconst n: number = 1",
             "%typescript\nconst n: number = 1",
-            "%tsx\nconst div = <TDiv></TDiv>",
+            "%tsx\nconst div = <TDiv></TDiv>"
         ).forEach {
             val str = listOf("%jsx", "%javascript", "%js", "%tsx", "%typescript", "%ts").fold(it) { s, k ->
                 s.replace(k, "")
@@ -85,7 +85,7 @@ class JsMagicMatcherTest {
     @Test
     fun `should return Kotlin`() {
         val matcher = JsMagicMatcher(
-            """ val foo ="string"; """,
+            """ val foo ="string"; """
         )
         val type = matcher.match()
         assertEquals(type, JsMagicMatcher.LanguageType.Kotlin)
@@ -99,7 +99,7 @@ class JsMagicMatcherTest {
             USE {
                 addCodePreprocessor(dev.yidafu.jupyper.JavaScriptMagicCodeProcessor(this.notebook));
             }
-            """.trimIndent(),
+            """.trimIndent()
         )
 
         val type = matcher.match()
@@ -116,9 +116,8 @@ class JsMagicMatcherTest {
             """.trimIndent()
         )
 
-        assertEquals( matcher.match(), JsMagicMatcher.LanguageType.JS)
+        assertEquals(matcher.match(), JsMagicMatcher.LanguageType.JS)
         println(matcher.cleanSourceCode)
         assertTrue(!matcher.cleanSourceCode.contains("%"))
-
     }
 }

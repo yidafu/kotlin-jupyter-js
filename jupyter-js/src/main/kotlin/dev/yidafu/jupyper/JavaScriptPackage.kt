@@ -19,16 +19,17 @@ data class JavaScriptPackage(
     }
 }
 val importSourceDescriptor = PrimitiveSerialDescriptor("importSource", PrimitiveKind.STRING)
+
 @OptIn(ExperimentalSerializationApi::class)
 val extraSourcesDescriptor =
     listSerialDescriptor(PrimitiveSerialDescriptor("importSource", PrimitiveKind.STRING))
 
 class JavaScriptPackageSerializer : KSerializer<JavaScriptPackage> {
     override val descriptor = buildClassSerialDescriptor(
-        "JavaScriptPackage",
+        "JavaScriptPackage"
     ) {
         element<String>("main")
-        element<List<String>>("extra",)
+        element<List<String>>("extra")
     }
 
     override fun deserialize(decoder: Decoder): JavaScriptPackage {
@@ -39,13 +40,13 @@ class JavaScriptPackageSerializer : KSerializer<JavaScriptPackage> {
                 JavaScriptPackage(obj.content)
             }
             is JsonObject -> {
-                val importSource = when(val default = obj["main"]) {
+                val importSource = when (val default = obj["main"]) {
                     is JsonPrimitive -> default.content
                     else -> {
                         throw IllegalStateException("default filed must be string")
                     }
                 }
-                val extraSources = when(val extra = obj["extra"]) {
+                val extraSources = when (val extra = obj["extra"]) {
                     is JsonArray -> extra.map {
                         if (it is JsonPrimitive && it.isString) {
                             it.content
@@ -59,7 +60,7 @@ class JavaScriptPackageSerializer : KSerializer<JavaScriptPackage> {
                 }
                 JavaScriptPackage(
                     importSource,
-                    extraSources,
+                    extraSources
                 )
             }
 
@@ -79,5 +80,4 @@ class JavaScriptPackageSerializer : KSerializer<JavaScriptPackage> {
             }
         }
     }
-
 }

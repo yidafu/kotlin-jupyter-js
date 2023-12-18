@@ -43,11 +43,6 @@ class KotlinKernelJsSupport : JupyterIntegration() {
             """.trimIndent(),
             )
         }
-        resources {
-            js("jupyter-js") {
-                url("http://localhost:3000/add-importmap.js")
-            }
-        }
         addCodePreprocessor(JavaScriptMagicCodeProcessor(this.notebook))
     }
 }
