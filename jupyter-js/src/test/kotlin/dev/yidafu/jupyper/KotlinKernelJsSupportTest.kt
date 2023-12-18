@@ -212,4 +212,39 @@ class KotlinKernelJsSupportTest : JupyterReplTestCase(
         val html = (result[MimeTypes.HTML] as String)
         println(html)
     }
+
+    @Test
+    fun `import complex data from kotlin workd`() {
+        exec(
+            """
+            USE {
+                addCodePreprocessor(dev.yidafu.jupyper.JavaScriptMagicCodeProcessor(this.notebook));
+            }
+            """.trimIndent(),
+        )
+        exec("""
+            val complexMap =  mapOf<String, Any>(
+                "int" to 1,
+                "bool" to  true,
+                "float" to 1.2f,
+                "double" to 1.2,
+                "arrayInt" to intArrayOf(1, 2,3),
+                "arrayInt2" to arrayOf(1, 2,3),
+                "arrayString" to arrayOf("foo", "bar"),
+                "listDouble" to listOf(1.1, 2.2, 3.3),
+                "listString" to listOf("goo", "baz"),
+                "mapInt" to mapOf("1" to 1, "2" to 2),
+            )
+        """.trimIndent())
+
+        val result = exec("""
+            %js
+            import { complexMap } from "@jupyter";
+            getCellRoot().innerHTML = `<h1>$\{JSON.stringify(complexMap, null, 2)}</h1>`
+        """.trimIndent()) as MimeTypedResult
+
+        val html = (result[MimeTypes.HTML] as String)
+        html.contains("\"int\":1,")
+        html.contains("\"arrayString\":[\"foo\",\"bar\"]")
+    }
 }
