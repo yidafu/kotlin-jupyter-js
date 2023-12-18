@@ -9,7 +9,7 @@ This Project still in early stage.
 + import any variable from kotlin world
 + support **JavaScript** / **TypeScript** / **React**
 
-## Support magic 
+## Support magic
 
 + `%js`
 + `%javacript`
@@ -21,7 +21,7 @@ This Project still in early stage.
 
 ## Import The Library First
 
-```
+```kt
 USE {
     repositories {
          mavenCentral()
@@ -34,19 +34,22 @@ USE {
     }
 }
 ```
+
 > this project is not stable, so not support `%use` magic.
 
 ## JS Example
 
 In JS world, you can import any variables from kotlin world, through the virtual package `@jupyter`.
 
-You can get a cell root Element in output cell, and do every thing you want to do.
-### first declare a varialbe in cell
+You can call `getCellRoot()` to get a `div` element in output cell, and then do every thing you want to do.
+
+### first declare a variable in cell
 
 ```kt
 // value define in kotlin world
 val kNumber = 233
 ```
+
 ### then, add a cell with `%js` magic
 
 ```js
@@ -56,6 +59,7 @@ import { kNumber } from '@jupyter'
 
 getCellRoot().innerHTML = `<h1>${kNumber}</h1>`
 ```
+
 #### screenshot
 
 ![image](https://github.com/yidafu/kotlin-jupyter-js/assets/22773923/cd1d84d3-7dcc-4f0f-8a3e-50300e4f7e4c)
@@ -75,6 +79,7 @@ export default function App() {
     return <h1>{foo}</h1>
 }
 ```
+
 #### screenshot
 
 ![image](https://github.com/yidafu/kotlin-jupyter-js/assets/22773923/c8902c7e-813d-41b3-be6b-b0ee192e890b)
@@ -102,7 +107,9 @@ import _ from 'lodash';
 ```
 
 ## builtin packages
+
 see: [libs-mapping.json](jupyter-js/src/main/resources/libs-mapping.json)
+
 + react
 + react-dom
 + echarts
@@ -118,7 +125,9 @@ see <https://echarts.apache.org/examples/en/editor.html?c=line-simple&lang=ts>
 ```kt
 val dataArray = arrayOf(150, 230, 224, 218, 135, 147, 260)
 ```
+
 2. using it with `%ts` magic, render to char
+
 ```js
 %ts
 import { dataArray } from "@jupyter";
@@ -150,12 +159,9 @@ option = {
 option && myChart.setOption(option);
 ```
 
-
-
 #### screenshot
 
 ![image](https://github.com/yidafu/kotlin-jupyter-js/assets/22773923/b5aa06d3-24dc-4e3e-a020-8bd7ac5b1bae)
-
 
 full example see [examples//js-magic.ipynb](./examples//js-magic.ipynb)
 
