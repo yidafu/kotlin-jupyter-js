@@ -18,7 +18,7 @@ import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
 class KotlinKernelJsSupportTest : JupyterReplTestCase(
-    ReplProvider.withDefaultClasspathResolution(),
+    ReplProvider.withDefaultClasspathResolution()
 ) {
 
     @Test
@@ -35,7 +35,7 @@ class KotlinKernelJsSupportTest : JupyterReplTestCase(
             USE {
                 addCodePreprocessor(dev.yidafu.jupyper.JavaScriptMagicCodeProcessor(this.notebook));
             }
-            """.trimIndent(),
+            """.trimIndent()
         )
         exec(""" val foo = "string" """)
         val result = exec(
@@ -46,7 +46,7 @@ class KotlinKernelJsSupportTest : JupyterReplTestCase(
             var b = 345
 
             console.log(b)
-        """.trimIndent(),
+            """.trimIndent()
         )
 
         assertIs<MimeTypedResult>(result)
@@ -60,7 +60,7 @@ class KotlinKernelJsSupportTest : JupyterReplTestCase(
             USE {
                 addCodePreprocessor(dev.yidafu.jupyper.JavaScriptMagicCodeProcessor(this.notebook));
             }
-            """.trimIndent(),
+            """.trimIndent()
         )
         exec(""" val foo = "string" """)
 
@@ -73,7 +73,7 @@ class KotlinKernelJsSupportTest : JupyterReplTestCase(
             export default function App() {
                 return <div>{foo}</div>
             }
-            """.trimIndent(),
+            """.trimIndent()
         ) as MimeTypedResult
         val html = (result[MimeTypes.HTML] as String)
         assertContains(html, "React.createElement")
@@ -87,7 +87,7 @@ class KotlinKernelJsSupportTest : JupyterReplTestCase(
             USE {
                 addCodePreprocessor(dev.yidafu.jupyper.JavaScriptMagicCodeProcessor(this.notebook));
             }
-            """.trimIndent(),
+            """.trimIndent()
         )
         val result = exec(
             """
@@ -101,7 +101,7 @@ class KotlinKernelJsSupportTest : JupyterReplTestCase(
             const user: IUser = { name: "jupyter", id: 1 };
             
             console.log(n, s, user)
-            """.trimIndent(),
+            """.trimIndent()
         ) as MimeTypedResult
         val html = result[MimeTypes.HTML] as String
         assertTrue(!html.contains("User"))
@@ -115,7 +115,7 @@ class KotlinKernelJsSupportTest : JupyterReplTestCase(
             USE {
                 addCodePreprocessor(dev.yidafu.jupyper.JavaScriptMagicCodeProcessor(this.notebook));
             }
-            """.trimIndent(),
+            """.trimIndent()
         )
         exec(""" val foo = "string" """)
 
@@ -132,7 +132,7 @@ class KotlinKernelJsSupportTest : JupyterReplTestCase(
             export default function App() {
                 return <Child text={foo} />
             }
-            """.trimIndent(),
+            """.trimIndent()
         ) as MimeTypedResult
         val html = (result[MimeTypes.HTML] as String)
         println(html)
@@ -147,7 +147,7 @@ class KotlinKernelJsSupportTest : JupyterReplTestCase(
             USE {
                 addCodePreprocessor(dev.yidafu.jupyper.JavaScriptMagicCodeProcessor(this.notebook));
             }
-            """.trimIndent(),
+            """.trimIndent()
         )
         val result = exec(
             """
@@ -156,13 +156,13 @@ class KotlinKernelJsSupportTest : JupyterReplTestCase(
             import * as echarts from "echarts";
             import * as graph3d from "vis-graph3d";
             console.log(echarts, graph3d)
-            """.trimIndent(),
+            """.trimIndent()
         ) as MimeTypedResult
 
         val html = (result[MimeTypes.HTML] as String)
         println(html)
-        assertContains(html, LibsMapping["echarts"]!!)
-        assertContains(html, LibsMapping["vis-graph3d"]!!)
+        assertContains(html, LibsMapping["echarts"]!!.mainSource)
+        assertContains(html, LibsMapping["vis-graph3d"]!!.mainSource)
     }
 
     @Test
@@ -172,7 +172,7 @@ class KotlinKernelJsSupportTest : JupyterReplTestCase(
             USE {
                 addCodePreprocessor(dev.yidafu.jupyper.JavaScriptMagicCodeProcessor(this.notebook));
             }
-            """.trimIndent(),
+            """.trimIndent()
         )
         exec(""" val dataArray = arrayOf(150, 230, 224, 218, 135, 147, 260) """)
         val result = exec(
@@ -206,7 +206,7 @@ class KotlinKernelJsSupportTest : JupyterReplTestCase(
             };
 
             option && myChart.setOption(option);
-        """.trimIndent(),
+            """.trimIndent()
         ) as MimeTypedResult
 
         val html = (result[MimeTypes.HTML] as String)
@@ -214,15 +214,36 @@ class KotlinKernelJsSupportTest : JupyterReplTestCase(
     }
 
     @Test
+    fun `import d3 package`() {
+        exec(
+            """
+            USE {
+                addCodePreprocessor(dev.yidafu.jupyper.JavaScriptMagicCodeProcessor(this.notebook));
+            }
+            """.trimIndent()
+        )
+        val result = exec(
+            """
+            %js
+
+            import highcharts from "highcharts";
+            """
+        ) as MimeTypedResult
+        val html = (result[MimeTypes.HTML] as String)
+        assertTrue(html.contains("import highcharts from \"https://code.highcharts.com/es-modules/masters/highcharts.src.js\";"))
+        assertTrue(html.contains("https://code.highcharts.com/es-modules/masters/modules/export-data.src.js"))
+    }
     fun `import complex data from kotlin workd`() {
         exec(
             """
             USE {
                 addCodePreprocessor(dev.yidafu.jupyper.JavaScriptMagicCodeProcessor(this.notebook));
             }
-            """.trimIndent(),
+            """.trimIndent()
         )
-        exec("""
+
+        exec(
+            """
             val complexMap =  mapOf<String, Any>(
                 "int" to 1,
                 "bool" to  true,
@@ -235,13 +256,16 @@ class KotlinKernelJsSupportTest : JupyterReplTestCase(
                 "listString" to listOf("goo", "baz"),
                 "mapInt" to mapOf("1" to 1, "2" to 2),
             )
-        """.trimIndent())
+            """.trimIndent()
+        )
 
-        val result = exec("""
+        val result = exec(
+            """
             %js
             import { complexMap } from "@jupyter";
             getCellRoot().innerHTML = `<h1>$\{JSON.stringify(complexMap, null, 2)}</h1>`
-        """.trimIndent()) as MimeTypedResult
+            """.trimIndent()
+        ) as MimeTypedResult
 
         val html = (result[MimeTypes.HTML] as String)
         html.contains("\"int\":1,")

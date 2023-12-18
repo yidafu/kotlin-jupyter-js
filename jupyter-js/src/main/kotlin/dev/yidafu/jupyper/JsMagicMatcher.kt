@@ -28,7 +28,7 @@ class JsMagicMatcher(private val source: String) {
      */
     val cleanSourceCode: String by lazy {
             val indexList = listOf(0) +
-                    intervals.map { listOf(it.first, it.last + 1) }.flatten().toMutableList() +
+                    intervals.map { listOf(maxOf(0, it.first - 1), minOf(source.length, it.last + 1)) }.flatten().toMutableList() +
                     listOf(source.length - 1)
 
             val keepIntervalList = indexList.chunked(2)
