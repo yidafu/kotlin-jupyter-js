@@ -1,0 +1,20 @@
+---
+title: transform flow
+---
+
+flowchart BT
+    Browser
+    Browser --1. source code--> Kotlin
+    Kotlin --7. html result-->  Browser
+    subgraph Kotlin[kotlin jupyter kernel]
+        Kernel
+        Processor[kotlin jupyter js preprocessor]
+        swc[swc jvm binding]
+        Kernel --2. detect source code has js magic or not--> Processor
+
+        Processor <-- 3. transform code, return ast tree--> swc
+        Processor -- 4. modify ast tree--> Processor
+        Processor <-- 5. print ast tree to String--> swc
+        Processor --6. Wrapper js code with HTML function--> Kernel
+    end
+    

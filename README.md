@@ -18,9 +18,13 @@ This Project still in early stage.
 + `%typescript`
 + `%tsx`
 
-# Usage
+## Documentation
 
-## Import The Library First
+[how kotlin jupyter js workd? (English Translation)](./docs//how-kotlin-jupyter-work.md) - [中文原文](./docs//how-kotlin-jupyter-work.zh-CN.md)
+
+## Usage
+
+### Import The Library First
 
 ```kt
 USE {
@@ -38,20 +42,20 @@ USE {
 
 > this project is not stable, so not support `%use` magic.
 
-## JS Example
+### JS Example
 
 In JS world, you can import any variables from kotlin world, through the virtual package `@jupyter`.
 
 You can call `getCellRoot()` to get a `div` element in output cell, and then do every thing you want to do.
 
-### first declare a variable in cell
+#### first declare a variable in cell
 
 ```kt
 // value define in kotlin world
 val kNumber = 233
 ```
 
-### then, add a cell with `%js` magic
+#### then, add a cell with `%js` magic
 
 ```js
 %js
@@ -61,7 +65,7 @@ import { kNumber } from '@jupyter'
 getCellRoot().innerHTML = `<h1>${kNumber}</h1>`
 ```
 
-#### screenshot
+##### screenshot
 
 ![image](https://github.com/yidafu/kotlin-jupyter-js/assets/22773923/cd1d84d3-7dcc-4f0f-8a3e-50300e4f7e4c)
 
@@ -81,7 +85,7 @@ export default function App() {
 }
 ```
 
-#### screenshot
+### screenshot
 
 ![image](https://github.com/yidafu/kotlin-jupyter-js/assets/22773923/c8902c7e-813d-41b3-be6b-b0ee192e890b)
 
@@ -107,7 +111,7 @@ so, you can coding like this:
 import _ from 'lodash';
 ```
 
-## builtin packages
+### builtin packages
 
 see: [libs-mapping.json](jupyter-js/src/main/resources/libs-mapping.json)
 
