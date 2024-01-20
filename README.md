@@ -2,8 +2,6 @@
 
 Jupyter Kotlin Kernel support `%js`/`%ts`/`%jsx`/`%tsx` line magics.
 
-This Project still in early stage.
-
 ## Feature
 
 + import any variable from kotlin world
@@ -18,9 +16,6 @@ This Project still in early stage.
 + `%typescript`
 + `%tsx`
 
-## Documentation
-
-[how kotlin jupyter js workd? (English Translation)](./docs//how-kotlin-jupyter-work.md) - [中文原文](./docs//how-kotlin-jupyter-work.zh-CN.md)
 
 ## Usage
 
@@ -35,7 +30,7 @@ USE {
     }
 
     dependencies {
-        implementation("dev.yidafu.jupyter:jupyter-js:0.3.1")
+        implementation("dev.yidafu.jupyter:jupyter-js:0.4.0")
     }
 }
 ```
@@ -172,7 +167,11 @@ option && myChart.setOption(option);
 
 ![image](https://github.com/yidafu/kotlin-jupyter-js/assets/22773923/b5aa06d3-24dc-4e3e-a020-8bd7ac5b1bae)
 
-full example see [examples/js-magic.ipynb](./examples//js-magic.ipynb)
+full example see [examples/js-magic.ipynb](./examples/js-magic.ipynb)
+
+## Article
+
+[how kotlin jupyter js workd? (English Translation)](./docs/how-kotlin-jupyter-work.md) - [中文原文](./docs/how-kotlin-jupyter-work.zh-CN.md)
 
 ## TODO LIST
 
