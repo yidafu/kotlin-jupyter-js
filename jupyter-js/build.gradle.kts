@@ -25,7 +25,7 @@ kotlinJupyter {
 }
 
 group = "dev.yidafu.jupyter"
-version = "0.3.2"
+version = "0.4.0"
 
 dependencies {
     implementation("org.jetbrains.dokka:kotlin-analysis-compiler:1.8.20")
