@@ -25,6 +25,20 @@ class NullResult : DisplayResult {
     }
 }
 
+/**
+ * replace virtual package (`@jupyter`) with kotlin variables
+ *
+ * ```js
+ * import { foo } from '@jupyter';
+ * ```
+ * will transform to
+ *
+ * ```js
+ * const foo = "bar";
+ * ```
+ *
+ * `foo` must be basic type or implement DisplayResult interface
+ */
 class JupyterImportProcessor(
     private val notebook: Notebook,
 ) : JavaScriptProcessor {
@@ -85,11 +99,11 @@ class JupyterImportProcessor(
                             }
                             else -> throw NotSupportMimeTypeException(result.keys.joinToString(", "))
                         }
-                        log.debug("import varabile ${it.second} from kotlin world, it't value: $jsValueString")
+                        log.debug("import variable ${it.second} from kotlin world, it't value: $jsValueString")
                         context.addKotlinValue(it.second to jsValueString)
                     }
 
-                    log.debug("replace statement `import * from '@jupyter'` with actual variable declare")
+//                    log.debug("replace statement `import * from '@jupyter'` with actual variable declare")
                 }
 
             // remove `import * from '@jupyter';`

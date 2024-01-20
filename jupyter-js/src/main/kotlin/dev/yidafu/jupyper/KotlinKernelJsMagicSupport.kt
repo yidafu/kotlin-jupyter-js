@@ -5,14 +5,13 @@ package dev.yidafu.jupyper
 
 import org.jetbrains.kotlinx.jupyter.api.annotations.JupyterLibrary
 import org.jetbrains.kotlinx.jupyter.api.libraries.JupyterIntegration
-import org.jetbrains.kotlinx.jupyter.api.libraries.resources
 import org.slf4j.LoggerFactory
 /**
  * support `%javascript` magic
  */
 @JupyterLibrary
-class KotlinKernelJsSupport : JupyterIntegration() {
-    val log = LoggerFactory.getLogger(KotlinKernelJsSupport::class.java)
+class KotlinKernelJsMagicSupport : JupyterIntegration() {
+    val log = LoggerFactory.getLogger(KotlinKernelJsMagicSupport::class.java)
 
     override fun Builder.onLoaded() {
 //        import<JsCodeResult>()
@@ -25,6 +24,9 @@ class KotlinKernelJsSupport : JupyterIntegration() {
 //            "dev.yidafu.swc.*",
 //        )
         onLoaded {
+            render<LibsMapping> {
+
+            }
             scheduleExecution(
                 """
                 dev.yidafu.jupyper.importmap(

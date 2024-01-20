@@ -17,7 +17,7 @@ import kotlin.test.assertContains
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
-class KotlinKernelJsSupportTest : JupyterReplTestCase(
+class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
     ReplProvider.withDefaultClasspathResolution()
 ) {
 

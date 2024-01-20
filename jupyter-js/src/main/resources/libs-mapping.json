@@ -1,12 +1,7 @@
 {
   "react":  "https://esm.sh/react@18.2.0",
   "react-dom":  "https://esm.sh/react-dom@18.2.0/client",
-  "echarts": {
-    "main": "https://unpkg.com/echarts@5.4.3/dist/echarts.esm.js",
-    "extra": [
-      "https://esm.sh/echarts-gl@2.0.9"
-    ]
-  },
+  "echarts": "https://cdn.jsdelivr.net/gh/yidafu/echarts-gl-esm@1.0.1/esm/echarts.js",
   "vis-data": "https://esm.sh/vis-data@7.1.9",
   "vis-graph3d": "https://esm.sh/vis-graph3d@6.0.6",
   "vis-network":  "https://esm.sh/vis-network@9.1.9",
