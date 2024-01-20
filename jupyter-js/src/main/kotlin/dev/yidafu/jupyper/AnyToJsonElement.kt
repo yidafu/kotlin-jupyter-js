@@ -2,6 +2,9 @@ package dev.yidafu.jupyper
 
 import kotlinx.serialization.json.*
 
+/**
+ * covert basic type to JsonElement
+ */
 fun Any?.toJsonElement(): JsonElement = when (this) {
     null -> JsonNull
     is Map<*, *> -> toJsonElement()
@@ -19,11 +22,16 @@ fun Any?.toJsonElement(): JsonElement = when (this) {
     is Number -> JsonPrimitive(this)
     is String -> JsonPrimitive(this)
     is Enum<*> -> JsonPrimitive(this.toString())
+    is Pair<*, *> -> JsonArray(listOf(this.first.toJsonElement(), this.second.toJsonElement()))
+    is Triple<*, *, *> -> JsonArray(listOf(this.first.toJsonElement(), this.second.toJsonElement(), this.third.toJsonElement()))
     else -> {
         throw IllegalStateException("Can't serialize class, you should implement org.jetbrains.kotlinx.jupyter.api.DisplayResult interface")
     }
 }
 
+/**
+ * convert Map<*, *> to JsonObject
+ */
 fun Map<*, *>.toJsonElement(): JsonElement {
     val map = mutableMapOf<String, JsonElement>()
     this.forEach { (key, value) ->
@@ -33,6 +41,9 @@ fun Map<*, *>.toJsonElement(): JsonElement {
     return JsonObject(map)
 }
 
+/**
+ * convert Collection<*> to JsonArray
+ */
 fun Collection<*>.toJsonElement(): JsonElement {
     return JsonArray(this.map { it.toJsonElement() })
 }
