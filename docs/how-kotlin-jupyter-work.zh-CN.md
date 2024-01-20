@@ -180,6 +180,7 @@ Kotlin 里并没有一个好的工具了来编译 JS。常见的 JS 编译工具
 对于 React, Jupyter 会将默认导出转换变量声明
 
 比如，下面的例子：
+
 ```js
 export function App() {
   return <span>React</span>
@@ -192,7 +193,7 @@ const __JupyterCellDefaultExportVariable__ = function App() {
   return <span>React</span>
 }
 const root = createRoot(cellElement);
-root.render(React.createElement($JSX_DEFAULT_EXPORT_VARIABLE_NAME))
+root.render(React.createElement(__JupyterCellDefaultExportVariable__))
 ```
 
 ## 尾声

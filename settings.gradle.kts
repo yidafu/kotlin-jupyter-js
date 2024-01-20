@@ -32,6 +32,4 @@ includeBuild("build-plugin")
 rootProject.name = "kotlin-notebook-js"
 
 include("jupyter-js")
-include("swc-binding")
-project(":swc-binding").name = "swc-binding"
 project(":jupyter-js").name = "jupyter-js"
