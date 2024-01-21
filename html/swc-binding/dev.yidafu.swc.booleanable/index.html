@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>dev.yidafu.swc.booleanable</title>
+    <link href="../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../";</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/clipboard.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
+</head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+            <a href="../../index.html">
+                    <span>swc-binding</span>
+            </a>
+    </div>
+    <div>
+0.5.1    </div>
+    <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":swc-binding:dokkaHtml/main">jvm</button>
+        </div>
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
+        <div id="sideMenu"></div>
+    </div>
+    <div id="main">
+<div class="main-content" data-page-type="package" id="content" pageIds="swc-binding::dev.yidafu.swc.booleanable////PointingToDeclaration//-243263284">
+  <div class="breadcrumbs"><a href="../../index.html">swc-binding</a><span class="delimiter">/</span><span class="current">dev.yidafu.swc.booleanable</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="">Types</h2>
+        <div class="table"><a data-name="-963936700%2FClasslikes%2F-243263284" anchor-label="Booleanable" id="-963936700%2FClasslikes%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-booleanable/index.html"><span><span>Booleanable</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-963936700%2FClasslikes%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="kotlinx.serialization/Serializable///PointingToDeclaration/"><span class="token annotation builtin">Serializable</span></span><span class="token punctuation">(</span><span>with<span class="token operator"> = </span><a href="-booleanable-serializer/index.html">BooleanableSerializer::class</a></span><wbr></wbr><span class="token punctuation">)</span></div></div><span class="token keyword">data </span><span class="token keyword">class </span><a href="-booleanable/index.html">Booleanable</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-booleanable/index.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>value<span class="token operator">: </span><a href="-booleanable/index.html">T</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">bool<span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">value may be boolean or <a href="-booleanable/index.html">T</a></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1385554970%2FClasslikes%2F-243263284" anchor-label="BooleanableArrayMatchPattern" id="1385554970%2FClasslikes%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1385554970%2FClasslikes%2F-243263284"><span>Booleanable</span><wbr></wbr><span>Array</span><wbr></wbr><span>Match</span><wbr></wbr><span><span>Pattern</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1385554970%2FClasslikes%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="index.html#1385554970%2FClasslikes%2F-243263284">BooleanableArrayMatchPattern</a><span class="token operator"> = </span><a href="-booleanable/index.html">Booleanable</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../dev.yidafu.swc.types/-match-pattern/index.html">MatchPattern</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-380899480%2FClasslikes%2F-243263284" anchor-label="BooleanableArrayMatchPatternSerializer" id="-380899480%2FClasslikes%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-booleanable-array-match-pattern-serializer/index.html"><span>Booleanable</span><wbr></wbr><span>Array</span><wbr></wbr><span>Match</span><wbr></wbr><span>Pattern</span><wbr></wbr><span><span>Serializer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-380899480%2FClasslikes%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-booleanable-array-match-pattern-serializer/index.html">BooleanableArrayMatchPatternSerializer</a> : <a href="-booleanable-serializer/index.html">BooleanableSerializer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../dev.yidafu.swc.types/-match-pattern/index.html">MatchPattern</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1455421484%2FClasslikes%2F-243263284" anchor-label="BooleanableArrayString" id="-1455421484%2FClasslikes%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1455421484%2FClasslikes%2F-243263284"><span>Booleanable</span><wbr></wbr><span>Array</span><wbr></wbr><span><span>String</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1455421484%2FClasslikes%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="index.html#-1455421484%2FClasslikes%2F-243263284">BooleanableArrayString</a><span class="token operator"> = </span><a href="-booleanable/index.html">Booleanable</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-435146078%2FClasslikes%2F-243263284" anchor-label="BooleanableArrayStringSerializer" id="-435146078%2FClasslikes%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-booleanable-array-string-serializer/index.html"><span>Booleanable</span><wbr></wbr><span>Array</span><wbr></wbr><span>String</span><wbr></wbr><span><span>Serializer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-435146078%2FClasslikes%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-booleanable-array-string-serializer/index.html">BooleanableArrayStringSerializer</a> : <a href="-booleanable-serializer/index.html">BooleanableSerializer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1374473026%2FClasslikes%2F-243263284" anchor-label="BooleanableFloat" id="1374473026%2FClasslikes%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#1374473026%2FClasslikes%2F-243263284"><span>Booleanable</span><wbr></wbr><span><span>Float</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1374473026%2FClasslikes%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="index.html#1374473026%2FClasslikes%2F-243263284">BooleanableFloat</a><span class="token operator"> = </span><a href="-booleanable/index.html">Booleanable</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html">Float</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-701889392%2FClasslikes%2F-243263284" anchor-label="BooleanableFloatSerializer" id="-701889392%2FClasslikes%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-booleanable-float-serializer/index.html"><span>Booleanable</span><wbr></wbr><span>Float</span><wbr></wbr><span><span>Serializer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-701889392%2FClasslikes%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-booleanable-float-serializer/index.html">BooleanableFloatSerializer</a> : <a href="-booleanable-serializer/index.html">BooleanableSerializer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-float/index.html">Float</a><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2100639665%2FClasslikes%2F-243263284" anchor-label="BooleanableInt" id="-2100639665%2FClasslikes%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-2100639665%2FClasslikes%2F-243263284"><span>Booleanable</span><wbr></wbr><span><span>Int</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2100639665%2FClasslikes%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="index.html#-2100639665%2FClasslikes%2F-243263284">BooleanableInt</a><span class="token operator"> = </span><a href="-booleanable/index.html">Booleanable</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-351480483%2FClasslikes%2F-243263284" anchor-label="BooleanableIntSerializer" id="-351480483%2FClasslikes%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-booleanable-int-serializer/index.html"><span>Booleanable</span><wbr></wbr><span>Int</span><wbr></wbr><span><span>Serializer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-351480483%2FClasslikes%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-booleanable-int-serializer/index.html">BooleanableIntSerializer</a> : <a href="-booleanable-serializer/index.html">BooleanableSerializer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html">Int</a><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1341235950%2FClasslikes%2F-243263284" anchor-label="BooleanableSerializer" id="-1341235950%2FClasslikes%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-booleanable-serializer/index.html"><span>Booleanable</span><wbr></wbr><span><span>Serializer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1341235950%2FClasslikes%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">class </span><a href="-booleanable-serializer/index.html">BooleanableSerializer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-booleanable-serializer/index.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">serializer<span class="token operator">: </span><span data-unresolved-link="kotlinx.serialization/KSerializer///PointingToDeclaration/">KSerializer</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-booleanable-serializer/index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>descriptor<span class="token operator">: </span><span data-unresolved-link="kotlinx.serialization.descriptors/SerialDescriptor///PointingToDeclaration/">SerialDescriptor</span><span class="token operator"> = </span>serializer.descriptor</span></span><span class="token punctuation">)</span> : <span data-unresolved-link="kotlinx.serialization/KSerializer///PointingToDeclaration/">KSerializer</span><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-booleanable/index.html">Booleanable</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="-booleanable-serializer/index.html">T</a><span class="token operator">&gt;</span><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">https://github.com/Kotlin/kotlinx.serialization/issues/1175</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1871707917%2FClasslikes%2F-243263284" anchor-label="BooleanableString" id="-1871707917%2FClasslikes%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-1871707917%2FClasslikes%2F-243263284"><span>Booleanable</span><wbr></wbr><span><span>String</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1871707917%2FClasslikes%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="index.html#-1871707917%2FClasslikes%2F-243263284">BooleanableString</a><span class="token operator"> = </span><a href="-booleanable/index.html">Booleanable</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1477349633%2FClasslikes%2F-243263284" anchor-label="BooleanableStringSerializer" id="1477349633%2FClasslikes%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-booleanable-string-serializer/index.html"><span>Booleanable</span><wbr></wbr><span>String</span><wbr></wbr><span><span>Serializer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1477349633%2FClasslikes%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-booleanable-string-serializer/index.html">BooleanableStringSerializer</a> : <a href="-booleanable-serializer/index.html">BooleanableSerializer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="756832385%2FClasslikes%2F-243263284" anchor-label="BooleanableTerserCompressOptions" id="756832385%2FClasslikes%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#756832385%2FClasslikes%2F-243263284"><span>Booleanable</span><wbr></wbr><span>Terser</span><wbr></wbr><span>Compress</span><wbr></wbr><span><span>Options</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="756832385%2FClasslikes%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="index.html#756832385%2FClasslikes%2F-243263284">BooleanableTerserCompressOptions</a><span class="token operator"> = </span><a href="-booleanable/index.html">Booleanable</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../dev.yidafu.swc.types/-terser-compress-options/index.html">TerserCompressOptions</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1565871887%2FClasslikes%2F-243263284" anchor-label="BooleanableTerserCompressOptionsSerializer" id="1565871887%2FClasslikes%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-booleanable-terser-compress-options-serializer/index.html"><span>Booleanable</span><wbr></wbr><span>Terser</span><wbr></wbr><span>Compress</span><wbr></wbr><span>Options</span><wbr></wbr><span><span>Serializer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1565871887%2FClasslikes%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-booleanable-terser-compress-options-serializer/index.html">BooleanableTerserCompressOptionsSerializer</a> : <a href="-booleanable-serializer/index.html">BooleanableSerializer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../dev.yidafu.swc.types/-terser-compress-options/index.html">TerserCompressOptions</a><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-201683803%2FClasslikes%2F-243263284" anchor-label="BooleanableTerserMangleOptions" id="-201683803%2FClasslikes%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="index.html#-201683803%2FClasslikes%2F-243263284"><span>Booleanable</span><wbr></wbr><span>Terser</span><wbr></wbr><span>Mangle</span><wbr></wbr><span><span>Options</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-201683803%2FClasslikes%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">typealias </span><a href="index.html#-201683803%2FClasslikes%2F-243263284">BooleanableTerserMangleOptions</a><span class="token operator"> = </span><a href="-booleanable/index.html">Booleanable</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../dev.yidafu.swc.types/-terser-mangle-options/index.html">TerserMangleOptions</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="187409971%2FClasslikes%2F-243263284" anchor-label="BooleanableTerserMangleOptionsSerializer" id="187409971%2FClasslikes%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-booleanable-terser-mangle-options-serializer/index.html"><span>Booleanable</span><wbr></wbr><span>Terser</span><wbr></wbr><span>Mangle</span><wbr></wbr><span>Options</span><wbr></wbr><span><span>Serializer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="187409971%2FClasslikes%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-booleanable-terser-mangle-options-serializer/index.html">BooleanableTerserMangleOptionsSerializer</a> : <a href="-booleanable-serializer/index.html">BooleanableSerializer</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="../dev.yidafu.swc.types/-terser-mangle-options/index.html">TerserMangleOptions</a><span class="token operator">&gt; </span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2024 Copyright</span><span
+                class="pull-right"><span>Generated by </span><a
+                href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
