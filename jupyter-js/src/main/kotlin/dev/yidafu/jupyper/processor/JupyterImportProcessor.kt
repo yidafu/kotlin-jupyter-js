@@ -3,6 +3,7 @@ package dev.yidafu.jupyper.processor
 import dev.yidafu.jupyper.InvalidMimeTypeResult
 import dev.yidafu.jupyper.JUPYTER_IMPORT_SPECIFIER_SOURCE_NAME
 import dev.yidafu.jupyper.NotSupportMimeTypeException
+import dev.yidafu.jupyper.toJsonElement
 import dev.yidafu.swc.types.* // ktlint-disable no-wildcard-imports
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
@@ -24,6 +25,20 @@ class NullResult : DisplayResult {
     }
 }
 
+/**
+ * replace virtual package (`@jupyter`) with kotlin variables
+ *
+ * ```js
+ * import { foo } from '@jupyter';
+ * ```
+ * will transform to
+ *
+ * ```js
+ * const foo = "bar";
+ * ```
+ *
+ * `foo` must be basic type or implement DisplayResult interface
+ */
 class JupyterImportProcessor(
     private val notebook: Notebook,
 ) : JavaScriptProcessor {
@@ -60,29 +75,7 @@ class JupyterImportProcessor(
                                 value.render(notebook).toJson()
                             }
                             else -> {
-                                if (value::class.hasAnnotation<Serializable>()) {
-                                    JSON(Json.encodeToJsonElement(value)).toJson()
-                                } else if (value is Array<*>) {
-                                   if (value.isArrayOf<String>()) {
-                                    JSON(Json.encodeToJsonElement(value as Array<String>)).toJson()
-                                   } else if (value.isArrayOf<Long>()) {
-                                       JSON(Json.encodeToJsonElement(value as Array<Long>)).toJson()
-                                   } else if (value.isArrayOf<Float>()) {
-                                       JSON(Json.encodeToJsonElement(value as Array<Float>)).toJson()
-                                   } else if (value.isArrayOf<Int>()) {
-                                       JSON(Json.encodeToJsonElement(value as Array<Int>)).toJson()
-                                   } else if (value.isArrayOf<Byte>()) {
-                                       JSON(Json.encodeToJsonElement(value as Array<Byte>)).toJson()
-                                   } else if (value.isArrayOf<UInt>()) {
-                                       JSON(Json.encodeToJsonElement(value as Array<UInt>)).toJson()
-                                   } else if (value.isArrayOf<Boolean>()) {
-                                       JSON(Json.encodeToJsonElement(value as Array<Boolean>)).toJson()
-                                   } else {
-                                       JSON(Json.encodeToJsonElement(value)).toJson()
-                                   }
-                                } else {
-                                    textResult(value.toString()).toJson()
-                                }
+                                JSON(value.toJsonElement()).toJson()
                             }
                         }
                         val data = result["data"] as JsonObject
@@ -106,11 +99,11 @@ class JupyterImportProcessor(
                             }
                             else -> throw NotSupportMimeTypeException(result.keys.joinToString(", "))
                         }
-                        log.debug("import varabile ${it.second} from kotlin world, it't value: $jsValueString")
+                        log.debug("import variable ${it.second} from kotlin world, it't value: $jsValueString")
                         context.addKotlinValue(it.second to jsValueString)
                     }
 
-                    log.debug("replace statement `import * from '@jupyter'` with actual variable declare")
+//                    log.debug("replace statement `import * from '@jupyter'` with actual variable declare")
                 }
 
             // remove `import * from '@jupyter';`

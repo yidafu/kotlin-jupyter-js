@@ -14,12 +14,16 @@ class JsCodeResult(private val jsCode: String) : Renderable {
     }
     private val jsCodeScriptModule: String
         get() = """
-            <div id="$uuid"></div>
-            <script type="module">
-            function getCellRoot() { return document.getElementById("$uuid"); }
-            $jsCode
-            </script>
-        """.trimIndent()
+<div id="$uuid" style="width:100%;min-height:100px"></div>
+<script type="module">
+function getCellRoot(width = "100%", height = "100px") {
+    var cellRoot = document.getElementById("$uuid");
+    cellRoot.style = `width: ${'$'}\{width};height: ${'$'}\{height}`
+    return cellRoot;
+}
+$jsCode
+</script>
+""".trimIndent()
 
     /**
      * Render to display result
