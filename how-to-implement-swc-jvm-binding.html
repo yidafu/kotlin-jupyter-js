@@ -1,21 +1,21 @@
-<h1><a id="user-content-how-to-implement-swc-jvm-binding" class="anchor" aria-hidden="true" tabindex="-1" href="#how-to-implement-swc-jvm-binding"><span aria-hidden="true" class="octicon octicon-link"></span></a>How to implement SWC JVM binding</h1>
+<h1>How to implement SWC JVM binding</h1>
 <p>Translated with DeepL.com (free version)</p>
-<h2><a id="user-content-background" class="anchor" aria-hidden="true" tabindex="-1" href="#background"><span aria-hidden="true" class="octicon octicon-link"></span></a>Background</h2>
-<p>In the process of using Kotlin Jupiter Kennel, I found that there is no 3D drawing library, and I can only use JS to draw data. We can only use JS to draw the data by using the <code>HTML(...) </code> function to write JS, which is very inconvenient. So I wrote the <a href="https://github.com/yidafu/kotlin-jupyter-js">kotlin-jupyter-js</a> plugin to support <code>%js</code> line magics. The core problem with the <code>kotlin-jupyter-js</code> plugin is: compiling JS code into ASTs is supported in the JVM. The core problem with the <code>kotlin-jupyter-js</code> plugin is that the JVM supports compiling JS code into ASTs.</p>
-<p>My idea is to implement SWC's JVM binding to solve this problem, SWC itself provides Node binding, so JVM binding is not that difficult to implement. Moreover, SWC supports TS/JSX compilation, which allows <code>kotlin-jupyter-js</code> to support <code>typescript</code> and <code>React</code>.</p>
-<h2><a id="user-content-implementation-ideas" class="anchor" aria-hidden="true" tabindex="-1" href="#implementation-ideas"><span aria-hidden="true" class="octicon octicon-link"></span></a>Implementation Ideas</h2>
+<h2>Background</h2>
+<p>In the process of using Kotlin Jupiter Kennel, I found that there is no 3D drawing library, and I can only use JS to draw data. We can only use JS to draw the data by using the <code class="notranslate">HTML(...) </code> function to write JS, which is very inconvenient. So I wrote the <a href="https://github.com/yidafu/kotlin-jupyter-js">kotlin-jupyter-js</a> plugin to support <code class="notranslate">%js</code> line magics. The core problem with the <code class="notranslate">kotlin-jupyter-js</code> plugin is: compiling JS code into ASTs is supported in the JVM. The core problem with the <code class="notranslate">kotlin-jupyter-js</code> plugin is that the JVM supports compiling JS code into ASTs.</p>
+<p>My idea is to implement SWC's JVM binding to solve this problem, SWC itself provides Node binding, so JVM binding is not that difficult to implement. Moreover, SWC supports TS/JSX compilation, which allows <code class="notranslate">kotlin-jupyter-js</code> to support <code class="notranslate">typescript</code> and <code class="notranslate">React</code>.</p>
+<h2>Implementation Ideas</h2>
 <p>The SWC JVM binding implementation is divided into two parts: 1) compiling the SWC Rust code into a JNI dynamic library, and 2) the JVM side, which implements the configuration classes and AST classes.</p>
 <p>SWC is for JS and only provides support for Node binding, we need to refer to Node binding to implement JVM binding.</p>
 <p>SWC Node binding exposes API output and input parameters are JSON strings, in Node, JSON strings can be easily converted to objects, but in JVM, you need to declare the corresponding classes.</p>
 <blockquote>
 <p>SWC provides WASM binding, you can encapsulate SWC based on WASM, the advantage is that you don't need to implement JNI binding, but you need to introduce WASM Runtime, so we don't consider it.</p>
 </blockquote>
-<h2><a id="user-content-swc-binding" class="anchor" aria-hidden="true" tabindex="-1" href="#swc-binding"><span aria-hidden="true" class="octicon octicon-link"></span></a>SWC binding</h2>
-<h3><a id="user-content-rust-jni-ffis" class="anchor" aria-hidden="true" tabindex="-1" href="#rust-jni-ffis"><span aria-hidden="true" class="octicon octicon-link"></span></a>Rust JNI FFIs</h3>
+<h2>SWC binding</h2>
+<h3>Rust JNI FFIs</h3>
 <p>Compiling Rust into a JNI dynamic library requires the Rust JNI FFI, which is supported by using <a href="https://crates.io/crates/jni" rel="nofollow">jni</a>.</p>
-<p>This library provides an easy way to bridge Rust and Java, see the official <code>jni</code> example.</p>
+<p>This library provides an easy way to bridge Rust and Java, see the official <code class="notranslate">jni</code> example.</p>
 <p>On the JVM side of the code.</p>
-<div class="highlight highlight-source-kotlin"><pre><span class="pl-k">class</span> <span class="pl-en">HelloWorld</span> {
+<div class="highlight highlight-source-kotlin"><pre class="notranslate"><span class="pl-k">class</span> <span class="pl-en">HelloWorld</span> {
     <span class="pl-en">init</span> {
         <span class="pl-en">System</span>.loadLibrary(<span class="pl-s"><span class="pl-pds">"</span>mylib<span class="pl-pds">"</span></span>);
     }
@@ -23,7 +23,7 @@
     <span class="pl-k">external</span> <span class="pl-k">fun</span> <span class="pl-en">hello</span>(<span class="pl-smi">input</span><span class="pl-k">:</span> <span class="pl-c1">String</span>): <span class="pl-c1">String</span>;
 }</pre></div>
 <p>In Rust code it's just a matter of writing the glue code.</p>
-<div class="highlight highlight-source-rust"><pre><span class="pl-c1">#<span class="pl-kos">[</span>no_mangle<span class="pl-kos">]</span></span>
+<div class="highlight highlight-source-rust"><pre class="notranslate"><span class="pl-c1">#<span class="pl-kos">[</span>no_mangle<span class="pl-kos">]</span></span>
 <span class="pl-k">pub</span> <span class="pl-k">extern</span> <span class="pl-s">"system"</span> <span class="pl-k">fn</span> <span class="pl-v">Java_HelloWorld_hello</span><span class="pl-kos">&lt;</span><span class="pl-c1">'</span><span class="pl-ent">local</span><span class="pl-kos">&gt;</span><span class="pl-kos">(</span><span class="pl-k">mut</span> <span class="pl-s1">env</span><span class="pl-kos">:</span> <span class="pl-smi">JNIEnv</span><span class="pl-kos">&lt;</span><span class="pl-c1">'</span><span class="pl-ent">local</span><span class="pl-kos">&gt;</span><span class="pl-kos">,</span> <span class="pl-s1">class</span><span class="pl-kos">:</span> <span class="pl-smi">JClass</span><span class="pl-kos">&lt;</span><span class="pl-c1">'</span><span class="pl-ent">local</span><span class="pl-kos">&gt;</span><span class="pl-kos">,</span> <span class="pl-s1">input</span><span class="pl-kos">:</span> <span class="pl-smi">JString</span><span class="pl-kos">&lt;</span><span class="pl-c1">'</span><span class="pl-ent">local</span><span class="pl-kos">&gt;</span><span class="pl-kos">)</span> -&gt; <span class="pl-smi">jstring</span> <span class="pl-kos">{</span>
     <span class="pl-k">let</span> input<span class="pl-kos">:</span> <span class="pl-smi">String</span> =
         env<span class="pl-kos">.</span><span class="pl-en">get_string</span><span class="pl-kos">(</span><span class="pl-c1">&amp;</span>input<span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">expect</span><span class="pl-kos">(</span><span class="pl-s">"Couldn't get java string!"</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">into</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
@@ -34,12 +34,12 @@
 
     output<span class="pl-kos">.</span><span class="pl-en">into_raw</span><span class="pl-kos">(</span><span class="pl-kos">)</span>
 <span class="pl-kos">}</span></pre></div>
-<p>Calling <code>HelloWorld().hello("JNI")</code> through JNI will call the Rust code returning <code>Hello, JNI!</code>.</p>
+<p>Calling <code class="notranslate">HelloWorld().hello("JNI")</code> through JNI will call the Rust code returning <code class="notranslate">Hello, JNI!</code>.</p>
 <p>The declaration of the bridge function in the above Rust code is quite long, you can use <a href="https://crates.io/crates/jni_fn" rel="nofollow">jni_fn</a> to generate the bridge function declaration automatically by macro to simplify the declaration.</p>
-<div class="highlight highlight-source-rust"><pre><span class="pl-c1">#<span class="pl-kos">[</span>jni_fn<span class="pl-kos">(</span><span class="pl-s">"HelloWorld"</span><span class="pl-kos">)</span><span class="pl-kos">]</span></span>
+<div class="highlight highlight-source-rust"><pre class="notranslate"><span class="pl-c1">#<span class="pl-kos">[</span>jni_fn<span class="pl-kos">(</span><span class="pl-s">"HelloWorld"</span><span class="pl-kos">)</span><span class="pl-kos">]</span></span>
 <span class="pl-k">pub</span> <span class="pl-k">fn</span> <span class="pl-en">hello</span><span class="pl-kos">&lt;</span><span class="pl-c1">'</span><span class="pl-ent">local</span><span class="pl-kos">&gt;</span><span class="pl-kos">(</span>...<span class="pl-kos">)</span> -&gt; <span class="pl-smi">jstring</span><span class="pl-kos"></span></pre></div>
-<p>With <code>jni</code> and <code>jni_fn</code> we can compile Rust code into JNI dynamic libraries.</p>
-<h3><a id="user-content-binding" class="anchor" aria-hidden="true" tabindex="-1" href="#binding"><span aria-hidden="true" class="octicon octicon-link"></span></a>Binding</h3>
+<p>With <code class="notranslate">jni</code> and <code class="notranslate">jni_fn</code> we can compile Rust code into JNI dynamic libraries.</p>
+<h3>Binding</h3>
 <p>SWC Node binding offers the following methods.</p>
 <ul>
 <li>transform
@@ -71,21 +71,21 @@
 </ul>
 </li>
 </ul>
-<p>SWC Node binding provides synchronous and asynchronous methods via <a href="https://crates.io/crates/napi" rel="nofollow">napi</a>. However, the JVM's FFI <code>jni</code> doesn't only support asynchrony, so we only implement the synchronous APIs: <code>transformSync</code>,<code>transformFileSync</code>,<code>parseSync</code>,<code>parseFileSync</code>,<code>minifySync</code>,<code>printSync</code>.</p>
-<h3><a id="user-content-pase_sync" class="anchor" aria-hidden="true" tabindex="-1" href="#pase_sync"><span aria-hidden="true" class="octicon octicon-link"></span></a>pase_sync</h3>
-<p>Below is an example of <code>pase_sync</code> to explain how to implement it.</p>
-<h4><a id="user-content-dependencies" class="anchor" aria-hidden="true" tabindex="-1" href="#dependencies"><span aria-hidden="true" class="octicon octicon-link"></span></a>Dependencies</h4>
-<p>SWC itself only considers Node binding.<a href="https://crates.io/crates/swc_core" rel="nofollow">swc_core</a> implements the logic of binding to Node, aggregating other SWC sub-package dependencies. NMP package <code>@swc/core</code> also wraps <code>swc_core</code>. We can't use the <code>swc_core</code> library directly, we need to replace other SWC subpackage calls.</p>
-<p>For example, <code>Compiler</code> from <code>swc_core</code>:</p>
-<div class="highlight highlight-source-rust"><pre><span class="pl-k">use</span> swc_core<span class="pl-kos">::</span><span class="pl-kos">{</span>
+<p>SWC Node binding provides synchronous and asynchronous methods via <a href="https://crates.io/crates/napi" rel="nofollow">napi</a>. However, the JVM's FFI <code class="notranslate">jni</code> doesn't only support asynchrony, so we only implement the synchronous APIs: <code class="notranslate">transformSync</code>,<code class="notranslate">transformFileSync</code>,<code class="notranslate">parseSync</code>,<code class="notranslate">parseFileSync</code>,<code class="notranslate">minifySync</code>,<code class="notranslate">printSync</code>.</p>
+<h3>pase_sync</h3>
+<p>Below is an example of <code class="notranslate">pase_sync</code> to explain how to implement it.</p>
+<h4>Dependencies</h4>
+<p>SWC itself only considers Node binding.<a href="https://crates.io/crates/swc_core" rel="nofollow">swc_core</a> implements the logic of binding to Node, aggregating other SWC sub-package dependencies. NMP package <code class="notranslate">@swc/core</code> also wraps <code class="notranslate">swc_core</code>. We can't use the <code class="notranslate">swc_core</code> library directly, we need to replace other SWC subpackage calls.</p>
+<p>For example, <code class="notranslate">Compiler</code> from <code class="notranslate">swc_core</code>:</p>
+<div class="highlight highlight-source-rust"><pre class="notranslate"><span class="pl-k">use</span> swc_core<span class="pl-kos">::</span><span class="pl-kos">{</span>
     base<span class="pl-kos">::</span><span class="pl-kos">{</span>
         <span class="pl-v">Compiler</span><span class="pl-kos">,</span>
     <span class="pl-kos">}</span><span class="pl-kos">,</span>
 <span class="pl-kos">}</span><span class="pl-kos"></span></pre></div>
 <p>Needs to be changed to be introduced from <a href="https://crates.io/crates/swc" rel="nofollow">swc</a>.</p>
-<div class="highlight highlight-source-rust"><pre><span class="pl-k">use</span> swc<span class="pl-kos">::</span><span class="pl-v">Compiler</span><span class="pl-kos">;</span></pre></div>
-<p>All SWC-related dependencies after <code>swc_core</code> conversion.</p>
-<div class="highlight highlight-source-toml"><pre>[<span class="pl-en">dependencies</span>]
+<div class="highlight highlight-source-rust"><pre class="notranslate"><span class="pl-k">use</span> swc<span class="pl-kos">::</span><span class="pl-v">Compiler</span><span class="pl-kos">;</span></pre></div>
+<p>All SWC-related dependencies after <code class="notranslate">swc_core</code> conversion.</p>
+<div class="highlight highlight-source-toml"><pre class="notranslate">[<span class="pl-en">dependencies</span>]
 <span class="pl-c"><span class="pl-c">#</span> ...</span>
 s<span class="pl-smi">wc</span> = <span class="pl-s"><span class="pl-pds">"</span>0.270.25<span class="pl-pds">"</span></span>
 <span class="pl-smi">swc_common</span> = <span class="pl-s"><span class="pl-pds">"</span>0.33.9<span class="pl-pds">"</span></span>
@@ -95,11 +95,11 @@ s<span class="pl-smi">wc</span> = <span class="pl-s"><span class="pl-pds">"</spa
 <span class="pl-smi">swc_ecma_visit</span> = <span class="pl-s"><span class="pl-pds">"</span>0.96.10<span class="pl-pds">"</span></span>
 <span class="pl-smi">swc_ecma_codegen</span> = <span class="pl-s"><span class="pl-pds">"</span>0.146.39<span class="pl-pds">"</span></span>
 <span class="pl-c"><span class="pl-c">#</span> ...</span></pre></div>
-<h4><a id="user-content-entryexit-parameter" class="anchor" aria-hidden="true" tabindex="-1" href="#entryexit-parameter"><span aria-hidden="true" class="octicon octicon-link"></span></a>entry/exit parameter</h4>
-<p>Theoretically, what needs to be done is simple: replace all <code>napi</code> related logic with <code>jni</code>. We don't need to change how SWC implements the specific functionality.</p>
-<p>See <a href="https://github.com/swc-project/swc/tree/main/bindings/binding_core_node">SWC - binding_core_node</a> for the <code>pase_sync</code> implementation [binding_core_node /src/parse.rs#L168](<a href="https://github.com/swc-project/swc/blob/828190c035d61e6521280e2260c511bc02b81327/bindings/binding_core_node/">https://github.com/swc-project/swc/blob/828190c035d61e6521280e2260c511bc02b81327/bindings/binding_core_node/</a> src/parse.rs#L168), <code>parseSync</code> copies most of the logic directly, but requires changes to the handling of incoming and outgoing parameters.</p>
-<p>The <code>pase_sync</code> implementation of <code>binding_core_node</code>:</p>
-<div class="highlight highlight-source-rust"><pre><span class="pl-c1">#<span class="pl-kos">[</span>napi<span class="pl-kos">]</span></span>
+<h4>entry/exit parameter</h4>
+<p>Theoretically, what needs to be done is simple: replace all <code class="notranslate">napi</code> related logic with <code class="notranslate">jni</code>. We don't need to change how SWC implements the specific functionality.</p>
+<p>See <a href="https://github.com/swc-project/swc/tree/main/bindings/binding_core_node">SWC - binding_core_node</a> for the <code class="notranslate">pase_sync</code> implementation [binding_core_node /src/parse.rs#L168](<a href="https://github.com/swc-project/swc/blob/828190c035d61e6521280e2260c511bc02b81327/bindings/binding_core_node/">https://github.com/swc-project/swc/blob/828190c035d61e6521280e2260c511bc02b81327/bindings/binding_core_node/</a> src/parse.rs#L168), <code class="notranslate">parseSync</code> copies most of the logic directly, but requires changes to the handling of incoming and outgoing parameters.</p>
+<p>The <code class="notranslate">pase_sync</code> implementation of <code class="notranslate">binding_core_node</code>:</p>
+<div class="highlight highlight-source-rust"><pre class="notranslate"><span class="pl-c1">#<span class="pl-kos">[</span>napi<span class="pl-kos">]</span></span>
 <span class="pl-k">pub</span> <span class="pl-k">fn</span> <span class="pl-en">parse_sync</span><span class="pl-kos">(</span><span class="pl-s1">src</span><span class="pl-kos">:</span> <span class="pl-smi">String</span><span class="pl-kos">,</span> <span class="pl-s1">opts</span><span class="pl-kos">:</span> <span class="pl-smi">Buffer</span><span class="pl-kos">,</span> <span class="pl-s1">filename</span><span class="pl-kos">:</span> <span class="pl-smi">Option</span><span class="pl-kos">&lt;</span><span class="pl-smi">String</span><span class="pl-kos">&gt;</span><span class="pl-kos">)</span> -&gt; napi<span class="pl-kos">::</span><span class="pl-smi">Result</span><span class="pl-kos">&lt;</span><span class="pl-smi">String</span><span class="pl-kos">&gt;</span> <span class="pl-kos">{</span>
     <span class="pl-c">// ...</span>
 
@@ -107,7 +107,7 @@ s<span class="pl-smi">wc</span> = <span class="pl-s"><span class="pl-pds">"</spa
     <span class="pl-v">Ok</span><span class="pl-kos">(</span>serde_json<span class="pl-kos">::</span><span class="pl-en">to_string</span><span class="pl-kos">(</span><span class="pl-c1">&amp;</span>program<span class="pl-kos">)</span>?<span class="pl-kos">)</span>
 <span class="pl-kos">}</span></pre></div>
 <p>Signature changes and entry/exit parameter processing are required:</p>
-<div class="highlight highlight-source-rust"><pre><span class="pl-c1">#<span class="pl-kos">[</span>jni_fn<span class="pl-kos">(</span><span class="pl-s">"dev.yidafu.swc.SwcNative"</span><span class="pl-kos">)</span><span class="pl-kos">]</span></span>
+<div class="highlight highlight-source-rust"><pre class="notranslate"><span class="pl-c1">#<span class="pl-kos">[</span>jni_fn<span class="pl-kos">(</span><span class="pl-s">"dev.yidafu.swc.SwcNative"</span><span class="pl-kos">)</span><span class="pl-kos">]</span></span>
 <span class="pl-k">pub</span> <span class="pl-k">fn</span> <span class="pl-en">parseSync</span><span class="pl-kos">(</span><span class="pl-k">mut</span> <span class="pl-s1">env</span><span class="pl-kos">:</span> <span class="pl-smi">JNIEnv</span><span class="pl-kos">,</span> _<span class="pl-kos">:</span> <span class="pl-smi">JClass</span><span class="pl-kos">,</span> <span class="pl-s1">code</span><span class="pl-kos">:</span> <span class="pl-smi">JString</span><span class="pl-kos">,</span> <span class="pl-s1">options</span><span class="pl-kos">:</span> <span class="pl-smi">JString</span><span class="pl-kos">,</span> <span class="pl-s1">filename</span><span class="pl-kos">:</span> <span class="pl-smi">JString</span><span class="pl-kos">)</span> -&gt; <span class="pl-smi">jstring</span> <span class="pl-kos">{</span>
     <span class="pl-c">// process parameter</span>
     <span class="pl-k">let</span> src<span class="pl-kos">:</span> <span class="pl-smi">String</span> = env
@@ -132,33 +132,33 @@ s<span class="pl-smi">wc</span> = <span class="pl-s"><span class="pl-pds">"</spa
     
     output<span class="pl-kos">.</span><span class="pl-en">into_raw</span><span class="pl-kos">(</span><span class="pl-kos">)</span>
 <span class="pl-kos">}</span></pre></div>
-<p>Getting a string passed by the JVM requires a call to <code>get_string</code> of <code>JNIEnv</code>.</p>
-<p>Converting a Rust string to a Java string also requires a call to <code>new_string</code> of <code>JNIEnv</code> before converting to a <code>jstring</code> type.</p>
-<h4><a id="user-content-exception-handling" class="anchor" aria-hidden="true" tabindex="-1" href="#exception-handling"><span aria-hidden="true" class="octicon octicon-link"></span></a>Exception Handling</h4>
+<p>Getting a string passed by the JVM requires a call to <code class="notranslate">get_string</code> of <code class="notranslate">JNIEnv</code>.</p>
+<p>Converting a Rust string to a Java string also requires a call to <code class="notranslate">new_string</code> of <code class="notranslate">JNIEnv</code> before converting to a <code class="notranslate">jstring</code> type.</p>
+<h4>Exception Handling</h4>
 <p>If SWC fails to process JS code (e.g. JS code has syntax errors), it needs to throw an exception to the JVM, which will be handled by the JVM side.</p>
 <p>The code thrown by Rust is first caught and then converted into an exception thrown by the JVM.</p>
-<p>The <code>binding_core_node</code> handler implements the <code>MapErr&lt;T&gt;</code> trait for <code>Result</code>, which converts the Rust exception to a <code>napi</code> exception via the <code>convert_err</code> method, and finally throws it in the Node.</p>
+<p>The <code class="notranslate">binding_core_node</code> handler implements the <code class="notranslate">MapErr&lt;T&gt;</code> trait for <code class="notranslate">Result</code>, which converts the Rust exception to a <code class="notranslate">napi</code> exception via the <code class="notranslate">convert_err</code> method, and finally throws it in the Node.</p>
 <p>Exception handling in SWC [swc/bindings/binding_core_node/src/parse.rs#L179](<a href="https://github.com/swc-project/swc/blob/">https://github.com/swc-project/swc/blob/</a> 828190c035d61e6521280e2260c511bc02b81327/bindings/binding_core_node/src/parse.rs#L179)</p>
-<div class="highlight highlight-source-rust"><pre><span class="pl-k">let</span> program = <span class="pl-en">try_with</span><span class="pl-kos">(</span>c<span class="pl-kos">.</span><span class="pl-c1">cm</span><span class="pl-kos">.</span><span class="pl-en">clone</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">,</span> <span class="pl-c1">false</span><span class="pl-kos">,</span> <span class="pl-smi">ErrorFormat</span><span class="pl-kos">::</span><span class="pl-v">Normal</span><span class="pl-kos">,</span> |handler| <span class="pl-kos">{</span>
+<div class="highlight highlight-source-rust"><pre class="notranslate"><span class="pl-k">let</span> program = <span class="pl-en">try_with</span><span class="pl-kos">(</span>c<span class="pl-kos">.</span><span class="pl-c1">cm</span><span class="pl-kos">.</span><span class="pl-en">clone</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">,</span> <span class="pl-c1">false</span><span class="pl-kos">,</span> <span class="pl-smi">ErrorFormat</span><span class="pl-kos">::</span><span class="pl-v">Normal</span><span class="pl-kos">,</span> |handler| <span class="pl-kos">{</span>
     <span class="pl-c">// ....</span>
 <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">convert_err</span><span class="pl-kos">(</span><span class="pl-kos">)</span>?<span class="pl-kos">;</span></pre></div>
-<p>We need to throw JVM exceptions, so implement the JVM's <code>MapErr&lt;T&gt;</code> trait to turn Rust exceptions into <code>jni</code> exceptions for <code>jni</code> to throw to the JVM.</p>
-<p>Copy the SWC's <code>MapErr&lt;T&gt;</code> trait.</p>
-<div class="highlight highlight-source-rust"><pre><span class="pl-k">pub</span> <span class="pl-k">trait</span> <span class="pl-smi">MapErr</span><span class="pl-kos">&lt;</span><span class="pl-smi">T</span><span class="pl-kos">&gt;</span><span class="pl-kos">:</span> <span class="pl-smi">Into</span><span class="pl-kos">&lt;</span><span class="pl-smi">Result</span><span class="pl-kos">&lt;</span><span class="pl-smi">T</span><span class="pl-kos">,</span> anyhow<span class="pl-kos">::</span><span class="pl-smi">Error</span><span class="pl-kos">&gt;</span><span class="pl-kos">&gt;</span> <span class="pl-kos">{</span>
+<p>We need to throw JVM exceptions, so implement the JVM's <code class="notranslate">MapErr&lt;T&gt;</code> trait to turn Rust exceptions into <code class="notranslate">jni</code> exceptions for <code class="notranslate">jni</code> to throw to the JVM.</p>
+<p>Copy the SWC's <code class="notranslate">MapErr&lt;T&gt;</code> trait.</p>
+<div class="highlight highlight-source-rust"><pre class="notranslate"><span class="pl-k">pub</span> <span class="pl-k">trait</span> <span class="pl-smi">MapErr</span><span class="pl-kos">&lt;</span><span class="pl-smi">T</span><span class="pl-kos">&gt;</span><span class="pl-kos">:</span> <span class="pl-smi">Into</span><span class="pl-kos">&lt;</span><span class="pl-smi">Result</span><span class="pl-kos">&lt;</span><span class="pl-smi">T</span><span class="pl-kos">,</span> anyhow<span class="pl-kos">::</span><span class="pl-smi">Error</span><span class="pl-kos">&gt;</span><span class="pl-kos">&gt;</span> <span class="pl-kos">{</span>
     <span class="pl-k">fn</span> <span class="pl-en">convert_err</span><span class="pl-kos">(</span><span class="pl-smi">self</span><span class="pl-kos">)</span> -&gt; <span class="pl-smi">SwcResult</span><span class="pl-kos">&lt;</span><span class="pl-smi">T</span><span class="pl-kos">&gt;</span> <span class="pl-kos">{</span>
         <span class="pl-smi">self</span><span class="pl-kos">.</span><span class="pl-en">into</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">map_err</span><span class="pl-kos">(</span>|err| <span class="pl-smi">SwcException</span><span class="pl-kos">::</span><span class="pl-smi">SwcAnyException</span> <span class="pl-kos">{</span>
             <span class="pl-c1">msg</span><span class="pl-kos">:</span> <span class="pl-en">format</span><span class="pl-en">!</span><span class="pl-kos">(</span><span class="pl-s">"{:?}"</span>, err<span class="pl-kos">)</span><span class="pl-kos">,</span>
         <span class="pl-kos">}</span><span class="pl-kos">)</span>
     <span class="pl-kos">}</span>
 <span class="pl-kos">}</span></pre></div>
-<p><code>Result</code> implements <code>MapErr&lt;T&gt;</code>.</p>
-<div class="highlight highlight-source-rust"><pre><span class="pl-k">impl</span><span class="pl-kos">&lt;</span><span class="pl-smi">T</span><span class="pl-kos">&gt;</span> <span class="pl-smi">MapErr</span><span class="pl-kos">&lt;</span><span class="pl-smi">T</span><span class="pl-kos">&gt;</span> <span class="pl-k">for</span> <span class="pl-smi">Result</span><span class="pl-kos">&lt;</span><span class="pl-smi">T</span><span class="pl-kos">,</span> anyhow<span class="pl-kos">::</span><span class="pl-smi">Error</span><span class="pl-kos">&gt;</span> <span class="pl-kos">{</span><span class="pl-kos">}</span></pre></div>
-<p>Here <code>jni</code> throws an exception and it should be noted that the function still needs to return a value, usually an empty string. Here <a href="https://github.com/jni-rs/jni-rs/issues/76">jni-rs#76</a> explains why.</p>
+<p><code class="notranslate">Result</code> implements <code class="notranslate">MapErr&lt;T&gt;</code>.</p>
+<div class="highlight highlight-source-rust"><pre class="notranslate"><span class="pl-k">impl</span><span class="pl-kos">&lt;</span><span class="pl-smi">T</span><span class="pl-kos">&gt;</span> <span class="pl-smi">MapErr</span><span class="pl-kos">&lt;</span><span class="pl-smi">T</span><span class="pl-kos">&gt;</span> <span class="pl-k">for</span> <span class="pl-smi">Result</span><span class="pl-kos">&lt;</span><span class="pl-smi">T</span><span class="pl-kos">,</span> anyhow<span class="pl-kos">::</span><span class="pl-smi">Error</span><span class="pl-kos">&gt;</span> <span class="pl-kos">{</span><span class="pl-kos">}</span></pre></div>
+<p>Here <code class="notranslate">jni</code> throws an exception and it should be noted that the function still needs to return a value, usually an empty string. Here <a href="https://github.com/jni-rs/jni-rs/issues/76" data-hovercard-type="issue" data-hovercard-url="/jni-rs/jni-rs/issues/76/hovercard">jni-rs#76</a> explains why.</p>
 <blockquote>
 <p>You still have to return to the JVM, even if you've thrown an exception. Remember that unwinding across the ffi boundary is always undefined behavior, so any panics need to be caught and recovered from in your extern functions.</p>
 </blockquote>
 <p>The final exception is handled like this</p>
-<div class="highlight highlight-source-rust"><pre><span class="pl-k">let</span> result = <span class="pl-en">try_with</span><span class="pl-kos">(</span>c<span class="pl-kos">.</span><span class="pl-c1">cm</span><span class="pl-kos">.</span><span class="pl-en">clone</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">,</span> <span class="pl-c1">false</span><span class="pl-kos">,</span> <span class="pl-smi">ErrorFormat</span><span class="pl-kos">::</span><span class="pl-v">Normal</span><span class="pl-kos">,</span> |handler| <span class="pl-kos">{</span>
+<div class="highlight highlight-source-rust"><pre class="notranslate"><span class="pl-k">let</span> result = <span class="pl-en">try_with</span><span class="pl-kos">(</span>c<span class="pl-kos">.</span><span class="pl-c1">cm</span><span class="pl-kos">.</span><span class="pl-en">clone</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">,</span> <span class="pl-c1">false</span><span class="pl-kos">,</span> <span class="pl-smi">ErrorFormat</span><span class="pl-kos">::</span><span class="pl-v">Normal</span><span class="pl-kos">,</span> |handler| <span class="pl-kos">{</span>
     <span class="pl-c">// ...</span>
 <span class="pl-kos">}</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">convert_err</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
 
@@ -175,9 +175,9 @@ s<span class="pl-smi">wc</span> = <span class="pl-s"><span class="pl-pds">"</spa
         <span class="pl-k">return</span> <span class="pl-smi">JString</span><span class="pl-kos">::</span><span class="pl-en">default</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">into_raw</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>
     <span class="pl-kos">}</span>
 <span class="pl-kos">}</span></pre></div>
-<h3><a id="user-content-swcnative" class="anchor" aria-hidden="true" tabindex="-1" href="#swcnative"><span aria-hidden="true" class="octicon octicon-link"></span></a>SwcNative</h3>
+<h3>SwcNative</h3>
 <p>Implementation of Rust compiled into a dynamic library, the next step will need to implement the JVM side of the glue code, the following is the Kotlin implementation.</p>
-<div class="highlight highlight-source-kotlin"><pre><span class="pl-k">class</span> <span class="pl-en">SwcNative</span> {
+<div class="highlight highlight-source-kotlin"><pre class="notranslate"><span class="pl-k">class</span> <span class="pl-en">SwcNative</span> {
     <span class="pl-en">init</span> {
         <span class="pl-en">System</span>.loadLibrary(<span class="pl-s"><span class="pl-pds">"</span>swc_jni<span class="pl-pds">"</span></span>)
     }
@@ -185,9 +185,9 @@ s<span class="pl-smi">wc</span> = <span class="pl-s"><span class="pl-pds">"</spa
     @Throws(<span class="pl-en">RuntimeException</span>::<span class="pl-c1">class</span>)
     <span class="pl-k">external</span> <span class="pl-k">fun</span> <span class="pl-en">parseSync</span>(<span class="pl-smi">code</span><span class="pl-k">:</span> <span class="pl-c1">String</span>, <span class="pl-smi">options</span><span class="pl-k">:</span> <span class="pl-c1">String</span>, <span class="pl-smi">filename</span><span class="pl-k">:</span> <span class="pl-c1">String?</span>): <span class="pl-c1">String</span>
 }</pre></div>
-<p>When the JVM loads <code>swc_jni</code>, it looks for dynamic libraries from the filesystem as a rule, but not from the <code>resources</code> directory of the jar. So, by <code>System.loadLibrary("swc_jni")</code> if there is no <code>swc_jni</code> dynamic library locally, it will fail to load. The user installs from maven and there is definitely no <code>swc_jni</code> locally.</p>
-<p>Solution, refer to this answer <a href="https://stackoverflow.com/questions/23189776/load-native-library-from-class-path" rel="nofollow">Load Native Library from Class path</a>, if <code>System.loadLibrary("swc_jni")</code> fails to load, then copy the jar's dynamic library to a temporary directory and load it again.</p>
-<div class="highlight highlight-source-kotlin"><pre>    <span class="pl-en">init</span> {
+<p>When the JVM loads <code class="notranslate">swc_jni</code>, it looks for dynamic libraries from the filesystem as a rule, but not from the <code class="notranslate">resources</code> directory of the jar. So, by <code class="notranslate">System.loadLibrary("swc_jni")</code> if there is no <code class="notranslate">swc_jni</code> dynamic library locally, it will fail to load. The user installs from maven and there is definitely no <code class="notranslate">swc_jni</code> locally.</p>
+<p>Solution, refer to this answer <a href="https://stackoverflow.com/questions/23189776/load-native-library-from-class-path" rel="nofollow">Load Native Library from Class path</a>, if <code class="notranslate">System.loadLibrary("swc_jni")</code> fails to load, then copy the jar's dynamic library to a temporary directory and load it again.</p>
+<div class="highlight highlight-source-kotlin"><pre class="notranslate">    <span class="pl-en">init</span> {
         <span class="pl-k">try</span> {
             <span class="pl-en">System</span>.loadLibrary(<span class="pl-s"><span class="pl-pds">"</span>swc_jni<span class="pl-pds">"</span></span>)
         } <span class="pl-k">catch</span> (e<span class="pl-k">:</span> <span class="pl-en">UnsatisfiedLinkError</span>) {
@@ -197,10 +197,10 @@ s<span class="pl-smi">wc</span> = <span class="pl-s"><span class="pl-pds">"</spa
             <span class="pl-en">System</span>.load(dllPath)
         }
     }</pre></div>
-<h3><a id="user-content-summary" class="anchor" aria-hidden="true" tabindex="-1" href="#summary"><span aria-hidden="true" class="octicon octicon-link"></span></a>Summary</h3>
-<p>Like the other methods just implement them like <code>parse_sync</code>.</p>
+<h3>Summary</h3>
+<p>Like the other methods just implement them like <code class="notranslate">parse_sync</code>.</p>
 <p>At this point we can compile JS in the JVM.</p>
-<div class="highlight highlight-source-kotlin"><pre><span class="pl-en">SwcNative</span>().parseSync(
+<div class="highlight highlight-source-kotlin"><pre class="notranslate"><span class="pl-en">SwcNative</span>().parseSync(
     <span class="pl-s"><span class="pl-pds">"</span>var foo = 'bar'<span class="pl-pds">"</span></span>, 
     <span class="pl-s"><span class="pl-pds">"""</span>{"syntax": "ecmascript";}<span class="pl-pds">"""</span></span>,
     <span class="pl-s"><span class="pl-pds">"</span>test.js<span class="pl-pds">"</span></span>,
@@ -208,7 +208,7 @@ s<span class="pl-smi">wc</span> = <span class="pl-s"><span class="pl-pds">"</spa
 </pre></div>
 <details>
 <summary>output string</summary>
-<div class="highlight highlight-source-json"><pre>{
+<div class="highlight highlight-source-json"><pre class="notranslate">{
   <span class="pl-ent">"type"</span>: <span class="pl-s"><span class="pl-pds">"</span>Module<span class="pl-pds">"</span></span>,
   <span class="pl-ent">"span"</span>: {
     <span class="pl-ent">"start"</span>: <span class="pl-c1">0</span>,
@@ -264,56 +264,52 @@ s<span class="pl-smi">wc</span> = <span class="pl-s"><span class="pl-pds">"</spa
 </pre></div>
 
 </details>
-<h2><a id="user-content-kotlin-ast-dsl" class="anchor" aria-hidden="true" tabindex="-1" href="#kotlin-ast-dsl"><span aria-hidden="true" class="octicon octicon-link"></span></a>Kotlin AST DSL</h2>
+<h2>Kotlin AST DSL</h2>
 <p>Now that we get the AST JSON string, it is still inconvenient if we want to manipulate the AST. We need the JSON string to convert it to a class so that traversing and modifying it will be easy.</p>
-<p>Also, the second <code>options</code> of <code>parseSync</code> is not type aware and needs to be constrained to a configuration item.</p>
+<p>Also, the second <code class="notranslate">options</code> of <code class="notranslate">parseSync</code> is not type aware and needs to be constrained to a configuration item.</p>
 <p>So how do we implement type descriptions for SWC ASTs and configuration item parameters in Kotlin?</p>
 <p>I've tried an AI conversion from Rust to Kotlin and it works pretty well. The only problem is that it requires kryptonite, and I admit that lack of money is my problem.</p>
 <p>Writing SWC class definitions from scratch? I'm afraid there's a lot of work to be done, SWC has 200+ ASTs and configuration item types.</p>
 <p>The best solution is to generate Kotlin classes via scripts. As it happens, SWC provides the TS declaration file <a href="https://www.npmjs.com/package/@swc/types" rel="nofollow">@swc/types</a>.</p>
-<h3><a id="user-content-swctypes" class="anchor" aria-hidden="true" tabindex="-1" href="#swctypes"><span aria-hidden="true" class="octicon octicon-link"></span></a>@swc/types</h3>
-<p>When you open the declaration file for <code>@swc/types</code>, it is full of <code>type</code> and <code>interface</code> declarations with a very simple structure.</p>
+<h3>@swc/types</h3>
+<p>When you open the declaration file for <code class="notranslate">@swc/types</code>, it is full of <code class="notranslate">type</code> and <code class="notranslate">interface</code> declarations with a very simple structure.</p>
 <p>It can be divided into the following cases.</p>
 <ol>
 <li>type alias
 <ol>
-<li>literal union type: <code>type T = 'foo' | 'bar'</code>
-</li>
-<li>primary union type: <code>type T = string | number</code>
-</li>
-<li>type alias and object literal type: <code>type T = S &amp; { foo: string }</code>
-</li>
-<li>type alias union type: <code>type T = S | E</code>
-</li>
+<li>literal union type: <code class="notranslate">type T = 'foo' | 'bar'</code></li>
+<li>primary union type: <code class="notranslate">type T = string | number</code></li>
+<li>type alias and object literal type: <code class="notranslate">type T = S &amp; { foo: string }</code></li>
+<li>type alias union type: <code class="notranslate">type T = S | E</code></li>
 </ol>
 </li>
 <li>interface</li>
 </ol>
 <p>The case of Type alias is relatively complex, mainly because of the flexibility of JS.</p>
-<h3><a id="user-content-type-alias" class="anchor" aria-hidden="true" tabindex="-1" href="#type-alias"><span aria-hidden="true" class="octicon octicon-link"></span></a>type alias</h3>
+<h3>type alias</h3>
 <p>For some special cases we need to reduce the dynamics of types to make it easier for us to work with them.</p>
-<p>Like <code>T | T[]</code> we can convert to <code>T[]</code> to avoid not being able to define the type in Kotlin.</p>
+<p>Like <code class="notranslate">T | T[]</code> we can convert to <code class="notranslate">T[]</code> to avoid not being able to define the type in Kotlin.</p>
 <p>For example:</p>
-<div class="highlight highlight-source-ts"><pre><span class="pl-k">export</span> <span class="pl-k">interface</span> <span class="pl-smi">Config</span> <span class="pl-kos">{</span>
+<div class="highlight highlight-source-ts"><pre class="notranslate"><span class="pl-k">export</span> <span class="pl-k">interface</span> <span class="pl-smi">Config</span> <span class="pl-kos">{</span>
     <span class="pl-c1">test</span>?: <span class="pl-smi">string</span> <span class="pl-c1">|</span> <span class="pl-smi">string</span><span class="pl-kos">[</span><span class="pl-kos">]</span><span class="pl-kos">;</span>
     <span class="pl-c">// ...</span>
 <span class="pl-kos">}</span></pre></div>
 <p>Just convert:</p>
-<div class="highlight highlight-source-kotlin"><pre><span class="pl-k">class</span> <span class="pl-en">Config</span> {
+<div class="highlight highlight-source-kotlin"><pre class="notranslate"><span class="pl-k">class</span> <span class="pl-en">Config</span> {
     <span class="pl-k">var</span> test<span class="pl-k">:</span> <span class="pl-c1">Array</span>&lt;<span class="pl-en">String</span>&gt;<span class="pl-k">?</span> <span class="pl-k">=</span> <span class="pl-c1">null</span>
 }</pre></div>
-<p>A literal union type like <code>props: 'foo' | 'bar' </code> should be converted directly to the base type: <code>val props: String?</code>.</p>
-<p>A <code>type T = S &amp; { foo: string }</code> requires that the object literal type be extracted as a separate type, with T inheriting from S and the extracted new type. Conversion to kotlin should look like this:</p>
-<div class="highlight highlight-source-kotlin"><pre><span class="pl-k">interface</span> <span class="pl-en">BaseT</span> {
+<p>A literal union type like <code class="notranslate">props: 'foo' | 'bar' </code> should be converted directly to the base type: <code class="notranslate">val props: String?</code>.</p>
+<p>A <code class="notranslate">type T = S &amp; { foo: string }</code> requires that the object literal type be extracted as a separate type, with T inheriting from S and the extracted new type. Conversion to kotlin should look like this:</p>
+<div class="highlight highlight-source-kotlin"><pre class="notranslate"><span class="pl-k">interface</span> <span class="pl-en">BaseT</span> {
     <span class="pl-k">val</span> foo<span class="pl-k">:</span> <span class="pl-c1">String</span>;
 }
 
 <span class="pl-k">class</span> <span class="pl-en">T</span> : <span class="pl-en">S</span>, <span class="pl-en">BaseT</span> {}</pre></div>
-<h3><a id="user-content-interface" class="anchor" aria-hidden="true" tabindex="-1" href="#interface"><span aria-hidden="true" class="octicon octicon-link"></span></a>interface</h3>
-<p>For <code>interface</code> processing, it is divided into 3 parts: 1. TS interface to Kotlin class; 2. inheritance; 3. serialization.</p>
-<h4><a id="user-content-ts-interface-to-kotlin-class" class="anchor" aria-hidden="true" tabindex="-1" href="#ts-interface-to-kotlin-class"><span aria-hidden="true" class="octicon octicon-link"></span></a>TS interface to Kotlin class</h4>
-<p>Define a <code>KotlinClass</code> to represent the Kotlin class to be converted. Implement <code>toString()</code> to convert it to a Kotlin class.</p>
-<div class="highlight highlight-source-ts"><pre><span class="pl-k">export</span> <span class="pl-k">class</span> <span class="pl-smi">KotlinClass</span> <span class="pl-kos">{</span>
+<h3>interface</h3>
+<p>For <code class="notranslate">interface</code> processing, it is divided into 3 parts: 1. TS interface to Kotlin class; 2. inheritance; 3. serialization.</p>
+<h4>TS interface to Kotlin class</h4>
+<p>Define a <code class="notranslate">KotlinClass</code> to represent the Kotlin class to be converted. Implement <code class="notranslate">toString()</code> to convert it to a Kotlin class.</p>
+<div class="highlight highlight-source-ts"><pre class="notranslate"><span class="pl-k">export</span> <span class="pl-k">class</span> <span class="pl-smi">KotlinClass</span> <span class="pl-kos">{</span>
     <span class="pl-c1">klassName</span>: <span class="pl-smi">string</span> <span class="pl-c1">=</span> <span class="pl-s">''</span><span class="pl-kos">;</span>
     <span class="pl-c1">headerComment</span>: <span class="pl-smi">string</span> <span class="pl-c1">=</span> <span class="pl-s">''</span>
     <span class="pl-c1">annotations</span>: <span class="pl-smi">string</span><span class="pl-kos">[</span><span class="pl-kos">]</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-kos">]</span>
@@ -321,9 +317,9 @@ s<span class="pl-smi">wc</span> = <span class="pl-s"><span class="pl-pds">"</spa
     <span class="pl-c1">parents</span>: <span class="pl-smi">string</span><span class="pl-kos">[</span><span class="pl-kos">]</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-kos">]</span>
     <span class="pl-c1">properties</span>: <span class="pl-smi">KotlinClassProperty</span><span class="pl-kos">[</span><span class="pl-kos">]</span> <span class="pl-c1">=</span> <span class="pl-kos">[</span><span class="pl-kos">]</span>
 <span class="pl-kos">}</span></pre></div>
-<p>The <code>KotlinClass</code> is generated by traversing the AST of the TS interface.</p>
-<p>When traversing interface properties, you need to recursively traverse the properties of the parent class. Properties inherited from the parent type need to set <code>KotlinClassProperty.isOverride</code> to true to facilitate the generation of kotlin classes with the <code>override</code> modifier.</p>
-<div class="highlight highlight-source-ts"><pre><span class="pl-k">class</span> <span class="pl-smi">KotlinClassProperty</span> <span class="pl-kos">{</span>
+<p>The <code class="notranslate">KotlinClass</code> is generated by traversing the AST of the TS interface.</p>
+<p>When traversing interface properties, you need to recursively traverse the properties of the parent class. Properties inherited from the parent type need to set <code class="notranslate">KotlinClassProperty.isOverride</code> to true to facilitate the generation of kotlin classes with the <code class="notranslate">override</code> modifier.</p>
+<div class="highlight highlight-source-ts"><pre class="notranslate"><span class="pl-k">class</span> <span class="pl-smi">KotlinClassProperty</span> <span class="pl-kos">{</span>
     <span class="pl-c1">modifier</span>: <span class="pl-smi">string</span> <span class="pl-c1">=</span> <span class="pl-s">'var'</span>
     <span class="pl-c1">name</span>: <span class="pl-smi">string</span> <span class="pl-c1">=</span> <span class="pl-s">''</span>
     <span class="pl-c1">type</span>: <span class="pl-smi">string</span> <span class="pl-c1">=</span> <span class="pl-s">''</span>
@@ -332,11 +328,11 @@ s<span class="pl-smi">wc</span> = <span class="pl-s"><span class="pl-pds">"</spa
     <span class="pl-c1">isOverride</span>: <span class="pl-smi">boolean</span> <span class="pl-c1">=</span> <span class="pl-c1">false</span>
     <span class="pl-c1">discriminator</span>: <span class="pl-smi">string</span> <span class="pl-c1">=</span> <span class="pl-s">'type'</span>
 <span class="pl-kos">}</span></pre></div>
-<h4><a id="user-content-inheritance" class="anchor" aria-hidden="true" tabindex="-1" href="#inheritance"><span aria-hidden="true" class="octicon octicon-link"></span></a>Inheritance</h4>
-<p>The parent interface from which the TS interface directly inherits is simply added to the <code>KotlinClass.parents</code> array.</p>
-<p>However, <code>type T = S | E</code> needs to be handled separately.</p>
+<h4>Inheritance</h4>
+<p>The parent interface from which the TS interface directly inherits is simply added to the <code class="notranslate">KotlinClass.parents</code> array.</p>
+<p>However, <code class="notranslate">type T = S | E</code> needs to be handled separately.</p>
 <p>As an example</p>
-<div class="highlight highlight-source-ts"><pre><span class="pl-k">export</span> <span class="pl-k">interface</span> <span class="pl-smi">VariableDeclarator</span> <span class="pl-k">extends</span> <span class="pl-smi">Node</span><span class="pl-kos">,</span> <span class="pl-smi">HasSpan</span> <span class="pl-kos">{</span>
+<div class="highlight highlight-source-ts"><pre class="notranslate"><span class="pl-k">export</span> <span class="pl-k">interface</span> <span class="pl-smi">VariableDeclarator</span> <span class="pl-k">extends</span> <span class="pl-smi">Node</span><span class="pl-kos">,</span> <span class="pl-smi">HasSpan</span> <span class="pl-kos">{</span>
     <span class="pl-c1">init</span>?: <span class="pl-smi">Expression</span><span class="pl-kos">;</span>
 
     <span class="pl-c">// other props...</span>
@@ -350,9 +346,9 @@ s<span class="pl-smi">wc</span> = <span class="pl-s"><span class="pl-pds">"</spa
 <span class="pl-k">export</span> <span class="pl-k">interface</span> <span class="pl-smi">ArrayExpression</span> <span class="pl-k">extends</span> <span class="pl-smi">ExpressionBase</span>  <span class="pl-kos">{</span>
     <span class="pl-c">// ...</span>
 <span class="pl-kos">}</span></pre></div>
-<p>Here Expression is the parent of all <code>XxxExpression</code>. This makes <code>variableDeclarator.init = thisExpression</code> or <code>variableDeclarator.init = arrayExpression</code> assignments legal.</p>
-<p>Because <code>Expression</code> is a type alias in TS, converting kotlin turns it into an empty interface. Converting to Kotlin results in something like this</p>
-<div class="highlight highlight-source-kotlin"><pre><span class="pl-k">interface</span> <span class="pl-en">Expression</span> {}
+<p>Here Expression is the parent of all <code class="notranslate">XxxExpression</code>. This makes <code class="notranslate">variableDeclarator.init = thisExpression</code> or <code class="notranslate">variableDeclarator.init = arrayExpression</code> assignments legal.</p>
+<p>Because <code class="notranslate">Expression</code> is a type alias in TS, converting kotlin turns it into an empty interface. Converting to Kotlin results in something like this</p>
+<div class="highlight highlight-source-kotlin"><pre class="notranslate"><span class="pl-k">interface</span> <span class="pl-en">Expression</span> {}
 
 <span class="pl-k">class</span> <span class="pl-en">VariableDeclarator</span> : <span class="pl-en">Node</span>, <span class="pl-en">HasSpan</span> {
     <span class="pl-k">val</span> <span class="pl-en">init</span><span class="pl-k">:</span> <span class="pl-en">Expression</span><span class="pl-k">?</span>;
@@ -362,11 +358,11 @@ s<span class="pl-smi">wc</span> = <span class="pl-s"><span class="pl-pds">"</spa
 <span class="pl-k">class</span> <span class="pl-en">ArrayExpression</span> : <span class="pl-en">ExpressionBase</span>, <span class="pl-en">Expression</span> {
     <span class="pl-c"><span class="pl-c">//</span> ...</span>
 }</pre></div>
-<p>So, for <code>type T = S | E</code>, <code>T</code> is the parent of <code>S</code> and <code>E</code>, and <code>T</code> needs to be added to the <code>KotlinClass.parents</code> array of <code>S</code>,<code>E</code>.</p>
-<h4><a id="user-content-serialization" class="anchor" aria-hidden="true" tabindex="-1" href="#serialization"><span aria-hidden="true" class="octicon octicon-link"></span></a>Serialization</h4>
+<p>So, for <code class="notranslate">type T = S | E</code>, <code class="notranslate">T</code> is the parent of <code class="notranslate">S</code> and <code class="notranslate">E</code>, and <code class="notranslate">T</code> needs to be added to the <code class="notranslate">KotlinClass.parents</code> array of <code class="notranslate">S</code>,<code class="notranslate">E</code>.</p>
+<h4>Serialization</h4>
 <p>When serializing AST nodes, one encounters problems with polymorphic serialization.</p>
-<p>For example, serialize <code>Expression</code>, and <code>Expression</code> is an empty interface, then <code>toJson</code> doesn't know how to deal with <code>ThisExpression</code> and <code>ArrayExpression</code> properties, and then it can only throw an exception or output an empty object, which don't meet our expectation.</p>
-<div class="highlight highlight-source-kotlin"><pre><span class="pl-k">val</span> thisExpression<span class="pl-k">:</span> <span class="pl-en">ThisExpression</span> <span class="pl-k">=</span> <span class="pl-en">ThisExpression</span>()
+<p>For example, serialize <code class="notranslate">Expression</code>, and <code class="notranslate">Expression</code> is an empty interface, then <code class="notranslate">toJson</code> doesn't know how to deal with <code class="notranslate">ThisExpression</code> and <code class="notranslate">ArrayExpression</code> properties, and then it can only throw an exception or output an empty object, which don't meet our expectation.</p>
+<div class="highlight highlight-source-kotlin"><pre class="notranslate"><span class="pl-k">val</span> thisExpression<span class="pl-k">:</span> <span class="pl-en">ThisExpression</span> <span class="pl-k">=</span> <span class="pl-en">ThisExpression</span>()
 <span class="pl-k">val</span> arrayExpression<span class="pl-k">:</span> <span class="pl-en">ArrayExpression</span> <span class="pl-k">=</span> <span class="pl-en">ArrayExpression</span>()
 
 <span class="pl-k">var</span> expression<span class="pl-k">:</span> <span class="pl-en">Expression</span> <span class="pl-k">=</span> thisExpression
@@ -374,15 +370,15 @@ toJson(expression)
 
 expression <span class="pl-k">=</span> arrayExpression
 toJson(expression)</pre></div>
-<p>The same goes for deserialization. <code>parseJson</code> also doesn't know whether to convert a string to <code>ThisExpression</code> or <code>ArrayExpression</code>.</p>
-<div class="highlight highlight-source-kotlin"><pre><span class="pl-k">val</span> thisExpression <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"""</span> {"type":"ThisExpression", "props": "any value" } <span class="pl-pds">"""</span></span>
+<p>The same goes for deserialization. <code class="notranslate">parseJson</code> also doesn't know whether to convert a string to <code class="notranslate">ThisExpression</code> or <code class="notranslate">ArrayExpression</code>.</p>
+<div class="highlight highlight-source-kotlin"><pre class="notranslate"><span class="pl-k">val</span> thisExpression <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"""</span> {"type":"ThisExpression", "props": "any value" } <span class="pl-pds">"""</span></span>
 <span class="pl-k">val</span> arrayExpression <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"""</span> {"type":"ThisExpression", "elements": [] } <span class="pl-pds">"""</span></span>
 
 <span class="pl-k">var</span> expression<span class="pl-k">:</span> <span class="pl-en">Expression</span> <span class="pl-k">=</span> parseJson(thisExpression)
 <span class="pl-k">var</span> expression<span class="pl-k">:</span> <span class="pl-en">Expression</span> <span class="pl-k">=</span> parseJson(arrayExpression)</pre></div>
 <p>Serialization using kotlinx serialization, which supports <a href="https://github.com/Kotlin/kotlinx.serialization/blob/master/docs/polymorphism.md">polymorphic serialization</a>, requires transforming the kotlin code.</p>
-<p>Annotate the class with <code>JsonClassDiscriminator</code> to indicate by which field the type is distinguished, and <code>SerialName</code> to indicate the name of the type after serialization. Deserialization can find the specific type based on this type name.</p>
-<div class="highlight highlight-source-kotlin"><pre><span class="pl-k">interface</span> <span class="pl-en">ArrayExpression</span> : <span class="pl-en">ExpressionBase</span>, <span class="pl-en">Expression</span> {
+<p>Annotate the class with <code class="notranslate">JsonClassDiscriminator</code> to indicate by which field the type is distinguished, and <code class="notranslate">SerialName</code> to indicate the name of the type after serialization. Deserialization can find the specific type based on this type name.</p>
+<div class="highlight highlight-source-kotlin"><pre class="notranslate"><span class="pl-k">interface</span> <span class="pl-en">ArrayExpression</span> : <span class="pl-en">ExpressionBase</span>, <span class="pl-en">Expression</span> {
     <span class="pl-c"><span class="pl-c">//</span> ....</span>
 }
 
@@ -404,8 +400,8 @@ toJson(expression)</pre></div>
     <span class="pl-c"><span class="pl-c">//</span> ....</span>
 }
 </pre></div>
-<p>In order for serialization and deserialization to be able to correctly find specific types, it is also necessary to define <code>SerializersModule</code>.</p>
-<div class="highlight highlight-source-kotlin"><pre><span class="pl-k">val</span> swcSerializersModule <span class="pl-k">=</span> <span class="pl-en">SerializersModule</span> {
+<p>In order for serialization and deserialization to be able to correctly find specific types, it is also necessary to define <code class="notranslate">SerializersModule</code>.</p>
+<div class="highlight highlight-source-kotlin"><pre class="notranslate"><span class="pl-k">val</span> swcSerializersModule <span class="pl-k">=</span> <span class="pl-en">SerializersModule</span> {
     <span class="pl-c"><span class="pl-c">//</span> ...</span>
     polymorphic(<span class="pl-en">Expression</span>::<span class="pl-c1">class</span>) {
         subclass(<span class="pl-en">ThisExpressionImpl</span>::<span class="pl-c1">class</span>)
@@ -423,7 +419,7 @@ toJson(expression)</pre></div>
     <span class="pl-c"><span class="pl-c">//</span> ...</span>
 }</pre></div>
 <p>This allows normal serialization of polymorphic types</p>
-<div class="highlight highlight-source-kotlin"><pre><span class="pl-k">val</span> json <span class="pl-k">=</span> <span class="pl-en">Json</span> {
+<div class="highlight highlight-source-kotlin"><pre class="notranslate"><span class="pl-k">val</span> json <span class="pl-k">=</span> <span class="pl-en">Json</span> {
     classDiscriminator <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>syntax<span class="pl-pds">"</span></span>
     serializersModule <span class="pl-k">=</span> configSerializer
 }
@@ -432,12 +428,12 @@ json.decodeFromString&lt;<span class="pl-en">Expression</span>&gt;(<span class="
 
 <span class="pl-k">val</span> arrayExpression<span class="pl-k">:</span> <span class="pl-en">Expression</span> <span class="pl-k">=</span> <span class="pl-en">ArrayExpression</span>()
 json.encodeToString&lt;<span class="pl-en">Expression</span>&gt;(arrayExpression)</pre></div>
-<h3><a id="user-content-dsl" class="anchor" aria-hidden="true" tabindex="-1" href="#dsl"><span aria-hidden="true" class="octicon octicon-link"></span></a>DSL</h3>
+<h3>DSL</h3>
 <p>We have generated class definitions for ASTs and configuration items, and would find it less elegant and convenient to build configuration or ASTs directly using classes.</p>
-<div class="highlight highlight-source-js"><pre><span class="pl-k">const</span> <span class="pl-s1">foo</span> <span class="pl-c1">=</span> <span class="pl-s">'bar'</span></pre></div>
+<div class="highlight highlight-source-js"><pre class="notranslate"><span class="pl-k">const</span> <span class="pl-s1">foo</span> <span class="pl-c1">=</span> <span class="pl-s">'bar'</span></pre></div>
 <details>
 <summary>SWC compile output string</summary>
-<div class="highlight highlight-source-json"><pre>    {
+<div class="highlight highlight-source-json"><pre class="notranslate">    {
       <span class="pl-ent">"type"</span>: <span class="pl-s"><span class="pl-pds">"</span>VariableDeclaration<span class="pl-pds">"</span></span>,
       <span class="pl-ent">"span"</span>: {
         <span class="pl-ent">"start"</span>: <span class="pl-c1">0</span>,
@@ -481,7 +477,7 @@ json.encodeToString&lt;<span class="pl-en">Expression</span>&gt;(arrayExpression
     }</pre></div>
 </details>
 <p>The JS code above, if we Kotlin build the AST</p>
-<div class="highlight highlight-source-kotlin"><pre><span class="pl-en">VariableDeclarationImpl</span>().<span class="pl-c1">apply</span> {
+<div class="highlight highlight-source-kotlin"><pre class="notranslate"><span class="pl-en">VariableDeclarationImpl</span>().<span class="pl-c1">apply</span> {
     span <span class="pl-k">=</span> <span class="pl-en">Span</span>(<span class="pl-c1">0</span>, <span class="pl-c1">17</span>, <span class="pl-c1">0</span>)
     kind <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>const<span class="pl-pds">'</span></span>
     declare <span class="pl-k">=</span> <span class="pl-c1">false</span>
@@ -500,8 +496,8 @@ json.encodeToString&lt;<span class="pl-en">Expression</span>&gt;(arrayExpression
         }
     )
 }</pre></div>
-<p>Simplified property settings are invoked via <code>apply</code>. Relative to spaghetti code, it's already cleaner via <code>apply</code>. It could be a bit more succinct.</p>
-<div class="highlight highlight-source-kotlin"><pre>variableDeclaration  {
+<p>Simplified property settings are invoked via <code class="notranslate">apply</code>. Relative to spaghetti code, it's already cleaner via <code class="notranslate">apply</code>. It could be a bit more succinct.</p>
+<div class="highlight highlight-source-kotlin"><pre class="notranslate">variableDeclaration  {
     span <span class="pl-k">=</span> span(<span class="pl-c1">0</span>, <span class="pl-c1">17</span>, <span class="pl-c1">0</span>)
     kind <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>const<span class="pl-pds">'</span></span>
     declare <span class="pl-k">=</span> <span class="pl-c1">false</span>
@@ -521,8 +517,8 @@ json.encodeToString&lt;<span class="pl-en">Expression</span>&gt;(arrayExpression
     )
 }</pre></div>
 <p>DSL is now very much like outputting AST JSON and is very simple and straightforward to write.</p>
-<p>Classes that require DSL writing require the <code>SwcDslMarker</code> annotation marker. The <code>SwcDslMarker</code> is mainly to restrict the scope and avoid accessing the outer scope.</p>
-<div class="highlight highlight-source-kotlin"><pre>@DslMarker
+<p>Classes that require DSL writing require the <code class="notranslate">SwcDslMarker</code> annotation marker. The <code class="notranslate">SwcDslMarker</code> is mainly to restrict the scope and avoid accessing the outer scope.</p>
+<div class="highlight highlight-source-kotlin"><pre class="notranslate">@DslMarker
 <span class="pl-k">annotation</span> <span class="pl-k">class</span> <span class="pl-en">SwcDslMarker</span>
 
 @SwcDslMarker
@@ -534,35 +530,33 @@ json.encodeToString&lt;<span class="pl-en">Expression</span>&gt;(arrayExpression
     <span class="pl-k">return</span> <span class="pl-en">VariableDeclarationImpl</span>().<span class="pl-c1">apply</span>(block)
 }</pre></div>
 <p>You can refer to the official documentation for how to implement it: <a href="https://kotlinlang.org/docs/type-safe-builders.html#scope-control-dslmarker" rel="nofollow">kotlin -- Type-safe builders</a></p>
-<h4><a id="user-content-dsl-extension-function" class="anchor" aria-hidden="true" tabindex="-1" href="#dsl-extension-function"><span aria-hidden="true" class="octicon octicon-link"></span></a>DSL extension function</h4>
-<div class="highlight highlight-source-kotlin"><pre><span class="pl-k">interface</span> <span class="pl-en">VariableDeclarator</span> : <span class="pl-en">Node</span>, <span class="pl-en">HasSpan</span> {
+<h4>DSL extension function</h4>
+<div class="highlight highlight-source-kotlin"><pre class="notranslate"><span class="pl-k">interface</span> <span class="pl-en">VariableDeclarator</span> : <span class="pl-en">Node</span>, <span class="pl-en">HasSpan</span> {
     <span class="pl-k">val</span> <span class="pl-en">init</span><span class="pl-k">:</span> <span class="pl-en">Expression</span><span class="pl-k">?</span>;
     <span class="pl-c"><span class="pl-c">//</span> other props...</span>
 }</pre></div>
-<p>For the <code>VariableDeclarator</code> interface, its init field type is <code>Expression</code>, meaning that its right value can be any subtype of <code>arrayExpression</code>, <code>thisExpression</code>, and so on.</p>
-<div class="highlight highlight-source-kotlin"><pre>variableDeclarator {
+<p>For the <code class="notranslate">VariableDeclarator</code> interface, its init field type is <code class="notranslate">Expression</code>, meaning that its right value can be any subtype of <code class="notranslate">arrayExpression</code>, <code class="notranslate">thisExpression</code>, and so on.</p>
+<div class="highlight highlight-source-kotlin"><pre class="notranslate">variableDeclarator {
     <span class="pl-en">init</span> <span class="pl-k">=</span> arrayExpression { <span class="pl-k">..</span>. }
     <span class="pl-c"><span class="pl-c">//</span> or</span>
     <span class="pl-en">init</span> <span class="pl-k">=</span> thisExpression { <span class="pl-k">..</span>. }
 }</pre></div>
-<p>So for <code>VariableDeclarator</code> it should have methods to create all <code>Expression</code> subclasses. The creation of <code>Expression</code> subclasses is added by extending the function to do so.</p>
-<p>When we parse <code>@swc/types</code> declaration file, we need to check the type of the attribute, if it is converted to Kotlin and is a class, then find out all its non-intermediate subclasses, and then generate extension functions for it.</p>
-<div class="highlight highlight-source-kotlin"><pre><span class="pl-k">fun</span> VariableDeclarator.<span class="pl-en">arrayExpression</span>(<span class="pl-smi">block</span><span class="pl-k">:</span> <span class="pl-en">ArrayExpression</span>.() <span class="pl-k">-&gt;</span> <span class="pl-c1">Unit</span>): <span class="pl-en">ArrayExpression</span> {
+<p>So for <code class="notranslate">VariableDeclarator</code> it should have methods to create all <code class="notranslate">Expression</code> subclasses. The creation of <code class="notranslate">Expression</code> subclasses is added by extending the function to do so.</p>
+<p>When we parse <code class="notranslate">@swc/types</code> declaration file, we need to check the type of the attribute, if it is converted to Kotlin and is a class, then find out all its non-intermediate subclasses, and then generate extension functions for it.</p>
+<div class="highlight highlight-source-kotlin"><pre class="notranslate"><span class="pl-k">fun</span> VariableDeclarator.<span class="pl-en">arrayExpression</span>(<span class="pl-smi">block</span><span class="pl-k">:</span> <span class="pl-en">ArrayExpression</span>.() <span class="pl-k">-&gt;</span> <span class="pl-c1">Unit</span>): <span class="pl-en">ArrayExpression</span> {
     <span class="pl-k">return</span> <span class="pl-en">ArrayExpressionImpl</span>().<span class="pl-c1">apply</span>(block)
 }</pre></div>
-<p>This allows the <code>Expression</code> class to be constructed from the <code>arrayExpression {}</code> function in <code>variableDeclarator {}</code>.</p>
-<h4><a id="user-content-templateliteral-vs-tstemplateliteraltype" class="anchor" aria-hidden="true" tabindex="-1" href="#templateliteral-vs-tstemplateliteraltype"><span aria-hidden="true" class="octicon octicon-link"></span></a>
-<code>TemplateLiteral</code> vs <code>TsTemplateLiteralType</code>
-</h4>
-<p>There's another special case to deal with here. <code>TemplateLiteral</code> conflicts with <code>TsTemplateLiteralType</code>, whose <code>type</code> is <code>"TemplateLiteral"</code>. This makes DSL-built ASTs unserializable. See the definition of a structure in rust.</p>
-<div class="highlight highlight-source-rust"><pre><span class="pl-c">// https://github.com/swc-project/swc/blob/828190c035d61e6521280e2260c511bc02b81327/crates/swc_ecma_ast/src/typescript.rs#L823</span>
+<p>This allows the <code class="notranslate">Expression</code> class to be constructed from the <code class="notranslate">arrayExpression {}</code> function in <code class="notranslate">variableDeclarator {}</code>.</p>
+<h4><code class="notranslate">TemplateLiteral</code> vs <code class="notranslate">TsTemplateLiteralType</code></h4>
+<p>There's another special case to deal with here. <code class="notranslate">TemplateLiteral</code> conflicts with <code class="notranslate">TsTemplateLiteralType</code>, whose <code class="notranslate">type</code> is <code class="notranslate">"TemplateLiteral"</code>. This makes DSL-built ASTs unserializable. See the definition of a structure in rust.</p>
+<div class="highlight highlight-source-rust"><pre class="notranslate"><span class="pl-c">// https://github.com/swc-project/swc/blob/828190c035d61e6521280e2260c511bc02b81327/crates/swc_ecma_ast/src/typescript.rs#L823</span>
 <span class="pl-c1">#<span class="pl-kos">[</span>ast_node<span class="pl-kos">(</span><span class="pl-s">"TemplateLiteral"</span><span class="pl-kos">)</span><span class="pl-kos">]</span></span>
 <span class="pl-c1">#<span class="pl-kos">[</span>derive<span class="pl-kos">(</span><span class="pl-v">Eq</span><span class="pl-kos">,</span> <span class="pl-v">Hash</span><span class="pl-kos">,</span> <span class="pl-v">EqIgnoreSpan</span><span class="pl-kos">)</span><span class="pl-kos">]</span></span>
 <span class="pl-c1">#<span class="pl-kos">[</span>cfg_attr<span class="pl-kos">(</span>feature = <span class="pl-s">"arbitrary"</span><span class="pl-kos">,</span> derive<span class="pl-kos">(</span>arbitrary<span class="pl-kos">::</span><span class="pl-v">Arbitrary</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">]</span></span>
 <span class="pl-k">pub</span> <span class="pl-k">struct</span> <span class="pl-smi">TsTplLitType</span> <span class="pl-kos">{</span>
     <span class="pl-c">// ...</span>
 <span class="pl-kos">}</span></pre></div>
-<div class="highlight highlight-source-rust"><pre><span class="pl-c">// https://github.com/swc-project/swc/blob/828190c035d61e6521280e2260c511bc02b81327/crates/swc_ecma_ast/src/expr.rs#L1060</span>
+<div class="highlight highlight-source-rust"><pre class="notranslate"><span class="pl-c">// https://github.com/swc-project/swc/blob/828190c035d61e6521280e2260c511bc02b81327/crates/swc_ecma_ast/src/expr.rs#L1060</span>
 <span class="pl-c1">#<span class="pl-kos">[</span>ast_node<span class="pl-kos">(</span><span class="pl-s">"TemplateLiteral"</span><span class="pl-kos">)</span><span class="pl-kos">]</span></span>
 <span class="pl-c1">#<span class="pl-kos">[</span>derive<span class="pl-kos">(</span><span class="pl-v">Eq</span><span class="pl-kos">,</span> <span class="pl-v">Hash</span><span class="pl-kos">,</span> <span class="pl-v">EqIgnoreSpan</span><span class="pl-kos">)</span><span class="pl-kos">]</span></span>
 <span class="pl-c1">#<span class="pl-kos">[</span>cfg_attr<span class="pl-kos">(</span>feature = <span class="pl-s">"arbitrary"</span><span class="pl-kos">,</span> derive<span class="pl-kos">(</span>arbitrary<span class="pl-kos">::</span><span class="pl-v">Arbitrary</span><span class="pl-kos">)</span><span class="pl-kos">)</span><span class="pl-kos">]</span></span>
@@ -575,8 +569,8 @@ json.encodeToString&lt;<span class="pl-en">Expression</span>&gt;(arrayExpression
     <span class="pl-k">pub</span> <span class="pl-c1">quasis</span><span class="pl-kos">:</span> <span class="pl-smi">Vec</span><span class="pl-kos">&lt;</span><span class="pl-smi">TplElement</span><span class="pl-kos">&gt;</span><span class="pl-kos">,</span>
 <span class="pl-kos">}</span></pre></div>
 <p>These two types need to be handled separately and not generated by a script.</p>
-<p>Implement both <code>TemplateLiteral</code>, <code>TsTemplateLiteralType</code> by one class. When used, it is then up-converted to <code>TemplateLiteral</code>, <code>TsTemplateLiteralType</code>.</p>
-<div class="highlight highlight-source-kotlin"><pre><span class="pl-c"><span class="pl-c">//</span> ignore annotation</span>
+<p>Implement both <code class="notranslate">TemplateLiteral</code>, <code class="notranslate">TsTemplateLiteralType</code> by one class. When used, it is then up-converted to <code class="notranslate">TemplateLiteral</code>, <code class="notranslate">TsTemplateLiteralType</code>.</p>
+<div class="highlight highlight-source-kotlin"><pre class="notranslate"><span class="pl-c"><span class="pl-c">//</span> ignore annotation</span>
 <span class="pl-k">interface</span> <span class="pl-en">TemplateLiteral</span> : <span class="pl-en">ExpressionBase</span>, <span class="pl-en">Expression</span> {
     <span class="pl-k">var</span> expressions<span class="pl-k">:</span> <span class="pl-c1">Array</span>&lt;<span class="pl-en">Expression</span>&gt;<span class="pl-k">?</span>
     <span class="pl-k">var</span> quasis<span class="pl-k">:</span> <span class="pl-c1">Array</span>&lt;<span class="pl-en">TemplateElement</span>&gt;<span class="pl-k">?</span>
@@ -597,13 +591,12 @@ json.encodeToString&lt;<span class="pl-en">Expression</span>&gt;(arrayExpression
 }
 
 <span class="pl-k">typealias</span> <span class="pl-en">TsTemplateLiteralTypeImpl</span> <span class="pl-k">=</span> <span class="pl-en">TemplateLiteralImpl</span></pre></div>
-<h3><a id="user-content-新的-parsesync" class="anchor" aria-hidden="true" tabindex="-1" href="#新的-parsesync"><span aria-hidden="true" class="octicon octicon-link"></span></a>新的 <code>parseSync</code>
-</h3>
-<p>Now we can upgrade the <code>parseSync</code> signature.</p>
-<div class="highlight highlight-source-kotlin"><pre>@Throws(<span class="pl-en">RuntimeException</span>::<span class="pl-c1">class</span>)
+<h3>新的 <code class="notranslate">parseSync</code></h3>
+<p>Now we can upgrade the <code class="notranslate">parseSync</code> signature.</p>
+<div class="highlight highlight-source-kotlin"><pre class="notranslate">@Throws(<span class="pl-en">RuntimeException</span>::<span class="pl-c1">class</span>)
 <span class="pl-k">fun</span> <span class="pl-en">parseSync</span>(<span class="pl-smi">code</span><span class="pl-k">:</span> <span class="pl-c1">String</span>, <span class="pl-smi">options</span><span class="pl-k">:</span> <span class="pl-en">ParserConfig</span>, <span class="pl-smi">filename</span><span class="pl-k">:</span> <span class="pl-c1">String?</span>): <span class="pl-en">Program</span> </pre></div>
 <p>Type safety and type hints are now guaranteed when used.</p>
-<div class="highlight highlight-source-kotlin"><pre><span class="pl-k">const</span> program <span class="pl-k">=</span> <span class="pl-en">SwcNative</span>().parseSync(
+<div class="highlight highlight-source-kotlin"><pre class="notranslate"><span class="pl-k">const</span> program <span class="pl-k">=</span> <span class="pl-en">SwcNative</span>().parseSync(
     <span class="pl-s"><span class="pl-pds">"""</span></span>
 <span class="pl-s">    function App() {</span>
 <span class="pl-s">       return &lt;div&gt;App&lt;/div&gt;</span>
@@ -620,7 +613,7 @@ json.encodeToString&lt;<span class="pl-en">Expression</span>&gt;(arrayExpression
         <span class="pl-c"><span class="pl-c">//</span> ...</span>
     }
 }</pre></div>
-<h2><a id="user-content-conclusion" class="anchor" aria-hidden="true" tabindex="-1" href="#conclusion"><span aria-hidden="true" class="octicon octicon-link"></span></a>Conclusion</h2>
+<h2>Conclusion</h2>
 <p>Here, we have explained the idea and core implementation points of SWC JVM binding: 1. SWC supports JNI; 2. AST JSON is serialized into Kotlin classes; 3. ASTs and configurations are described through DSL.</p>
 <p>Some details are not covered, such as the handling of boundary cases in Kotlin generated scripts, Rust cross-compilation, etc. For more details, you can read the source code. If you are interested in the details, you can read the source code <a href="https://github.com/yidafu/swc-binding">yidafu/swc-binding</a>.</p>
 <p>If you need to compile JS in the JVM, SWC JVM binding has been released to the Maven central repository, use <a href="https://mvnrepository.com/artifact/dev.yidafu.swc/" rel="nofollow">dev.yidafu.swc:swc-binding:0.5.0</a>. swc-binding)</p>
@@ -628,4 +621,3 @@ json.encodeToString&lt;<span class="pl-en">Expression</span>&gt;(arrayExpression
 <blockquote>
 <p>Thinking never ends.</p>
 </blockquote>
-
