@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>JscConfig</title>
+    <link href="../../../images/logo-icon.svg" rel="icon" type="image/svg">
+    <script>var pathToRoot = "../../../";</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async="async"></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/jetbrains-mono.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/clipboard.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="../../../scripts/symbol-parameters-wrapper_deferred.js" defer="defer"></script>
+</head>
+<body>
+<div class="navigation-wrapper" id="navigation-wrapper">
+    <div id="leftToggler"><span class="icon-toggler"></span></div>
+    <div class="library-name">
+            <a href="../../../index.html">
+                    <span>swc-binding</span>
+            </a>
+    </div>
+    <div>
+0.5.1    </div>
+    <div class="pull-right d-flex">
+        <div class="filter-section" id="filter-section">
+                <button class="platform-tag platform-selector jvm-like" data-active="" data-filter=":swc-binding:dokkaHtml/main">jvm</button>
+        </div>
+        <button id="theme-toggle-button"><span id="theme-toggle"></span></button>
+        <div id="searchBar"></div>
+    </div>
+</div>
+<div id="container">
+    <div id="leftColumn">
+        <div id="sideMenu"></div>
+    </div>
+    <div id="main">
+<div class="main-content" data-page-type="classlike" id="content" pageIds="swc-binding::dev.yidafu.swc.types/JscConfig///PointingToDeclaration//-243263284">
+  <div class="breadcrumbs"><a href="../../../index.html">swc-binding</a><span class="delimiter">/</span><a href="../index.html">dev.yidafu.swc.types</a><span class="delimiter">/</span><span class="current">JscConfig</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Jsc</span><wbr></wbr><span><span>Config</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="kotlinx.serialization/Serializable///PointingToDeclaration/"><span class="token annotation builtin">Serializable</span></span></div></div><span class="token keyword">class </span><a href="index.html">JscConfig</a></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="">Constructors</h2>
+        <div class="table"><a data-name="312635602%2FConstructors%2F-243263284" anchor-label="JscConfig" id="312635602%2FConstructors%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-togglable="CONSTRUCTOR" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-jsc-config.html"><span>Jsc</span><wbr></wbr><span><span>Config</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="312635602%2FConstructors%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="">Properties</h2>
+        <div class="table"><a data-name="-437448080%2FProperties%2F-243263284" anchor-label="baseUrl" id="-437448080%2FProperties%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="base-url.html"><span>base</span><wbr></wbr><span><span>Url</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-437448080%2FProperties%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="base-url.html">baseUrl</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1329711964%2FProperties%2F-243263284" anchor-label="experimental" id="-1329711964%2FProperties%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="experimental.html"><span><span>experimental</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1329711964%2FProperties%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="experimental.html">experimental</a><span class="token operator">: </span><a href="../-experimental-literal/index.html">ExperimentalLiteral</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-686904940%2FProperties%2F-243263284" anchor-label="externalHelpers" id="-686904940%2FProperties%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="external-helpers.html"><span>external</span><wbr></wbr><span><span>Helpers</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-686904940%2FProperties%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="external-helpers.html">externalHelpers</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1211451479%2FProperties%2F-243263284" anchor-label="keepClassNames" id="1211451479%2FProperties%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="keep-class-names.html"><span>keep</span><wbr></wbr><span>Class</span><wbr></wbr><span><span>Names</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1211451479%2FProperties%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="keep-class-names.html">keepClassNames</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1652439824%2FProperties%2F-243263284" anchor-label="loose" id="-1652439824%2FProperties%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="loose.html"><span><span>loose</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1652439824%2FProperties%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="loose.html">loose</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="870160290%2FProperties%2F-243263284" anchor-label="minify" id="870160290%2FProperties%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="minify.html"><span><span>minify</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="870160290%2FProperties%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="minify.html">minify</a><span class="token operator">: </span><a href="../-js-minify-options/index.html">JsMinifyOptions</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="878319757%2FProperties%2F-243263284" anchor-label="parser" id="878319757%2FProperties%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="parser.html"><span><span>parser</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="878319757%2FProperties%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="parser.html">parser</a><span class="token operator">: </span><a href="../-parser-config/index.html">ParserConfig</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1252922208%2FProperties%2F-243263284" anchor-label="paths" id="-1252922208%2FProperties%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="paths.html"><span><span>paths</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1252922208%2FProperties%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="paths.html">paths</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-array/index.html">Array</a><span class="token operator">&lt;</span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="507525989%2FProperties%2F-243263284" anchor-label="preserveAllComments" id="507525989%2FProperties%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="preserve-all-comments.html"><span>preserve</span><wbr></wbr><span>All</span><wbr></wbr><span><span>Comments</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="507525989%2FProperties%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="preserve-all-comments.html">preserveAllComments</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1105430363%2FProperties%2F-243263284" anchor-label="target" id="1105430363%2FProperties%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="target.html"><span><span>target</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1105430363%2FProperties%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="target.html">target</a><span class="token operator">: </span><a href="../index.html#-41161116%2FClasslikes%2F-243263284">JscTarget</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1295539042%2FProperties%2F-243263284" anchor-label="transform" id="1295539042%2FProperties%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="transform.html"><span><span>transform</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1295539042%2FProperties%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">var </span><a href="transform.html">transform</a><span class="token operator">: </span><a href="../-transform-config/index.html">TransformConfig</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="EXTENSION_FUNCTION">
+        <h2 class="">Functions</h2>
+        <div class="table"><a data-name="965459855%2FFunctions%2F-243263284" anchor-label="esParserConfig" id="965459855%2FFunctions%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../dev.yidafu.swc.dsl/es-parser-config.html"><span>es</span><wbr></wbr><span>Parser</span><wbr></wbr><span><span>Config</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="965459855%2FFunctions%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">JscConfig</a><span class="token punctuation">.</span><a href="../../dev.yidafu.swc.dsl/es-parser-config.html"><span class="token function">esParserConfig</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">block<span class="token operator">: </span><span class="token keyword"></span><a href="../-es-parser-config/index.html">EsParserConfig</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-es-parser-config/index.html">EsParserConfig</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-222039189%2FFunctions%2F-243263284" anchor-label="jsMinifyOptions" id="-222039189%2FFunctions%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../dev.yidafu.swc.dsl/js-minify-options.html"><span>js</span><wbr></wbr><span>Minify</span><wbr></wbr><span><span>Options</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-222039189%2FFunctions%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">JscConfig</a><span class="token punctuation">.</span><a href="../../dev.yidafu.swc.dsl/js-minify-options.html"><span class="token function">jsMinifyOptions</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">block<span class="token operator">: </span><span class="token keyword"></span><a href="../-js-minify-options/index.html">JsMinifyOptions</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-js-minify-options/index.html">JsMinifyOptions</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1522220213%2FFunctions%2F-243263284" anchor-label="transformConfig" id="-1522220213%2FFunctions%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../dev.yidafu.swc.dsl/transform-config.html"><span>transform</span><wbr></wbr><span><span>Config</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1522220213%2FFunctions%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">JscConfig</a><span class="token punctuation">.</span><a href="../../dev.yidafu.swc.dsl/transform-config.html"><span class="token function">transformConfig</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">block<span class="token operator">: </span><span class="token keyword"></span><a href="../-transform-config/index.html">TransformConfig</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-transform-config/index.html">TransformConfig</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="258940081%2FFunctions%2F-243263284" anchor-label="tsParserConfig" id="258940081%2FFunctions%2F-243263284" data-filterable-set=":swc-binding:dokkaHtml/main"></a>
+          <div class="table-row" data-togglable="EXTENSION_FUNCTION" data-filterable-current=":swc-binding:dokkaHtml/main" data-filterable-set=":swc-binding:dokkaHtml/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../dev.yidafu.swc.dsl/ts-parser-config.html"><span>ts</span><wbr></wbr><span>Parser</span><wbr></wbr><span><span>Config</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="258940081%2FFunctions%2F-243263284"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":swc-binding:dokkaHtml/main"><div class="symbol monospace"><span class="token keyword"></span><span class="token keyword">fun </span><a href="index.html">JscConfig</a><span class="token punctuation">.</span><a href="../../dev.yidafu.swc.dsl/ts-parser-config.html"><span class="token function">tsParserConfig</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">block<span class="token operator">: </span><span class="token keyword"></span><a href="../-ts-parser-config/index.html">TsParserConfig</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span class="token keyword"></span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-ts-parser-config/index.html">TsParserConfig</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      <div class="footer">
+        <span class="go-to-top-icon"><a href="#content" id="go-to-top-link"></a></span><span>© 2024 Copyright</span><span
+                class="pull-right"><span>Generated by </span><a
+                href="https://github.com/Kotlin/dokka"><span>dokka</span><span class="padded-icon"></span></a></span>
+      </div>
+    </div>
+</div>
+</body>
+</html>
