@@ -9,7 +9,7 @@ I need to understand blind watermarking for work, and this involves Fourier Tran
 After some trial and error, the only way to display 3D surfaces in Kotlin Jupyter is to use JS.Using JS in Kotlin Jupyter is more cumbersome. You need to convert kotlin variables to JSON strings, write the html code to be executed in the `HTML()` method, the container tag and the `<script>` tag.
 
 
-```kt
+```kotlin
 // convert to JSON
 var dataList = "[" + bList.map { "[${it.first}, ${it.second}, ${it.third}]" }.joinToString(",\n") + "]";
 
@@ -74,7 +74,7 @@ My idea is virtual import, defining `@jupyter` as a virtual package from which w
 Let's say that the first cell defines a Kotlin variable.
 
 
-```kt
+```kotlin
 val foo = "bar";
 ```
 
@@ -111,7 +111,7 @@ According to the discussion in [Kotlin/kotlinx.serialization#296](https://github
 
 The following function can recursively convert the base type to `JsonElement`, and then convert `JsonElement` to a string is very convenient.
 
-```kt
+```kotlin
 fun Any?.toJsonElement(): JsonElement = when(this) {
     null -> JsonNull
     is Collection<*> -> toJsonElement() // call Collection<*>.toJsonElement()
@@ -134,7 +134,7 @@ Full code: [AnyToJsonElement.kt#L5](https://github.com/yidafu/kotlin-jupyter-js/
 However, this way does not support classes, and for class support you need another way. Implement the `DisplayResult` or `Renderable` interface. Because `DisplayResult` has `toJSon` method, through this method can get the json object which can be imported.
 
 
-```kt
+```kotlin
 when (value) {
   is DisplayResult -> {
     value.toJson()

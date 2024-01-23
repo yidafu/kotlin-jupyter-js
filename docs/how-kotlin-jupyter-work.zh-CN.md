@@ -8,7 +8,7 @@
 
 代码如下：
 
-```kt
+```kotlin
 // convert to JSON
 var dataList = "[" + bList.map { "[${it.first}, ${it.second}, ${it.third}]" }.joinToString(",\n") + "]";
 
@@ -69,7 +69,7 @@ console.log(hello)
 
 假设，第一个 cell 定义了一个 Kotlin 变量
 
-```kt
+```kotlin
 val foo = "bar";
 ```
 
@@ -107,7 +107,7 @@ console.log('variable from kotlin', foo)
 
 下面的函数就能够递归的将基础类型转为`JsonElement`,然后将`JsonElement`转为字符串就很方便了。
 
-```kt
+```kotlin
 fun Any?.toJsonElement(): JsonElement = when(this) {
     null -> JsonNull
     is Collection<*> -> toJsonElement() // call Collection<*>.toJsonElement()
@@ -131,7 +131,7 @@ fun Collection<*>.toJsonElement(): JsonElement {
 
 Kotlin Jupyter JS 变量会判断是否是`DisplayResult` `Renderable` 类型，调用`toJson`方法就能后获取到该变量的 JSON 数据。
 
-```kt
+```kotlin
 when (value) {
   is DisplayResult -> {
     value.toJson()

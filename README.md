@@ -16,7 +16,6 @@ Jupyter Kotlin Kernel support `%js`/`%ts`/`%jsx`/`%tsx` line magics.
 + `%typescript`
 + `%tsx`
 
-
 ## Usage
 
 ### Import The Library First
@@ -42,6 +41,9 @@ USE {
 In JS world, you can import any variables from kotlin world, through the virtual package `@jupyter`.
 
 You can call `getCellRoot()` to get a `div` element in output cell, and then do every thing you want to do.
+
++ [Baics Usage](https://yidafu.github.io/kotlin-jupyter-js/examples/js-magic.html)
++ [Echarts 3D Example](https://yidafu.github.io/kotlin-jupyter-js/examples/girls-last-tour.html)
 
 #### first declare a variable in cell
 
@@ -172,6 +174,10 @@ full example see [examples/js-magic.ipynb](./examples/js-magic.ipynb)
 ## Article
 
 [how kotlin jupyter js workd? (English Translation)](./docs/how-kotlin-jupyter-work.md) - [中文原文](./docs/how-kotlin-jupyter-work.zh-CN.md)
+
+## Documentation
+
+[Jupyter Kotlin Js API](https://yidafu.github.io/kotlin-jupyter-js/kt-docs/index.html)
 
 ## TODO LIST
 
