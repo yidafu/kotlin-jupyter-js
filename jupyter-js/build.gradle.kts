@@ -16,6 +16,8 @@ plugins {
     alias(libs.plugins.ksp)
 //    alias(libs.plugins.publisher)
     alias(libs.plugins.kotlin.serialization)
+    id("org.jetbrains.kotlinx.kover") version "0.7.5"
+
     `maven-publish`
 }
 

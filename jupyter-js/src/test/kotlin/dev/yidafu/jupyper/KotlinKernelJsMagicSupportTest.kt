@@ -233,7 +233,9 @@ class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
         assertTrue(html.contains("import highcharts from \"https://code.highcharts.com/es-modules/masters/highcharts.src.js\";"))
         assertTrue(html.contains("https://code.highcharts.com/es-modules/masters/modules/export-data.src.js"))
     }
-    fun `import complex data from kotlin workd`() {
+
+    @Test
+    fun `import complex data from kotlin world`() {
         exec(
             """
             USE {
@@ -271,4 +273,24 @@ class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
         html.contains("\"int\":1,")
         html.contains("\"arrayString\":[\"foo\",\"bar\"]")
     }
+
+    @Test
+    fun `computed types`() {
+        exec(
+            """
+            USE {
+                addCodePreprocessor(dev.yidafu.jupyper.JavaScriptMagicCodeProcessor(this.notebook));
+            }
+            """.trimIndent()
+        )
+        exec(
+            """
+            %js
+                function color(params) {
+                  return 'rgb(0,0,' + params.data[2] + ')';
+                }
+            """.trimIndent()
+        )
+    }
+
 }

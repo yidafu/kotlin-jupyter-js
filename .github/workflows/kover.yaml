@@ -16,14 +16,14 @@ jobs:
       - name: Set up Gradle
         uses: gradle/gradle-build-action@v2
       - name: Generate kover coverage report
-        run: ./gradlew koverXmlReport
+        run: ./gradlew :jupyter-js:koverXmlReport
 
       - name: Add coverage report to PR
         id: kover
         uses: mi-kas/kover-report@v1
         with:
           path: |
-            ${{ github.workspace }}/swc-binding/build/reports/kover/report.xml
+            ${{ github.workspace }}/jupyter-js/build/reports/kover/report.xml
           title: Code Coverage
           token: ${{ secrets.PR_TOKEN }}
           update-comment: true
