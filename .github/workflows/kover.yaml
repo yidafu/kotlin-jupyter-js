@@ -25,7 +25,7 @@ jobs:
           path: |
             ${{ github.workspace }}/jupyter-js/build/reports/kover/report.xml
           title: Code Coverage
-          token: ${{ secrets.PR_TOKEN }}
+          token: ${{ vars.PR_TOKEN }}
           update-comment: true
           min-coverage-overall: 80
           min-coverage-changed-files: 80
