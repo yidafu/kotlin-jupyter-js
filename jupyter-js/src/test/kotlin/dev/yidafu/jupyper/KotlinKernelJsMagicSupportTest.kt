@@ -293,4 +293,24 @@ class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
         )
     }
 
+
+    @Test
+    fun `jsExport`() {
+        exec("""
+            val foo = "string";
+            jsExport("bar", foo)
+        """.trimIndent())
+
+        val result = exec("""
+            %js
+            import { foo, bar } from '@jupyter';
+            
+            console.log(foo == bar);
+        """.trimIndent()) as MimeTypedResult
+
+        val html = (result[MimeTypes.HTML] as String)
+        println(html)
+        html.contains("const foo = \"string\"")
+        html.contains("const bar = \"string\"")
+    }
 }

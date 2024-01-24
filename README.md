@@ -169,6 +169,23 @@ option && myChart.setOption(option);
 
 ![image](https://github.com/yidafu/kotlin-jupyter-js/assets/22773923/b5aa06d3-24dc-4e3e-a020-8bd7ac5b1bae)
 
+### kotlin variable alias
+
+jsExport will export kotlin variable to javascript. kotlin variable will encode to json string.
+
+```kotlin
+val foo = "string"
+// export variable to javascript
+jsExport("bar", foo)
+```
+
+```js
+%js
+import { foo, bar } from '@jupyter';
+
+console.log(foo == bar);
+```
+
 full example see [examples/js-magic.ipynb](./examples/js-magic.ipynb)
 
 ## Article
