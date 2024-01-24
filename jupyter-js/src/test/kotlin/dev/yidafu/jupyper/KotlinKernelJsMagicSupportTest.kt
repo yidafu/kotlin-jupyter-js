@@ -6,10 +6,7 @@ package dev.yidafu.jupyper
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
-import org.jetbrains.kotlinx.jupyter.api.JSON
-import org.jetbrains.kotlinx.jupyter.api.MimeTypedResult
-import org.jetbrains.kotlinx.jupyter.api.MimeTypes
-import org.jetbrains.kotlinx.jupyter.api.htmlResult
+import org.jetbrains.kotlinx.jupyter.api.*
 import org.jetbrains.kotlinx.jupyter.testkit.JupyterReplTestCase
 import org.jetbrains.kotlinx.jupyter.testkit.ReplProvider
 import kotlin.test.Test
@@ -309,8 +306,23 @@ class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
         """.trimIndent()) as MimeTypedResult
 
         val html = (result[MimeTypes.HTML] as String)
-        println(html)
-        html.contains("const foo = \"string\"")
-        html.contains("const bar = \"string\"")
+        assertContains(html, "const foo = \"string\"")
+        assertContains(html, "const bar = \"string\"")
+    }
+
+    @Test
+    fun `export markdown to javascript`() {
+        exec("""
+        val md = mimeResult(MimeTypes.MARKDOWN to "# title")
+        """.trimIndent())
+
+        val result = exec("""
+            %js
+            import { md } from '@jupyter';
+            console.log(md);
+        """.trimIndent()) as MimeTypedResult
+        println(result.toJson())
+        val html = (result[MimeTypes.HTML] as String)
+        assertContains(html, "not support in in Kotlin Jupyter JS")
     }
 }
