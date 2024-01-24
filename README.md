@@ -23,13 +23,13 @@ Jupyter Kotlin Kernel support `%js`/`%ts`/`%jsx`/`%tsx` line magics.
 ```kt
 USE {
     repositories {
-         mavenCentral()
+        mavenCentral()
          
         maven("https://s01.oss.sonatype.org/content/groups/public/")
     }
 
     dependencies {
-        implementation("dev.yidafu.jupyter:jupyter-js:0.5.0")
+        implementation("dev.yidafu.jupyter:jupyter-js:0.6.0")
     }
 }
 ```
