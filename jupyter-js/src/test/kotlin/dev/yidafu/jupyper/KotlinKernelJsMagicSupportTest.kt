@@ -325,4 +325,5 @@ class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
         val html = (result[MimeTypes.HTML] as String)
         assertContains(html, "not support in in Kotlin Jupyter JS")
     }
+    
 }
