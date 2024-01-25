@@ -290,20 +290,23 @@ class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
         )
     }
 
-
     @Test
     fun `jsExport`() {
-        exec("""
+        exec(
+            """
             val foo = "string";
             jsExport("bar", foo)
-        """.trimIndent())
+            """.trimIndent()
+        )
 
-        val result = exec("""
+        val result = exec(
+            """
             %js
             import { foo, bar } from '@jupyter';
             
             console.log(foo == bar);
-        """.trimIndent()) as MimeTypedResult
+            """.trimIndent()
+        ) as MimeTypedResult
 
         val html = (result[MimeTypes.HTML] as String)
         assertContains(html, "const foo = \"string\"")
@@ -312,18 +315,31 @@ class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
 
     @Test
     fun `export markdown to javascript`() {
-        exec("""
+        exec(
+            """
         val md = mimeResult(MimeTypes.MARKDOWN to "# title")
-        """.trimIndent())
+            """.trimIndent()
+        )
 
-        val result = exec("""
+        val result = exec(
+            """
             %js
             import { md } from '@jupyter';
             console.log(md);
-        """.trimIndent()) as MimeTypedResult
+            """.trimIndent()
+        ) as MimeTypedResult
         println(result.toJson())
         val html = (result[MimeTypes.HTML] as String)
         assertContains(html, "not support in in Kotlin Jupyter JS")
     }
-    
+
+    @Test
+    fun `import remote inline script`() {
+        exec(
+            """
+            %js
+            import "https://cdn.jsdelivr.net/gh/yidafu/kotlin-jupyter-js@feature/import-inline-file/examples/local.js?inline"
+            """.trimIndent()
+        )
+    }
 }
