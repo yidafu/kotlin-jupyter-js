@@ -7,7 +7,9 @@ package dev.yidafu.jupyper.processor
  *
  * At final step will transform to js variable declarations string. and concat with js code.
  */
-class JavascriptProcessContext {
+class JavascriptProcessContext(
+    val processor: DefaultJavaScriptProcessor
+) {
     private val importedVariables: MutableList<Pair<String, String>> = mutableListOf()
 
     fun addKotlinValue(pair: Pair<String, String>) {
