@@ -16,6 +16,8 @@ plugins {
     alias(libs.plugins.ksp)
 //    alias(libs.plugins.publisher)
     alias(libs.plugins.kotlin.serialization)
+    id("org.jetbrains.kotlinx.kover") version "0.7.5"
+
     `maven-publish`
 }
 
@@ -25,7 +27,7 @@ kotlinJupyter {
 }
 
 group = "dev.yidafu.jupyter"
-version = "0.5.0"
+version = "0.6.0"
 
 dependencies {
     implementation("org.jetbrains.dokka:kotlin-analysis-compiler:1.8.20")

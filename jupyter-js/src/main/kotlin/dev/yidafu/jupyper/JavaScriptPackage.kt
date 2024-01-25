@@ -18,11 +18,6 @@ data class JavaScriptPackage(
         return mainSource
     }
 }
-val importSourceDescriptor = PrimitiveSerialDescriptor("importSource", PrimitiveKind.STRING)
-
-@OptIn(ExperimentalSerializationApi::class)
-val extraSourcesDescriptor =
-    listSerialDescriptor(PrimitiveSerialDescriptor("importSource", PrimitiveKind.STRING))
 
 class JavaScriptPackageSerializer : KSerializer<JavaScriptPackage> {
     override val descriptor = buildClassSerialDescriptor(
@@ -34,8 +29,7 @@ class JavaScriptPackageSerializer : KSerializer<JavaScriptPackage> {
 
     override fun deserialize(decoder: Decoder): JavaScriptPackage {
         val jsonEncoder = decoder as JsonDecoder
-        val obj = jsonEncoder.decodeJsonElement()
-        return when (obj) {
+        return when (val obj = jsonEncoder.decodeJsonElement()) {
             is JsonPrimitive -> {
                 JavaScriptPackage(obj.content)
             }

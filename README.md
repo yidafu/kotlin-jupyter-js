@@ -23,13 +23,13 @@ Jupyter Kotlin Kernel support `%js`/`%ts`/`%jsx`/`%tsx` line magics.
 ```kt
 USE {
     repositories {
-         mavenCentral()
+        mavenCentral()
          
         maven("https://s01.oss.sonatype.org/content/groups/public/")
     }
 
     dependencies {
-        implementation("dev.yidafu.jupyter:jupyter-js:0.5.0")
+        implementation("dev.yidafu.jupyter:jupyter-js:0.6.0")
     }
 }
 ```
@@ -168,6 +168,23 @@ option && myChart.setOption(option);
 #### screenshot
 
 ![image](https://github.com/yidafu/kotlin-jupyter-js/assets/22773923/b5aa06d3-24dc-4e3e-a020-8bd7ac5b1bae)
+
+### kotlin variable alias
+
+jsExport will export kotlin variable to javascript. kotlin variable will encode to json string.
+
+```kotlin
+val foo = "string"
+// export variable to javascript
+jsExport("bar", foo)
+```
+
+```js
+%js
+import { foo, bar } from '@jupyter';
+
+console.log(foo == bar);
+```
 
 full example see [examples/js-magic.ipynb](./examples/js-magic.ipynb)
 
