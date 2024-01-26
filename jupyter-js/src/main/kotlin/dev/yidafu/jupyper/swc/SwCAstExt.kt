@@ -1,24 +1,35 @@
 package dev.yidafu.jupyper.swc
 
-import dev.yidafu.swc.types.ImportDeclaration
-import dev.yidafu.swc.types.Module
-import dev.yidafu.swc.types.ModuleItem
+import dev.yidafu.swc.types.*
 
 fun Module.forEachImportDeclaration(block: (importDeclaration: ImportDeclaration) -> Unit) {
     val bodyAlt = body ?: emptyArray()
 
-    bodyAlt.forEach{ moduleItem ->
+    bodyAlt.forEach { moduleItem ->
         if (moduleItem is ImportDeclaration) {
             block(moduleItem)
         }
     }
 }
 
-fun Module.replace(sourceItem: ModuleItem, vararg targetItems: ModuleItem) {
+fun Module.forEachExportDeclaration(block: (importDeclaration: ExportDeclaration) -> Unit) {
+    val bodyAlt = body ?: emptyArray()
+
+    bodyAlt.forEach { moduleItem ->
+        if (moduleItem is ExportDeclaration) {
+            block(moduleItem)
+        }
+    }
+}
+
+fun Module.replace(
+    sourceItem: ModuleItem,
+    vararg targetItems: ModuleItem,
+) {
     val newBody = mutableListOf<ModuleItem>()
     body?.forEach {
         if (it == sourceItem) {
-            targetItems.forEach {t ->
+            targetItems.forEach { t ->
                 newBody.add(t)
             }
         } else {
@@ -27,4 +38,18 @@ fun Module.replace(sourceItem: ModuleItem, vararg targetItems: ModuleItem) {
     }
 
     body = newBody.toTypedArray()
+}
+
+fun ModuleExportName?.getValue(): String? {
+    if (this is Identifier) {
+        return value
+    }
+    if (this is StringLiteral) {
+        return value
+    }
+    return null
+}
+
+fun PropertyName?.getValue(): String? {
+    return null
 }

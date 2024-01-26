@@ -234,12 +234,16 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
         sourceCode: String,
     ): String {
         val context = JavascriptProcessContext(this)
-        return when (langType) {
-            JsMagicMatcher.LanguageType.JS -> processJsCode(sourceCode, context)
-            JsMagicMatcher.LanguageType.TS -> processTsCode(sourceCode, context)
-            JsMagicMatcher.LanguageType.JSX -> processJsxCode(sourceCode, context)
-            JsMagicMatcher.LanguageType.TSX -> processTsxCode(sourceCode, context)
-            JsMagicMatcher.LanguageType.Kotlin -> sourceCode
-        }
+        val result =
+            context.dependencyScope("jupyter-cell.js") {
+                when (langType) {
+                    JsMagicMatcher.LanguageType.JS -> processJsCode(sourceCode, context)
+                    JsMagicMatcher.LanguageType.TS -> processTsCode(sourceCode, context)
+                    JsMagicMatcher.LanguageType.JSX -> processJsxCode(sourceCode, context)
+                    JsMagicMatcher.LanguageType.TSX -> processTsxCode(sourceCode, context)
+                    JsMagicMatcher.LanguageType.Kotlin -> sourceCode
+                }
+            }
+        return result
     }
 }

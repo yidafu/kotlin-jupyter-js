@@ -1,6 +1,7 @@
 package dev.yidafu.jupyper.processor
 
 import dev.yidafu.jupyper.CircularDependencyException
+import org.slf4j.LoggerFactory
 
 data class DependenceNode(
     val source: String,
@@ -36,23 +37,30 @@ data class DependenceNode(
 class JavascriptProcessContext(
     val processor: DefaultJavaScriptProcessor,
 ) {
+    private val log = LoggerFactory.getLogger(JavascriptProcessContext::class.java)
     private val importedVariables: MutableList<Pair<String, String>> = mutableListOf()
     private val root = DependenceNode("root")
 
-    private var currentDepNode = root
+    private var currentDepNode: DependenceNode = root
 
-    fun updateCurrentDepNode(source: String) {
+    fun <T> dependencyScope(
+        source: String,
+        block: () -> T,
+    ): T {
+        log.info("enter scope: $source")
         val newDepNode = currentDepNode.addChildren(source)
         currentDepNode = newDepNode
+        val result = block()
+        currentDepNode = currentDepNode.parent!!
+        log.info("exit scope: $source")
+
+        return result
     }
 
     /**
      * detect circular dependency
      */
-    fun addDependency(
-        parent: String,
-        child: String,
-    ) {
+    fun addDependency(child: String) {
         var p: DependenceNode? = currentDepNode
         while (p != null) {
             if (p.source == child) {
@@ -60,6 +68,7 @@ class JavascriptProcessContext(
             }
             p = p.parent
         }
+        log.info("${currentDepNode.source} add dependency $child")
         currentDepNode.addChildren(child)
     }
 
