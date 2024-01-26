@@ -36,42 +36,44 @@ import kotlin.io.encoding.ExperimentalEncodingApi
  *
  *     const foo = localJsExports.foo;
  *     ```
-    */
+ */
 class InlineImportSourceProcessor : JavaScriptProcessor {
     private val log = LoggerFactory.getLogger(InlineImportSourceProcessor::class.java)
 
-    override fun process(program: Program, context: JavascriptProcessContext) {
+    override fun process(
+        program: Program,
+        context: JavascriptProcessContext,
+    ) {
         if (program is Module) {
             program.forEachImportDeclaration {
                 val originSource = it.source?.value
                 if (!originSource.isNullOrEmpty()) {
                     // relative path, absolute path
-                    val inlineContext = if (
-                        originSource.startsWith(".")
-                        || originSource.startsWith("/")) {
-                        val file = File(originSource)
-                        log.info("local js file path ${file.absolutePath.toString()}")
-                        file.readText()
-
-                    }
-                    // inline remote source
-                    else if (originSource.substringAfter("?").contains("inline")) {
-                        log.info("fetch remote script $originSource")
-                        URL(originSource).readText()
-                    } else {
-                        ""
-                    }
+                    val inlineContext =
+                        if (
+                            originSource.startsWith(".") ||
+                            originSource.startsWith("/")
+                        ) {
+                            val file = File(originSource)
+                            log.info("local js file path ${file.absolutePath}")
+                            file.readText()
+                        }
+                        // inline remote source
+                        else if (originSource.substringAfter("?").contains("inline")) {
+                            log.info("fetch remote script $originSource")
+                            URL(originSource).readText()
+                        } else {
+                            ""
+                        }
 
                     log.info("inline js context {}", inlineContext)
                     if (inlineContext.isNotEmpty()) {
-
                         val inlineProgram = context.processor.parseJsCode(inlineContext, context)
                         if (inlineProgram is Module) {
                             program.replace(it, toIIFE(url2VarName(originSource), inlineProgram))
                         }
                     }
                 }
-
             }
         }
     }
@@ -81,66 +83,82 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
         return "inline_" + Base64.encode(url.toByteArray()).replace("=", "")
     }
 
-    private fun toIIFE(varName: String, module: Module): VariableDeclaration {
-        return  createVariableDeclaration {
+    private fun toIIFE(
+        varName: String,
+        module: Module,
+    ): VariableDeclaration {
+        return createVariableDeclaration {
             span = emptySpan()
             kind = "const"
-            declarations = arrayOf(
-                variableDeclarator {
-                    span = emptySpan()
-                    id = identifier {
+            declarations =
+                arrayOf(
+                    variableDeclarator {
                         span = emptySpan()
-                        value = varName
-                    }
-                    definite = false
-                    init = callExpression {
-                        span = emptySpan()
-                        callee = parenthesisExpression {
-                            span = emptySpan()
-                            expression = functionExpression {
+                        id =
+                            identifier {
                                 span = emptySpan()
-                                async = false
-                                generator = false
-                                params = arrayOf(
-                                    param {
-                                        span = emptySpan()
-                                        decorators = emptyArray()
-                                        pat = assignmentExpression {
-                                            operator = "="
-                                            span = emptySpan()
-                                            left = identifier {
-                                                span = emptySpan()
-                                                value = "exports"
-                                                optional = false
-                                            }
-                                            right = objectExpression {
-                                                span = emptySpan()
-                                                properties = emptyArray()
-                                            }
-                                        }
-                                    }
-                                )
-                                body = blockStatement {
-                                    span = emptySpan()
-
-                                    stmts = (
-                                        (module.body?.map { it as Statement } ?: emptyList())
-                                            + listOf(returnStatement {
-                                                span = emptySpan()
-                                                argument = identifier {
-                                                    span = emptySpan()
-                                                    value = "exports"
-                                                    optional = false
-                                                }
-                                            }
-                                        )
-                                    ).toTypedArray()
-                                }
+                                value = varName
                             }
-                        }
-                    }
-                }
-            )
+                        definite = false
+                        init =
+                            callExpression {
+                                span = emptySpan()
+                                callee =
+                                    parenthesisExpression {
+                                        span = emptySpan()
+                                        expression =
+                                            functionExpression {
+                                                span = emptySpan()
+                                                async = false
+                                                generator = false
+                                                params =
+                                                    arrayOf(
+                                                        param {
+                                                            span = emptySpan()
+                                                            decorators = emptyArray()
+                                                            pat =
+                                                                assignmentExpression {
+                                                                    operator = "="
+                                                                    span = emptySpan()
+                                                                    left =
+                                                                        identifier {
+                                                                            span = emptySpan()
+                                                                            value = "exports"
+                                                                            optional = false
+                                                                        }
+                                                                    right =
+                                                                        objectExpression {
+                                                                            span = emptySpan()
+                                                                            properties = emptyArray()
+                                                                        }
+                                                                }
+                                                        },
+                                                    )
+                                                body =
+                                                    blockStatement {
+                                                        span = emptySpan()
+
+                                                        stmts =
+                                                            (
+                                                                (module.body?.map { it as Statement } ?: emptyList()) +
+                                                                    listOf(
+                                                                        returnStatement {
+                                                                            span = emptySpan()
+                                                                            argument =
+                                                                                identifier {
+                                                                                    span = emptySpan()
+                                                                                    value = "exports"
+                                                                                    optional = false
+                                                                                }
+                                                                        },
+                                                                    )
+                                                            ).toTypedArray()
+                                                    }
+                                            }
+                                    }
+                            }
+                    },
+                )
         }
     }
 }
