@@ -40,6 +40,19 @@ fun Module.replace(
     body = newBody.toTypedArray()
 }
 
+fun Module.appendAfter(item: ModuleItem, vararg appendItem: ModuleItem) {
+    val newBody = mutableListOf<ModuleItem>()
+    body?.forEach {
+        newBody.add(it)
+        if (it == item) {
+            appendItem.forEach {i ->
+                newBody.add(i)
+            }
+        }
+    }
+    body = newBody.toTypedArray()
+}
+
 fun ModuleExportName?.getValue(): String? {
     if (this is Identifier) {
         return value
@@ -50,6 +63,3 @@ fun ModuleExportName?.getValue(): String? {
     return null
 }
 
-fun PropertyName?.getValue(): String? {
-    return null
-}

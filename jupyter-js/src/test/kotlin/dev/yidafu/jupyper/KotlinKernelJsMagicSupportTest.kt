@@ -328,7 +328,7 @@ class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
             console.log(md);
             """.trimIndent()
         ) as MimeTypedResult
-        println(result.toJson())
+
         val html = (result[MimeTypes.HTML] as String)
         assertContains(html, "not support in in Kotlin Jupyter JS")
     }
@@ -341,5 +341,15 @@ class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
             import "https://cdn.jsdelivr.net/gh/yidafu/kotlin-jupyter-js@feature/import-inline-file/examples/local.js?inline"
             """.trimIndent()
         )
+    }
+
+    @Test
+    fun `javascript template string eascaping`() {
+        val result = exec(
+            "%js\nconsole.log(`js variable \${foo}`)"
+        ) as MimeTypedResult
+
+        val html = (result[MimeTypes.HTML] as String)
+        assertContains(html, "\${foo")
     }
 }

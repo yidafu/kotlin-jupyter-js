@@ -18,12 +18,12 @@ class JsCodeResult(private val jsCode: String) : Renderable {
 <script type="module">
 function getCellRoot(width = "100%", height = "100px") {
     var cellRoot = document.getElementById("$uuid");
-    cellRoot.style = `width: ${'$'}\{width};height: ${'$'}\{height}`
+    cellRoot.style = `width: ${'$'}{width};height: ${'$'}{height}`
     return cellRoot;
 }
 $jsCode
 </script>
-""".trimIndent()
+"""
 
     /**
      * Render to display result

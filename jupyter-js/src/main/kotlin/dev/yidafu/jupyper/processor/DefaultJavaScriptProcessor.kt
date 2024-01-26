@@ -9,8 +9,11 @@ import dev.yidafu.swc.options
 import dev.yidafu.swc.tsParseOptions
 import dev.yidafu.swc.types.Program
 import org.jetbrains.kotlinx.jupyter.api.Notebook
+import org.slf4j.LoggerFactory
 
 class DefaultJavaScriptProcessor(private val notebook: Notebook) {
+    private val log = LoggerFactory.getLogger(DefaultJavaScriptProcessor::class.java)
+
     private val swcCompiler: SwcNative = SwcNative()
 
     private val jsParseOpt
@@ -244,6 +247,10 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
                     JsMagicMatcher.LanguageType.Kotlin -> sourceCode
                 }
             }
-        return result
+        // escaping javascript template ${ }
+        // https://stackoverflow.com/a/32994616
+        val output = result.replace("\${", "\${'$'}{")
+        log.debug("javascript output code:\n{}", output)
+        return output
     }
 }
