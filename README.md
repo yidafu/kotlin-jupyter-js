@@ -29,7 +29,7 @@ USE {
     }
 
     dependencies {
-        implementation("dev.yidafu.jupyter:jupyter-js:0.6.0")
+        implementation("dev.yidafu.jupyter:jupyter-js:0.7.0")
     }
 }
 ```
