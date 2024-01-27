@@ -4,14 +4,34 @@ $dokka.location:dev.yidafu.jupyper.processor////PointingToDeclaration/jupyter-j
 $dokka.location:dev.yidafu.jupyper.processor/DefaultExportProcessor///PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-default-export-processor/index.html
 $dokka.location:dev.yidafu.jupyper.processor/DefaultExportProcessor/DefaultExportProcessor/#/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-default-export-processor/-default-export-processor.html
 $dokka.location:dev.yidafu.jupyper.processor/DefaultExportProcessor/process/#dev.yidafu.swc.types.Program#dev.yidafu.jupyper.processor.JavascriptProcessContext/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-default-export-processor/process.html
+$dokka.location:dev.yidafu.jupyper.processor/DefaultJavaScriptProcessor///PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-default-java-script-processor/index.html
+$dokka.location:dev.yidafu.jupyper.processor/DefaultJavaScriptProcessor/DefaultJavaScriptProcessor/#org.jetbrains.kotlinx.jupyter.api.Notebook/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-default-java-script-processor/-default-java-script-processor.html
+$dokka.location:dev.yidafu.jupyper.processor/DefaultJavaScriptProcessor/parseJsCode/#kotlin.String#dev.yidafu.jupyper.processor.JavascriptProcessContext/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-default-java-script-processor/parse-js-code.html
+$dokka.location:dev.yidafu.jupyper.processor/DefaultJavaScriptProcessor/process/#dev.yidafu.jupyper.JsMagicMatcher.LanguageType#kotlin.String/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-default-java-script-processor/process.html
+$dokka.location:dev.yidafu.jupyper.processor/DefaultJavaScriptProcessor/transformTsxCode/#kotlin.String#dev.yidafu.jupyper.processor.JavascriptProcessContext/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-default-java-script-processor/transform-tsx-code.html
+$dokka.location:dev.yidafu.jupyper.processor/DependenceNode///PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-dependence-node/index.html
+$dokka.location:dev.yidafu.jupyper.processor/DependenceNode/DependenceNode/#kotlin.String#dev.yidafu.jupyper.processor.DependenceNode?#kotlin.collections.MutableList[dev.yidafu.jupyper.processor.DependenceNode]/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-dependence-node/-dependence-node.html
+$dokka.location:dev.yidafu.jupyper.processor/DependenceNode/addChildren/#kotlin.String/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-dependence-node/add-children.html
+$dokka.location:dev.yidafu.jupyper.processor/DependenceNode/children/#/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-dependence-node/children.html
+$dokka.location:dev.yidafu.jupyper.processor/DependenceNode/getChildren/#kotlin.String/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-dependence-node/get-children.html
+$dokka.location:dev.yidafu.jupyper.processor/DependenceNode/hasChildren/#kotlin.String/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-dependence-node/has-children.html
+$dokka.location:dev.yidafu.jupyper.processor/DependenceNode/parent/#/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-dependence-node/parent.html
+$dokka.location:dev.yidafu.jupyper.processor/DependenceNode/source/#/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-dependence-node/source.html
 $dokka.location:dev.yidafu.jupyper.processor/ImportSourceMappingProcessor///PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-import-source-mapping-processor/index.html
 $dokka.location:dev.yidafu.jupyper.processor/ImportSourceMappingProcessor/ImportSourceMappingProcessor/#/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-import-source-mapping-processor/-import-source-mapping-processor.html
 $dokka.location:dev.yidafu.jupyper.processor/ImportSourceMappingProcessor/process/#dev.yidafu.swc.types.Program#dev.yidafu.jupyper.processor.JavascriptProcessContext/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-import-source-mapping-processor/process.html
+$dokka.location:dev.yidafu.jupyper.processor/InlineImportSourceProcessor///PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-inline-import-source-processor/index.html
+$dokka.location:dev.yidafu.jupyper.processor/InlineImportSourceProcessor/InlineImportSourceProcessor/#/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-inline-import-source-processor/-inline-import-source-processor.html
+$dokka.location:dev.yidafu.jupyper.processor/InlineImportSourceProcessor/process/#dev.yidafu.swc.types.Program#dev.yidafu.jupyper.processor.JavascriptProcessContext/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-inline-import-source-processor/process.html
+$dokka.location:dev.yidafu.jupyper.processor/InlineImportSourceProcessor/url2VarName/#kotlin.String/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-inline-import-source-processor/url2-var-name.html
 $dokka.location:dev.yidafu.jupyper.processor/JavaScriptProcessor///PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-java-script-processor/index.html
 $dokka.location:dev.yidafu.jupyper.processor/JavaScriptProcessor/process/#dev.yidafu.swc.types.Program#dev.yidafu.jupyper.processor.JavascriptProcessContext/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-java-script-processor/process.html
 $dokka.location:dev.yidafu.jupyper.processor/JavascriptProcessContext///PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-javascript-process-context/index.html
-$dokka.location:dev.yidafu.jupyper.processor/JavascriptProcessContext/JavascriptProcessContext/#/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-javascript-process-context/-javascript-process-context.html
+$dokka.location:dev.yidafu.jupyper.processor/JavascriptProcessContext/JavascriptProcessContext/#dev.yidafu.jupyper.processor.DefaultJavaScriptProcessor/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-javascript-process-context/-javascript-process-context.html
+$dokka.location:dev.yidafu.jupyper.processor/JavascriptProcessContext/addDependency/#kotlin.String/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-javascript-process-context/add-dependency.html
 $dokka.location:dev.yidafu.jupyper.processor/JavascriptProcessContext/addKotlinValue/#kotlin.Pair[kotlin.String,kotlin.String]/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-javascript-process-context/add-kotlin-value.html
+$dokka.location:dev.yidafu.jupyper.processor/JavascriptProcessContext/dependencyScope/#kotlin.String#kotlin.Function0[TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-javascript-process-context/dependency-scope.html
+$dokka.location:dev.yidafu.jupyper.processor/JavascriptProcessContext/processor/#/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-javascript-process-context/processor.html
 $dokka.location:dev.yidafu.jupyper.processor/JavascriptProcessContext/toString/#/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-javascript-process-context/to-string.html
 $dokka.location:dev.yidafu.jupyper.processor/JupyterImportProcessor///PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-jupyter-import-processor/index.html
 $dokka.location:dev.yidafu.jupyper.processor/JupyterImportProcessor/JupyterImportProcessor/#org.jetbrains.kotlinx.jupyter.api.Notebook/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-jupyter-import-processor/-jupyter-import-processor.html
@@ -19,6 +39,12 @@ $dokka.location:dev.yidafu.jupyper.processor/JupyterImportProcessor/process/#dev
 $dokka.location:dev.yidafu.jupyper.processor/NullResult///PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-null-result/index.html
 $dokka.location:dev.yidafu.jupyper.processor/NullResult/NullResult/#/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-null-result/-null-result.html
 $dokka.location:dev.yidafu.jupyper.processor/NullResult/toJson/#kotlinx.serialization.json.JsonObject#kotlin.String?/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-null-result/to-json.html
+$dokka.location:dev.yidafu.jupyper.swc////PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.swc/index.html
+$dokka.location:dev.yidafu.jupyper.swc//appendAfter/dev.yidafu.swc.types.Module#dev.yidafu.swc.types.ModuleItem#kotlin.Array[dev.yidafu.swc.types.ModuleItem]/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.swc/append-after.html
+$dokka.location:dev.yidafu.jupyper.swc//forEachExportDeclaration/dev.yidafu.swc.types.Module#kotlin.Function1[dev.yidafu.swc.types.ExportDeclaration,kotlin.Unit]/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.swc/for-each-export-declaration.html
+$dokka.location:dev.yidafu.jupyper.swc//forEachImportDeclaration/dev.yidafu.swc.types.Module#kotlin.Function1[dev.yidafu.swc.types.ImportDeclaration,kotlin.Unit]/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.swc/for-each-import-declaration.html
+$dokka.location:dev.yidafu.jupyper.swc//getValue/dev.yidafu.swc.types.ModuleExportName?#/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.swc/get-value.html
+$dokka.location:dev.yidafu.jupyper.swc//replace/dev.yidafu.swc.types.Module#dev.yidafu.swc.types.ModuleItem#kotlin.Array[dev.yidafu.swc.types.ModuleItem]/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.swc/replace.html
 $dokka.location:dev.yidafu.jupyper////PointingToDeclaration/jupyter-js/dev.yidafu.jupyper/index.html
 $dokka.location:dev.yidafu.jupyper//jsExport/#kotlin.String#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper/js-export.html
 $dokka.location:dev.yidafu.jupyper//json/#/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper/json.html
@@ -27,6 +53,8 @@ $dokka.location:dev.yidafu.jupyper//toJsonElement/kotlin.Any?#/PointingToDeclara
 $dokka.location:dev.yidafu.jupyper//toJsonElement/kotlin.Array[*]#/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper/to-json-element.html
 $dokka.location:dev.yidafu.jupyper//toJsonElement/kotlin.collections.Collection[*]#/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper/to-json-element.html
 $dokka.location:dev.yidafu.jupyper//toJsonElement/kotlin.collections.Map[*,*]#/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper/to-json-element.html
+$dokka.location:dev.yidafu.jupyper/CircularDependencyException///PointingToDeclaration/jupyter-js/dev.yidafu.jupyper/-circular-dependency-exception/index.html
+$dokka.location:dev.yidafu.jupyper/CircularDependencyException/CircularDependencyException/#kotlin.String#kotlin.String/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper/-circular-dependency-exception/-circular-dependency-exception.html
 $dokka.location:dev.yidafu.jupyper/InvalidMimeTypeResult///PointingToDeclaration/jupyter-js/dev.yidafu.jupyper/-invalid-mime-type-result/index.html
 $dokka.location:dev.yidafu.jupyper/InvalidMimeTypeResult/InvalidMimeTypeResult/#kotlin.String/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper/-invalid-mime-type-result/-invalid-mime-type-result.html
 $dokka.location:dev.yidafu.jupyper/JavaScriptMagicCodeProcessor///PointingToDeclaration/jupyter-js/dev.yidafu.jupyper/-java-script-magic-code-processor/index.html
@@ -84,4 +112,5 @@ $dokka.location:dev.yidafu.jupyper/NotSupportMimeTypeException///PointingToDecla
 $dokka.location:dev.yidafu.jupyper/NotSupportMimeTypeException/NotSupportMimeTypeException/#kotlin.String/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper/-not-support-mime-type-exception/-not-support-mime-type-exception.html
 dev.yidafu.jupyper
 dev.yidafu.jupyper.processor
+dev.yidafu.jupyper.swc
 
