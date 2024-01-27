@@ -20,8 +20,9 @@ $dokka.location:dev.yidafu.jupyper.processor/NullResult///PointingToDeclaration/
 $dokka.location:dev.yidafu.jupyper.processor/NullResult/NullResult/#/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-null-result/-null-result.html
 $dokka.location:dev.yidafu.jupyper.processor/NullResult/toJson/#kotlinx.serialization.json.JsonObject#kotlin.String?/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper.processor/-null-result/to-json.html
 $dokka.location:dev.yidafu.jupyper////PointingToDeclaration/jupyter-js/dev.yidafu.jupyper/index.html
-$dokka.location:dev.yidafu.jupyper//extraSourcesDescriptor/#/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper/extra-sources-descriptor.html
-$dokka.location:dev.yidafu.jupyper//importSourceDescriptor/#/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper/import-source-descriptor.html
+$dokka.location:dev.yidafu.jupyper//jsExport/#kotlin.String#TypeParam(bounds=[kotlin.Any])/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper/js-export.html
+$dokka.location:dev.yidafu.jupyper//json/#/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper/json.html
+$dokka.location:dev.yidafu.jupyper//log/#/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper/log.html
 $dokka.location:dev.yidafu.jupyper//toJsonElement/kotlin.Any?#/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper/to-json-element.html
 $dokka.location:dev.yidafu.jupyper//toJsonElement/kotlin.Array[*]#/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper/to-json-element.html
 $dokka.location:dev.yidafu.jupyper//toJsonElement/kotlin.collections.Collection[*]#/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper/to-json-element.html
@@ -42,6 +43,7 @@ $dokka.location:dev.yidafu.jupyper/JavaScriptPackageSerializer/JavaScriptPackage
 $dokka.location:dev.yidafu.jupyper/JavaScriptPackageSerializer/descriptor/#/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper/-java-script-package-serializer/descriptor.html
 $dokka.location:dev.yidafu.jupyper/JavaScriptPackageSerializer/deserialize/#kotlinx.serialization.encoding.Decoder/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper/-java-script-package-serializer/deserialize.html
 $dokka.location:dev.yidafu.jupyper/JavaScriptPackageSerializer/serialize/#kotlinx.serialization.encoding.Encoder#dev.yidafu.jupyper.JavaScriptPackage/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper/-java-script-package-serializer/serialize.html
+$dokka.location:dev.yidafu.jupyper/JavaScriptVariableStore///PointingToDeclaration/jupyter-js/dev.yidafu.jupyper/-java-script-variable-store/index.html
 $dokka.location:dev.yidafu.jupyper/JsCodeResult///PointingToDeclaration/jupyter-js/dev.yidafu.jupyper/-js-code-result/index.html
 $dokka.location:dev.yidafu.jupyper/JsCodeResult/JsCodeResult/#kotlin.String/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper/-js-code-result/-js-code-result.html
 $dokka.location:dev.yidafu.jupyper/JsCodeResult/render/#org.jetbrains.kotlinx.jupyter.api.Notebook/PointingToDeclaration/jupyter-js/dev.yidafu.jupyper/-js-code-result/render.html
