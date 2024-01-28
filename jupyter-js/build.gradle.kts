@@ -56,8 +56,13 @@ publishMan {
     description.set("Kotlin Jupyter JS Support")
 }
 
-
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 }
 
+// Optionally configure plugin
+configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+    debug.set(true)
+    version.set("1.1.1")
+    disabledRules.set(setOf("standard:no-wildcard-imports", "standard:filename"))
+}

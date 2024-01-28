@@ -21,12 +21,13 @@ import org.jetbrains.kotlin.backend.common.push
  * ```
  */
 class ImportSourceMappingProcessor : JavaScriptProcessor {
-
-    override fun process(program: Program, context: JavascriptProcessContext) {
+    override fun process(
+        program: Program,
+        context: JavascriptProcessContext,
+    ) {
         if (program is Module) {
-
             val newBodyList = mutableListOf<ModuleItem>()
-            program.body?.forEach{ moduleItem ->
+            program.body?.forEach { moduleItem ->
                 newBodyList.push(moduleItem)
                 if (moduleItem is ImportDeclaration) {
                     val originSource = moduleItem.source?.value
@@ -35,15 +36,18 @@ class ImportSourceMappingProcessor : JavaScriptProcessor {
                         moduleItem.source!!.value = jsPackage?.mainSource
                         moduleItem.source!!.raw = "\"${jsPackage}\""
                         if (!jsPackage?.extraSources.isNullOrEmpty()) {
-                             jsPackage!!.extraSources!!.forEach {
-                                newBodyList.push(createImportDeclaration {
-                                    span = emptySpan()
-                                    source = stringLiteral {
+                            jsPackage!!.extraSources!!.forEach {
+                                newBodyList.push(
+                                    createImportDeclaration {
                                         span = emptySpan()
-                                        value = it
-                                        raw = "\"$it\""
-                                    }
-                                })
+                                        source =
+                                            stringLiteral {
+                                                span = emptySpan()
+                                                value = it
+                                                raw = "\"$it\""
+                                            }
+                                    },
+                                )
                             }
                         }
                     }

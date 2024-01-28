@@ -12,7 +12,7 @@ import kotlinx.serialization.json.*
 @Serializable(JavaScriptPackageSerializer::class)
 data class JavaScriptPackage(
     val mainSource: String,
-    val extraSources: List<String>? = null
+    val extraSources: List<String>? = null,
 ) {
     override fun toString(): String {
         return mainSource
@@ -20,12 +20,13 @@ data class JavaScriptPackage(
 }
 
 class JavaScriptPackageSerializer : KSerializer<JavaScriptPackage> {
-    override val descriptor = buildClassSerialDescriptor(
-        "JavaScriptPackage"
-    ) {
-        element<String>("main")
-        element<List<String>>("extra")
-    }
+    override val descriptor =
+        buildClassSerialDescriptor(
+            "JavaScriptPackage",
+        ) {
+            element<String>("main")
+            element<List<String>>("extra")
+        }
 
     override fun deserialize(decoder: Decoder): JavaScriptPackage {
         val jsonEncoder = decoder as JsonDecoder
@@ -38,33 +39,36 @@ class JavaScriptPackageSerializer : KSerializer<JavaScriptPackage> {
                 }
             }
             is JsonObject -> {
-                val importSource = when (val default = obj["main"]) {
-                    is JsonPrimitive -> {
-                        if (default.isString) {
-                            default.content
-                        } else {
+                val importSource =
+                    when (val default = obj["main"]) {
+                        is JsonPrimitive -> {
+                            if (default.isString) {
+                                default.content
+                            } else {
+                                throw IllegalStateException("main field must be string")
+                            }
+                        }
+                        else -> {
                             throw IllegalStateException("main field must be string")
                         }
                     }
-                    else -> {
-                        throw IllegalStateException("main field must be string")
-                    }
-                }
-                val extraSources = when (val extra = obj["extra"]) {
-                    is JsonArray -> extra.map {
-                        if (it is JsonPrimitive && it.isString) {
-                            it.content
-                        } else {
-                            throw IllegalStateException("extra field must be Array<string>")
+                val extraSources =
+                    when (val extra = obj["extra"]) {
+                        is JsonArray ->
+                            extra.map {
+                                if (it is JsonPrimitive && it.isString) {
+                                    it.content
+                                } else {
+                                    throw IllegalStateException("extra field must be Array<string>")
+                                }
+                            }
+                        else -> {
+                            throw IllegalStateException("extra field must be Array")
                         }
                     }
-                    else -> {
-                        throw IllegalStateException("extra field must be Array")
-                    }
-                }
                 JavaScriptPackage(
                     importSource,
-                    extraSources
+                    extraSources,
                 )
             }
 
@@ -74,7 +78,10 @@ class JavaScriptPackageSerializer : KSerializer<JavaScriptPackage> {
         }
     }
 
-    override fun serialize(encoder: Encoder, value: JavaScriptPackage) {
+    override fun serialize(
+        encoder: Encoder,
+        value: JavaScriptPackage,
+    ) {
         if (value.extraSources.isNullOrEmpty()) {
             encoder.encodeString(value.mainSource)
         } else {

@@ -9,32 +9,34 @@ import kotlin.test.assertTrue
 class JavaScriptMagicCodeProcessorTest : FunSpec({
     test("if code contains %js") {
         val notebook = mockkClass(Notebook::class)
+
         fun shouldTrue(code: String) {
             assertTrue(
-                JavaScriptMagicCodeProcessor(notebook).accepts(code)
+                JavaScriptMagicCodeProcessor(notebook).accepts(code),
             )
         }
+
         fun shouldFalse(code: String) {
             assertFalse(
-                JavaScriptMagicCodeProcessor(notebook).accepts(code)
+                JavaScriptMagicCodeProcessor(notebook).accepts(code),
             )
         }
         shouldTrue(
             """
             %js
             var code = 1;
-            """.trimIndent()
+            """.trimIndent(),
         )
         shouldTrue(
             """
             %javascript
             var code = 1;
-            """.trimIndent()
+            """.trimIndent(),
         )
         shouldFalse(
             """
             var code = 1;
-            """.trimIndent()
+            """.trimIndent(),
         )
         shouldFalse("%javascrip")
         shouldFalse("%jp")

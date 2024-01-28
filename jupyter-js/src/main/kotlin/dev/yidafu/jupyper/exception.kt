@@ -13,5 +13,5 @@ class CircularDependencyException(parent: String, child: String) : JupyterJsExce
     |    ^
     V    |
     $child
-    """.trimIndent()
+    """.trimIndent(),
 )

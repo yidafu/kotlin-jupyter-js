@@ -7,6 +7,7 @@ object LibsMapping : Map<String, JavaScriptPackage> {
     private val mLibsMapping: Map<String, JavaScriptPackage> by lazy {
         getLibMapping()
     }
+
     private fun getResourceFile(filepath: String): String {
         return ImportSourceMappingProcessor::class.java.classLoader.getResource(filepath)?.readText() ?: ""
     }

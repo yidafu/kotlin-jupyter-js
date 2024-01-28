@@ -11,10 +11,8 @@ import org.slf4j.LoggerFactory
 import java.io.File
 import java.net.URI
 import java.net.URL
-import java.nio.file.Paths
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
-import kotlin.io.path.Path
 
 /**
  * process inline code
@@ -76,16 +74,17 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                     val langType = url2LanguageType(originSource)
                     if (inlineContext.isNotEmpty() && langType != LanguageType.Kotlin) {
                         context.dependencyScope(originSource) {
-                            val inlineProgram = when (langType) {
-                                LanguageType.JS -> context.processor.parseJsCode(inlineContext, context)
-                                LanguageType.TS ->context.processor.transformJsxCode(inlineContext, context)
-                                LanguageType.JSX -> context.processor.transformTsCode(inlineContext, context)
-                                LanguageType.TSX -> context.processor.transformTsxCode(inlineContext, context)
-                                // unreachable
-                                else -> createModule { span = emptySpan() }
-                            }
+                            val inlineProgram =
+                                when (langType) {
+                                    LanguageType.JS -> context.processor.parseJsCode(inlineContext, context)
+                                    LanguageType.TS -> context.processor.transformJsxCode(inlineContext, context)
+                                    LanguageType.JSX -> context.processor.transformTsCode(inlineContext, context)
+                                    LanguageType.TSX -> context.processor.transformTsxCode(inlineContext, context)
+                                    // unreachable
+                                    else -> createModule { span = emptySpan() }
+                                }
 
-                            val varName = url2VarName(originSource);
+                            val varName = url2VarName(originSource)
                             if (inlineProgram is Module) {
                                 val replacements = mutableListOf<Statement>()
                                 if (!inlineSourceCache.containsKey(varName)) {
@@ -94,37 +93,39 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                                     replacements.add(iife)
                                 }
 
-                                val variableDeclarations = it.specifiers?.mapNotNull { specifier ->
-                                    when (specifier) {
-                                        is ImportDefaultSpecifier -> {
-                                            createImportVariableDeclaration(
-                                                specifier.local?.value!!,
-                                                varName,
-                                                "default"
-                                            )
-                                        }
+                                val variableDeclarations =
+                                    it.specifiers?.mapNotNull { specifier ->
+                                        when (specifier) {
+                                            is ImportDefaultSpecifier -> {
+                                                createImportVariableDeclaration(
+                                                    specifier.local?.value!!,
+                                                    varName,
+                                                    "default",
+                                                )
+                                            }
 
-                                        is NamedImportSpecifier -> {
-                                            val variableName = specifier.local?.value!!
-                                            createImportVariableDeclaration(variableName, varName, variableName)
-                                        }
+                                            is NamedImportSpecifier -> {
+                                                val variableName = specifier.local?.value!!
+                                                createImportVariableDeclaration(variableName, varName, variableName)
+                                            }
 
-                                        is ImportNamespaceSpecifier -> {
-                                            createImportVariableDeclaration(
-                                                createIdentifier {
-                                                    span = emptySpan()
-                                                    value = specifier.local?.value!!
-                                                    optional = false
-                                                },
-                                                createIdentifier {
-                                                    span = emptySpan()
-                                                    value = varName
-                                                })
-                                        }
+                                            is ImportNamespaceSpecifier -> {
+                                                createImportVariableDeclaration(
+                                                    createIdentifier {
+                                                        span = emptySpan()
+                                                        value = specifier.local?.value!!
+                                                        optional = false
+                                                    },
+                                                    createIdentifier {
+                                                        span = emptySpan()
+                                                        value = varName
+                                                    },
+                                                )
+                                            }
 
-                                        else -> null
-                                    }
-                                } ?: emptyList()
+                                            else -> null
+                                        }
+                                    } ?: emptyList()
                                 replacements.addAll(variableDeclarations)
                                 program.replace(it, *(replacements.toTypedArray()))
                             }
@@ -206,22 +207,25 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                                                 body =
                                                     blockStatement {
                                                         span = emptySpan()
-                                                        val newStats = module.body?.filterIsInstance<Statement>()
-                                                            ?: emptyList()
-                                                        val exportStats = transformExport(
-                                                            module.body?.filter { it !is Statement } ?: emptyList(),
-                                                        )
-                                                        val returnStat = listOf(
-                                                            returnStatement {
-                                                                span = emptySpan()
-                                                                argument =
-                                                                    identifier {
-                                                                        span = emptySpan()
-                                                                        value = "exports"
-                                                                        optional = false
-                                                                    }
-                                                            },
-                                                        )
+                                                        val newStats =
+                                                            module.body?.filterIsInstance<Statement>()
+                                                                ?: emptyList()
+                                                        val exportStats =
+                                                            transformExport(
+                                                                module.body?.filter { it !is Statement } ?: emptyList(),
+                                                            )
+                                                        val returnStat =
+                                                            listOf(
+                                                                returnStatement {
+                                                                    span = emptySpan()
+                                                                    argument =
+                                                                        identifier {
+                                                                            span = emptySpan()
+                                                                            value = "exports"
+                                                                            optional = false
+                                                                        }
+                                                                },
+                                                            )
                                                         stmts = (newStats + exportStats + returnStat).toTypedArray()
                                                     }
                                             }
@@ -266,7 +270,7 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                                                             jsObject =
                                                                 identifier {
                                                                     span = emptySpan()
-                                                                    value =  objName
+                                                                    value = objName
                                                                     optional = false
                                                                 }
                                                             property =
@@ -293,14 +297,15 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                                                         is KeyValuePatternProperty -> {
                                                             val key = prop.key
                                                             val value = prop.value
-                                                            val expr = if (value is Identifier) {
-                                                                createExportAssignmentExpression(
-                                                                    value,
-                                                                    value,
-                                                                )
-                                                            } else {
-                                                                null
-                                                            }
+                                                            val expr =
+                                                                if (value is Identifier) {
+                                                                    createExportAssignmentExpression(
+                                                                        value,
+                                                                        value,
+                                                                    )
+                                                                } else {
+                                                                    null
+                                                                }
                                                             expr?.let { e -> newStats.add(e) }
                                                         }
                                                     }
@@ -327,7 +332,6 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                 }
                 // export default function foo () { };
                 is ExportDefaultDeclaration -> {
-
                     val defaultExpr = it.decl as Expression
                     createExportAssignmentExpression("default", defaultExpr)
                 }
@@ -354,13 +358,11 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
         return newStats
     }
 
-
     private fun createImportVariableDeclaration(
         varName: String,
         jsObjName: String,
         propName: String,
     ): VariableDeclaration {
-
         return createImportVariableDeclaration(
             createIdentifier {
                 span = emptySpan()
@@ -376,7 +378,8 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                 span = emptySpan()
                 value = propName
                 optional = false
-            })
+            },
+        )
     }
 
     private fun createImportVariableDeclaration(
@@ -384,24 +387,31 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
         jsObj: Identifier,
         prop: Identifier,
     ): VariableDeclaration {
-        return createImportVariableDeclaration(name, createMemberExpression {
-            span = emptySpan()
-            jsObject = jsObj
-            property = prop
-        })
+        return createImportVariableDeclaration(
+            name,
+            createMemberExpression {
+                span = emptySpan()
+                jsObject = jsObj
+                property = prop
+            },
+        )
     }
 
-    private fun createImportVariableDeclaration(varName: Identifier, initExpr: Expression): VariableDeclaration {
+    private fun createImportVariableDeclaration(
+        varName: Identifier,
+        initExpr: Expression,
+    ): VariableDeclaration {
         return createVariableDeclaration {
             span = emptySpan()
             kind = "const"
-            declarations = arrayOf(
-                variableDeclarator {
-                    span = emptySpan()
-                    id = varName
-                    init = initExpr
-                }
-            )
+            declarations =
+                arrayOf(
+                    variableDeclarator {
+                        span = emptySpan()
+                        id = varName
+                        init = initExpr
+                    },
+                )
         }
     }
 
@@ -420,7 +430,8 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                 span = emptySpan()
                 value = leftName
                 optional = false
-            }, expr
+            },
+            expr,
         )
     }
 
@@ -447,7 +458,9 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                 span = emptySpan()
                 value = "exports"
                 optional = false
-            }, prop, expr
+            },
+            prop,
+            expr,
         )
     }
 
@@ -467,7 +480,6 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                             span = emptySpan()
                             jsObject = jsObj
                             property = prop
-
                         }
                     right = rightExpr
                 }

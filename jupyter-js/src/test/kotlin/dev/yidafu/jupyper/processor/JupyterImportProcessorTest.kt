@@ -10,11 +10,7 @@ import io.mockk.verify
 import org.jetbrains.kotlinx.jupyter.api.HTML
 import org.jetbrains.kotlinx.jupyter.api.MimeTypedResult
 import org.jetbrains.kotlinx.jupyter.api.Notebook
-import org.jetbrains.kotlinx.jupyter.api.VariableState
-import kotlin.reflect.KProperty
 import kotlin.reflect.full.memberProperties
-
-
 
 object MockScriptInstance {
     val foo: MimeTypedResult = HTML("<div></div>")
@@ -28,21 +24,23 @@ class JupyterImportProcessorTest : ShouldSpec({
             val notebookMock: Notebook = mockk(relaxed = true)
             val contextMock: JavascriptProcessContext = mockk(relaxed = true)
 
-
-            every { notebookMock.variablesState } returns mapOf(
-                "foo" to MockVariableState(
-                    MockScriptInstance::class.memberProperties.first(),
-                    MockScriptInstance,
-                    "",
-                    Result.success(MockScriptInstance.foo),
-                ),
-                "bar" to  MockVariableState(
-                    MockScriptInstance::class.memberProperties.first(),
-                    MockScriptInstance,
-                    "",
-                    Result.success(MockScriptInstance.bar),
+            every { notebookMock.variablesState } returns
+                mapOf(
+                    "foo" to
+                        MockVariableState(
+                            MockScriptInstance::class.memberProperties.first(),
+                            MockScriptInstance,
+                            "",
+                            Result.success(MockScriptInstance.foo),
+                        ),
+                    "bar" to
+                        MockVariableState(
+                            MockScriptInstance::class.memberProperties.first(),
+                            MockScriptInstance,
+                            "",
+                            Result.success(MockScriptInstance.bar),
+                        ),
                 )
-            )
 
             val program = processTestScript("import { foo, bar as renamedBar } from \"@jupyter\" ")
 
@@ -55,7 +53,6 @@ class JupyterImportProcessorTest : ShouldSpec({
             if (program is Module) {
                 program.body?.size shouldBe 0
             }
-
         }
     }
 })

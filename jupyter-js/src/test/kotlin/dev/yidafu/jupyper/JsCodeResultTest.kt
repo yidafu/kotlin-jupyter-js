@@ -10,21 +10,21 @@ import kotlinx.serialization.json.Json
 import org.jetbrains.kotlinx.jupyter.api.Notebook
 
 class JsCodeResultTest : ShouldSpec({
-        val testJsCode = "console.log('Hello, World!')"
-        val jsCodeResult = JsCodeResult(testJsCode)
+    val testJsCode = "console.log('Hello, World!')"
+    val jsCodeResult = JsCodeResult(testJsCode)
 
-        context("when generating UUID and rendering") {
-            should("generate a non-empty UUID") {
-                jsCodeResult.uuid.shouldNotBeNull()
-                jsCodeResult.uuid.shouldNotBeEmpty()
-            }
-
-            should("include JS code in the script module") {
-                val notebook = mockkClass(Notebook::class)
-                val result = jsCodeResult.render(notebook)
-                val renderedHtml = Json.encodeToString(result.toJson())
-                renderedHtml shouldContain testJsCode
-                renderedHtml shouldContain jsCodeResult.uuid
-            }
+    context("when generating UUID and rendering") {
+        should("generate a non-empty UUID") {
+            jsCodeResult.uuid.shouldNotBeNull()
+            jsCodeResult.uuid.shouldNotBeEmpty()
         }
+
+        should("include JS code in the script module") {
+            val notebook = mockkClass(Notebook::class)
+            val result = jsCodeResult.render(notebook)
+            val renderedHtml = Json.encodeToString(result.toJson())
+            renderedHtml shouldContain testJsCode
+            renderedHtml shouldContain jsCodeResult.uuid
+        }
+    }
 })

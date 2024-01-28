@@ -10,10 +10,11 @@ import kotlinx.serialization.json.Json
 
 class JavaScriptPackageSerializationTest : ShouldSpec({
     val simplePackage = JavaScriptPackage("main.js")
-    val complexPackage = JavaScriptPackage(
-        "main.js",
-        listOf("extra1.js", "extra2.js")
-    )
+    val complexPackage =
+        JavaScriptPackage(
+            "main.js",
+            listOf("extra1.js", "extra2.js"),
+        )
 
     context("JavaScriptPackage serialization") {
         should("correctly serialize a simple package with only mainSource") {
@@ -30,7 +31,7 @@ class JavaScriptPackageSerializationTest : ShouldSpec({
         should("correctly deserialize a simple package from JSON") {
             val json = """ "main.js" """.trim()
             val deserialized = Json.decodeFromString<JavaScriptPackage>(json)
-            deserialized shouldBeEqual  simplePackage
+            deserialized shouldBeEqual simplePackage
         }
 
         should("correctly serialize a complex package with extraSources") {
@@ -50,7 +51,6 @@ class JavaScriptPackageSerializationTest : ShouldSpec({
                 Json.decodeFromString<JavaScriptPackage>(json)
             }
         }
-
 
         should("incorrectly deserialize a complex package from from JSON when main field is array") {
             val json = """{"main": [1234], "extra": ["extra1.js", "extra2.js"]}"""
@@ -72,7 +72,6 @@ class JavaScriptPackageSerializationTest : ShouldSpec({
                 Json.decodeFromString<JavaScriptPackage>(json)
             }
         }
-
 
         should("incorrectly deserialize a complex package from from JSON when it not { main: string, extra: {} }") {
             val json = """ ["main.js", ["extra1.js", "extra2.js"] ]"""

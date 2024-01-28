@@ -9,12 +9,13 @@ enum class LanguageType {
     ;
 
     companion object {
-        fun fromString(magic: String): LanguageType = when (magic) {
-            "%js", "%javascript" -> JS
-            "%jsx" -> JSX
-            "%ts", "%typescript" -> TS
-            "%tsx" -> TSX
-            else -> Kotlin // unreachable
-        }
+        fun fromString(magic: String): LanguageType =
+            when (magic) {
+                "%js", "%javascript" -> JS
+                "%jsx" -> JSX
+                "%ts", "%typescript" -> TS
+                "%tsx" -> TSX
+                else -> Kotlin // unreachable
+            }
     }
 }

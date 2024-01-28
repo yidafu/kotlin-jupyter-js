@@ -8,6 +8,5 @@ class LibsMappingTest : FunSpec({
         assertNotNull(LibsMapping["react"])
         assertNotNull(LibsMapping["react-dom"])
         assertNotNull(LibsMapping["echarts"])
-
     }
 })
