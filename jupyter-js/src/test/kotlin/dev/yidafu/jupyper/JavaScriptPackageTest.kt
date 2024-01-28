@@ -1,20 +1,18 @@
 package dev.yidafu.jupyper
 
+import io.kotest.core.spec.style.FunSpec
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-class JavaScriptPackageTest {
-    @Test
-    fun `JavaScriptPackage serialize`() {
+class JavaScriptPackageTest : FunSpec({
+    test("JavaScriptPackage serialize") {
         val json = Json.encodeToString(JavaScriptPackage("source", listOf("extra1", "extra2")))
         assertEquals(json, """{"main":"source","extra":["extra1","extra2"]}""")
     }
 
-    @Test
-    fun `JavaScriptPackage deserialize`() {
+    test("JavaScriptPackage deserialize") {
         val pkgs = Json.decodeFromString<List<JavaScriptPackage>>(
             """
                 [
@@ -28,4 +26,4 @@ class JavaScriptPackageTest {
         assertNull(pkgs[1].extraSources)
         assertEquals(pkgs[1].mainSource, "string")
     }
-}
+})

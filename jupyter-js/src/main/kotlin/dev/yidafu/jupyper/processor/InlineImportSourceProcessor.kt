@@ -1,5 +1,6 @@
 package dev.yidafu.jupyper.processor
 
+import dev.yidafu.jupyper.LanguageType
 import dev.yidafu.jupyper.swc.forEachImportDeclaration
 import dev.yidafu.jupyper.swc.getValue
 import dev.yidafu.jupyper.swc.replace
@@ -8,9 +9,12 @@ import dev.yidafu.swc.emptySpan
 import dev.yidafu.swc.types.*
 import org.slf4j.LoggerFactory
 import java.io.File
+import java.net.URI
 import java.net.URL
+import java.nio.file.Paths
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
+import kotlin.io.path.Path
 
 /**
  * process inline code
@@ -68,11 +72,19 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                                 ""
                             }
                         }
-
-                    log.info("inline js context {}", inlineContext)
-                    if (inlineContext.isNotEmpty()) {
+//                    log.debug("inline js context {}", inlineContext)
+                    val langType = url2LanguageType(originSource)
+                    if (inlineContext.isNotEmpty() && langType != LanguageType.Kotlin) {
                         context.dependencyScope(originSource) {
-                            val inlineProgram = context.processor.parseJsCode(inlineContext, context)
+                            val inlineProgram = when (langType) {
+                                LanguageType.JS -> context.processor.parseJsCode(inlineContext, context)
+                                LanguageType.TS ->context.processor.transformJsxCode(inlineContext, context)
+                                LanguageType.JSX -> context.processor.transformTsCode(inlineContext, context)
+                                LanguageType.TSX -> context.processor.transformTsxCode(inlineContext, context)
+                                // unreachable
+                                else -> createModule { span = emptySpan() }
+                            }
+
                             val varName = url2VarName(originSource);
                             if (inlineProgram is Module) {
                                 val replacements = mutableListOf<Statement>()
@@ -123,8 +135,20 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
         }
     }
 
+    private fun url2LanguageType(url: String): LanguageType {
+        val path = URI(url).path
+        val ext = path.substring(path.lastIndexOf("."))
+        return when (ext) {
+            ".js" -> LanguageType.JS
+            ".jsx" -> LanguageType.JSX
+            ".ts" -> LanguageType.TS
+            ".tsx" -> LanguageType.TSX
+            else -> LanguageType.Kotlin
+        }
+    }
+
     @OptIn(ExperimentalEncodingApi::class)
-    fun url2VarName(url: String): String {
+    private fun url2VarName(url: String): String {
         return "inline_" + Base64.encode(url.toByteArray()).replace("=", "")
     }
 

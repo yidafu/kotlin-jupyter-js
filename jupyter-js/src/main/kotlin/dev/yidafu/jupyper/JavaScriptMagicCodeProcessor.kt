@@ -14,7 +14,7 @@ class JavaScriptMagicCodeProcessor(
 
     override fun accepts(code: String): Boolean {
         val matcher = JsMagicMatcher(code)
-        return matcher.match() !== JsMagicMatcher.LanguageType.Kotlin
+        return matcher.match() !== LanguageType.Kotlin
     }
 
     /**

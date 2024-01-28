@@ -1,24 +1,24 @@
 package dev.yidafu.jupyper
 
+import io.kotest.core.spec.style.FunSpec
 import kotlin.test.*
 
-class JsMagicMatcherTest {
-    fun shouldTrue(code: String) {
+class JsMagicMatcherTest : FunSpec( {
+     fun shouldTrue(code: String) {
         assertNotEquals(
             JsMagicMatcher(code).match(),
-            JsMagicMatcher.LanguageType.Kotlin
+            LanguageType.Kotlin
         )
     }
-    fun shouldFalse(code: String) {
+     fun shouldFalse(code: String) {
         assertEquals(
             JsMagicMatcher(code).match(),
-            JsMagicMatcher.LanguageType.Kotlin
+            LanguageType.Kotlin
         )
     }
 
-    @Test
-    fun `match js magic word`() {
-        assertEquals(JsMagicMatcher.LanguageType.formString("%js"), JsMagicMatcher.LanguageType.JS)
+    test("match js magic word") {
+        assertEquals(LanguageType.formString("%js"), LanguageType.JS)
 
         listOf(
             "%js\nvar code = 1;",
@@ -40,8 +40,7 @@ class JsMagicMatcherTest {
         }
     }
 
-    @Test
-    fun `match ts magic word`() {
+    test("match ts magic word") {
         listOf(
             "%ts\nvar code = 1;",
             " %typescript\n var code = 1;",
@@ -62,8 +61,7 @@ class JsMagicMatcherTest {
         }
     }
 
-    @Test
-    fun `remove js magic of source code`() {
+    test("remove js magic of source code") {
         listOf(
             "%js\nconst foo = 1",
             "%jsx\nconst div = <Div></Div>",
@@ -76,24 +74,23 @@ class JsMagicMatcherTest {
                 s.replace(k, "")
             }
             val matcher = JsMagicMatcher(it)
-            assertTrue(!matcher.cleanSourceCode.contains("%"))
 
+            assertTrue(!matcher.cleanSourceCode.contains("%"))
             assertEquals(matcher.cleanSourceCode, str)
         }
     }
 
-    @Test
-    fun `should return Kotlin`() {
+    test("should return Kotlin") {
         val matcher = JsMagicMatcher(
             """ val foo ="string"; """
         )
         val type = matcher.match()
-        assertEquals(type, JsMagicMatcher.LanguageType.Kotlin)
+        assertEquals(type, LanguageType.Kotlin)
         assertEquals(matcher.cleanSourceCode, """ val foo ="string"; """)
+
     }
 
-    @Test
-    fun `kotlin USE statement should be Kotlin`() {
+    test("kotlin USE statement should be Kotlin") {
         val matcher = JsMagicMatcher(
             """
             USE {
@@ -103,11 +100,11 @@ class JsMagicMatcherTest {
         )
 
         val type = matcher.match()
-        assertEquals(type, JsMagicMatcher.LanguageType.Kotlin)
+        assertEquals(type, LanguageType.Kotlin)
     }
 
-    @Test
-    fun `get clean code`() {
+    test("get clean code") {
+
         val matcher = JsMagicMatcher(
             """
             %js
@@ -116,8 +113,7 @@ class JsMagicMatcherTest {
             """.trimIndent()
         )
 
-        assertEquals(matcher.match(), JsMagicMatcher.LanguageType.JS)
-        println(matcher.cleanSourceCode)
+        assertEquals(matcher.match(), LanguageType.JS)
         assertTrue(!matcher.cleanSourceCode.contains("%"))
     }
-}
+})

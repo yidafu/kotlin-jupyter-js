@@ -1,24 +1,7 @@
 package dev.yidafu.jupyper
 
 class JsMagicMatcher(private val source: String) {
-    enum class LanguageType {
-        JS,
-        JSX,
-        TS,
-        TSX,
-        Kotlin,
-        ;
 
-        companion object {
-            fun formString(magic: String): LanguageType = when (magic) {
-                "%js", "%javascript" -> JS
-                "%jsx" -> JSX
-                "%ts", "%typescript" -> TS
-                "%tsx" -> TSX
-                else -> Kotlin // unreachable
-            }
-        }
-    }
     private val intervals by lazy {
         jsMagicIntervals(source)
     }

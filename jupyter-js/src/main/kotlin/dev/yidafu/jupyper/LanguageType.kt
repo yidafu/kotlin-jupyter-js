@@ -1,0 +1,20 @@
+package dev.yidafu.jupyper
+
+enum class LanguageType {
+    JS,
+    JSX,
+    TS,
+    TSX,
+    Kotlin,
+    ;
+
+    companion object {
+        fun formString(magic: String): LanguageType = when (magic) {
+            "%js", "%javascript" -> JS
+            "%jsx" -> JSX
+            "%ts", "%typescript" -> TS
+            "%tsx" -> TSX
+            else -> Kotlin // unreachable
+        }
+    }
+}
