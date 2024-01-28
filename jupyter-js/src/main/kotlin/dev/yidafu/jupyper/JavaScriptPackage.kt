@@ -31,13 +31,23 @@ class JavaScriptPackageSerializer : KSerializer<JavaScriptPackage> {
         val jsonEncoder = decoder as JsonDecoder
         return when (val obj = jsonEncoder.decodeJsonElement()) {
             is JsonPrimitive -> {
-                JavaScriptPackage(obj.content)
+                if (obj.isString) {
+                    JavaScriptPackage(obj.content)
+                } else {
+                    throw IllegalStateException("package url must be string")
+                }
             }
             is JsonObject -> {
                 val importSource = when (val default = obj["main"]) {
-                    is JsonPrimitive -> default.content
+                    is JsonPrimitive -> {
+                        if (default.isString) {
+                            default.content
+                        } else {
+                            throw IllegalStateException("main field must be string")
+                        }
+                    }
                     else -> {
-                        throw IllegalStateException("default filed must be string")
+                        throw IllegalStateException("main field must be string")
                     }
                 }
                 val extraSources = when (val extra = obj["extra"]) {
@@ -59,7 +69,7 @@ class JavaScriptPackageSerializer : KSerializer<JavaScriptPackage> {
             }
 
             else -> {
-                throw IllegalStateException("JavaScriptPackage must be string or object { importSource: string, extraSources: string[} }")
+                throw IllegalStateException("JavaScriptPackage must be string or object { main: string, extra: string[} }")
             }
         }
     }

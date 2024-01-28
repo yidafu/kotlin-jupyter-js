@@ -1,5 +1,6 @@
 package dev.yidafu.jupyper
 
+
 class JsMagicMatcher(private val source: String) {
 
     private val intervals by lazy {
@@ -30,7 +31,7 @@ class JsMagicMatcher(private val source: String) {
         if (intervals.isEmpty()) return LanguageType.Kotlin
         // last js magic will work
         intervals.last {
-             return LanguageType.formString(source.slice(it))
+             return LanguageType.fromString(source.slice(it))
         }
         return LanguageType.Kotlin
     }
@@ -121,3 +122,5 @@ class JsMagicMatcher(private val source: String) {
         return intervals
     }
 }
+
+

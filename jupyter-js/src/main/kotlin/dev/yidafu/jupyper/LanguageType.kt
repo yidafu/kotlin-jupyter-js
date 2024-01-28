@@ -9,7 +9,7 @@ enum class LanguageType {
     ;
 
     companion object {
-        fun formString(magic: String): LanguageType = when (magic) {
+        fun fromString(magic: String): LanguageType = when (magic) {
             "%js", "%javascript" -> JS
             "%jsx" -> JSX
             "%ts", "%typescript" -> TS
