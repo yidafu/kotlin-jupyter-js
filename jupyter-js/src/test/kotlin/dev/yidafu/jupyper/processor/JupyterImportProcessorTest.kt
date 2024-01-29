@@ -42,36 +42,9 @@ class JupyterImportProcessorTest : ShouldSpec({
 
     context("JupyterImportProcessor") {
         should("process and replace import statements with Kotlin variables") {
-            val notebookMock: Notebook = mockk(relaxed = true)
-            val contextMock: JavascriptProcessContext = mockk(relaxed = true)
+            val notebookMock: Notebook =  getMockNotebook()
 
-            every { notebookMock.variablesState } returns
-                    mapOf(
-                        "foo" to MockVariableState(
-                            MockScriptInstance::class.memberProperties.first(),
-                            MockScriptInstance,
-                            "",
-                            Result.success(MockScriptInstance.foo),
-                        ),
-                        "bar" to MockVariableState(
-                            MockScriptInstance::class.memberProperties.elementAt(1),
-                            MockScriptInstance,
-                            "",
-                            Result.success(MockScriptInstance.bar),
-                        ),
-                        "renderable" to MockVariableState(
-                            MockScriptInstance::class.memberProperties.elementAt(3),
-                            MockScriptInstance,
-                            "",
-                            Result.success(MockScriptInstance.renderable),
-                        ),
-                        "text" to MockVariableState(
-                            MockScriptInstance::class.memberProperties.elementAt(3),
-                            MockScriptInstance,
-                            "",
-                            Result.success(MockScriptInstance.text),
-                        )
-                    )
+            val contextMock: JavascriptProcessContext = mockk(relaxed = true)
 
             val program = processTestScript("import { foo, bar as renamedBar, renderable, text } from \"@jupyter\" ")
 

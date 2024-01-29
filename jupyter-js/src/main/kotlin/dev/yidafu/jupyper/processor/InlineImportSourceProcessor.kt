@@ -65,23 +65,24 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                             // inline remote source
                             if (originSource.substringAfter("?").contains("inline")) {
                                 log.info("fetch remote script $originSource")
-                                URL(originSource).readText()
+                                // readText is inline function, can't mock
+                                URL(originSource).readBytes().toString(Charsets.UTF_8)
                             } else {
                                 ""
                             }
                         }
 //                    log.debug("inline js context {}", inlineContext)
                     val langType = url2LanguageType(originSource)
-                    if (inlineContext.isNotEmpty() && langType != LanguageType.Kotlin) {
+                    if (inlineContext.isNotEmpty()) {
                         context.dependencyScope(originSource) {
                             val inlineProgram =
                                 when (langType) {
                                     LanguageType.JS -> context.processor.parseJsCode(inlineContext, context)
-                                    LanguageType.TS -> context.processor.transformJsxCode(inlineContext, context)
-                                    LanguageType.JSX -> context.processor.transformTsCode(inlineContext, context)
+                                    LanguageType.TS -> context.processor.transformTsCode(inlineContext, context)
+                                    LanguageType.JSX -> context.processor.transformJsxCode(inlineContext, context)
                                     LanguageType.TSX -> context.processor.transformTsxCode(inlineContext, context)
                                     // unreachable
-                                    else -> createModule { span = emptySpan() }
+                                    else -> throw IllegalStateException("Jupyter Js only support .js/.ts/.jsx/.tsx")
                                 }
 
                             val varName = url2VarName(originSource)
@@ -96,6 +97,7 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                                 val variableDeclarations =
                                     it.specifiers?.mapNotNull { specifier ->
                                         when (specifier) {
+                                            // import Foo from 'foo.js';
                                             is ImportDefaultSpecifier -> {
                                                 createImportVariableDeclaration(
                                                     specifier.local?.value!!,
@@ -103,12 +105,12 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                                                     "default",
                                                 )
                                             }
-
+                                            // import { foo } from 'foo.js';
                                             is NamedImportSpecifier -> {
                                                 val variableName = specifier.local?.value!!
                                                 createImportVariableDeclaration(variableName, varName, variableName)
                                             }
-
+                                            // import * as foo from 'foo.js'
                                             is ImportNamespaceSpecifier -> {
                                                 createImportVariableDeclaration(
                                                     createIdentifier {
@@ -140,6 +142,7 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
         val path = URI(url).path
         val ext = path.substring(path.lastIndexOf("."))
         return when (ext) {
+            ".mjs" -> LanguageType.JS
             ".js" -> LanguageType.JS
             ".jsx" -> LanguageType.JSX
             ".ts" -> LanguageType.TS

@@ -8,7 +8,7 @@ object LibsMapping : Map<String, JavaScriptPackage> {
         getLibMapping()
     }
 
-    private fun getResourceFile(filepath: String): String {
+    internal fun getResourceFile(filepath: String): String {
         return ImportSourceMappingProcessor::class.java.classLoader.getResource(filepath)?.readText() ?: ""
     }
 
@@ -16,7 +16,7 @@ object LibsMapping : Map<String, JavaScriptPackage> {
         return mLibsMapping[key]
     }
 
-    private fun getLibMapping(): Map<String, JavaScriptPackage> {
+    internal fun getLibMapping(): Map<String, JavaScriptPackage> {
         val libsMappingText = getResourceFile(LIBS_MAPPING_JSON_FILE_NAME)
         return if (libsMappingText.isNotEmpty()) {
             Json.decodeFromString<Map<String, JavaScriptPackage>>(libsMappingText)
