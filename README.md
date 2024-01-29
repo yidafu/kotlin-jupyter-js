@@ -1,3 +1,7 @@
+<div style="display:flex;margin: 24px">
+    <img src="./docs/logo.png" width="180" height="180" style="margin: auto"/>
+</div>
+
 # kotlin-notebook-js
 
 Jupyter Kotlin Kernel support `%js`/`%ts`/`%jsx`/`%tsx` line magics.
@@ -24,7 +28,7 @@ Jupyter Kotlin Kernel support `%js`/`%ts`/`%jsx`/`%tsx` line magics.
 USE {
     repositories {
         mavenCentral()
-         
+
         maven("https://s01.oss.sonatype.org/content/groups/public/")
     }
 
@@ -88,7 +92,8 @@ export default function App() {
 
 ## Using NPM Library
 
-You may want using npm package? fine, JupyterJs will transform js code into `<script type="module">`. this means you can import any script or package by http(s) link.
+You may want using npm package? fine, JupyterJs will transform js code into `<script type="module">`. this means you can
+import any script or package by http(s) link.
 
 like this:
 
@@ -99,7 +104,8 @@ import _ from 'https://cdn.jsdelivr.net/npm/lodash-es@4.17.21/lodash.min.js';
 
 **<https://esm.sh/> may help you**
 
-Too long to Coding? JupyterJs also support import source replacement. JupyterJs will replace import source which [libs-mapping.json](jupyter-js/src/main/resources/libs-mapping.json) contains into http(s) link
+Too long to Coding? JupyterJs also support import source replacement. JupyterJs will replace import source
+which [libs-mapping.json](jupyter-js/src/main/resources/libs-mapping.json) contains into http(s) link
 
 so, you can coding like this:
 

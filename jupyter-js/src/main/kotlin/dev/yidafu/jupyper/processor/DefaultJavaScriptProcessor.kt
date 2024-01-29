@@ -1,6 +1,6 @@
 package dev.yidafu.jupyper.processor
 
-import dev.yidafu.jupyper.JsMagicMatcher
+import dev.yidafu.jupyper.LanguageType
 import dev.yidafu.swc.SwcNative
 import dev.yidafu.swc.booleanable.BooleanableString
 import dev.yidafu.swc.dsl.jscConfig
@@ -233,18 +233,18 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
     }
 
     fun process(
-        langType: JsMagicMatcher.LanguageType,
+        langType: LanguageType,
         sourceCode: String,
     ): String {
         val context = JavascriptProcessContext(this)
         val result =
             context.dependencyScope("jupyter-cell.js") {
                 when (langType) {
-                    JsMagicMatcher.LanguageType.JS -> processJsCode(sourceCode, context)
-                    JsMagicMatcher.LanguageType.TS -> processTsCode(sourceCode, context)
-                    JsMagicMatcher.LanguageType.JSX -> processJsxCode(sourceCode, context)
-                    JsMagicMatcher.LanguageType.TSX -> processTsxCode(sourceCode, context)
-                    JsMagicMatcher.LanguageType.Kotlin -> sourceCode
+                    LanguageType.JS -> processJsCode(sourceCode, context)
+                    LanguageType.TS -> processTsCode(sourceCode, context)
+                    LanguageType.JSX -> processJsxCode(sourceCode, context)
+                    LanguageType.TSX -> processTsxCode(sourceCode, context)
+                    LanguageType.Kotlin -> sourceCode
                 }
             }
         // escaping javascript template ${ }

@@ -1,4 +1,6 @@
-package dev.yidafu.jupyper // ktlint-disable filename
+@file:Suppress("ktlint:standard:filename")
+
+package dev.yidafu.jupyper
 
 internal const val JSX_DEFAULT_EXPORT_VARIABLE_NAME = "__JupyterCellDefaultExportVariable__"
 

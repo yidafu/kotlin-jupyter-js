@@ -12,7 +12,7 @@ import kotlinx.serialization.json.*
 @Serializable(JavaScriptPackageSerializer::class)
 data class JavaScriptPackage(
     val mainSource: String,
-    val extraSources: List<String>? = null
+    val extraSources: List<String>? = null,
 ) {
     override fun toString(): String {
         return mainSource
@@ -20,51 +20,68 @@ data class JavaScriptPackage(
 }
 
 class JavaScriptPackageSerializer : KSerializer<JavaScriptPackage> {
-    override val descriptor = buildClassSerialDescriptor(
-        "JavaScriptPackage"
-    ) {
-        element<String>("main")
-        element<List<String>>("extra")
-    }
+    override val descriptor =
+        buildClassSerialDescriptor(
+            "JavaScriptPackage",
+        ) {
+            element<String>("main")
+            element<List<String>>("extra")
+        }
 
     override fun deserialize(decoder: Decoder): JavaScriptPackage {
         val jsonEncoder = decoder as JsonDecoder
         return when (val obj = jsonEncoder.decodeJsonElement()) {
             is JsonPrimitive -> {
-                JavaScriptPackage(obj.content)
+                if (obj.isString) {
+                    JavaScriptPackage(obj.content)
+                } else {
+                    throw IllegalStateException("package url must be string")
+                }
             }
             is JsonObject -> {
-                val importSource = when (val default = obj["main"]) {
-                    is JsonPrimitive -> default.content
-                    else -> {
-                        throw IllegalStateException("default filed must be string")
-                    }
-                }
-                val extraSources = when (val extra = obj["extra"]) {
-                    is JsonArray -> extra.map {
-                        if (it is JsonPrimitive && it.isString) {
-                            it.content
-                        } else {
-                            throw IllegalStateException("extra field must be Array<string>")
+                val importSource =
+                    when (val default = obj["main"]) {
+                        is JsonPrimitive -> {
+                            if (default.isString) {
+                                default.content
+                            } else {
+                                throw IllegalStateException("main field must be string")
+                            }
+                        }
+                        else -> {
+                            throw IllegalStateException("main field must be string")
                         }
                     }
-                    else -> {
-                        throw IllegalStateException("extra field must be Array")
+                val extraSources =
+                    when (val extra = obj["extra"]) {
+                        is JsonArray ->
+                            extra.map {
+                                if (it is JsonPrimitive && it.isString) {
+                                    it.content
+                                } else {
+                                    throw IllegalStateException("extra field must be Array<string>")
+                                }
+                            }
+                        else -> {
+                            throw IllegalStateException("extra field must be Array")
+                        }
                     }
-                }
                 JavaScriptPackage(
                     importSource,
-                    extraSources
+                    extraSources,
                 )
             }
 
             else -> {
-                throw IllegalStateException("JavaScriptPackage must be string or object { importSource: string, extraSources: string[} }")
+                throw IllegalStateException("JavaScriptPackage must be string or object { main: string, extra: string[} }")
             }
         }
     }
 
-    override fun serialize(encoder: Encoder, value: JavaScriptPackage) {
+    override fun serialize(
+        encoder: Encoder,
+        value: JavaScriptPackage,
+    ) {
         if (value.extraSources.isNullOrEmpty()) {
             encoder.encodeString(value.mainSource)
         } else {
