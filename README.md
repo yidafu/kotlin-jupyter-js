@@ -81,7 +81,35 @@ getCellRoot().innerHTML = `<h1>${kNumber}</h1>`
 
 ![image](https://github.com/yidafu/kotlin-jupyter-js/assets/22773923/cd1d84d3-7dcc-4f0f-8a3e-50300e4f7e4c)
 
-## React Example
+#### inline js script
+
+In some case, you may want to reuse js script.
+
+Jupyter JS support inline relative and remote script.
+
+Inline script supports all feature as js script in cell.
+
+you just import js script in local workspace, like: [example/local.js](./examples/local.js)
+
+```js
+%js
+import { foo } from './local.js'
+
+console.log(foo)
+// ==> 123
+```
+
+Or you may want using some shared script online. Add `?inline` query parameter after url.
+
+```js
+%js
+import { foo } from  "https://cdn.jsdelivr.net/gh/yidafu/kotlin-jupyter-js@main/examples/local.js?inline"
+
+console.log(foo)
+// ==> 123
+```
+
+### React Example
 
 Just export your component function.
 
@@ -97,11 +125,11 @@ export default function App() {
 }
 ```
 
-### screenshot
+#### screenshot
 
 ![image](https://github.com/yidafu/kotlin-jupyter-js/assets/22773923/c8902c7e-813d-41b3-be6b-b0ee192e890b)
 
-## Using NPM Library
+### Using NPM Library
 
 You may want using npm package? fine, JupyterJs will transform js code into `<script type="module">`. this means you can
 import any script or package by http(s) link.
