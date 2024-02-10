@@ -1,8 +1,14 @@
+[![Kotlin beta stability](https://img.shields.io/badge/project-beta-kotlin.svg?colorA=555555&colorB=AC29EC&label=&logo=kotlin&logoColor=ffffff&logoWidth=10)](https://kotlinlang.org/docs/components-stability.html)
+[![Maven Central](https://img.shields.io/maven-metadata/v.svg?color=blue&label=Maven%20artifacts&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fdev%2Fyidafu%2Fjupyter%2Fjupyter-js%2Fmaven-metadata.xml)](https://search.maven.org/search?q=kotlin-jupyter)
+[![GitHub](https://img.shields.io/github/license/yidafu/kotlin-jupyter-js)](https://www.apache.org/licenses/LICENSE-2.0)
+
+
 <div style="display:flex;margin: 24px">
     <img src="./docs/logo.png" width="180" height="180" style="margin: auto"/>
 </div>
 
 # kotlin-notebook-js
+
 
 Jupyter Kotlin Kernel support `%js`/`%ts`/`%jsx`/`%tsx` line magics.
 
@@ -24,11 +30,18 @@ Jupyter Kotlin Kernel support `%js`/`%ts`/`%jsx`/`%tsx` line magics.
 
 ### Import The Library First
 
+Latest dev jupyter kotlin kernel support `%use` magic.
+
+```kotlin
+%use jupyter-js
+```
+
+For old version, you have to using `USE {}` block.
+
 ```kt
 USE {
     repositories {
         mavenCentral()
-
         maven("https://s01.oss.sonatype.org/content/groups/public/")
     }
 
@@ -37,8 +50,6 @@ USE {
     }
 }
 ```
-
-> this project is not stable, so not support `%use` magic.
 
 ### JS Example
 
