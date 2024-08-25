@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory
  */
 object JavaScriptVariableStore : MutableMap<String, String> by mutableMapOf()
 
-val log: Logger = LoggerFactory.getLogger("jsExport")
 val json =
     Json {
         encodeDefaults = true
@@ -24,7 +23,6 @@ inline fun <reified T : Any> jsExport(
     variable: T,
 ) {
     val valueStr = json.encodeToString<T>(variable)
-    log.info("Add variable to JavaScript {}", varName)
 
     JavaScriptVariableStore[varName] = valueStr
 }
