@@ -28,7 +28,7 @@ class InlineImportSourceProcessorTest : ShouldSpec({
                     """
                     import * as foo from '/tmp/absolute.js';
                     import { bar } from './local.js';
-                    import './local2.js';
+                    import './local2.mjs';
                     """.trimIndent(),
                 )
             program shouldBe beOfType<ModuleImpl>()
@@ -43,7 +43,7 @@ class InlineImportSourceProcessorTest : ShouldSpec({
 
             every { File("/tmp/absolute.js").readText() } returns "export const foo = 'foo'"
             every { File("./local.js").readText() } returns
-                """
+                    """
                 |export const foo = 'foo';
                 |export function bar() {
                 |    return 'bar';
@@ -53,7 +53,7 @@ class InlineImportSourceProcessorTest : ShouldSpec({
                 |export { foo as baz, bar }
                 |export default Foo;
                 """.trimMargin()
-            every { File("./local2.js").readText() } returns "export const foo = 'foo'"
+            every { File("./local2.mjs").readText() } returns "export const foo = 'foo'"
 
             processor.process(program, context)
 
@@ -77,7 +77,7 @@ class InlineImportSourceProcessorTest : ShouldSpec({
             }
             mockkStatic(URL::readBytes)
             every { URL(originSource).readBytes() } returns
-                "export const foo = 'foo';\nexport default function foo() {};".toByteArray()
+                    "export const foo = 'foo';\nexport default function foo() {};".toByteArray()
 
             val notebook = getMockNotebook()
             val context = JavascriptProcessContext(DefaultJavaScriptProcessor(notebook))
@@ -194,5 +194,6 @@ class InlineImportSourceProcessorTest : ShouldSpec({
 //            transformedStats.size shouldBe expectedSize
             // ... 更具体的断言逻辑
         }
+
     }
 })
