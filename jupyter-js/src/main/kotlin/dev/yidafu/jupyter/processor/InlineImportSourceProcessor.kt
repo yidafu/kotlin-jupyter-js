@@ -11,8 +11,6 @@ import org.slf4j.LoggerFactory
 import java.io.File
 import java.net.URI
 import java.net.URL
-import kotlin.io.encoding.Base64
-import kotlin.io.encoding.ExperimentalEncodingApi
 
 /**
  * process inline code
@@ -47,10 +45,10 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
         program: Program,
         context: JavascriptProcessContext,
     ) {
-        val inlineSourceCache = mutableMapOf<String, VariableDeclaration>()
+//        val inlineSourceCache = mutableMapOf<String, VariableDeclaration>()
         if (program is Module) {
-            program.forEachImportDeclaration {
-                val originSource = it.source?.value
+            program.forEachImportDeclaration { declaration ->
+                val originSource = declaration.source?.value
                 if (!originSource.isNullOrEmpty()) {
                     // relative path, absolute path
                     val inlineContext =
@@ -71,12 +69,21 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                                 ""
                             }
                         }
-//                    log.debug("inline js context {}", inlineContext)
+                    log.debug("inline js context \n\n{}", inlineContext)
                     val langType = url2LanguageType(originSource)
                     if (inlineContext.isNotEmpty()) {
-                        context.dependencyScope(originSource) {
-                            val inlineProgram =
-                                when (langType) {
+                        log.info("dependency scope $originSource")
+                        context.dependencyScope<String>(originSource) {
+                            val replacements = mutableListOf<Statement>()
+
+                            val globalVarName = url2VarName(originSource)
+                            val localVarName = url2VarName(originSource, false)
+
+                            val varDeclaration = createImportStatement(localVarName, globalVarName)
+                            replacements.add(varDeclaration)
+                            if (!context.hasImport(globalVarName)) {
+                                context.addImport(globalVarName)
+                                val inlineProgram = when (langType) {
                                     LanguageType.JS -> context.processor.parseJsCode(inlineContext, context)
                                     LanguageType.TS -> context.processor.transformTsCode(inlineContext, context)
                                     LanguageType.JSX -> context.processor.transformJsxCode(inlineContext, context)
@@ -85,52 +92,55 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                                     else -> throw IllegalStateException("Jupyter Js only support .js/.ts/.jsx/.tsx")
                                 }
 
-                            val varName = url2VarName(originSource)
-                            if (inlineProgram is Module) {
-                                val replacements = mutableListOf<Statement>()
-                                if (!inlineSourceCache.containsKey(varName)) {
-                                    val iife = toIIFE(varName, inlineProgram)
-                                    inlineSourceCache[varName] = iife
-                                    replacements.add(iife)
-                                }
-
-                                val variableDeclarations =
-                                    it.specifiers?.mapNotNull { specifier ->
-                                        when (specifier) {
-                                            // import Foo from 'foo.js';
-                                            is ImportDefaultSpecifier -> {
-                                                createImportVariableDeclaration(
-                                                    specifier.local?.value!!,
-                                                    varName,
-                                                    "default",
-                                                )
-                                            }
-                                            // import { foo } from 'foo.js';
-                                            is NamedImportSpecifier -> {
-                                                val variableName = specifier.local?.value!!
-                                                createImportVariableDeclaration(variableName, varName, variableName)
-                                            }
-                                            // import * as foo from 'foo.js'
-                                            is ImportNamespaceSpecifier -> {
-                                                createImportVariableDeclaration(
-                                                    createIdentifier {
-                                                        span = emptySpan()
-                                                        value = specifier.local?.value!!
-                                                        optional = false
-                                                    },
-                                                    createIdentifier {
-                                                        span = emptySpan()
-                                                        value = varName
-                                                    },
-                                                )
-                                            }
-
-                                            else -> null
-                                        }
-                                    } ?: emptyList()
-                                replacements.addAll(variableDeclarations)
-                                program.replace(it, *(replacements.toTypedArray()))
+                                val iife = toIIFE(globalVarName, inlineProgram as Module)
+                                context.addGlobalImportStat(globalVarName, iife)
                             }
+
+//                            if (inlineProgram is Module) {
+
+                            val variableDeclarations =
+                                declaration.specifiers?.mapNotNull { specifier ->
+                                    when (specifier) {
+                                        // import Foo from 'foo.js';
+                                        is ImportDefaultSpecifier -> {
+                                            createImportVariableDeclaration(
+                                                specifier.local?.value!!,
+                                                localVarName,
+                                                "default",
+                                            )
+                                        }
+                                        // import { foo } from 'foo.js';
+                                        is NamedImportSpecifier -> {
+                                            val variableName = specifier.local?.value!!
+                                            createImportVariableDeclaration(
+                                                variableName,
+                                                localVarName,
+                                                variableName
+                                            )
+                                        }
+                                        // import * as foo from 'foo.js'
+                                        is ImportNamespaceSpecifier -> {
+                                            createImportVariableDeclaration(
+                                                createIdentifier {
+                                                    span = emptySpan()
+                                                    value = specifier.local?.value!!
+                                                    optional = false
+                                                },
+                                                createIdentifier {
+                                                    span = emptySpan()
+                                                    value = localVarName
+                                                },
+                                            )
+                                        }
+
+                                        else -> null
+                                    }
+                                } ?: emptyList()
+                            replacements.addAll(variableDeclarations)
+                            program.replace(declaration, *(replacements.toTypedArray()))
+//                            }
+
+                            globalVarName
                         }
                     }
                 }
@@ -151,9 +161,25 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
         }
     }
 
-    @OptIn(ExperimentalEncodingApi::class)
-    private fun url2VarName(url: String): String {
-        return "inline_" + Base64.encode(url.toByteArray()).replace("=", "")
+    private fun createImportStatement(var1: String, var2: String): VariableDeclaration {
+        return createVariableDeclaration {
+            span = emptySpan()
+            kind = "const"
+            declarations = arrayOf(
+                variableDeclarator {
+                    span = emptySpan()
+                    id = identifier {
+                        span = emptySpan()
+                        value = var1
+                    }
+                    definite = false
+                    init = identifier {
+                        span = emptySpan()
+                        value = var2
+                    }
+                }
+            )
+        }
     }
 
     private fun toIIFE(

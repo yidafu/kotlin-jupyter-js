@@ -1,6 +1,8 @@
 package dev.yidafu.jupyter.swc
 
 import dev.yidafu.swc.types.*
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 fun Module.forEachImportDeclaration(block: (importDeclaration: ImportDeclaration) -> Unit) {
     val bodyAlt = body ?: emptyArray()
@@ -20,6 +22,17 @@ fun Module.forEachExportDeclaration(block: (importDeclaration: ExportDeclaration
             block(moduleItem)
         }
     }
+}
+
+fun Module.remove(sourceItem: ModuleItem) {
+    val newBody = mutableListOf<ModuleItem>()
+    body?.forEach {
+        if (it == sourceItem) {
+            newBody.add(it)
+        }
+    }
+
+    body = newBody.toTypedArray()
 }
 
 fun Module.replace(
@@ -64,4 +77,15 @@ fun ModuleExportName?.getValue(): String? {
         return value
     }
     return null
+}
+
+fun Program.addFirst(list: List<ModuleItem>) {
+    if (this is Module) {
+        val newBody = mutableListOf<ModuleItem>()
+        newBody.addAll(list)
+        body?.forEach {
+            newBody.add(it)
+        }
+        body = newBody.toTypedArray()
+    }
 }

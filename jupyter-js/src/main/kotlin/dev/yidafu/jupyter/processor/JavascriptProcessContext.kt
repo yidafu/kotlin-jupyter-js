@@ -1,18 +1,21 @@
 package dev.yidafu.jupyter.processor
 
-import dev.yidafu.jupyter.CircularDependencyException
+import dev.yidafu.swc.types.VariableDeclaration
 import org.slf4j.LoggerFactory
+import java.util.*
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 data class DependenceNode(
     val source: String,
     val parent: DependenceNode? = null,
     val children: MutableList<DependenceNode> = mutableListOf(),
 ) {
-    fun hasChildren(source: String): Boolean {
+    private fun hasChildren(source: String): Boolean {
         return children.any { it.source == source }
     }
 
-    fun getChildren(source: String): DependenceNode? {
+    private fun getChildren(source: String): DependenceNode? {
         return children.find { it.source == source }
     }
 
@@ -25,6 +28,11 @@ data class DependenceNode(
             getChildren(child)!!
         }
     }
+}
+
+@OptIn(ExperimentalEncodingApi::class)
+internal fun url2VarName(url: String, global: Boolean = true): String {
+    return  (if (global) "global_" else "inline_") + Base64.encode(url.toByteArray()).replace("=", "")
 }
 
 /**
@@ -42,34 +50,45 @@ class JavascriptProcessContext(
     private val root = DependenceNode("root")
 
     private var currentDepNode: DependenceNode = root
+    private val importQueue: Deque<String> = LinkedList()
 
+    fun addImport(varName: String) {
+        if (importQueue.contains(varName)) {
+            importQueue.remove(varName)
+        }
+        importQueue.offerFirst(varName)
+    }
+
+    private val globalImportStat = mutableMapOf<String, VariableDeclaration>()
+    
+    fun addGlobalImportStat(varName: String, stat: VariableDeclaration) {
+        addImport(varName)
+        globalImportStat[varName] = stat
+    }
+
+    fun hasImport(varName: String): Boolean {
+        return importQueue.contains(varName)
+    }
+    val globalImports: List<VariableDeclaration>
+        get() {
+            return importQueue.mapNotNull {varName ->
+                globalImportStat[varName]
+            }
+        }
     fun <T> dependencyScope(
         source: String,
         block: () -> T,
-    ): T {
-        log.info("enter scope: $source")
-        val newDepNode = currentDepNode.addChildren(source)
-        currentDepNode = newDepNode
-        val result = block()
-        currentDepNode = currentDepNode.parent!!
-        log.info("exit scope: $source")
-
-        return result
-    }
-
-    /**
-     * detect circular dependency
-     */
-    fun addDependency(child: String) {
-        var p: DependenceNode? = currentDepNode
-        while (p != null) {
-            if (p.source == child) {
-                throw CircularDependencyException(p.source, child)
-            }
-            p = p.parent
+    ): T? {
+        if (!globalImportStat.containsKey(url2VarName(source))) {
+            log.info("enter scope: $source")
+            val newDepNode = currentDepNode.addChildren(source)
+            currentDepNode = newDepNode
+            val result = block()
+            currentDepNode = currentDepNode.parent!!
+            log.info("exit scope: $source")
+            return result
         }
-        log.info("${currentDepNode.source} add dependency $child")
-        currentDepNode.addChildren(child)
+        return null
     }
 
     fun addKotlinValue(pair: Pair<String, String>) {

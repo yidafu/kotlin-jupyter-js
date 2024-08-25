@@ -1,12 +1,14 @@
 package dev.yidafu.jupyter.processor
 
 import dev.yidafu.jupyter.LanguageType
+import dev.yidafu.jupyter.swc.addFirst
 import dev.yidafu.swc.SwcNative
 import dev.yidafu.swc.booleanable.BooleanableString
 import dev.yidafu.swc.dsl.jscConfig
 import dev.yidafu.swc.esParseOptions
 import dev.yidafu.swc.options
 import dev.yidafu.swc.tsParseOptions
+import dev.yidafu.swc.types.Module
 import dev.yidafu.swc.types.Program
 import org.jetbrains.kotlinx.jupyter.api.Notebook
 import org.slf4j.LoggerFactory
@@ -106,6 +108,8 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
         context: JavascriptProcessContext,
     ): String {
         val program = parseJsCode(source, context)
+        log.warn("processJsCode ${context.globalImports.size}")
+        program.addFirst(context.globalImports)
 
         val output =
             swcCompiler.printSync(
@@ -148,6 +152,8 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
         context: JavascriptProcessContext,
     ): String {
         val program = transformTsCode(source, context)
+        program.addFirst(context.globalImports)
+
         val output = swcCompiler.printSync(program, tsPrintOpt)
 
         return "dev.yidafu.jupyter.JsCodeResult(\"\"\" $context\n ${output.code} \"\"\")"
@@ -188,7 +194,7 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
         val program = transformJsxCode(source, context)
 
         executeJsxProcessor(program, context)
-
+        program.addFirst(context.globalImports)
         val output = swcCompiler.printSync(program, jsPrintOpt)
 
         return "dev.yidafu.jupyter.JsxCodeResult(\"\"\" $context\n ${output.code} \"\"\")"
@@ -226,7 +232,7 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
         val program = transformTsxCode(source, context)
 
         executeJsxProcessor(program, context)
-
+        program.addFirst(context.globalImports)
         val output = swcCompiler.printSync(program, tsPrintOpt)
 
         return "dev.yidafu.jupyter.JsxCodeResult(\"\"\" $context\n ${output.code} \"\"\")"
@@ -249,7 +255,7 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
             }
         // escaping javascript template ${ }
         // https://stackoverflow.com/a/32994616
-        val output = result.replace("\${", "\${'$'}{")
+        val output = result?.replace("\${", "\${'$'}{") ?: ""
         log.debug("javascript output code:\n{}", output)
         return output
     }
