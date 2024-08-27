@@ -3,9 +3,9 @@
   "react-dom":  "https://esm.sh/react-dom@18.2.0/client",
   "echarts": "https://cdn.jsdelivr.net/gh/yidafu/echarts-gl-esm@1.0.1/esm/echarts.js",
   "vis-data": "https://esm.sh/vis-data@7.1.9",
-  "vis-graph3d": "https://esm.sh/vis-graph3d@6.0.6",
-  "vis-network":  "https://esm.sh/vis-network@9.1.9",
-  "vis-timeline": "https://esm.sh/vis-timeline@7.7.3",
+  "vis-graph3d": "https://esm.sh/vis-graph3d@6.0.6/standalone",
+  "vis-network":  "https://esm.sh/vis-network@9.1.9/standalone",
+  "vis-timeline": "https://esm.sh/vis-timeline@7.7.3/standalone",
   "lodash": "https://cdn.jsdelivr.net/npm/lodash-es@4.17.21/lodash.min.js\n",
   "d3": "https://cdn.jsdelivr.net/npm/d3@7/+esm",
   "highcharts": {
