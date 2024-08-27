@@ -42,6 +42,7 @@ For old version, you have to using `USE {}` block.
 USE {
     repositories {
         mavenCentral()
+
         maven("https://s01.oss.sonatype.org/content/groups/public/")
     }
 
