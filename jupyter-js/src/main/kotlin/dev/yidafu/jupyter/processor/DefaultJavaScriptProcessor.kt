@@ -8,7 +8,6 @@ import dev.yidafu.swc.dsl.jscConfig
 import dev.yidafu.swc.esParseOptions
 import dev.yidafu.swc.options
 import dev.yidafu.swc.tsParseOptions
-import dev.yidafu.swc.types.Module
 import dev.yidafu.swc.types.Program
 import org.jetbrains.kotlinx.jupyter.api.Notebook
 import org.slf4j.LoggerFactory

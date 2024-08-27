@@ -3,7 +3,6 @@ package dev.yidafu.jupyter
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
 
-
 class JsExportTest : ShouldSpec({
     should("export kotlin variable to js world") {
         jsExport("num", 1234)

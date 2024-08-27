@@ -11,8 +11,11 @@ fun processTestScript(script: String): Program {
     return compiler.parseSync(script, esParseOptions { }, "test.js")
 }
 
-fun printTestProgram(porgram: Program) : String {
-    return compiler.printSync(porgram, options {
-        filename = "test.js"
-    }).code
+fun printTestProgram(porgram: Program): String {
+    return compiler.printSync(
+        porgram,
+        options {
+            filename = "test.js"
+        },
+    ).code
 }

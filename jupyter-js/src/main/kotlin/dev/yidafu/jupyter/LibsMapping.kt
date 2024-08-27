@@ -19,7 +19,7 @@ class LibsMapping(
     }
 
     internal fun getLibMapping(): Map<String, JavaScriptPackage> {
-        val libsMappingText = getResourceFile(mappingPath )
+        val libsMappingText = getResourceFile(mappingPath)
         return if (libsMappingText.isNotEmpty()) {
             Json.decodeFromString<Map<String, JavaScriptPackage>>(libsMappingText)
         } else {

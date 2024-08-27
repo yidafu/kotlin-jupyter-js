@@ -298,7 +298,7 @@ class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
     }
 
     @Test
-    fun `jsExport`() {
+    fun `using 'jsExport' to export JavaScript world`() {
         exec(
             """
             val foo = "string";
@@ -361,27 +361,5 @@ class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
 
         val html = (result[MimeTypes.HTML] as String)
         assertContains(html, "\${foo")
-    }
-
-    @Test
-    fun `using 'jsExport' to export JavaScript world`() {
-        exec(
-            """
-            USE {
-                addCodePreprocessor(dev.yidafu.jupyter.JavaScriptMagicCodeProcessor(this.notebook));
-                import("dev.yidafu.jupyter.jsExport");
-            }
-            """.trimIndent(),
-        )
-        exec("""
-            jsExport("jsVar", 123);
-        """.trimIndent())
-        val result = exec("""
-            %js
-            import { jsVar } from "@jupyter";
-            console.log(jsVar);
-        """.trimIndent()) as MimeTypedResult
-        val html =   (result[MimeTypes.HTML] as String)
-        assertContains(html, "const jsVar = 123")
     }
 }

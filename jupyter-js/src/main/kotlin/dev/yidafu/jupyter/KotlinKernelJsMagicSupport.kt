@@ -5,6 +5,7 @@ package dev.yidafu.jupyter
 
 import org.jetbrains.kotlinx.jupyter.api.annotations.JupyterLibrary
 import org.jetbrains.kotlinx.jupyter.api.libraries.JupyterIntegration
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 /**
@@ -12,7 +13,7 @@ import org.slf4j.LoggerFactory
  */
 @JupyterLibrary
 class KotlinKernelJsMagicSupport : JupyterIntegration() {
-    val log = LoggerFactory.getLogger(KotlinKernelJsMagicSupport::class.java)
+    val log: Logger = LoggerFactory.getLogger(KotlinKernelJsMagicSupport::class.java)
 
     override fun Builder.onLoaded() {
         import(

@@ -1,8 +1,6 @@
 package dev.yidafu.jupyter.swc
 
 import dev.yidafu.swc.types.*
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 fun Module.forEachImportDeclaration(block: (importDeclaration: ImportDeclaration) -> Unit) {
     val bodyAlt = body ?: emptyArray()
