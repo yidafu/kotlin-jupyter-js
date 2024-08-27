@@ -83,14 +83,15 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                             replacements.add(varDeclaration)
                             if (!context.hasImport(globalVarName)) {
                                 context.addImport(globalVarName)
-                                val inlineProgram = when (langType) {
-                                    LanguageType.JS -> context.processor.parseJsCode(inlineContext, context)
-                                    LanguageType.TS -> context.processor.transformTsCode(inlineContext, context)
-                                    LanguageType.JSX -> context.processor.transformJsxCode(inlineContext, context)
-                                    LanguageType.TSX -> context.processor.transformTsxCode(inlineContext, context)
-                                    // unreachable
-                                    else -> throw IllegalStateException("Jupyter Js only support .js/.ts/.jsx/.tsx")
-                                }
+                                val inlineProgram =
+                                    when (langType) {
+                                        LanguageType.JS -> context.processor.parseJsCode(inlineContext, context)
+                                        LanguageType.TS -> context.processor.transformTsCode(inlineContext, context)
+                                        LanguageType.JSX -> context.processor.transformJsxCode(inlineContext, context)
+                                        LanguageType.TSX -> context.processor.transformTsxCode(inlineContext, context)
+                                        // unreachable
+                                        else -> throw IllegalStateException("Jupyter Js only support .js/.ts/.jsx/.tsx")
+                                    }
 
                                 val iife = toIIFE(globalVarName, inlineProgram as Module)
                                 context.addGlobalImportStat(globalVarName, iife)
@@ -115,7 +116,7 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                                             createImportVariableDeclaration(
                                                 variableName,
                                                 localVarName,
-                                                variableName
+                                                variableName,
                                             )
                                         }
                                         // import * as foo from 'foo.js'
@@ -161,24 +162,30 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
         }
     }
 
-    private fun createImportStatement(var1: String, var2: String): VariableDeclaration {
+    private fun createImportStatement(
+        var1: String,
+        var2: String,
+    ): VariableDeclaration {
         return createVariableDeclaration {
             span = emptySpan()
             kind = "const"
-            declarations = arrayOf(
-                variableDeclarator {
-                    span = emptySpan()
-                    id = identifier {
+            declarations =
+                arrayOf(
+                    variableDeclarator {
                         span = emptySpan()
-                        value = var1
-                    }
-                    definite = false
-                    init = identifier {
-                        span = emptySpan()
-                        value = var2
-                    }
-                }
-            )
+                        id =
+                            identifier {
+                                span = emptySpan()
+                                value = var1
+                            }
+                        definite = false
+                        init =
+                            identifier {
+                                span = emptySpan()
+                                value = var2
+                            }
+                    },
+                )
         }
     }
 

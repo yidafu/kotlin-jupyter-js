@@ -1,5 +1,6 @@
 package dev.yidafu.jupyter.processor
 
+import dev.yidafu.jupyter.CircularDependencyException
 import dev.yidafu.swc.types.*
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.ShouldSpec
@@ -43,7 +44,7 @@ class InlineImportSourceProcessorTest : ShouldSpec({
 
             every { File("/tmp/absolute.js").readText() } returns "export const foo = 'foo'"
             every { File("./local.js").readText() } returns
-                    """
+                """
                 |export const foo = 'foo';
                 |export function bar() {
                 |    return 'bar';
@@ -77,7 +78,7 @@ class InlineImportSourceProcessorTest : ShouldSpec({
             }
             mockkStatic(URL::readBytes)
             every { URL(originSource).readBytes() } returns
-                    "export const foo = 'foo';\nexport default function foo() {};".toByteArray()
+                "export const foo = 'foo';\nexport default function foo() {};".toByteArray()
 
             val notebook = getMockNotebook()
             val context = JavascriptProcessContext(DefaultJavaScriptProcessor(notebook))
@@ -183,17 +184,36 @@ class InlineImportSourceProcessorTest : ShouldSpec({
             }
         }
 
-        should("properly handle export transformations") {
-            // 提供一组示例模块项 (ModuleItem)，然后验证 transformExport 函数的输出结果
-//            val moduleItems = listOf(
-            // 示例 ModuleItem 实例
-//            )
-//            val transformedStats = processor.transformExport(moduleItems)
+        should("throw  CircularDependencyException when circular dependency occur") {
+            val program =
+                processTestScript(
+                    """
+                    import { bar } from './local.js';
+                    console.log('main.js', bar);
+                    """.trimIndent(),
+                )
+            val notebook = getMockNotebook()
+            val context = JavascriptProcessContext(DefaultJavaScriptProcessor(notebook))
 
-            // 针对每个预期的输出 Statement 进行断言
-//            transformedStats.size shouldBe expectedSize
-            // ... 更具体的断言逻辑
+            mockkStatic("kotlin.io.FilesKt__FileReadWriteKt")
+
+            every { File("./local.js").readText() } returns
+                """
+                import { bar } from './local-2.js';
+                console.log('local.js', bar);
+                const foo = "foo";
+                export { bar, foo };
+                """.trimIndent()
+            every { File("./local-2.js").readText() } returns
+                """
+                import { foo } from "./local.js";
+                console.log("local-2.js", foo);
+                export const bar = "bar";
+                """.trimIndent()
+
+            shouldThrow<CircularDependencyException> {
+                processor.process(program, context)
+            }
         }
-
     }
 })

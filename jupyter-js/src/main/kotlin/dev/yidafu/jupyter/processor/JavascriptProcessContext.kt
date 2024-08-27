@@ -1,5 +1,6 @@
 package dev.yidafu.jupyter.processor
 
+import dev.yidafu.jupyter.CircularDependencyException
 import dev.yidafu.swc.types.VariableDeclaration
 import org.slf4j.LoggerFactory
 import java.util.*
@@ -19,7 +20,18 @@ data class DependenceNode(
         return children.find { it.source == source }
     }
 
+    private fun detectCircularDependency(child: String) {
+        var node = parent
+        while (node != null) {
+            if (node.source == child) {
+                throw CircularDependencyException(node.source, child)
+            }
+            node = node.parent
+        }
+    }
+
     fun addChildren(child: String): DependenceNode {
+        detectCircularDependency(child)
         return if (!hasChildren(child)) {
             val newChild = DependenceNode(child, this)
             children.add(newChild)
@@ -31,8 +43,11 @@ data class DependenceNode(
 }
 
 @OptIn(ExperimentalEncodingApi::class)
-internal fun url2VarName(url: String, global: Boolean = true): String {
-    return  (if (global) "global_" else "inline_") + Base64.encode(url.toByteArray()).replace("=", "")
+internal fun url2VarName(
+    url: String,
+    global: Boolean = true,
+): String {
+    return (if (global) "global_" else "inline_") + Base64.encode(url.toByteArray()).replace("=", "")
 }
 
 /**
@@ -60,8 +75,11 @@ class JavascriptProcessContext(
     }
 
     private val globalImportStat = mutableMapOf<String, VariableDeclaration>()
-    
-    fun addGlobalImportStat(varName: String, stat: VariableDeclaration) {
+
+    fun addGlobalImportStat(
+        varName: String,
+        stat: VariableDeclaration,
+    ) {
         addImport(varName)
         globalImportStat[varName] = stat
     }
@@ -69,12 +87,14 @@ class JavascriptProcessContext(
     fun hasImport(varName: String): Boolean {
         return importQueue.contains(varName)
     }
+
     val globalImports: List<VariableDeclaration>
         get() {
-            return importQueue.mapNotNull {varName ->
+            return importQueue.mapNotNull { varName ->
                 globalImportStat[varName]
             }
         }
+
     fun <T> dependencyScope(
         source: String,
         block: () -> T,
