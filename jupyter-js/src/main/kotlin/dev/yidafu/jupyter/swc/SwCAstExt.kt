@@ -12,26 +12,26 @@ fun Module.forEachImportDeclaration(block: (importDeclaration: ImportDeclaration
     }
 }
 
-fun Module.forEachExportDeclaration(block: (importDeclaration: ExportDeclaration) -> Unit) {
-    val bodyAlt = body ?: emptyArray()
+//fun Module.forEachExportDeclaration(block: (importDeclaration: ExportDeclaration) -> Unit) {
+//    val bodyAlt = body ?: emptyArray()
+//
+//    bodyAlt.forEach { moduleItem ->
+//        if (moduleItem is ExportDeclaration) {
+//            block(moduleItem)
+//        }
+//    }
+//}
 
-    bodyAlt.forEach { moduleItem ->
-        if (moduleItem is ExportDeclaration) {
-            block(moduleItem)
-        }
-    }
-}
-
-fun Module.remove(sourceItem: ModuleItem) {
-    val newBody = mutableListOf<ModuleItem>()
-    body?.forEach {
-        if (it == sourceItem) {
-            newBody.add(it)
-        }
-    }
-
-    body = newBody.toTypedArray()
-}
+//fun Module.remove(sourceItem: ModuleItem) {
+//    val newBody = mutableListOf<ModuleItem>()
+//    body?.forEach {
+//        if (it == sourceItem) {
+//            newBody.add(it)
+//        }
+//    }
+//
+//    body = newBody.toTypedArray()
+//}
 
 fun Module.replace(
     sourceItem: ModuleItem,
@@ -51,21 +51,21 @@ fun Module.replace(
     body = newBody.toTypedArray()
 }
 
-fun Module.appendAfter(
-    item: ModuleItem,
-    vararg appendItem: ModuleItem,
-) {
-    val newBody = mutableListOf<ModuleItem>()
-    body?.forEach {
-        newBody.add(it)
-        if (it == item) {
-            appendItem.forEach { i ->
-                newBody.add(i)
-            }
-        }
-    }
-    body = newBody.toTypedArray()
-}
+//fun Module.appendAfter(
+//    item: ModuleItem,
+//    vararg appendItem: ModuleItem,
+//) {
+//    val newBody = mutableListOf<ModuleItem>()
+//    body?.forEach {
+//        newBody.add(it)
+//        if (it == item) {
+//            appendItem.forEach { i ->
+//                newBody.add(i)
+//            }
+//        }
+//    }
+//    body = newBody.toTypedArray()
+//}
 
 fun ModuleExportName?.getValue(): String? {
     if (this is Identifier) {
