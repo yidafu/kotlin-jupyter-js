@@ -1,4 +1,14 @@
+[![Kotlin beta stability](https://img.shields.io/badge/project-beta-kotlin.svg?colorA=555555&colorB=AC29EC&label=&logo=kotlin&logoColor=ffffff&logoWidth=10)](https://kotlinlang.org/docs/components-stability.html)
+[![Maven Central](https://img.shields.io/maven-metadata/v.svg?color=blue&label=Maven%20artifacts&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fdev%2Fyidafu%2Fjupyter%2Fjupyter-js%2Fmaven-metadata.xml)](https://search.maven.org/search?q=kotlin-jupyter)
+[![GitHub](https://img.shields.io/github/license/yidafu/kotlin-jupyter-js)](https://www.apache.org/licenses/LICENSE-2.0)
+
+
+<div style="display:flex;margin: 24px">
+    <img src="./docs/logo.png" width="180" height="180" style="margin: auto"/>
+</div>
+
 # kotlin-notebook-js
+
 
 Jupyter Kotlin Kernel support `%js`/`%ts`/`%jsx`/`%tsx` line magics.
 
@@ -20,11 +30,19 @@ Jupyter Kotlin Kernel support `%js`/`%ts`/`%jsx`/`%tsx` line magics.
 
 ### Import The Library First
 
+Latest dev jupyter kotlin kernel support `%use` magic.
+
+```kotlin
+%use jupyter-js
+```
+
+For old version, you have to using `USE {}` block.
+
 ```kt
 USE {
     repositories {
         mavenCentral()
-         
+
         maven("https://s01.oss.sonatype.org/content/groups/public/")
     }
 
@@ -33,8 +51,6 @@ USE {
     }
 }
 ```
-
-> this project is not stable, so not support `%use` magic.
 
 ### JS Example
 
@@ -66,7 +82,35 @@ getCellRoot().innerHTML = `<h1>${kNumber}</h1>`
 
 ![image](https://github.com/yidafu/kotlin-jupyter-js/assets/22773923/cd1d84d3-7dcc-4f0f-8a3e-50300e4f7e4c)
 
-## React Example
+#### inline js script
+
+In some case, you may want to reuse js script.
+
+Jupyter JS support inline relative and remote script.
+
+Inline script supports all feature as js script in cell.
+
+you just import js script in local workspace, like: [example/local.js](./examples/local.js)
+
+```js
+%js
+import { foo } from './local.js'
+
+console.log(foo)
+// ==> 123
+```
+
+Or you may want using some shared script online. Add `?inline` query parameter after url.
+
+```js
+%js
+import { foo } from  "https://cdn.jsdelivr.net/gh/yidafu/kotlin-jupyter-js@main/examples/local.js?inline"
+
+console.log(foo)
+// ==> 123
+```
+
+### React Example
 
 Just export your component function.
 
@@ -82,13 +126,14 @@ export default function App() {
 }
 ```
 
-### screenshot
+#### screenshot
 
 ![image](https://github.com/yidafu/kotlin-jupyter-js/assets/22773923/c8902c7e-813d-41b3-be6b-b0ee192e890b)
 
-## Using NPM Library
+### Using NPM Library
 
-You may want using npm package? fine, JupyterJs will transform js code into `<script type="module">`. this means you can import any script or package by http(s) link.
+You may want using npm package? fine, JupyterJs will transform js code into `<script type="module">`. this means you can
+import any script or package by http(s) link.
 
 like this:
 
@@ -99,7 +144,8 @@ import _ from 'https://cdn.jsdelivr.net/npm/lodash-es@4.17.21/lodash.min.js';
 
 **<https://esm.sh/> may help you**
 
-Too long to Coding? JupyterJs also support import source replacement. JupyterJs will replace import source which [libs-mapping.json](jupyter-js/src/main/resources/libs-mapping.json) contains into http(s) link
+Too long to Coding? JupyterJs also support import source replacement. JupyterJs will replace import source
+which [libs-mapping.json](jupyter-js/src/main/resources/libs-mapping.json) contains into http(s) link
 
 so, you can coding like this:
 

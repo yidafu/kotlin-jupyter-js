@@ -136,7 +136,7 @@ class LibraryPlugin : Plugin<Project> {
             doFirst {
                 val publishMan = this.project.extensions.findByType<PublishManExtension>()
                 this.project.extensions.findByType(PublishingExtension::class)?.let { ext ->
-                    println("pom name ${publishMan?.name?.getOrElse("")}")
+//                    println("pom name ${publishMan?.name?.getOrElse("")}")
                     ext.publications {
                         val publication = findByName(PUBLICATION_NAME) as MavenPublication
                         publication.pom {
