@@ -15,5 +15,8 @@
       "https://code.highcharts.com/es-modules/masters/modules/exporting.src.js",
       "https://code.highcharts.com/es-modules/masters/modules/export-data.src.js"
     ]
+  },
+  "three": {
+    "main": "https://cdn.jsdelivr.net/npm/three@v0.149.0/build/three.module.js"
   }
 }
