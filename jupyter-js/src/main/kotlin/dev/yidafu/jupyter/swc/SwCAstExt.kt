@@ -12,7 +12,7 @@ fun Module.forEachImportDeclaration(block: (importDeclaration: ImportDeclaration
     }
 }
 
-//fun Module.forEachExportDeclaration(block: (importDeclaration: ExportDeclaration) -> Unit) {
+// fun Module.forEachExportDeclaration(block: (importDeclaration: ExportDeclaration) -> Unit) {
 //    val bodyAlt = body ?: emptyArray()
 //
 //    bodyAlt.forEach { moduleItem ->
@@ -20,9 +20,9 @@ fun Module.forEachImportDeclaration(block: (importDeclaration: ImportDeclaration
 //            block(moduleItem)
 //        }
 //    }
-//}
+// }
 
-//fun Module.remove(sourceItem: ModuleItem) {
+// fun Module.remove(sourceItem: ModuleItem) {
 //    val newBody = mutableListOf<ModuleItem>()
 //    body?.forEach {
 //        if (it == sourceItem) {
@@ -31,7 +31,7 @@ fun Module.forEachImportDeclaration(block: (importDeclaration: ImportDeclaration
 //    }
 //
 //    body = newBody.toTypedArray()
-//}
+// }
 
 fun Module.replace(
     sourceItem: ModuleItem,
@@ -51,10 +51,10 @@ fun Module.replace(
     body = newBody.toTypedArray()
 }
 
-//fun Module.appendAfter(
+// fun Module.appendAfter(
 //    item: ModuleItem,
 //    vararg appendItem: ModuleItem,
-//) {
+// ) {
 //    val newBody = mutableListOf<ModuleItem>()
 //    body?.forEach {
 //        newBody.add(it)
@@ -65,7 +65,7 @@ fun Module.replace(
 //        }
 //    }
 //    body = newBody.toTypedArray()
-//}
+// }
 
 fun ModuleExportName?.getValue(): String? {
     if (this is Identifier) {
