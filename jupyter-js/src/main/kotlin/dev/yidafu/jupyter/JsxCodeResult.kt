@@ -12,16 +12,6 @@ class JsxCodeResult(private val jsCode: String) : Renderable {
     }
     private val pattern: Regex = """from\s+['"]react['"]""".toRegex()
 
-    private val reactImportStatement: String
-        get() {
-            val isReactImported = pattern.containsMatchIn(jsCode)
-            return if (isReactImported) {
-                ""
-            } else {
-                """import React from "${LibsMapping.default["react"]}";"""
-            }
-        }
-
     private val jsCodeScriptModule: String
         get() = """
 <div id="$uuid" style="width:100%;min-height:100px"></div>
@@ -31,8 +21,8 @@ function getCellRoot(width = "100%", height = "100px") {
     cellRoot.style = `width: $\{width};height: $\{height}`
     return cellRoot;
 }
-import  { createRoot }  from "${LibsMapping.default["react-dom"]}";
-$reactImportStatement
+import  { createRoot }  from "react-dom";
+import React from "react";
 
 $jsCode
 const root = createRoot(getCellRoot());

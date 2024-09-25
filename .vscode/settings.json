@@ -1,0 +1,9 @@
+{
+  "java.compile.nullAnalysis.mode": "automatic",
+  "cSpell.words": [
+    "jnix",
+    "yidafu"
+  ],
+  "java.configuration.updateBuildConfiguration": "interactive",
+  "julia.environmentPath": "/Users/dovyih/gitlab/kotlin-notebook-js"
+}

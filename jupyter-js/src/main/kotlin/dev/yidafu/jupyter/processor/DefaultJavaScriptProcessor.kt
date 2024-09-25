@@ -72,7 +72,6 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
         context: JavascriptProcessContext,
     ): JavascriptProcessContext {
         JupyterImportProcessor(notebook).process(program, context)
-        ImportSourceMappingProcessor().process(program, context)
         InlineImportSourceProcessor().process(program, context)
         return context
     }

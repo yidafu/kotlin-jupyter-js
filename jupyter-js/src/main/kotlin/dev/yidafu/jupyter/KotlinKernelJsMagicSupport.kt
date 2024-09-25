@@ -3,6 +3,7 @@
  */
 package dev.yidafu.jupyter
 
+import org.jetbrains.kotlinx.jupyter.api.HTML
 import org.jetbrains.kotlinx.jupyter.api.annotations.JupyterLibrary
 import org.jetbrains.kotlinx.jupyter.api.libraries.JupyterIntegration
 import org.slf4j.Logger
@@ -21,6 +22,8 @@ class KotlinKernelJsMagicSupport : JupyterIntegration() {
         )
         onLoaded {
             JavaScriptVariableStore.clear()
+
+            display(JavaScriptImportMap(), "jupyter-js-importmap")
         }
 
         addCodePreprocessor(JavaScriptMagicCodeProcessor(this.notebook))
