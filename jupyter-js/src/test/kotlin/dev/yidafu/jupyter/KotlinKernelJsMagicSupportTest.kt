@@ -141,32 +141,6 @@ class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
     }
 
     @Test
-    fun `import source mapping`() {
-        exec(
-            """
-            USE {
-                addCodePreprocessor(dev.yidafu.jupyter.JavaScriptMagicCodeProcessor(this.notebook));
-            }
-            """.trimIndent(),
-        )
-        val result =
-            exec(
-                """
-                %tsx
-                // ts will auto tree shaking
-                import * as echarts from "echarts";
-                import * as graph3d from "vis-graph3d";
-                console.log(echarts, graph3d)
-                """.trimIndent(),
-            ) as MimeTypedResult
-
-        val html = (result[MimeTypes.HTML] as String)
-        println(html)
-        assertContains(html, LibsMapping.default["echarts"]!!.mainSource)
-        assertContains(html, LibsMapping.default["vis-graph3d"]!!.mainSource)
-    }
-
-    @Test
     fun `echarts example`() {
         exec(
             """

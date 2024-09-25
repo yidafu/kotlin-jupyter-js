@@ -6,4 +6,4 @@ internal const val JSX_DEFAULT_EXPORT_VARIABLE_NAME = "__JupyterCellDefaultExpor
 
 internal const val JUPYTER_IMPORT_SPECIFIER_SOURCE_NAME = "@jupyter"
 
-internal const val LIBS_MAPPING_JSON_FILE_NAME = "libs-mapping.json"
+internal const val JAVASCRIPT_IMPORTMAP_FILE_NAME = "importmap.json"
