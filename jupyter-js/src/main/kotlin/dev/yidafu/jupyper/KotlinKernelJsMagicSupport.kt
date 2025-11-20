@@ -3,25 +3,47 @@
  */
 package dev.yidafu.jupyper
 
-import org.jetbrains.kotlinx.jupyter.api.annotations.JupyterLibrary
 import org.jetbrains.kotlinx.jupyter.api.libraries.JupyterIntegration
 import org.slf4j.LoggerFactory
 
 /**
- * support `%javascript` magic
+ * Kotlin Jupyter Kernel JavaScript Magic support library
+ *
+ * Provides JavaScript/TypeScript/JSX/TSX Magic command support for Kotlin Jupyter Kernel
+ * Supported Magic commands:
+ * - `%js` or `%javascript`: Execute JavaScript code
+ * - `%ts` or `%typescript`: Execute TypeScript code
+ * - `%jsx`: Execute JSX code (React)
+ * - `%tsx`: Execute TSX code (TypeScript + React)
+ *
+ * Features:
+ * 1. Support for writing and executing JavaScript/TypeScript code directly in Jupyter Notebook
+ * 2. Support for exporting variables from Kotlin to JavaScript (via jsExport function)
+ * 3. Support for importing Kotlin variables from JavaScript (via `import { varName } from '@jupyter'`)
+ * 4. Automatic handling of JavaScript library imports and dependency management
+ * 5. Support for JSX/TSX syntax with automatic React environment configuration
  */
-@JupyterLibrary
 class KotlinKernelJsMagicSupport : JupyterIntegration() {
     val log = LoggerFactory.getLogger(KotlinKernelJsMagicSupport::class.java)
 
+    /**
+     * Initialization logic when library is loaded
+     *
+     * 1. Import jsExport function to make it available in Notebook
+     * 2. Clear JavaScript variable store
+     * 3. Register code preprocessor for handling Magic commands
+     */
     override fun Builder.onLoaded() {
+        // Import jsExport function to Notebook global scope
         import(
             "dev.yidafu.jupyper.jsExport",
         )
+        // Clear JavaScript variable store each time Notebook loads
         onLoaded {
             JavaScriptVariableStore.clear()
         }
 
+        // Register JavaScript Magic code preprocessor
         addCodePreprocessor(JavaScriptMagicCodeProcessor(this.notebook))
     }
 }

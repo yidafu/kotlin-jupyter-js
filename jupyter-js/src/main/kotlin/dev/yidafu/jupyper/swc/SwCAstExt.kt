@@ -1,6 +1,6 @@
 package dev.yidafu.jupyper.swc
 
-import dev.yidafu.swc.types.*
+import dev.yidafu.swc.generated.*
 
 fun Module.forEachImportDeclaration(block: (importDeclaration: ImportDeclaration) -> Unit) {
     val bodyAlt = body ?: emptyArray()

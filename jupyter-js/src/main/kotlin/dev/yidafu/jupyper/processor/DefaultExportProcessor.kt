@@ -3,11 +3,9 @@
 package dev.yidafu.jupyper.processor
 
 import dev.yidafu.jupyper.JSX_DEFAULT_EXPORT_VARIABLE_NAME
-import dev.yidafu.swc.dsl.createVariableDeclaration
-import dev.yidafu.swc.dsl.identifier
-import dev.yidafu.swc.dsl.variableDeclarator
 import dev.yidafu.swc.emptySpan
-import dev.yidafu.swc.types.*
+import dev.yidafu.swc.generated.*
+import dev.yidafu.swc.generated.dsl.*
 
 /**
  * process JSX default export to variable declaration
@@ -39,7 +37,7 @@ class DefaultExportProcessor : JavaScriptProcessor {
                     val varDecl =
                         createVariableDeclaration {
                             span = emptySpan()
-                            kind = "const"
+                            kind = VariableDeclarationKind.CONST
 
                             declarations =
                                 arrayOf(
@@ -60,4 +58,5 @@ class DefaultExportProcessor : JavaScriptProcessor {
             }
         }
     }
+
 }

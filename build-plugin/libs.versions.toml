@@ -1,10 +1,13 @@
 [versions]
-kotlin = "1.9.21"
-jupyter = "0.12.0-91"
-ksp = "1.9.21-1.0.15"
+kotlin = "2.2.0"
+jupyter = "0.16.0-726"
+ksp = "2.2.0-2.0.2"
 ktlint = "12.1.0"
 dokka = "1.8.20"
 publisher = "1.8.10-dev-43"
+kover = "0.7.5"
+kotest = "5.8.0"
+mockk = "1.13.9"
 
 [libraries]
 # gradle plugins
@@ -20,15 +23,32 @@ dokka_plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version = "
 ktlint_plugin = { module = "org.jlleitschuh.gradle:ktlint-gradle", version = "11.6.1" }
 kotlin_serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.6.0"}
 slf4j_api = { module = "org.slf4j:slf4j-api", version = "2.0.9"}
-swc_binding = { module = "dev.yidafu.swc:swc-binding", version = "0.6.0" }
+swc_binding = { module = "dev.yidafu.swc:swc-binding", version = "0.7.0" }
+
+# Dokka
+dokka_analysis_compiler = { module = "org.jetbrains.dokka:kotlin-analysis-compiler", version.ref = "dokka" }
+
+# Testing libraries
+kotest_runner_junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+kotest_assertions_core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotest_property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
+kotest_assertions_json = { module = "io.kotest:kotest-assertions-json", version.ref = "kotest" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 
 [bundles]
 allGradlePlugins = [
     "kotlin_jvm_plugin",
 #    "plugin-jupyter",
     "kotlin-publish-plugin",
-    "dokka-plugin",
-    "ktlint-plugin",
+    "dokka_plugin",
+    "ktlint_plugin",
+]
+
+kotest = [
+    "kotest_runner_junit5",
+    "kotest_assertions_core",
+    "kotest_property",
+    "kotest_assertions_json",
 ]
 
 [plugins]
@@ -39,5 +59,6 @@ publisher = { id = "org.jetbrains.kotlin.libs.publisher", version.ref= "publishe
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka"}
 ktlint = {id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint"}
 kotlin_serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 signing = { id = "org.gradle.signing" }
 mavenPublish = { id = "org.gradle.maven-publish"}

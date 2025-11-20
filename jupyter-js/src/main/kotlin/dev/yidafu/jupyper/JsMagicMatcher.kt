@@ -1,12 +1,28 @@
 package dev.yidafu.jupyper
 
+/**
+ * JavaScript Magic command matcher
+ *
+ * Used to identify and parse Magic commands (e.g., %js, %ts, %jsx, %tsx) in code
+ * Supports extracting Magic commands from code and obtaining clean source code
+ *
+ * @param source Source code containing Magic commands
+ */
 class JsMagicMatcher(private val source: String) {
+    /**
+     * List of position intervals for Magic commands in source code
+     * Lazily computed to avoid repeated parsing
+     */
     private val intervals by lazy {
         jsMagicIntervals(source)
     }
 
     /**
-     * code without js magics
+     * Clean source code after removing all Magic commands
+     *
+     * Example:
+     * Input: `%js\nconsole.log("hello");`
+     * Output: `console.log("hello");`
      */
     val cleanSourceCode: String by lazy {
         val indexList =
@@ -27,6 +43,13 @@ class JsMagicMatcher(private val source: String) {
         }.joinToString("")
     }
 
+    /**
+     * Matches language type in code
+     *
+     * If code contains multiple Magic commands, the last Magic command takes effect
+     *
+     * @return Detected language type, returns Kotlin if no Magic commands found
+     */
     fun match(): LanguageType {
         if (intervals.isEmpty()) return LanguageType.Kotlin
         // last js magic will work
@@ -36,6 +59,18 @@ class JsMagicMatcher(private val source: String) {
         return LanguageType.Kotlin
     }
 
+    /**
+     * Finds position intervals of all Magic commands in source code
+     *
+     * Supported Magic commands:
+     * - %js or %javascript
+     * - %jsx
+     * - %ts or %typescript
+     * - %tsx
+     *
+     * @param source Source code
+     * @return List of position intervals for Magic commands
+     */
     private fun jsMagicIntervals(source: String): List<IntRange> {
         val len = source.length
 

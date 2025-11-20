@@ -15,37 +15,41 @@ plugins {
     alias(libs.plugins.ksp)
 //    alias(libs.plugins.publisher)
     alias(libs.plugins.kotlin.serialization)
-    id("org.jetbrains.kotlinx.kover") version "0.7.5"
+    alias(libs.plugins.kover)
 
     `maven-publish`
 }
 
+kotlin {
+    jvmToolchain(19)
+}
+
 kotlinJupyter {
     addApiDependency()
-    addScannerDependency()
+    // addScannerDependency() - Removed in Kotlin Jupyter API 0.16.0+
+}
+
+// Creates the metadata needed for the library integration to be detected automatically.
+tasks.processJupyterApiResources {
+    libraryProducers = listOf("dev.yidafu.jupyper.KotlinKernelJsMagicSupport")
 }
 
 group = "dev.yidafu.jupyter"
-version = "0.7.0"
+version = "0.8.0"
 
 dependencies {
-    implementation("org.jetbrains.dokka:kotlin-analysis-compiler:1.8.20")
+    implementation(libs.dokka.analysis.compiler)
     testImplementation(kotlin("test"))
     implementation(libs.slf4j.api)
     implementation(libs.kotlin.serialization.json)
-//    implementation(project(":swc-binding"))
     implementation(libs.swc.binding)
 
-    testImplementation("io.kotest:kotest-runner-junit5:5.8.0")
-    testImplementation("io.kotest:kotest-assertions-core:5.8.0")
-    testImplementation("io.kotest:kotest-property:5.8.0")
-    testImplementation("io.kotest:kotest-assertions-json:5.8.0")
-
-    // https://mvnrepository.com/artifact/io.mockk/mockk
-    testImplementation("io.mockk:mockk:1.13.9")
+    testImplementation(libs.bundles.kotest)
+    testImplementation(libs.mockk)
 }
 
 repositories {
+    mavenLocal()
     maven("https://mirrors.cloud.tencent.com/nexus/repository/maven-public")
     maven("https://s01.oss.sonatype.org/content/groups/public/")
     mavenCentral()
@@ -54,6 +58,47 @@ repositories {
 publishMan {
     name.set("Kotlin Jupyter JS Support")
     description.set("Kotlin Jupyter JS Support")
+}
+
+// 配置本地发布，禁用签名
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
+
+            pom {
+                name.set("Kotlin Jupyter JS Support")
+                description.set("Kotlin Jupyter JS Support")
+                url.set("https://github.com/yidafu/kotlin-jupyter-js/")
+
+                licenses {
+                    license {
+                        name.set("The Apache License, Version 2.0")
+                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                    }
+                }
+
+                developers {
+                    developer {
+                        id.set("dovyih")
+                        name.set("Dov Yih")
+                        email.set("me@yidafu.dev")
+                    }
+                }
+
+                scm {
+                    connection.set("scm:git:git://github.com:yidafu/kotlin-jupyter-js.git")
+                    developerConnection.set("scm:git:ssh://github.com:yidafu/kotlin-jupyter-js.git")
+                    url.set("https://github.com:yidafu/kotlin-jupyter-js/")
+                }
+            }
+        }
+    }
+}
+
+// 禁用签名任务
+tasks.withType<Sign> {
+    enabled = false
 }
 
 tasks.withType<Test>().configureEach {
