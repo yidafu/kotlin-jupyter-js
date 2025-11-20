@@ -9,24 +9,36 @@
 
 # kotlin-notebook-js
 
+Jupyter Kotlin Kernel support for `%js`/`%ts`/`%jsx`/`%tsx` line magics, enabling seamless integration between Kotlin and JavaScript/TypeScript in Jupyter notebooks.
 
-Jupyter Kotlin Kernel support `%js`/`%ts`/`%jsx`/`%tsx` line magics.
+## Features
 
-## Feature
-
-+ import any variable from kotlin world
-+ support **JavaScript** / **TypeScript** / **React**
++ ✨ Import any variable from Kotlin world via virtual package `@jupyter`
++ 🚀 Support **JavaScript** / **TypeScript** / **React** (JSX/TSX)
++ 📦 Inline script import (local and remote with `?inline` parameter)
++ 🌐 NPM package support via CDN (ES modules)
++ 📚 Built-in library mappings for 100+ popular packages
++ ⚙️ Configuration DSL for custom library mappings
++ 🛡️ Comprehensive error handling and formatting
++ 🔄 Variable aliasing with `jsExport`
++ 📊 Rich visualization support (ECharts, D3, Chart.js, etc.)
 
 ## Support magic
 
 + `%js`
-+ `%javacript`
++ `%javascript`
 + `%jsx`
 + `%ts`
 + `%typescript`
 + `%tsx`
 
-## Usage
+## Requirements
+
+- Kotlin Jupyter Kernel (latest dev version recommended)
+- Jupyter Notebook or JupyterLab
+- Java 17+ (for building from source)
+
+## Installation
 
 ### Import The Library First
 
@@ -46,7 +58,7 @@ USE {
     }
 
     dependencies {
-        implementation("dev.yidafu.jupyter:jupyter-js:0.7.0")
+        implementation("dev.yidafu.jupyter:jupyter-js:0.8.0")
     }
 }
 ```
@@ -109,11 +121,30 @@ console.log(foo)
 // ==> 123
 ```
 
+### TypeScript Example
+
+TypeScript support includes type checking, interfaces, and type-safe functions.
+
+```ts
+%ts
+import { dataArray } from "@jupyter";
+
+interface DataPoint {
+    x: number;
+    y: number;
+}
+
+const points: DataPoint[] = dataArray.map((val, idx) => ({
+    x: idx,
+    y: val
+}));
+
+console.log(points);
+```
+
 ### React Example
 
-Just export your component function.
-
-`%jsx`/`%tsx` magic will render your default export component function
+Just export your component function. `%jsx`/`%tsx` magic will render your default export component function.
 
 ```jsx
 %jsx
@@ -153,19 +184,19 @@ so, you can coding like this:
 import _ from 'lodash';
 ```
 
-### builtin packages
+### Built-in packages
 
-see: [libs-mapping.json](jupyter-js/src/main/resources/libs-mapping.json)
+The library includes pre-configured mappings for many popular packages. See: [libs-mapping.json](jupyter-js/src/main/resources/libs-mapping.json)
 
-+ react
-+ react-dom
-+ lodash
-+ echarts
-+ d3
-+ highcharts
-+ visjs
+Popular packages include:
++ react, react-dom
++ lodash, ramda
++ echarts, d3, chart.js, highcharts
++ visjs, three.js, leaflet
++ axios, moment, dayjs
++ And many more...
 
-Adding your favorite pakcage, submit a PR/Issue.
+Adding your favorite package? Submit a PR/Issue.
 
 ### Echarts Example
 
@@ -214,13 +245,13 @@ option && myChart.setOption(option);
 
 ![image](https://github.com/yidafu/kotlin-jupyter-js/assets/22773923/b5aa06d3-24dc-4e3e-a020-8bd7ac5b1bae)
 
-### kotlin variable alias
+### Kotlin variable alias
 
-jsExport will export kotlin variable to javascript. kotlin variable will encode to json string.
+`jsExport` allows you to export Kotlin variables to JavaScript with custom names. Variables are automatically encoded to JSON strings.
 
 ```kotlin
 val foo = "string"
-// export variable to javascript
+// Export variable to JavaScript with alias "bar"
 jsExport("bar", foo)
 ```
 
@@ -228,24 +259,162 @@ jsExport("bar", foo)
 %js
 import { foo, bar } from '@jupyter';
 
-console.log(foo == bar);
+console.log(foo == bar); // true
 ```
 
-full example see [examples/js-magic.ipynb](./examples/js-magic.ipynb)
+Full example see [examples/js-magic.ipynb](./examples/js-magic.ipynb)
 
-## Article
+## More Examples
 
-[how kotlin jupyter js workd? (English Translation)](./docs/how-kotlin-jupyter-work.md) - [中文原文](./docs/how-kotlin-jupyter-work.zh-CN.md)
+The project includes comprehensive examples covering various use cases:
+
+### Getting Started
+- [00-getting-started.ipynb](./examples/00-getting-started.ipynb) - Basic TypeScript example
+- [js-magic.ipynb](./examples/js-magic.ipynb) - JavaScript magic commands
+
+### Visualization
+- [echarts-basic-charts.ipynb](./examples/echarts-basic-charts.ipynb) - ECharts examples
+- [01-statistical-charts.ipynb](./examples/01-statistical-charts.ipynb) - Chart.js statistical charts
+- [d3-visualization.ipynb](./examples/d3-visualization.ipynb) - D3.js custom visualizations
+- [girls-last-tour.ipynb](./examples/girls-last-tour.ipynb) - 3D ECharts example
+
+### React & UI
+- [react-jsx-basic.ipynb](./examples/react-jsx-basic.ipynb) - React JSX basics
+- [react-tsx-basic.ipynb](./examples/react-tsx-basic.ipynb) - React TSX with TypeScript
+
+### Utilities & Data
+- [lodash-utilities.ipynb](./examples/lodash-utilities.ipynb) - Lodash utility functions
+- [kotlin-js-data-exchange.ipynb](./examples/kotlin-js-data-exchange.ipynb) - Data exchange patterns
+- [basic-typescript.ipynb](./examples/basic-typescript.ipynb) - TypeScript fundamentals
+
+### Configuration
+- [config-dsl-basic.ipynb](./examples/config-dsl-basic.ipynb) - Configuration DSL examples
+
+### Testing
+- [console-log-test.ipynb](./examples/console-log-test.ipynb) - Console.log redirection
+
+View all examples online: [Examples Gallery](https://yidafu.github.io/kotlin-jupyter-js/)
+
+## Error Handling
+
+The library provides comprehensive error handling with user-friendly HTML error messages:
+
+- **Syntax Errors** - Line and column information
+- **Type Errors** - Expected vs actual type information
+- **Network Errors** - URL and status code details
+- **Variable Not Found** - Available variables suggestions
+- **Configuration Errors** - Config key and value details
+- **Compilation Errors** - Language-specific error details
+
+Errors are automatically formatted and displayed in the notebook output.
+
+## Articles
+
+[How Kotlin Jupyter JS works? (English Translation)](./docs/how-kotlin-jupyter-work.md) - [中文原文](./docs/how-kotlin-jupyter-work.zh-CN.md)
 
 ## Documentation
 
-[Jupyter Kotlin Js API](https://yidafu.github.io/kotlin-jupyter-js/kt-docs/index.html)
+- [Jupyter Kotlin Js API](https://yidafu.github.io/kotlin-jupyter-js/kt-docs/index.html) - Full API documentation
+- [DSL Usage Examples](jupyter-js/DSL_USAGE_EXAMPLES.md) - Configuration DSL guide
+- [Optimized Usage](jupyter-js/OPTIMIZED_USAGE.md) - Performance tips
+- [Preset Libraries](jupyter-js/PRESET_LIBRARIES.md) - Available preset libraries
+- [Scenario-Based Usage](jupyter-js/SCENARIO_BASED_USAGE.md) - Common scenarios
+- [Examples README](./examples/README.md) - Examples documentation
+
+## Contributing
+
+Contributions are welcome! Here are some ways you can help:
+
+1. **Report Issues** - Found a bug? Please open an issue
+2. **Suggest Features** - Have an idea? Share it in discussions
+3. **Add Libraries** - Submit PRs to add popular libraries to the built-in mappings
+4. **Improve Documentation** - Help improve docs and examples
+5. **Write Examples** - Create example notebooks for new use cases
+
+### Development Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/yidafu/kotlin-jupyter-js.git
+cd kotlin-jupyter-js
+
+# Build the project
+./gradlew build
+
+# Publish to local Maven repository for testing
+./gradlew publishToMavenLocal
+
+# Run tests
+./gradlew test
+```
+
+See [examples/README.md](./examples/README.md) for local development and debugging tips.
+
+## FAQ
+
+### Q: How do I use a library that's not in the built-in mappings?
+
+A: You can use the configuration DSL to add custom library mappings:
+
+```kotlin
+jsConfig {
+    dependencies("my-lib", "https://cdn.example.com/my-lib.js")
+}
+```
+
+Or import directly via URL:
+
+```js
+%js
+import { something } from 'https://cdn.example.com/my-lib.js';
+```
+
+### Q: Can I use npm packages?
+
+A: Yes! You can use any npm package via CDN services like [esm.sh](https://esm.sh/) or [jsdelivr](https://www.jsdelivr.com/):
+
+```js
+%js
+import _ from 'https://esm.sh/lodash';
+```
+
+### Q: How do I debug JavaScript errors?
+
+A: Errors are automatically formatted and displayed in the notebook. You can also check the browser console for detailed error information.
+
+### Q: Can I use TypeScript types?
+
+A: Yes! Use `%ts` or `%tsx` magic commands. TypeScript code is compiled to JavaScript before execution.
+
+### Q: How do I export Kotlin variables with custom names?
+
+A: Use the `jsExport` function:
+
+```kotlin
+val data = listOf(1, 2, 3)
+jsExport("myData", data)
+```
+
+Then import in JavaScript:
+
+```js
+%js
+import { myData } from '@jupyter';
+```
+
+## License
+
+This project is licensed under the Apache License 2.0 - see the [License](License) file for details.
 
 ## TODO LIST
 
-+ [x] swc binding for compile js code
-+ [x] `%js`/`%ts`magics
++ [x] SWC binding for compiling JS/TS code
++ [x] `%js`/`%ts` magics
 + [x] `%jsx`/`%tsx` magic
-+ [x] import variable from Kotlin world. like this: `import { foo } from "@jupyter"`
-+ [ ] js syntax highlight
++ [x] Import variable from Kotlin world: `import { foo } from "@jupyter"`
++ [x] Inline script import (local and remote)
++ [x] Library mapping configuration DSL
++ [x] Error handling and formatting
++ [ ] JS syntax highlighting
++ [ ] More built-in library mappings
 + [ ] etc...
