@@ -1,7 +1,7 @@
 package dev.yidafu.jupyper.processor
 
-import dev.yidafu.swc.types.ImportDeclaration
-import dev.yidafu.swc.types.Module
+import dev.yidafu.swc.generated.ImportDeclaration
+import dev.yidafu.swc.generated.Module
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.shouldBe

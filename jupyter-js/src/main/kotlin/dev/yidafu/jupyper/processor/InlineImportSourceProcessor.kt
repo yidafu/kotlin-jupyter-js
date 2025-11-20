@@ -4,9 +4,10 @@ import dev.yidafu.jupyper.LanguageType
 import dev.yidafu.jupyper.swc.forEachImportDeclaration
 import dev.yidafu.jupyper.swc.getValue
 import dev.yidafu.jupyper.swc.replace
-import dev.yidafu.swc.dsl.*
 import dev.yidafu.swc.emptySpan
-import dev.yidafu.swc.types.*
+import dev.yidafu.swc.generated.*
+import dev.yidafu.swc.generated.dsl.*
+
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.net.URI
@@ -162,7 +163,7 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
     ): VariableDeclaration {
         return createVariableDeclaration {
             span = emptySpan()
-            kind = "const"
+            kind = VariableDeclarationKind.CONST
             declarations =
                 arrayOf(
                     variableDeclarator {
@@ -191,7 +192,7 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                                                             decorators = emptyArray()
                                                             pat =
                                                                 assignmentExpression {
-                                                                    operator = "="
+                                                                    operator = AssignmentOperator.Assignment
                                                                     span = emptySpan()
                                                                     left =
                                                                         identifier {
@@ -270,18 +271,16 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                                                     fun createRightExpr(propName: String): MemberExpression {
                                                         return createMemberExpression {
                                                             span = emptySpan()
-                                                            jsObject =
-                                                                identifier {
-                                                                    span = emptySpan()
-                                                                    value = objName
-                                                                    optional = false
-                                                                }
-                                                            property =
-                                                                identifier {
-                                                                    span = emptySpan()
-                                                                    value = propName
-                                                                    optional = false
-                                                                }
+                                                            `object` = identifier {
+                                                                span = emptySpan()
+                                                                value = objName
+                                                                optional = false
+                                                            }
+                                                            property = identifier {
+                                                                span = emptySpan()
+                                                                value = propName
+                                                                optional = false
+                                                            }
                                                         }
                                                     }
                                                     when (prop) {
@@ -311,9 +310,21 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                                                                 }
                                                             expr?.let { e -> newStats.add(e) }
                                                         }
+
+                                                        is RestElement -> {
+                                                            // Rest element in object pattern, skip
+                                                        }
+
+                                                        else -> {
+                                                            // Other pattern properties, skip
+                                                        }
                                                     }
                                                 }
                                             }
+                                        }
+
+                                        else -> {
+                                            // Other patterns (ArrayPattern, AssignmentPattern, etc.), skip
                                         }
                                     }
                                 }
@@ -330,13 +341,24 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                                     newStats.add(createExportAssignmentExpression(iName, iName))
                                 }
                             }
+
+                            is TsEnumDeclaration,
+                            is TsInterfaceDeclaration,
+                            is TsModuleDeclaration,
+                            is TsTypeAliasDeclaration -> {
+                                // TypeScript declarations, skip export assignment
+                            }
+
+                            else -> {
+                                // Other declaration types, skip
+                            }
                         }
                     }
                 }
                 // export default function foo () { };
                 is ExportDefaultDeclaration -> {
                     val defaultExpr = it.decl as Expression
-                    createExportAssignmentExpression("default", defaultExpr)
+                    newStats.add(createExportAssignmentExpression("default", defaultExpr))
                 }
                 // export default "expression";
                 is ExportDefaultExpression -> {
@@ -353,8 +375,32 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                                 val exported = specifier.exported.getValue() ?: orig
                                 newStats.add(createExportAssignmentExpression(exported!!, orig!!))
                             }
+
+                            is ExportDefaultSpecifier -> {
+                                // Export default specifier, skip
+                            }
+
+                            is ExportNamespaceSpecifier -> {
+                                // Export namespace specifier, skip
+                            }
+
+                            else -> {
+                                // Other specifier types, skip
+                            }
                         }
                     }
+                }
+
+                is ExportAllDeclaration,
+                is ImportDeclaration,
+                is TsExportAssignment,
+                is TsImportEqualsDeclaration,
+                is TsNamespaceExportDeclaration -> {
+                    // Other export/import types, skip
+                }
+
+                else -> {
+                    // Other ModuleItem types that are not exports, skip
                 }
             }
         }
@@ -394,7 +440,7 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
             name,
             createMemberExpression {
                 span = emptySpan()
-                jsObject = jsObj
+                `object` = jsObj
                 property = prop
             },
         )
@@ -406,7 +452,7 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
     ): VariableDeclaration {
         return createVariableDeclaration {
             span = emptySpan()
-            kind = "const"
+            kind = VariableDeclarationKind.CONST
             declarations =
                 arrayOf(
                     variableDeclarator {
@@ -453,7 +499,7 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
     }
 
     private fun createExportAssignmentExpression(
-        prop: MemberExpressionProperty,
+        prop: Expression,
         expr: Expression,
     ): ExpressionStatement {
         return createAssignmentExpression(
@@ -469,7 +515,7 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
 
     private fun createAssignmentExpression(
         jsObj: Expression,
-        prop: MemberExpressionProperty,
+        prop: Expression,
         rightExpr: Expression,
     ): ExpressionStatement {
         return createExpressionStatement {
@@ -477,12 +523,12 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
             expression =
                 assignmentExpression {
                     span = emptySpan()
-                    operator = "="
+                    operator = AssignmentOperator.Assignment
                     left =
                         memberExpression {
                             span = emptySpan()
-                            jsObject = jsObj
-                            property = prop
+                            `object` = jsObj
+                            property = prop as Node
                         }
                     right = rightExpr
                 }

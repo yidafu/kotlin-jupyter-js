@@ -2,70 +2,124 @@ package dev.yidafu.jupyper.processor
 
 import dev.yidafu.jupyper.LanguageType
 import dev.yidafu.swc.SwcNative
-import dev.yidafu.swc.booleanable.BooleanableString
-import dev.yidafu.swc.dsl.jscConfig
-import dev.yidafu.swc.esParseOptions
-import dev.yidafu.swc.options
-import dev.yidafu.swc.tsParseOptions
-import dev.yidafu.swc.types.Program
+import dev.yidafu.swc.generated.*
+import dev.yidafu.swc.generated.dsl.*
 import org.jetbrains.kotlinx.jupyter.api.Notebook
 import org.slf4j.LoggerFactory
 
+/**
+ * Default JavaScript processor
+ *
+ * Handles compilation and transformation of JavaScript/TypeScript/JSX/TSX code
+ * Uses SWC (Speedy Web Compiler) for code parsing, transformation, and generation
+ *
+ * Processing flow:
+ * 1. Parse source code into AST (Abstract Syntax Tree)
+ * 2. Apply various processors (import processing, dependency mapping, etc.)
+ * 3. Convert processed AST to JavaScript code
+ * 4. Wrap as Kotlin code (returns JsCodeResult or JsxCodeResult)
+ *
+ * @param notebook Current Notebook instance for accessing variable state
+ */
 class DefaultJavaScriptProcessor(private val notebook: Notebook) {
     private val log = LoggerFactory.getLogger(DefaultJavaScriptProcessor::class.java)
 
+    /**
+     * SWC compiler instance
+     * Used for parsing and transforming JavaScript/TypeScript code
+     */
     private val swcCompiler: SwcNative = SwcNative()
 
+    /**
+     * JavaScript parse options
+     * Configured for ES2020 target with top-level await and nullish coalescing operator support
+     */
     private val jsParseOpt
         get() =
             esParseOptions {
-                target = "es2020"
+                target = JscTarget.ES2020
                 comments = false
                 topLevelAwait = true
                 nullishCoalescing = true
             }
+
+    /**
+     * JSX parse options
+     * Configured for ES2020 target with JSX syntax support enabled
+     */
     private val jsxParseOpt
         get() =
             esParseOptions {
                 jsx = true
-                target = "es2020"
+                target = JscTarget.ES2020
                 comments = false
                 topLevelAwait = true
                 nullishCoalescing = true
             }
+
+    /**
+     * JavaScript print options
+     * Used to convert AST to JavaScript code
+     */
     private val jsPrintOpt
         get() =
             options {
                 jsc =
                     jscConfig {
-                        target = "es2020"
+                        target = JscTarget.ES2020
                         parser = jsParseOpt
                     }
             }
+
+    /**
+     * TypeScript parse options
+     * Configured for ES2020 target with TypeScript syntax support
+     */
     private val tsParseOpt
         get() =
             tsParseOptions {
-                target = "es2020"
+                target = JscTarget.ES2020
                 comments = false
             }
+
+    /**
+     * TypeScript print options
+     * Used to convert TypeScript AST to JavaScript code
+     */
     private val tsPrintOpt
         get() =
             options {
                 jsc =
                     jscConfig {
-                        target = "es2020"
+                        target = JscTarget.ES2020
                         parser = tsParseOpt
                     }
             }
 
+    /**
+     * TSX parse options
+     * Configured for ES2020 target with TypeScript + JSX syntax support
+     */
     private val tsxParseOpt
         get() =
             tsParseOptions {
-                target = "es2020"
+                target = JscTarget.ES2020
                 comments = false
                 tsx = true
             }
 
+    /**
+     * Executes processor chain for JavaScript code
+     *
+     * Executes in order:
+     * 1. JupyterImportProcessor: Processes @jupyter virtual package imports
+     * 2. ImportSourceMappingProcessor: Maps library names to CDN URLs
+     * 3. InlineImportSourceProcessor: Processes inline import sources
+     *
+     * @param program AST program node
+     * @param context JavaScript processing context
+     * @return Processed context
+     */
     private fun executeJsCodeProcessor(
         program: Program,
         context: JavascriptProcessContext,
@@ -76,6 +130,16 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
         return context
     }
 
+    /**
+     * Executes processor chain for JSX code
+     *
+     * First executes JavaScript processor chain, then:
+     * - DefaultExportProcessor: Processes default exports for React component rendering
+     *
+     * @param program AST program node
+     * @param context JavaScript processing context
+     * @return Processed context
+     */
     private fun executeJsxProcessor(
         program: Program,
         context: JavascriptProcessContext,
@@ -86,6 +150,13 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
         return context
     }
 
+    /**
+     * Parses JavaScript code into AST
+     *
+     * @param source JavaScript source code
+     * @param context JavaScript processing context
+     * @return Parsed AST program node
+     */
     fun parseJsCode(
         source: String,
         context: JavascriptProcessContext,
@@ -101,6 +172,19 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
         return program
     }
 
+    /**
+     * Processes JavaScript code
+     *
+     * Complete flow:
+     * 1. Parse to AST
+     * 2. Apply processor chain
+     * 3. Convert to JavaScript code
+     * 4. Wrap as JsCodeResult
+     *
+     * @param source JavaScript source code
+     * @param context JavaScript processing context
+     * @return Wrapped Kotlin code string
+     */
     private fun processJsCode(
         source: String,
         context: JavascriptProcessContext,
@@ -115,6 +199,15 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
         return "dev.yidafu.jupyper.JsCodeResult(\"\"\" $context\n ${output.code} \"\"\")"
     }
 
+    /**
+     * Transforms TypeScript code
+     *
+     * First uses SWC to convert TypeScript to JavaScript, then parses to AST
+     *
+     * @param source TypeScript source code
+     * @param context JavaScript processing context
+     * @return Transformed AST program node
+     */
     internal fun transformTsCode(
         source: String,
         context: JavascriptProcessContext,
@@ -143,6 +236,13 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
         return program
     }
 
+    /**
+     * Processes TypeScript code
+     *
+     * @param source TypeScript source code
+     * @param context JavaScript processing context
+     * @return Wrapped Kotlin code string
+     */
     private fun processTsCode(
         source: String,
         context: JavascriptProcessContext,
@@ -153,6 +253,15 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
         return "dev.yidafu.jupyper.JsCodeResult(\"\"\" $context\n ${output.code} \"\"\")"
     }
 
+    /**
+     * Transforms JSX code
+     *
+     * First uses SWC to convert JSX to JavaScript, then parses to AST
+     *
+     * @param source JSX source code
+     * @param context JavaScript processing context
+     * @return Transformed AST program node
+     */
     internal fun transformJsxCode(
         source: String,
         context: JavascriptProcessContext,
@@ -166,7 +275,6 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
                         jscConfig {
                             parser = jsxParseOpt
                         }
-                    isModule = BooleanableString.ofTrue()
                 },
             )
 
@@ -181,6 +289,13 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
         return program
     }
 
+    /**
+     * Processes JSX code
+     *
+     * @param source JSX source code
+     * @param context JavaScript processing context
+     * @return Wrapped Kotlin code string (returns JsxCodeResult)
+     */
     private fun processJsxCode(
         source: String,
         context: JavascriptProcessContext,
@@ -194,6 +309,15 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
         return "dev.yidafu.jupyper.JsxCodeResult(\"\"\" $context\n ${output.code} \"\"\")"
     }
 
+    /**
+     * Transforms TSX code
+     *
+     * First uses SWC to convert TSX to JavaScript, then parses to AST
+     *
+     * @param source TSX source code
+     * @param context JavaScript processing context
+     * @return Transformed AST program node
+     */
     fun transformTsxCode(
         source: String,
         context: JavascriptProcessContext,
@@ -219,6 +343,13 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
         return program
     }
 
+    /**
+     * Processes TSX code
+     *
+     * @param source TSX source code
+     * @param context JavaScript processing context
+     * @return Wrapped Kotlin code string (returns JsxCodeResult)
+     */
     private fun processTsxCode(
         source: String,
         context: JavascriptProcessContext,
@@ -232,6 +363,15 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
         return "dev.yidafu.jupyper.JsxCodeResult(\"\"\" $context\n ${output.code} \"\"\")"
     }
 
+    /**
+     * Processes code based on language type
+     *
+     * This is the main entry method that calls appropriate processing method based on language type
+     *
+     * @param langType Language type (JS/TS/JSX/TSX/Kotlin)
+     * @param sourceCode Source code
+     * @return Processed Kotlin code string
+     */
     fun process(
         langType: LanguageType,
         sourceCode: String,

@@ -9,6 +9,30 @@ import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.encoding.encodeStructure
 import kotlinx.serialization.json.*
 
+/**
+ * JavaScript package configuration
+ *
+ * Represents configuration information for a JavaScript library, including main source and extra dependency sources
+ *
+ * @param mainSource Main source URL (required), usually the main entry file of the library
+ * @param extraSources List of extra dependency sources (optional), used to load additional dependencies
+ *
+ * Serialization format supports two types:
+ * 1. Simple string format: `"https://cdn.jsdelivr.net/npm/react@18"`
+ * 2. Object format: `{ "main": "https://...", "extra": ["https://..."] }`
+ *
+ * Example:
+ * ```kotlin
+ * // Simple configuration
+ * JavaScriptPackage("https://cdn.jsdelivr.net/npm/react@18")
+ *
+ * // Configuration with extra dependencies
+ * JavaScriptPackage(
+ *     mainSource = "https://cdn.jsdelivr.net/npm/echarts@5",
+ *     extraSources = listOf("https://cdn.jsdelivr.net/npm/echarts-gl@2")
+ * )
+ * ```
+ */
 @Serializable(JavaScriptPackageSerializer::class)
 data class JavaScriptPackage(
     val mainSource: String,
@@ -19,6 +43,15 @@ data class JavaScriptPackage(
     }
 }
 
+/**
+ * Custom serializer for JavaScriptPackage
+ *
+ * Supports two serialization formats:
+ * 1. String format: Serializes directly as mainSource
+ * 2. Object format: Serializes as { main: string, extra: string[] }
+ *
+ * When deserializing, uses string format if only main source exists; uses object format if extra dependencies exist
+ */
 class JavaScriptPackageSerializer : KSerializer<JavaScriptPackage> {
     override val descriptor =
         buildClassSerialDescriptor(

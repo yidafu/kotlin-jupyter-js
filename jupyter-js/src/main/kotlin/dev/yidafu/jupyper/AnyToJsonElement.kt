@@ -3,7 +3,11 @@ package dev.yidafu.jupyper
 import kotlinx.serialization.json.*
 
 /**
- * covert basic type to JsonElement
+ * Converts basic types to JsonElement
+ *
+ * Recursively converts Kotlin types to JSON elements for serialization
+ * Supports: null, Map, Collection, Arrays, primitives, Enum, Pair, Triple
+ * Throws IllegalStateException for unsupported types
  */
 fun Any?.toJsonElement(): JsonElement =
     when (this) {
@@ -33,7 +37,10 @@ fun Any?.toJsonElement(): JsonElement =
     }
 
 /**
- * convert Map<*, *> to JsonObject
+ * Converts Map<*, *> to JsonObject
+ *
+ * Converts all map entries to JSON object properties
+ * Keys are converted to strings (JSON requirement)
  */
 fun Map<*, *>.toJsonElement(): JsonElement {
     val map = mutableMapOf<String, JsonElement>()
@@ -45,12 +52,19 @@ fun Map<*, *>.toJsonElement(): JsonElement {
 }
 
 /**
- * convert Collection<*> to JsonArray
+ * Converts Collection<*> to JsonArray
+ *
+ * Converts all collection elements to JSON array elements
  */
 fun Collection<*>.toJsonElement(): JsonElement {
     return JsonArray(this.map { it.toJsonElement() })
 }
 
+/**
+ * Converts Array<*> to JsonArray
+ *
+ * Converts all array elements to JSON array elements
+ */
 fun Array<*>.toJsonElement(): JsonElement {
     return JsonArray(this.map { it.toJsonElement() })
 }

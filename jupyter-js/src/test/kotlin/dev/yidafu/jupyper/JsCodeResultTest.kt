@@ -7,6 +7,7 @@ import io.kotest.matchers.string.shouldNotBeEmpty
 import io.mockk.mockkClass
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.buildJsonObject
 import org.jetbrains.kotlinx.jupyter.api.Notebook
 
 class JsCodeResultTest : ShouldSpec({
@@ -22,7 +23,7 @@ class JsCodeResultTest : ShouldSpec({
         should("include JS code in the script module") {
             val notebook = mockkClass(Notebook::class)
             val result = jsCodeResult.render(notebook)
-            val renderedHtml = Json.encodeToString(result.toJson())
+            val renderedHtml = Json.encodeToString(result.toJson(buildJsonObject {}))
             renderedHtml shouldContain testJsCode
             renderedHtml shouldContain jsCodeResult.uuid
         }

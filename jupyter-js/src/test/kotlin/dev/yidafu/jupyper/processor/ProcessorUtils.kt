@@ -1,8 +1,8 @@
 package dev.yidafu.jupyper.processor
 
 import dev.yidafu.swc.SwcNative
-import dev.yidafu.swc.esParseOptions
-import dev.yidafu.swc.types.Program
+import dev.yidafu.swc.generated.*
+import dev.yidafu.swc.generated.dsl.*
 
 val compiler = SwcNative()
 
