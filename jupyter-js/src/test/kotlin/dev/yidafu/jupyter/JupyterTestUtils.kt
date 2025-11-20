@@ -1,4 +1,4 @@
-package dev.yidafu.jupyper
+package dev.yidafu.jupyter
 
 import org.jetbrains.kotlinx.jupyter.api.libraries.JupyterIntegration
 import org.jetbrains.kotlinx.jupyter.repl.result.EvalResultEx
@@ -51,10 +51,10 @@ inline fun <T : JupyterIntegration> JupyterReplTestCase.withLibrary(
     // Initialize library through USE block
     // Library initialization logic is defined in JupyterIntegration.onLoaded()
     // Use addCodePreprocessor to register code preprocessors
-    this.execEx(
+        this.execEx(
         """
         USE {
-            addCodePreprocessor(dev.yidafu.jupyper.JavaScriptMagicCodeProcessor(this.notebook));
+            addCodePreprocessor(dev.yidafu.jupyter.JavaScriptMagicCodeProcessor(this.notebook));
         }
         """.trimIndent(),
     )

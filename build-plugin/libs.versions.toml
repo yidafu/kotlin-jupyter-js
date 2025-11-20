@@ -1,13 +1,14 @@
 [versions]
-kotlin = "2.2.0"
+kotlin = "2.2.20"
 jupyter = "0.16.0-726"
-ksp = "2.2.0-2.0.2"
+ksp = "2.2.20-2.0.4"
 ktlint = "12.1.0"
 dokka = "1.8.20"
 publisher = "1.8.10-dev-43"
 kover = "0.7.5"
 kotest = "5.8.0"
 mockk = "1.13.9"
+junit-jupiter = "5.9.2"
 
 [libraries]
 # gradle plugins
@@ -34,6 +35,8 @@ kotest_assertions_core = { module = "io.kotest:kotest-assertions-core", version.
 kotest_property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
 kotest_assertions_json = { module = "io.kotest:kotest-assertions-json", version.ref = "kotest" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+jupyter_test_kit = { module = "org.jetbrains.kotlinx:kotlin-jupyter-test-kit", version.ref = "jupyter" }
+junit_jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
 
 [bundles]
 allGradlePlugins = [

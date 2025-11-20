@@ -30,8 +30,22 @@
    - `jupyter-js-0.8.0.module`
 
 3. **使用本地版本**:
-   - 所有示例文件都已更新为使用 `%use jupyter-js@0.8.0`
+   - 所有示例文件都已配置为使用 `USE` 块，明确指定 `mavenLocal()` 仓库
+   - 这会优先从 Maven 本地仓库（`~/.m2/repository`）加载最新构建的版本
+   - 如果本地仓库没有找到，会从 `mavenCentral()` 下载
    - 确保 Maven 本地仓库包含最新构建的版本
+   - 配置示例：
+     ```kotlin
+     USE {
+         repositories {
+             mavenLocal()
+             mavenCentral()
+         }
+         dependencies {
+             implementation("dev.yidafu.jupyter:jupyter-js:0.8.0")
+         }
+     }
+     ```
 
 ## 🚀 快速开始
 
@@ -53,15 +67,12 @@ jupyter notebook
 
 ## 📁 示例文件
 
-- `console-log-test.ipynb` - Console.log 重定向功能测试
-- `basic-typescript.ipynb` - TypeScript 基础示例
-- `config-dsl-basic.ipynb` - 配置 DSL 基础示例
-- `d3-visualization.ipynb` - D3.js 可视化示例
-- `echarts-basic-charts.ipynb` - ECharts 图表示例
-- `kotlin-js-data-exchange.ipynb` - Kotlin-JS 数据交换示例
+- `01-statistical-charts.ipynb` - Chart.js 统计图表示例（柱状图、折线图、饼图、散点图）
+- `config-dsl-basic.ipynb` - jsConfig DSL 配置示例
+- `d3-visualization.ipynb` - D3.js 自定义可视化示例
+- `echarts-basic-charts.ipynb` - ECharts 图表示例（线图、柱状图、饼图）
+- `kotlin-js-data-exchange.ipynb` - Kotlin 与 JavaScript 数据交换示例
 - `lodash-utilities.ipynb` - Lodash 工具库示例
-- `react-jsx-basic.ipynb` - React JSX 基础示例
-- `react-tsx-basic.ipynb` - React TSX 基础示例
 
 ## 🔧 环境信息
 
@@ -130,5 +141,6 @@ JavaScript 的 `console.log` 输出会同时显示在：
 - 确保在运行示例前激活虚拟环境
 - 某些示例可能需要网络连接来加载外部库
 - 如果遇到问题，请检查浏览器控制台的错误信息
-- **调试模式**: 所有示例都配置为使用本地 0.8.0 版本进行调试
-- **版本管理**: 确保本地 Maven 仓库包含最新构建的版本
+- **调试模式**: 所有示例都配置为使用 `USE` 块，明确指定 `mavenLocal()` 优先从本地 Maven 仓库加载
+- **版本管理**: 确保本地 Maven 仓库包含最新构建的版本，运行 `./gradlew publishToMavenLocal` 更新本地版本
+- **仓库配置**: 使用 `mavenLocal()` 确保优先使用本地构建的版本，`mavenCentral()` 作为备用仓库

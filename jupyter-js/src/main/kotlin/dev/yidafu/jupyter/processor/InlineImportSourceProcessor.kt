@@ -4,7 +4,7 @@ import dev.yidafu.jupyter.LanguageType
 import dev.yidafu.jupyter.swc.forEachImportDeclaration
 import dev.yidafu.jupyter.swc.getValue
 import dev.yidafu.jupyter.swc.replace
-import dev.yidafu.swc.dsl.*
+import dev.yidafu.swc.generated.dsl.*
 import dev.yidafu.swc.emptySpan
 import dev.yidafu.swc.generated.*
 import dev.yidafu.swc.generated.dsl.*

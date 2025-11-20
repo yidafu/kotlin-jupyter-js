@@ -3,9 +3,9 @@
 package dev.yidafu.jupyter.processor
 
 import dev.yidafu.jupyter.JSX_DEFAULT_EXPORT_VARIABLE_NAME
-import dev.yidafu.swc.dsl.createVariableDeclaration
-import dev.yidafu.swc.dsl.identifier
-import dev.yidafu.swc.dsl.variableDeclarator
+import dev.yidafu.swc.generated.dsl.createVariableDeclaration
+import dev.yidafu.swc.generated.dsl.identifier
+import dev.yidafu.swc.generated.dsl.variableDeclarator
 import dev.yidafu.swc.emptySpan
 import dev.yidafu.swc.generated.*
 import dev.yidafu.swc.generated.dsl.*

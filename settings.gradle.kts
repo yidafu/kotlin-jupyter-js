@@ -10,6 +10,8 @@
 
 pluginManagement {
     repositories {
+        mavenLocal()
+
         maven("https://mirrors.cloud.tencent.com/nexus/repository/maven-public")
         maven("https://s01.oss.sonatype.org/content/groups/public/")
         gradlePluginPortal()

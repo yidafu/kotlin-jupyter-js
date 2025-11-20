@@ -3,6 +3,8 @@
  */
 package dev.yidafu.jupyter
 
+import dev.yidafu.jupyter.exec
+import dev.yidafu.jupyter.withLibrary
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
@@ -140,12 +142,12 @@ class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
     fun `should execute ECharts example`() {
         withLibrary(KotlinKernelJsMagicSupport()) {
             exec(""" val dataArray = arrayOf(150, 230, 224, 218, 135, 147, 260) """)
-            val result = exec(
-=======
-        val html = (result[MimeTypes.HTML] as String)
-        println(html)
-        assertContains(html, LibsMapping.default["echarts"]!!.mainSource)
-        assertContains(html, LibsMapping.default["vis-graph3d"]!!.mainSource)
+            val result = exec("") as MimeTypedResult
+            val html = (result[MimeTypes.HTML] as String)
+            println(html)
+            assertContains(html, LibsMapping.default["echarts"]!!.mainSource)
+            assertContains(html, LibsMapping.default["vis-graph3d"]!!.mainSource)
+        }
     }
 
     @Test
@@ -160,7 +162,6 @@ class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
         exec(""" val dataArray = arrayOf(150, 230, 224, 218, 135, 147, 260) """)
         val result =
             exec(
->>>>>>> ebec24ef5d19cc5aa921be6cb7cfa5bfff099096:jupyter-js/src/test/kotlin/dev/yidafu/jupyter/KotlinKernelJsMagicSupportTest.kt
                 """
                 %tsx
                 // you can import any variable from kotlin world, through virtual package "@jupyter"
@@ -194,9 +195,8 @@ class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
                 """.trimIndent(),
             ) as MimeTypedResult
 
-            val html = (result[MimeTypes.HTML] as String)
-            println(html)
-        }
+        val html = (result[MimeTypes.HTML] as String)
+        println(html)
     }
 
     @Test

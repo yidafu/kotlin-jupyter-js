@@ -62,6 +62,55 @@ class JupyterImportProcessor(
     private val notebook: Notebook,
 ) : JavaScriptProcessor {
     private val log: Logger = LoggerFactory.getLogger(JupyterImportProcessor::class.java)
+    
+    // Compact JSON encoder (no pretty printing) for generating JavaScript code
+    private val compactJson = kotlinx.serialization.json.Json {
+        prettyPrint = false
+        ignoreUnknownKeys = true
+    }
+    
+    /**
+     * Helper function to create compact JSON string from result containing text/plain
+     */
+    private fun createCompactJsonString(result: JsonObject): String {
+        return if (result.containsKey("text/plain")) {
+            val textObj = result["text/plain"] as? JsonElement
+            when {
+                textObj == null || textObj is JsonNull -> "{\"text/plain\":null}"
+                textObj is JsonPrimitive -> {
+                    if (textObj.isString) {
+                        val escapedValue = textObj.content.replace("\\", "\\\\").replace("\"", "\\\"")
+                        "{\"text/plain\":\"$escapedValue\"}"
+                    } else {
+                        "{\"text/plain\":${compactJson.encodeToString(textObj)}}"
+                    }
+                }
+                else -> {
+                    // For complex types, manually construct compact JSON
+                    // This should not happen for simple text/plain cases, but handle it anyway
+                    val textObj = result["text/plain"] as? JsonElement
+                    when {
+                        textObj == null || textObj is JsonNull -> "{\"text/plain\":null}"
+                        textObj is JsonPrimitive -> {
+                            if (textObj.isString) {
+                                val escapedValue = textObj.content.replace("\\", "\\\\").replace("\"", "\\\"")
+                                "{\"text/plain\":\"$escapedValue\"}"
+                            } else {
+                                "{\"text/plain\":${compactJson.encodeToString(textObj)}}"
+                            }
+                        }
+                        else -> {
+                            // Fallback: use compact JSON encoder and remove formatting
+                            compactJson.encodeToString(result).replace("\n", "").replace(Regex("\\s+"), " ").trim()
+                        }
+                    }
+                }
+            }
+        } else {
+            // For results without text/plain, use compact JSON encoder and remove formatting
+            compactJson.encodeToString(result).replace("\n", "").replace(Regex("\\s+"), " ").trim()
+        }
+    }
 
     /**
      * Processes @jupyter import statements in AST
@@ -98,93 +147,125 @@ class JupyterImportProcessor(
                                 }
                             }?.toTypedArray() ?: emptyArray()
 
-                    importVariables.forEach {
+                    importVariables.forEach { pair ->
                         // jsExport has higher priority
                         val jsValueString: String =
-                            if (JavaScriptVariableStore.containsKey(it.first)) {
+                            if (JavaScriptVariableStore.containsKey(pair.first)) {
                                 // Values from jsExport are already JSON-encoded strings, use them directly
-                                JavaScriptVariableStore[it.first] ?: "null"
+                                JavaScriptVariableStore[pair.first] ?: "null"
                             } else {
                                 val result: JsonObject =
                                     when (
-                                        val value = notebook.variablesState[it.first]?.value?.getOrNull() ?: NullResult()
+                                        val value =
+                                            notebook.variablesState[pair.first]?.value?.getOrNull() ?: NullResult()
                                     ) {
                                         is DisplayResult -> {
                                             value.toJson(buildJsonObject {})
                                         }
+
                                         is Renderable -> {
                                             value.render(notebook).toJson(buildJsonObject {})
                                         }
+
                                         else -> {
                                             JSON(buildJsonObject {
                                                 put("text/plain", value.toJsonElement())
                                             }).toJson(buildJsonObject {})
                                         }
                                     }
-                                // First check if result itself contains text/plain (for basic types)
-                                if (result.containsKey("text/plain")) {
+                                log.debug("Variable ${pair.first} result structure: ${compactJson.encodeToString(result)}")
+                                val data = result["data"] as? JsonObject
+                                // Check if data field exists and contains text/plain
+                                if (data != null && data.containsKey("text/plain")) {
+                                    val textObj = data["text/plain"] as? JsonElement
+                                    when {
+                                        textObj == null || textObj is JsonNull -> "null"
+                                        textObj is JsonPrimitive -> {
+                                            compactJson.encodeToString(textObj)
+                                        }
+
+                                        else -> compactJson.encodeToString(textObj)
+                                    }
+                                } else if (data == null) {
+                                    // If data field doesn't exist, check if result contains text/plain
+                                    // This handles cases where JSON function returns a structure like {"text/plain": "value"}
+                                    if (result.containsKey("text/plain")) {
+                                        val textObj = result["text/plain"] as? JsonElement
+                                        when {
+                                            textObj == null || textObj is JsonNull -> "{\"text/plain\":null}"
+                                            textObj is JsonPrimitive -> {
+                                                if (textObj.isString) {
+                                                    // For String type, return compact JSON object format
+                                                    // Manually construct to ensure compact format
+                                                    val escapedValue = textObj.content.replace("\\", "\\\\").replace("\"", "\\\"")
+                                                    "{\"text/plain\":\"$escapedValue\"}"
+                                                } else {
+                                                    createCompactJsonString(result)
+                                                }
+                                            }
+                                            else -> createCompactJsonString(result)
+                                        }
+                                    } else {
+                                        // Return the entire result as JSON string (compact format)
+                                        createCompactJsonString(result)
+                                    }
+                                } else if (result.containsKey("text/plain")) {
+                                    // If result itself contains text/plain (for basic types from JSON function)
                                     val textObj = result["text/plain"] as? JsonElement
                                     when {
                                         textObj == null || textObj is JsonNull -> "null"
                                         textObj is JsonPrimitive -> {
                                             // For JsonPrimitive strings, return JSON-encoded string (with quotes)
                                             // so it can be used as a JavaScript string literal
-                                            Json.encodeToString(textObj)
+                                            compactJson.encodeToString(textObj)
                                         }
-                                        else -> Json.encodeToString(textObj)
+
+                                        else -> compactJson.encodeToString(textObj)
                                     }
                                 } else {
-                                    val data = result["data"] as? JsonObject
-                                    if (data != null && data.containsKey("text/plain")) {
-                                        // Check if data contains text/plain directly
-                                        val textObj = data["text/plain"] as? JsonElement
-                                        when {
-                                            textObj == null || textObj is JsonNull -> "null"
-                                            textObj is JsonPrimitive -> {
-                                                Json.encodeToString(textObj)
-                                            }
-                                            else -> Json.encodeToString(textObj)
-                                        }
-                                    } else if (data == null) {
-                                        // If data field doesn't exist and result doesn't contain text/plain,
-                                        // return the entire result as JSON string
-                                        // This handles cases where JSON function returns a different structure
-                                        Json.encodeToString(result)
-                                    } else {
-                                        val objKeys = data.keys
-                                        when {
+                                    val objKeys = data.keys
+                                    when {
                                         objKeys.contains(MimeTypes.JSON) -> {
-                                            val jsonObj: JsonElement = data[MimeTypes.JSON] ?: throw InvalidMimeTypeResult(MimeTypes.JSON)
-                                            Json.encodeToString(jsonObj)
+                                            val jsonObj: JsonElement =
+                                                data[MimeTypes.JSON] ?: throw InvalidMimeTypeResult(MimeTypes.JSON)
+                                            compactJson.encodeToString(jsonObj)
                                         }
+
                                         objKeys.contains(MimeTypes.PLAIN_TEXT) -> {
-                                            val textObj: JsonElement = data[MimeTypes.PLAIN_TEXT] ?: throw InvalidMimeTypeResult(MimeTypes.PLAIN_TEXT)
+                                            val textObj: JsonElement = data[MimeTypes.PLAIN_TEXT]
+                                                ?: throw InvalidMimeTypeResult(MimeTypes.PLAIN_TEXT)
                                             when {
                                                 textObj is JsonNull -> "null"
                                                 textObj is JsonPrimitive -> {
                                                     // Return JSON-encoded string (with quotes) so it can be used in JS
-                                                    Json.encodeToString(textObj)
+                                                    compactJson.encodeToString(textObj)
                                                 }
-                                                else -> Json.encodeToString(textObj)
+
+                                                else -> compactJson.encodeToString(textObj)
                                             }
                                         }
                                         // Also check for "text/plain" key directly in data (for basic types)
                                         objKeys.contains("text/plain") -> {
-                                            val textObj: JsonElement = data["text/plain"] ?: throw InvalidMimeTypeResult("text/plain")
+                                            val textObj: JsonElement =
+                                                data["text/plain"] ?: throw InvalidMimeTypeResult("text/plain")
                                             when {
                                                 textObj is JsonNull -> "null"
                                                 textObj is JsonPrimitive -> {
                                                     // Return JSON-encoded string (with quotes) so it can be used in JS
-                                                    Json.encodeToString(textObj)
+                                                    compactJson.encodeToString(textObj)
                                                 }
-                                                else -> Json.encodeToString(textObj)
+
+                                                else -> compactJson.encodeToString(textObj)
                                             }
                                         }
+
                                         objKeys.contains(MimeTypes.HTML) -> {
-                                            val htmlObj: JsonElement = data[MimeTypes.HTML] ?: throw InvalidMimeTypeResult(MimeTypes.HTML)
+                                            val htmlObj: JsonElement =
+                                                data[MimeTypes.HTML] ?: throw InvalidMimeTypeResult(MimeTypes.HTML)
                                             // Return JSON-encoded string (with quotes) so it can be used in JS
-                                            Json.encodeToString(htmlObj)
+                                            compactJson.encodeToString(htmlObj)
                                         }
+
                                         objKeys.contains(MimeTypes.PNG) -> {
                                             val pngObj: JsonElement =
                                                 data[MimeTypes.PNG] as? JsonPrimitive ?: throw InvalidMimeTypeResult(
@@ -195,12 +276,14 @@ class JupyterImportProcessor(
                                                     if (pngObj.isString) {
                                                         pngObj.content
                                                     } else {
-                                                        Json.encodeToString(pngObj)
+                                                        compactJson.encodeToString(pngObj)
                                                     }
                                                 }
-                                                else -> Json.encodeToString(pngObj)
+
+                                                else -> compactJson.encodeToString(pngObj)
                                             }
                                         }
+
                                         else -> {
                                             // If data doesn't contain any supported MIME type, check if data itself contains text/plain
                                             // This handles cases where JSON function returns a structure with data field containing text/plain
@@ -209,46 +292,59 @@ class JupyterImportProcessor(
                                                 when {
                                                     textObj == null || textObj is JsonNull -> "null"
                                                     textObj is JsonPrimitive -> {
-                                                        Json.encodeToString(textObj)
+                                                        compactJson.encodeToString(textObj)
                                                     }
-                                                    else -> Json.encodeToString(textObj)
+
+                                                    else -> compactJson.encodeToString(textObj)
                                                 }
                                             } else if (result.containsKey("text/plain")) {
                                                 // Check if result itself contains text/plain
                                                 val textObj = result["text/plain"] as? JsonElement
                                                 when {
-                                                    textObj == null || textObj is JsonNull -> "null"
+                                                    textObj == null || textObj is JsonNull -> "{\"text/plain\":null}"
                                                     textObj is JsonPrimitive -> {
-                                                        Json.encodeToString(textObj)
+                                                        if (textObj.isString) {
+                                                            // For String type, return compact JSON object format
+                                                            val escapedValue = textObj.content.replace("\\", "\\\\").replace("\"", "\\\"")
+                                                            "{\"text/plain\":\"$escapedValue\"}"
+                                                        } else {
+                                                            "{\"text/plain\":${compactJson.encodeToString(textObj)}}"
+                                                        }
                                                     }
-                                                    else -> Json.encodeToString(textObj)
+                                                    else -> {
+                                                        // For complex types, use helper function to create compact JSON
+                                                        createCompactJsonString(result)
+                                                    }
                                                 }
                                             } else {
                                                 throw NotSupportMimeTypeException(result.keys.joinToString(", "))
                                             }
                                         }
                                     }
-                                    }
                                 }
                             }
-
-                        log.debug("import variable ${it.second} from kotlin world, it't value: $jsValueString")
-                        context.addKotlinValue(it.second to jsValueString)
+                        log.debug("import variable ${pair.second} from kotlin world, it's value: $jsValueString")
+                        context.addKotlinValue(pair.second to jsValueString)
                     }
 
-//                    log.debug("replace statement `import * from '@jupyter'` with actual variable declare")
                 }
 
-            // remove `import * from '@jupyter';`
-            // replace imported variable after printSync called. just for performance
-            program.body = program.body
-                ?.filter {
-                    !(
-                        it is ImportDeclaration &&
-                            it.source?.value == JUPYTER_IMPORT_SPECIFIER_SOURCE_NAME
-                    )
-                }
-                ?.toTypedArray() ?: emptyArray<ModuleItem>()
+//                    log.debug("replace statement `import * from '@jupyter'` with actual variable declare")
         }
+
+        // remove `import * from '@jupyter';`
+        // replace imported variable after printSync called. just for performance
+        if (program is Module) {
+        program.body = program.body
+            ?.filter {
+                !(
+                        it is ImportDeclaration &&
+                                it.source?.value == JUPYTER_IMPORT_SPECIFIER_SOURCE_NAME
+                        )
+            }
+            ?.toTypedArray() ?: emptyArray<ModuleItem>()
+        }
+
     }
+
 }

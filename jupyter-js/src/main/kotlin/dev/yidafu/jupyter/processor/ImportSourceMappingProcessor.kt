@@ -1,8 +1,8 @@
 package dev.yidafu.jupyter.processor
 
 import dev.yidafu.jupyter.LibsMapping
-import dev.yidafu.swc.dsl.createImportDeclaration
-import dev.yidafu.swc.dsl.stringLiteral
+import dev.yidafu.swc.generated.dsl.createImportDeclaration
+import dev.yidafu.swc.generated.dsl.stringLiteral
 import dev.yidafu.swc.emptySpan
 import org.jetbrains.kotlin.backend.common.push
 

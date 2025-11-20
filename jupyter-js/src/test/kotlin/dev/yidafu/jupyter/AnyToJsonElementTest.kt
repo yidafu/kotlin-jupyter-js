@@ -1,5 +1,6 @@
 package dev.yidafu.jupyper
 
+import dev.yidafu.jupyter.toJsonElement
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.comparables.shouldBeGreaterThan

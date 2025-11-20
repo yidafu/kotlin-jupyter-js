@@ -1,9 +1,9 @@
 package dev.yidafu.jupyter.processor
 
 import dev.yidafu.swc.SwcNative
-import dev.yidafu.swc.esParseOptions
-import dev.yidafu.swc.options
+import dev.yidafu.swc.generated.dsl.options
 import dev.yidafu.swc.generated.Program
+import dev.yidafu.swc.generated.dsl.esParseOptions
 
 val compiler = SwcNative()
 

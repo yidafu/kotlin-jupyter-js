@@ -1,7 +1,7 @@
 package dev.yidafu.jupyter.processor
 
 import dev.yidafu.jupyter.CircularDependencyException
-import dev.yidafu.swc.types.VariableDeclaration
+import dev.yidafu.swc.generated.VariableDeclaration
 import org.slf4j.LoggerFactory
 import java.util.*
 import kotlin.io.encoding.Base64

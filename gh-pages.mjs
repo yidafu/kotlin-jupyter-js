@@ -1,10 +1,14 @@
 #!/usr/bin/env zx
 var ghpages = require('gh-pages');
 
+
+await $`./gradlew :jupyter-js:dokkaHtml`
+
 await $`rm -fr ./dist`
 await $`mkdir -p ./dist`
 await $`cp -r jupyter-js/build/dokka/html dist/kt-docs`
 await $`cp -r examples-html dist/examples`
+
 
 await $`cp docs/theme.css dist/theme.css`
 await $`cp docs/prism.js dist/prism.js`

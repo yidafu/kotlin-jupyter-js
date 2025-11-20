@@ -221,3 +221,7 @@ local.properties
 gradle.properties
 .DS_Store
 .ipynb_checkpoints/
+
+*.md
+build-plugin/libs.versions.toml
+.idea/

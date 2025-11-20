@@ -31,21 +31,36 @@ kotlinJupyter {
 
 // Creates the metadata needed for the library integration to be detected automatically.
 tasks.processJupyterApiResources {
-    libraryProducers = listOf("dev.yidafu.jupyper.KotlinKernelJsMagicSupport")
+    libraryProducers = listOf("dev.yidafu.jupyter.KotlinKernelJsMagicSupport")
 }
 
 group = "dev.yidafu.jupyter"
 version = "0.8.0"
 
 dependencies {
-    implementation(libs.dokka.analysis.compiler)
+    implementation(libs.dokka.analysis.compiler) {
+        // 排除可能冲突的 Kotlin 编译器依赖
+        exclude(group = "org.jetbrains.kotlin", module = "kotlin-compiler")
+        exclude(group = "org.jetbrains.kotlin", module = "kotlin-compiler-embeddable")
+    }
     testImplementation(kotlin("test"))
     implementation(libs.slf4j.api)
     implementation(libs.kotlin.serialization.json)
     implementation(libs.swc.binding)
 
+    // Kotlin Jupyter 测试依赖
+    testImplementation(libs.jupyter.test.kit)
+    
+    // Kotest 测试框架
     testImplementation(libs.bundles.kotest)
     testImplementation(libs.mockk)
+    
+    // JUnit Jupiter (Kotlin Jupyter Test Kit 需要)
+    testImplementation(libs.junit.jupiter)
+    
+    // 强制使用正确的 Kotlin 编译器版本
+    testRuntimeOnly("org.jetbrains.kotlin:kotlin-compiler-embeddable:2.2.20")
+    testRuntimeOnly("org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:2.2.20")
 }
 
 repositories {

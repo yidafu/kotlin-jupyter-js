@@ -1,5 +1,8 @@
-package dev.yidafu.jupyper
+package dev.yidafu.jupyter
 
+import dev.yidafu.jupyter.KotlinKernelJsMagicSupport
+import dev.yidafu.jupyter.exec
+import dev.yidafu.jupyter.withLibrary
 import org.jetbrains.kotlinx.jupyter.api.*
 import org.jetbrains.kotlinx.jupyter.testkit.JupyterReplTestCase
 import org.jetbrains.kotlinx.jupyter.testkit.ReplProvider

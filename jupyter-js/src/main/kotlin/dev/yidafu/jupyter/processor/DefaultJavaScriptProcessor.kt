@@ -2,9 +2,11 @@ package dev.yidafu.jupyter.processor
 
 import dev.yidafu.jupyter.LanguageType
 import dev.yidafu.jupyter.swc.addFirst
+import dev.yidafu.swc.SwcJson
 import dev.yidafu.swc.SwcNative
 import dev.yidafu.swc.generated.*
 import dev.yidafu.swc.generated.dsl.*
+import org.jetbrains.kotlin.backend.common.phaser.transform
 import org.jetbrains.kotlinx.jupyter.api.Notebook
 import org.slf4j.LoggerFactory
 
@@ -42,6 +44,7 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
                 comments = false
                 topLevelAwait = true
                 nullishCoalescing = true
+
             }
 
     /**
@@ -65,11 +68,10 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
     private val jsPrintOpt
         get() =
             options {
-                jsc =
-                    jscConfig {
-                        target = JscTarget.ES2020
-                        parser = jsParseOpt
-                    }
+//                jsc =
+//                    jscConfig {
+//                        target = JscTarget.ES2020
+//                    }
             }
 
     /**
@@ -80,6 +82,7 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
         get() =
             tsParseOptions {
                 target = JscTarget.ES2020
+                script = false
                 comments = false
             }
 
@@ -93,7 +96,6 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
                 jsc =
                     jscConfig {
                         target = JscTarget.ES2020
-                        parser = tsParseOpt
                     }
             }
 
@@ -106,6 +108,7 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
             tsParseOptions {
                 target = JscTarget.ES2020
                 comments = false
+                script = false
                 tsx = true
             }
 
@@ -190,10 +193,10 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
         source: String,
         context: JavascriptProcessContext,
     ): String {
-        val program = parseJsCode(source, context)
+        val program: Program = parseJsCode(source, context)
         log.warn("processJsCode ${context.globalImports.size}")
         program.addFirst(context.globalImports)
-
+        println("before print printSync \n\n${SwcJson.astTreeToString(program as Module)}")
         val output =
             swcCompiler.printSync(
                 program,
@@ -215,25 +218,34 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
         source: String,
         context: JavascriptProcessContext,
     ): Program {
+        // 1. transform code ts javascript
         val transformOutput =
             swcCompiler.transformSync(
                 source,
-                false,
                 options {
                     jsc =
                         jscConfig {
                             parser = tsParseOpt
+                            tsxParseOpt
                         }
                 },
             )
 
+        // 2. parse code to AST Tree
+        // transformSync 已将 TypeScript 转换为 JavaScript，所以使用 esParseOptions 解析
         val program =
             swcCompiler.parseSync(
                 transformOutput.code,
-                tsParseOpt,
+                esParseOptions {
+                    target = JscTarget.ES2020
+                    comments = false
+                    topLevelAwait = true
+                    nullishCoalescing = true
+                },
                 "jupyter-cell-js.js",
             )
 
+        // 3. modify AST Tree
         executeJsCodeProcessor(program, context)
 
         return program
@@ -253,7 +265,8 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
         val program = transformTsCode(source, context)
         program.addFirst(context.globalImports)
 
-        val output = swcCompiler.printSync(program, tsPrintOpt)
+        // transformTsCode 已将 TypeScript 转换为 JavaScript，所以使用 jsPrintOpt
+        val output = swcCompiler.printSync(program, jsPrintOpt)
 
         return "dev.yidafu.jupyter.JsCodeResult(\"\"\" $context\n ${output.code} \"\"\")"
     }
@@ -274,7 +287,6 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
         val transformOutput =
             swcCompiler.transformSync(
                 source,
-                false,
                 options {
                     jsc =
                         jscConfig {
@@ -283,14 +295,20 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
                 },
             )
 
+        // transformSync 已将 JSX 转换为 JavaScript，所以使用 esParseOptions 解析
         val program =
             swcCompiler.parseSync(
                 transformOutput.code,
-                jsxParseOpt,
+                esParseOptions {
+                    target = JscTarget.ES2020
+                    comments = false
+                    topLevelAwait = true
+                    nullishCoalescing = true
+                },
                 "jupyter-cell-jsx.js",
             )
 
-        executeJsxProcessor(program, context)
+        // 注意：processor 在 processJsxCode 中调用，不在这里调用
         return program
     }
 
@@ -330,21 +348,32 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
         val transformOutput =
             swcCompiler.transformSync(
                 source,
-                false,
                 options {
                     jsc =
                         jscConfig {
                             parser = tsxParseOpt
+                            target = JscTarget.ES2020
+                            transform = transformConfig {
+
+                            }
                         }
+
                 },
             )
 
+        // transformSync 已将 TSX 转换为 JavaScript，所以使用 esParseOptions 解析
         val program =
             swcCompiler.parseSync(
                 transformOutput.code,
-                tsxParseOpt,
+                esParseOptions {
+                    target = JscTarget.ES2020
+                    comments = false
+                    topLevelAwait = true
+                    nullishCoalescing = true
+                },
                 "jupyter-cell-tsx.js",
             )
+
         return program
     }
 
@@ -363,7 +392,9 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
 
         executeJsxProcessor(program, context)
         program.addFirst(context.globalImports)
-        val output = swcCompiler.printSync(program, tsPrintOpt)
+
+        // transformTsxCode 已将 TSX 转换为 JavaScript，所以使用 jsPrintOpt
+        val output = swcCompiler.printSync(program, jsPrintOpt)
 
         return "dev.yidafu.jupyter.JsxCodeResult(\"\"\" $context\n ${output.code} \"\"\")"
     }
@@ -394,7 +425,7 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
             }
         // escaping javascript template ${ }
         // https://stackoverflow.com/a/32994616
-        val output = result?.replace("\${", "\${'$'}{") ?: ""
+        val output = result?.replace($$"${", $$"${'$'}{") ?: ""
         log.debug("javascript output code:\n{}", output)
         return output
     }
