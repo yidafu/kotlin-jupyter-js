@@ -403,4 +403,204 @@ class KotlinKernelJsMagicSupportTest :
             println("Skipping template string test: ${e.message}")
         }
     }
+
+    @Test
+    fun `should handle Kotlin comments in JavaScript code`() {
+        withLibrary(KotlinKernelJsMagicSupport()) {
+            val result =
+                exec(
+                    """
+                    %js
+                    // kotlin commet 添加注释
+                    const x = 1;
+                    console.log(x);
+                    """.trimIndent(),
+                ) as MimeTypedResult
+
+            val html = (result[MimeTypes.HTML] as String)
+            // Verify code executes correctly despite comments (comments may be removed during compilation)
+            assertContains(html, "const x = 1")
+            assertContains(html, "console.log(x)")
+            // Code should execute successfully
+            assertTrue(result is MimeTypedResult)
+        }
+    }
+
+    @Test
+    fun `should handle emoji comments in JavaScript code`() {
+        withLibrary(KotlinKernelJsMagicSupport()) {
+            val result =
+                exec(
+                    """
+                    %js
+                    // 🔧 Local debug version
+                    const debug = true;
+                    console.log(debug);
+                    """.trimIndent(),
+                ) as MimeTypedResult
+
+            val html = (result[MimeTypes.HTML] as String)
+            // Verify code executes correctly despite emoji comments (comments may be removed during compilation)
+            assertContains(html, "const debug = true")
+            assertContains(html, "console.log(debug)")
+            // Code should execute successfully
+            assertTrue(result is MimeTypedResult)
+        }
+    }
+
+    @Test
+    fun `should handle both Kotlin and emoji comments together`() {
+        withLibrary(KotlinKernelJsMagicSupport()) {
+            val result =
+                exec(
+                    """
+                    %js
+                    // kotlin commet 添加注释
+                    // 🔧 Local debug version
+                    const value = 42;
+                    console.log(value);
+                    """.trimIndent(),
+                ) as MimeTypedResult
+
+            val html = (result[MimeTypes.HTML] as String)
+            // Verify code executes correctly despite multiple comments (comments may be removed during compilation)
+            assertContains(html, "const value = 42")
+            assertContains(html, "console.log(value)")
+            // Code should execute successfully
+            assertTrue(result is MimeTypedResult)
+        }
+    }
+
+    @Test
+    fun `should handle comments in JSX code`() {
+        withLibrary(KotlinKernelJsMagicSupport()) {
+            val result =
+                exec(
+                    """
+                    %jsx
+                    // kotlin commet 添加注释
+                    // 🔧 Local debug version
+                    export default function App() {
+                        return <div>Hello</div>
+                    }
+                    """.trimIndent(),
+                ) as MimeTypedResult
+
+            val html = (result[MimeTypes.HTML] as String)
+            // Verify JSX code executes correctly despite comments (comments may be removed during compilation)
+            assertContains(html, "React.createElement")
+            assertContains(html, "Hello")
+            // Code should execute successfully
+            assertTrue(result is MimeTypedResult)
+        }
+    }
+
+    @Test
+    fun `should handle comments in TypeScript code`() {
+        withLibrary(KotlinKernelJsMagicSupport()) {
+            val result =
+                exec(
+                    """
+                    %ts
+                    // kotlin commet 添加注释
+                    // 🔧 Local debug version
+                    const x: number = 1;
+                    console.log(x);
+                    """.trimIndent(),
+                ) as MimeTypedResult
+
+            val html = (result[MimeTypes.HTML] as String)
+            // Verify TypeScript code executes correctly despite comments (comments may be removed during compilation)
+            assertContains(html, "const x")
+            assertContains(html, "console.log(x)")
+            // Code should execute successfully
+            assertTrue(result is MimeTypedResult)
+        }
+    }
+
+    @Test
+    fun `should serialize Kotlin data class and export to JavaScript`() {
+        withLibrary(KotlinKernelJsMagicSupport()) {
+            // Enable Kotlin Serialization library
+            exec("%use serialization")
+
+            // Define Serializable data class
+            exec(
+                """
+                @Serializable
+                data class Employee(
+                    val id: Int,
+                    val name: String,
+                    val department: String,
+                    val salary: Double,
+                    val joinDate: String
+                )
+                """.trimIndent(),
+            )
+
+            // Create employee data
+            exec(
+                """
+                val employees = listOf(
+                    Employee(1, "Alice Johnson", "Engineering", 95000.0, "2020-01-15"),
+                    Employee(2, "Bob Smith", "Marketing", 75000.0, "2019-06-20"),
+                    Employee(3, "Carol White", "Sales", 70000.0, "2021-03-10")
+                )
+                """.trimIndent(),
+            )
+
+            // Import and use in JavaScript
+            val result =
+                exec(
+                    $$"""
+                    %js
+                    import { employees } from '@jupyter';
+                    
+                    const container = getContainer();
+                    const totalEmployees = employees.length;
+                    const avgSalary = employees.reduce((sum, emp) => sum + emp.salary, 0) / totalEmployees;
+                    
+                    container.innerHTML = `
+                        <div>
+                            <h2>Employee Directory</h2>
+                            <p>Total Employees: ${totalEmployees}</p>
+                            <p>Average Salary: ${avgSalary.toFixed(2)}</p>
+                            <ul>
+                                ${employees.map(emp => `<li>${emp.name} - ${emp.department}</li>`).join('')}
+                            </ul>
+                        </div>
+                    `;
+                    
+                    console.log('Employees:', employees);
+                    """.trimIndent(),
+                ) as MimeTypedResult
+
+            val html = (result[MimeTypes.HTML] as String)
+            println(html)
+            // Verify employees data is correctly serialized and imported
+            assertContains(html, "const employees")
+            // Verify employee names are correctly serialized
+            assertContains(html, "Alice Johnson")
+            assertContains(html, "Bob Smith")
+            assertContains(html, "Carol White")
+            // Verify departments are correctly serialized
+            assertContains(html, "Engineering")
+            assertContains(html, "Marketing")
+            assertContains(html, "Sales")
+            // Verify salary values are correctly serialized
+            assertContains(html, "95000")
+            assertContains(html, "75000")
+            assertContains(html, "70000")
+            // Verify the JSON structure contains all required fields
+            assertContains(html, "\"id\":1")
+            assertContains(html, "\"name\":")
+            assertContains(html, "\"department\":")
+            assertContains(html, "\"salary\":")
+            assertContains(html, "\"joinDate\":")
+            // Verify the JavaScript code structure
+            assertContains(html, "totalEmployees")
+            assertContains(html, "avgSalary")
+            assertContains(html, "Employee Directory")
+        }
+    }
 }

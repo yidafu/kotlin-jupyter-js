@@ -19,6 +19,7 @@ import java.util.UUID
  *
  * @param jsCode JSX/TSX code to execute (already converted to JavaScript)
  */
+
 class JsxCodeResult(
     private val jsCode: String,
 ) : Renderable {
@@ -66,11 +67,11 @@ class JsxCodeResult(
     private val jsCodeScriptModule: String
         get() =
             buildString {
-                append("""<div id="$uuid" style="width:100%;min-height:100px"></div>""")
+                append("""<div id="$uuid" style="width:100%;min-height:30px;max-height:400px"></div>""")
                 append("""<script type="module">""")
                 append(
                     $$"""
-function getContainer(width = "100%", height = "100px") {
+function getContainer(width = "100%", height = "300px") {
     var cellRoot = document.getElementById("$${uuid}");
     cellRoot.style = `width: ${width};height: ${height}`
     return cellRoot;

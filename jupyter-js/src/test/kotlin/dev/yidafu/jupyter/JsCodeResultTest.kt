@@ -16,20 +16,8 @@ import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import org.jetbrains.kotlinx.jupyter.api.DisplayResult
-import org.jetbrains.kotlinx.jupyter.api.MimeTypes
 import org.jetbrains.kotlinx.jupyter.api.Notebook
 import java.util.UUID
-
-/**
- * Extract HTML content from DisplayResult
- * Helper function to get unescaped HTML from the JSON structure
- */
-fun extractHtml(result: DisplayResult): String {
-    val json = result.toJson(buildJsonObject {})
-    val data = json["data"]?.jsonObject
-    val html = data?.get(MimeTypes.HTML)?.jsonPrimitive?.content
-    return html ?: ""
-}
 
 class JsCodeResultTest :
     ShouldSpec({
@@ -82,7 +70,7 @@ class JsCodeResultTest :
                 val result = jsCodeResult.render(notebook)
                 val html = extractHtml(result)
                 html shouldContain """<div id="${jsCodeResult.uuid}""""
-                html shouldContain """style="width:100%;min-height:100px""""
+                html shouldContain """style="width:100%;min-height:30px;max-height:400px""""
             }
 
             should("include script module tag") {
@@ -103,7 +91,7 @@ class JsCodeResultTest :
                 val result = jsCodeResult.render(notebook)
                 val html = extractHtml(result)
                 html shouldContain """width = "100%""""
-                html shouldContain """height = "100px""""
+                html shouldContain """height = "300px""""
             }
         }
 
@@ -214,9 +202,10 @@ class JsCodeResultTest :
             should("container div has correct styling") {
                 val result = jsCodeResult.render(notebook)
                 val html = extractHtml(result)
-                // Check for width and min-height styles
+                // Check for width, min-height and max-height styles
                 html shouldContain "width:100%"
-                html shouldContain "min-height:100px"
+                html shouldContain "min-height:30px"
+                html shouldContain "max-height:400px"
             }
 
             should("getContainer function sets style correctly") {

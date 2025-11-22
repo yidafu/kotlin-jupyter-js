@@ -1,4 +1,4 @@
-package dev.yidafu.jupyper
+package dev.yidafu.jupyter
 
 import dev.yidafu.jupyter.toJsonElement
 import io.kotest.assertions.throwables.shouldThrow
@@ -6,6 +6,8 @@ import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.comparables.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.types.shouldBeInstanceOf
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.JsonNull
 import kotlinx.serialization.json.JsonPrimitive
 
@@ -134,6 +136,27 @@ class AnyToJsonElementTest :
                 )
                 shouldThrow<IllegalStateException> {
                     CustomClass("test").toJsonElement()
+                }
+            }
+
+            should("should throw IllegalStateException with correct message and SerializationException cause when Json.encodeToJsonElement fails") {
+                // 创建一个没有 @Serializable 注解的类，确保会抛出 SerializationException
+                class NonSerializableClass(
+                    val name: String,
+                    val age: Int,
+                )
+
+                val exception = shouldThrow<IllegalStateException> {
+                    NonSerializableClass("test", 123).toJsonElement()
+                }
+
+                // 验证异常消息
+                exception.message shouldContain "Can't serialize class"
+                exception.message shouldContain "you should implement org.jetbrains.kotlinx.jupyter.api.DisplayResult interface"
+
+                // 验证异常原因（cause）是 SerializationException（如果存在）
+                if (exception.cause != null) {
+                    exception.cause.shouldBeInstanceOf<SerializationException>()
                 }
             }
         }

@@ -88,20 +88,6 @@ class DefaultJavaScriptProcessor(
                 script = false
                 comments = false
             }
-
-    /**
-     * TypeScript print options
-     * Used to convert TypeScript AST to JavaScript code
-     */
-    private val tsPrintOpt
-        get() =
-            options {
-                jsc =
-                    jscConfig {
-                        target = JscTarget.ES2020
-                    }
-            }
-
     /**
      * TSX parse options
      * Configured for ES2020 target with TypeScript + JSX syntax support

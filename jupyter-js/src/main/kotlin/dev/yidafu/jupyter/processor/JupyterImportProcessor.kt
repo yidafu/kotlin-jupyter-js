@@ -28,30 +28,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 /**
- * Null result implementation
- *
- * Used to represent variables with no display content
- */
-class NullResult : DisplayResult {
-    /**
-     * Converts display data to JSON object
-     *
-     * @param additionalMetadata Additional reply metadata
-     * @param overrideId Override ID (unused)
-     * @return Display JSON object
-     */
-    override fun toJson(
-        additionalMetadata: JsonObject,
-        overrideId: String?,
-    ): JsonObject =
-        JSON(
-            buildJsonObject {
-                put("text/plain", JsonNull)
-            },
-        ).toJson(buildJsonObject {})
-}
-
-/**
  * Jupyter virtual package import processor
  *
  * Replaces `import { varName } from '@jupyter'` statements in JavaScript code

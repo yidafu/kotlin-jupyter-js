@@ -38,9 +38,9 @@ class JsCodeResult(
      */
     private val jsCodeScriptModule: String
         get() = $$"""
-<div id="$$uuid" style="width:100%;min-height:100px"></div>
+<div id="$$uuid" style="width:100%;min-height:30px;max-height:400px"></div>
 <script type="module">
-function getContainer(width = "100%", height = "100px") {
+function getContainer(width = "100%", height = "300px") {
     var cellRoot = document.getElementById("$$uuid");
     cellRoot.style = `width: ${width};height: ${height}`
     return cellRoot;

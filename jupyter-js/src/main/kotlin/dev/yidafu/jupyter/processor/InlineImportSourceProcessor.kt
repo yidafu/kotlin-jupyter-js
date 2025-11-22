@@ -9,6 +9,7 @@ import dev.yidafu.jupyter.swc.replace
 import dev.yidafu.swc.emptySpan
 import dev.yidafu.swc.generated.*
 import dev.yidafu.swc.generated.dsl.*
+import kotlinx.serialization.Serializable
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.net.URI
@@ -397,14 +398,14 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                                     newStats.add(createExportAssignmentExpression(iName, iName))
                                 }
                             }
-
-                            is TsEnumDeclaration,
-                            is TsInterfaceDeclaration,
-                            is TsModuleDeclaration,
-                            is TsTypeAliasDeclaration,
-                            -> {
-                                // TypeScript declarations, skip export assignment
-                            }
+                            // never reach case below, because TypeScript will transform to JavaScript at beginning
+                            // is TsEnumDeclaration,
+                            // is TsInterfaceDeclaration,
+                            // is TsModuleDeclaration,
+                            // is TsTypeAliasDeclaration,
+                            // -> {
+                            //     // TypeScript declarations, skip export assignment
+                            // }
 
                             else -> {
                                 // Other declaration types, skip
@@ -451,14 +452,15 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                     }
                 }
 
-                is ExportAllDeclaration,
-                is ImportDeclaration,
-                is TsExportAssignment,
-                is TsImportEqualsDeclaration,
-                is TsNamespaceExportDeclaration,
-                -> {
-                    // Other export/import types, skip
-                }
+                // never reach case below, because TypeScript will transform to JavaScript at beginning
+                // is ExportAllDeclaration,
+                // is ImportDeclaration,
+                // is TsExportAssignment,
+                // is TsImportEqualsDeclaration,
+                // is TsNamespaceExportDeclaration,
+                // -> {
+                //     // Other export/import types, skip
+                // }
 
                 else -> {
                     // Other ModuleItem types that are not exports, skip

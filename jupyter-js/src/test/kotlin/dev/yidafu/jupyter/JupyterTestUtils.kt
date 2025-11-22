@@ -1,5 +1,10 @@
 package dev.yidafu.jupyter
 
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
+import org.jetbrains.kotlinx.jupyter.api.DisplayResult
+import org.jetbrains.kotlinx.jupyter.api.MimeTypes
 import org.jetbrains.kotlinx.jupyter.api.libraries.JupyterIntegration
 import org.jetbrains.kotlinx.jupyter.repl.result.EvalResultEx
 import org.jetbrains.kotlinx.jupyter.testkit.JupyterReplTestCase
@@ -9,6 +14,20 @@ import org.jetbrains.kotlinx.jupyter.testkit.JupyterReplTestCase
  *
  * Provides helper methods and extension functions for Jupyter testing
  */
+
+/**
+ * Extract HTML content from DisplayResult
+ * Helper function to get unescaped HTML from the JSON structure
+ *
+ * @param result DisplayResult instance containing HTML data
+ * @return Extracted HTML string, or empty string if not found
+ */
+fun extractHtml(result: DisplayResult): String {
+    val json = result.toJson(buildJsonObject {})
+    val data = json["data"]?.jsonObject
+    val html = data?.get(MimeTypes.HTML)?.jsonPrimitive?.content
+    return html ?: ""
+}
 
 /**
  * Execute code and return result

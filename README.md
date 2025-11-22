@@ -265,6 +265,56 @@ console.log(foo == bar); // true
 
 Full example see [examples/js-magic.ipynb](./examples/js-magic.ipynb)
 
+### Exporting Custom Classes with @Serializable
+
+⚠️ **Important**: Custom classes annotated with `@Serializable` **MUST** use `jsExport()` to be accessible in JavaScript. The default import mechanism (`import { variable } from '@jupyter'`) does **NOT** support custom classes.
+
+**Supported by default import:**
+- Basic types: `String`, `Number`, `Boolean`
+- Collections: `List`, `Set`, `Array`
+- Maps: `Map<String, *>`
+- Primitives and standard types
+
+**Requires `jsExport()`:**
+- Custom data classes with `@Serializable` annotation
+- Any user-defined classes
+
+**Example:**
+
+```kotlin
+// Enable serialization library first
+%use serialization
+
+@Serializable
+data class Employee(
+    val id: Int,
+    val name: String,
+    val department: String
+)
+
+val employees = listOf(
+    Employee(1, "Alice", "Engineering"),
+    Employee(2, "Bob", "Marketing")
+)
+
+// ⚠️ MUST use jsExport() for custom classes
+jsExport("employees", employees)
+
+// ❌ This will NOT work - default import doesn't support custom classes
+// val employees2 = listOf(...)
+// (without jsExport, employees2 cannot be imported in JavaScript)
+```
+
+```js
+%js
+import { employees } from '@jupyter';
+// ✅ Works because employees was exported with jsExport()
+
+console.log(employees); // Array of employee objects
+```
+
+See [examples/02-table-data-rendering.ipynb](./examples/02-table-data-rendering.ipynb) for a complete example.
+
 ## More Examples
 
 The project includes comprehensive examples covering various use cases:

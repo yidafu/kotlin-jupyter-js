@@ -1,6 +1,20 @@
 package dev.yidafu.jupyter.libmapping
 
 import dev.yidafu.jupyter.JavaScriptPackage
+import dev.yidafu.jupyter.errors.ErrorFactory
+
+/**
+ * Throw configuration error
+ * IllegalArgumentException will be converted to ConfigurationError by ErrorFactory.fromException
+ */
+private fun throwConfigurationError(
+    configKey: String,
+    message: String,
+    configValue: String? = null,
+): Nothing {
+    // Throw IllegalArgumentException which ErrorFactory.fromException will convert to ConfigurationError
+    throw IllegalArgumentException(message)
+}
 
 /**
  * JavaScript configuration DSL
@@ -10,12 +24,39 @@ class JsConfigBuilder {
     private val mappings = mutableMapOf<String, JavaScriptPackage>()
 
     /**
+     * Validate library name
+     */
+    private fun validateLibraryName(libraryName: String) {
+        if (libraryName.isBlank()) {
+            throwConfigurationError(
+                configKey = "libraryName",
+                message = "Library name cannot be empty or blank",
+            )
+        }
+    }
+
+    /**
+     * Validate URL
+     */
+    private fun validateUrl(url: String, paramName: String = "url") {
+        if (url.isBlank()) {
+            throwConfigurationError(
+                configKey = paramName,
+                message = "URL cannot be empty or blank",
+                configValue = url,
+            )
+        }
+    }
+
+    /**
      * Add dependency library (main method)
      */
     fun dependencies(
         libraryName: String,
         url: String,
     ) {
+        validateLibraryName(libraryName)
+        validateUrl(url, "url")
         mappings[libraryName] = JavaScriptPackage(url)
     }
 
@@ -27,6 +68,17 @@ class JsConfigBuilder {
         mainUrl: String,
         extraUrls: List<String> = emptyList(),
     ) {
+        validateLibraryName(libraryName)
+        validateUrl(mainUrl, "mainUrl")
+        extraUrls.forEachIndexed { index, url ->
+            if (url.isBlank()) {
+                throwConfigurationError(
+                    configKey = "extraUrls[$index]",
+                    message = "Extra URL at index $index cannot be empty or blank",
+                    configValue = url,
+                )
+            }
+        }
         mappings[libraryName] = JavaScriptPackage(mainUrl, extraUrls)
     }
 
@@ -37,6 +89,17 @@ class JsConfigBuilder {
         libraryName: String,
         packageConfig: JavaScriptPackage,
     ) {
+        validateLibraryName(libraryName)
+        validateUrl(packageConfig.mainSource, "packageConfig.mainSource")
+        packageConfig.extraSources?.forEachIndexed { index, url ->
+            if (url.isBlank()) {
+                throwConfigurationError(
+                    configKey = "packageConfig.extraSources[$index]",
+                    message = "Extra URL at index $index cannot be empty or blank",
+                    configValue = url,
+                )
+            }
+        }
         mappings[libraryName] = packageConfig
     }
 
@@ -106,4 +169,12 @@ fun getJsConfig(): Map<String, JavaScriptPackage> = LibMappingManager.getAll()
 /**
  * Check if library is configured
  */
-fun hasJsLibrary(libraryName: String): Boolean = LibMappingManager.has(libraryName)
+fun hasJsLibrary(libraryName: String): Boolean {
+    if (libraryName.isBlank()) {
+        throwConfigurationError(
+            configKey = "libraryName",
+            message = "Library name cannot be empty or blank",
+        )
+    }
+    return LibMappingManager.has(libraryName)
+}

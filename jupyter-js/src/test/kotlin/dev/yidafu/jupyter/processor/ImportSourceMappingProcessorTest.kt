@@ -325,5 +325,97 @@ class ImportSourceMappingProcessorTest :
                     }
                 }
             }
+
+            should("handle import with empty source string") {
+                val contextMock: JavascriptProcessContext = mockk(relaxed = true)
+                val program =
+                    processTestScript(
+                        """
+                    |import { useState } from "";
+                        """.trimMargin(),
+                    )
+                val processor = ImportSourceMappingProcessor()
+                processor.process(program, contextMock)
+
+                if (program is Module) {
+                    val importDecl = program.body?.get(0)
+                    if (importDecl is ImportDeclaration) {
+                        // Empty source should not be modified
+                        importDecl.source?.value shouldBe ""
+                    }
+                }
+            }
+
+            should("handle import with null source") {
+                val contextMock: JavascriptProcessContext = mockk(relaxed = true)
+                val program =
+                    processTestScript(
+                        """
+                    |import { useState } from "react";
+                        """.trimMargin(),
+                    )
+                val processor = ImportSourceMappingProcessor()
+                
+                if (program is Module) {
+                    val importDecl = program.body?.get(0)
+                    if (importDecl is ImportDeclaration) {
+                        // Temporarily set source to null to test null handling
+                        val originalSource = importDecl.source
+                        importDecl.source = null
+                        processor.process(program, contextMock)
+                        // Restore for cleanup
+                        importDecl.source = originalSource
+                    }
+                }
+            }
+
+            should("handle library with empty extraSources list") {
+                val contextMock: JavascriptProcessContext = mockk(relaxed = true)
+                val mainUrl = "https://custom-cdn.com/library@1.0.0"
+
+                // Set runtime config with empty extra dependencies
+                LibMappingManager.set("custom-lib-empty", mainUrl, emptyList())
+
+                val program =
+                    processTestScript(
+                        """
+                    |import { func } from "custom-lib-empty";
+                        """.trimMargin(),
+                    )
+                val processor = ImportSourceMappingProcessor()
+                processor.process(program, contextMock)
+
+                if (program is Module) {
+                    val mainImport = program.body?.get(0)
+                    if (mainImport is ImportDeclaration) {
+                        mainImport.source?.value shouldBe mainUrl
+                    }
+                    // Should only have 1 import (no extra dependencies)
+                    program.body?.size shouldBe 1
+                }
+            }
+
+            should("handle non-ImportDeclaration module items") {
+                val contextMock: JavascriptProcessContext = mockk(relaxed = true)
+                val program =
+                    processTestScript(
+                        """
+                    |const x = 1;
+                    |import { useState } from "react";
+                    |function foo() { return 42; }
+                        """.trimMargin(),
+                    )
+                val processor = ImportSourceMappingProcessor()
+                processor.process(program, contextMock)
+
+                if (program is Module) {
+                    // Should preserve non-import statements
+                    program.body?.size shouldBe 3
+                    val importDecl = program.body?.get(1)
+                    if (importDecl is ImportDeclaration) {
+                        importDecl.source?.value shouldBe "https://esm.sh/react@18.2.0"
+                    }
+                }
+            }
         }
     })

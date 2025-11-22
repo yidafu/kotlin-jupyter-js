@@ -14,8 +14,12 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.buildJsonObject
 import org.jetbrains.kotlinx.jupyter.api.DisplayResult
+import org.jetbrains.kotlinx.jupyter.api.MimeTypes
 import org.jetbrains.kotlinx.jupyter.api.Notebook
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import java.util.UUID
+
 
 class JsxCodeResultTest :
     ShouldSpec({
@@ -74,7 +78,7 @@ class JsxCodeResultTest :
                 val result = jsxCodeResult.render(notebook)
                 val html = extractHtml(result)
                 html shouldContain """<div id="""
-                html shouldContain """style="width:100%;min-height:100px""""
+                html shouldContain """style="width:100%;min-height:30px;max-height:400px""""
             }
 
             should("include script module tag") {
@@ -95,7 +99,7 @@ class JsxCodeResultTest :
                 val result = jsxCodeResult.render(notebook)
                 val html = extractHtml(result)
                 html shouldContain """width = "100%""""
-                html shouldContain """height = "100px""""
+                html shouldContain """height = "300px""""
             }
         }
 
@@ -335,7 +339,8 @@ class JsxCodeResultTest :
                 val result = jsxCodeResult.render(notebook)
                 val html = extractHtml(result)
                 html shouldContain "width:100%"
-                html shouldContain "min-height:100px"
+                html shouldContain "min-height:30px"
+                html shouldContain "max-height:400px"
             }
 
             should("getContainer function sets style correctly") {

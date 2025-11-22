@@ -882,5 +882,324 @@ class InlineImportSourceProcessorTest :
                     generatedCode shouldContain "InlineClass"
                 }
             }
+
+            should("handle import with empty source string") {
+                val program =
+                    processTestScript(
+                        """
+                        import { foo } from "";
+                        """.trimIndent(),
+                    )
+                val notebook = getMockNotebook()
+                val context = JavascriptProcessContext(DefaultJavaScriptProcessor(notebook))
+
+                processor.process(program, context)
+
+                if (program is Module) {
+                    // Empty source should not be processed
+                    program.body?.get(0) shouldBe beOfType<ImportDeclaration>()
+                }
+            }
+
+            should("handle import with null source") {
+                val program =
+                    processTestScript(
+                        """
+                        import { foo } from './test.js';
+                        """.trimIndent(),
+                    )
+                val notebook = getMockNotebook()
+                val context = JavascriptProcessContext(DefaultJavaScriptProcessor(notebook))
+
+                if (program is Module) {
+                    val importDecl = program.body?.get(0)
+                    if (importDecl is ImportDeclaration) {
+                        // Temporarily set source to null to test null handling
+                        val originalSource = importDecl.source
+                        importDecl.source = null
+                        processor.process(program, context)
+                        // Restore for cleanup
+                        importDecl.source = originalSource
+                    }
+                }
+            }
+
+            should("handle unknown specifier type") {
+                val inlineContent = "export const foo = 'foo';"
+                val program =
+                    processTestScript(
+                        """
+                        import { foo } from './unknown-spec.js';
+                        """.trimIndent(),
+                    )
+                val notebook = getMockNotebook()
+                val context = JavascriptProcessContext(DefaultJavaScriptProcessor(notebook))
+
+                mockkStatic("kotlin.io.FilesKt__FileReadWriteKt")
+                every { File("./unknown-spec.js").readText() } returns inlineContent
+
+                // Mock specifier to return null for unknown type
+                if (program is Module) {
+                    val importDecl = program.body?.get(0)
+                    if (importDecl is ImportDeclaration) {
+                        // Create a mock specifier that will fall into else branch
+                        // We'll use an empty specifiers array to test the null handling
+                        val originalSpecifiers = importDecl.specifiers
+                        importDecl.specifiers = emptyArray()
+                        processor.process(program, context)
+                        importDecl.specifiers = originalSpecifiers
+                    }
+                }
+            }
+
+            should("handle file without extension") {
+                val program =
+                    processTestScript(
+                        """
+                        import { foo } from '/absolute/path/noext';
+                        """.trimIndent(),
+                    )
+                val notebook = getMockNotebook()
+                val context = JavascriptProcessContext(DefaultJavaScriptProcessor(notebook))
+
+                mockkStatic("kotlin.io.FilesKt__FileReadWriteKt")
+                every { File("/absolute/path/noext").readText() } returns "export const foo = 'foo';"
+
+                processor.process(program, context)
+
+                if (program is Module) {
+                    // Files without extension default to JS, so should process successfully
+                    program.body?.get(0) shouldBe beOfType<VariableDeclaration>()
+                }
+            }
+
+            should("handle .mjs extension") {
+                val program =
+                    processTestScript(
+                        """
+                        import { foo } from './test.mjs';
+                        """.trimIndent(),
+                    )
+                val notebook = getMockNotebook()
+                val context = JavascriptProcessContext(DefaultJavaScriptProcessor(notebook))
+
+                mockkStatic("kotlin.io.FilesKt__FileReadWriteKt")
+                every { File("./test.mjs").readText() } returns "export const foo = 'foo';"
+
+                processor.process(program, context)
+
+                if (program is Module) {
+                    program.body?.get(0) shouldBe beOfType<VariableDeclaration>()
+                }
+            }
+
+            should("handle unknown file extension") {
+                val program =
+                    processTestScript(
+                        """
+                        import { foo } from './test.unknown';
+                        """.trimIndent(),
+                    )
+                val notebook = getMockNotebook()
+                val context = JavascriptProcessContext(DefaultJavaScriptProcessor(notebook))
+
+                mockkStatic("kotlin.io.FilesKt__FileReadWriteKt")
+                every { File("./test.unknown").readText() } returns "export const foo = 'foo';"
+
+                shouldThrow<IllegalStateException> {
+                    processor.process(program, context)
+                }
+            }
+
+            should("handle https URL without inline parameter") {
+                val originSource = "https://example.com/script.js"
+                val program =
+                    processTestScript(
+                        """
+                        import { foo } from "$originSource";
+                        """.trimIndent(),
+                    )
+                val notebook = getMockNotebook()
+                val context = JavascriptProcessContext(DefaultJavaScriptProcessor(notebook))
+
+                processor.process(program, context)
+
+                if (program is Module) {
+                    // Should skip processing
+                    program.body?.get(0) shouldBe beOfType<ImportDeclaration>()
+                }
+            }
+
+            should("handle http URL without inline parameter") {
+                val originSource = "http://example.com/script.js"
+                val program =
+                    processTestScript(
+                        """
+                        import { foo } from "$originSource";
+                        """.trimIndent(),
+                    )
+                val notebook = getMockNotebook()
+                val context = JavascriptProcessContext(DefaultJavaScriptProcessor(notebook))
+
+                processor.process(program, context)
+
+                if (program is Module) {
+                    // Should skip processing
+                    program.body?.get(0) shouldBe beOfType<ImportDeclaration>()
+                }
+            }
+
+            should("handle export with RestElement in object pattern") {
+                val inlineContent =
+                    """
+                    const obj = { a: 1, b: 2, c: 3 };
+                    export const { a, ...rest } = obj;
+                    """.trimIndent()
+
+                val program =
+                    processTestScript(
+                        """
+                        import { a } from './rest-element.js';
+                        """.trimIndent(),
+                    )
+                val notebook = getMockNotebook()
+                val context = JavascriptProcessContext(DefaultJavaScriptProcessor(notebook))
+
+                mockkStatic("kotlin.io.FilesKt__FileReadWriteKt")
+                every { File("./rest-element.js").readText() } returns inlineContent
+
+                processor.process(program, context)
+
+                if (program is Module) {
+                    program.body?.get(0) shouldBe beOfType<VariableDeclaration>()
+                }
+            }
+
+            should("handle export with other pattern types") {
+                val inlineContent =
+                    """
+                    const arr = [1, 2, 3];
+                    export const [first, second] = arr;
+                    """.trimIndent()
+
+                val program =
+                    processTestScript(
+                        """
+                        import { first } from './array-pattern.js';
+                        """.trimIndent(),
+                    )
+                val notebook = getMockNotebook()
+                val context = JavascriptProcessContext(DefaultJavaScriptProcessor(notebook))
+
+                mockkStatic("kotlin.io.FilesKt__FileReadWriteKt")
+                every { File("./array-pattern.js").readText() } returns inlineContent
+
+                processor.process(program, context)
+
+                if (program is Module) {
+                    program.body?.get(0) shouldBe beOfType<VariableDeclaration>()
+                }
+            }
+
+            should("handle ExportAllDeclaration") {
+                val inlineContent =
+                    """
+                    export * from './other.js';
+                    """.trimIndent()
+
+                val program =
+                    processTestScript(
+                        """
+                        import { foo } from './export-all.js';
+                        """.trimIndent(),
+                    )
+                val notebook = getMockNotebook()
+                val context = JavascriptProcessContext(DefaultJavaScriptProcessor(notebook))
+
+                mockkStatic("kotlin.io.FilesKt__FileReadWriteKt")
+                every { File("./export-all.js").readText() } returns inlineContent
+
+                processor.process(program, context)
+
+                if (program is Module) {
+                    program.body?.get(0) shouldBe beOfType<VariableDeclaration>()
+                }
+            }
+
+            should("handle ExportDefaultSpecifier") {
+                val inlineContent =
+                    """
+                    export { default } from './other.js';
+                    """.trimIndent()
+
+                val program =
+                    processTestScript(
+                        """
+                        import { foo } from './export-default-spec.js';
+                        """.trimIndent(),
+                    )
+                val notebook = getMockNotebook()
+                val context = JavascriptProcessContext(DefaultJavaScriptProcessor(notebook))
+
+                mockkStatic("kotlin.io.FilesKt__FileReadWriteKt")
+                every { File("./export-default-spec.js").readText() } returns inlineContent
+
+                processor.process(program, context)
+
+                if (program is Module) {
+                    program.body?.get(0) shouldBe beOfType<VariableDeclaration>()
+                }
+            }
+
+            should("handle ExportNamespaceSpecifier") {
+                val inlineContent =
+                    """
+                    export * as ns from './other.js';
+                    """.trimIndent()
+
+                val program =
+                    processTestScript(
+                        """
+                        import { foo } from './export-namespace-spec.js';
+                        """.trimIndent(),
+                    )
+                val notebook = getMockNotebook()
+                val context = JavascriptProcessContext(DefaultJavaScriptProcessor(notebook))
+
+                mockkStatic("kotlin.io.FilesKt__FileReadWriteKt")
+                every { File("./export-namespace-spec.js").readText() } returns inlineContent
+
+                processor.process(program, context)
+
+                if (program is Module) {
+                    program.body?.get(0) shouldBe beOfType<VariableDeclaration>()
+                }
+            }
+
+            should("handle KeyValuePatternProperty with non-Identifier value") {
+                val inlineContent =
+                    """
+                    const obj = { a: 1, b: 2 };
+                    export const { a, b: c } = obj;
+                    """.trimIndent()
+
+                val program =
+                    processTestScript(
+                        """
+                        import { a, c } from './key-value-pattern.js';
+                        """.trimIndent(),
+                    )
+                val notebook = getMockNotebook()
+                val context = JavascriptProcessContext(DefaultJavaScriptProcessor(notebook))
+
+                mockkStatic("kotlin.io.FilesKt__FileReadWriteKt")
+                every { File("./key-value-pattern.js").readText() } returns inlineContent
+
+                processor.process(program, context)
+
+                if (program is Module) {
+                    program.body?.get(0) shouldBe beOfType<VariableDeclaration>()
+                }
+            }
         }
     })
