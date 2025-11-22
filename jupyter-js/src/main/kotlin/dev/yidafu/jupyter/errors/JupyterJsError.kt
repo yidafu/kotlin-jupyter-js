@@ -1,4 +1,4 @@
-package dev.yidafu.jupyper.errors
+package dev.yidafu.jupyter.errors
 
 /**
  * Structured error type system

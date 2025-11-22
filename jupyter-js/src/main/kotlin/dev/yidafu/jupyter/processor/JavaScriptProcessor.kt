@@ -1,5 +1,6 @@
-package dev.yidafu.jupyter.processor
+@file:Suppress("ktlint:standard:no-wildcard-imports")
 
+package dev.yidafu.jupyter.processor
 
 import dev.yidafu.swc.generated.*
 import dev.yidafu.swc.generated.dsl.*

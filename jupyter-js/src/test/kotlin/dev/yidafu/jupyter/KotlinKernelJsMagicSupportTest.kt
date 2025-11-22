@@ -3,12 +3,18 @@
  */
 package dev.yidafu.jupyter
 
-import dev.yidafu.jupyter.exec
-import dev.yidafu.jupyter.withLibrary
+import dev.yidafu.jupyter.libmapping.LibsMapping
+import io.kotest.matchers.string.shouldContain
+import io.kotest.matchers.types.shouldBeInstanceOf
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.jsonObject
+import org.jetbrains.jupyter.parser.notebook.ExecuteResult
 import org.jetbrains.kotlinx.jupyter.api.*
+import org.jetbrains.kotlinx.jupyter.repl.result.EvalResultEx
 import org.jetbrains.kotlinx.jupyter.testkit.JupyterReplTestCase
 import org.jetbrains.kotlinx.jupyter.testkit.ReplProvider
 import kotlin.test.Test
@@ -16,9 +22,10 @@ import kotlin.test.assertContains
 import kotlin.test.assertIs
 import kotlin.test.assertTrue
 
-class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
-    ReplProvider.withDefaultClasspathResolution(),
-) {
+class KotlinKernelJsMagicSupportTest :
+    JupyterReplTestCase(
+        ReplProvider.withDefaultClasspathResolution(),
+    ) {
     @Test
     fun `test Renderable result`() {
         println(Json.encodeToString(htmlResult("<div>TEXT</div>").toJson(buildJsonObject {})))
@@ -30,19 +37,22 @@ class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
     fun `should import variables from Kotlin world`() {
         withLibrary(KotlinKernelJsMagicSupport()) {
             exec(""" val foo = "string" """)
-            val result = exec(
-                """
-                %js
-                import { foo } from "@jupyter";
+            val result =
+                execEx(
+                    """
+                    %js
+                    import { foo } from "@jupyter";
 
-                var b = 345
+                    var b = 345
 
-                console.log(b)
-                """.trimIndent(),
-            )
-
-            assertIs<MimeTypedResult>(result)
-            assertTrue((result[MimeTypes.HTML] as String).contains("const foo = \"string\";"))
+                    console.log(b)
+                    """.trimIndent(),
+                )
+            result.shouldBeInstanceOf<EvalResultEx.Success>()
+            val displayValue = result.displayValue
+            assertIs<MimeTypedResult>(displayValue)
+            val jsonHtml = displayValue[MimeTypes.HTML]
+            jsonHtml shouldContain "const foo = \"string\""
         }
     }
 
@@ -51,17 +61,18 @@ class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
         withLibrary(KotlinKernelJsMagicSupport()) {
             exec(""" val foo = "string" """)
 
-            val result = exec(
-                """
-                %jsx
-                
-                import { foo, bar } from "@jupyter";
+            val result =
+                exec(
+                    """
+                    %jsx
+                    
+                    import { foo, bar } from "@jupyter";
 
-                export default function App() {
-                    return <div>{foo}</div>
-                }
-                """.trimIndent(),
-            ) as MimeTypedResult
+                    export default function App() {
+                        return <div>{foo}</div>
+                    }
+                    """.trimIndent(),
+                ) as MimeTypedResult
             val html = (result[MimeTypes.HTML] as String)
             assertContains(html, "React.createElement")
             assertContains(html, "const bar = null")
@@ -71,20 +82,21 @@ class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
     @Test
     fun `should execute TypeScript code`() {
         withLibrary(KotlinKernelJsMagicSupport()) {
-            val result = exec(
-                """
-                %ts
-                const n: number = 123;
-                const s: string = "foo";
-                interface IUser {
-                    name: string
-                    id: number
-                }
-                const user: IUser = { name: "jupyter", id: 1 };
-                
-                console.log(n, s, user)
-                """.trimIndent(),
-            ) as MimeTypedResult
+            val result =
+                exec(
+                    """
+                    %ts
+                    const n: number = 123;
+                    const s: string = "foo";
+                    interface IUser {
+                        name: string
+                        id: number
+                    }
+                    const user: IUser = { name: "jupyter", id: 1 };
+                    
+                    console.log(n, s, user)
+                    """.trimIndent(),
+                ) as MimeTypedResult
             val html = result[MimeTypes.HTML] as String
             assertTrue(!html.contains("User"))
             assertTrue(!html.contains("number"))
@@ -96,21 +108,22 @@ class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
         withLibrary(KotlinKernelJsMagicSupport()) {
             exec(""" val foo = "string" """)
 
-            val result = exec(
-                """
-                %tsx
-                import { foo, bar } from "@jupyter";
-                interface IChildProps {
-                    text: string;
-                }
-                function Child(props: IChildProps) {
-                    return <div>{props.text}</div>
-                }
-                export default function App() {
-                    return <Child text={foo} />
-                }
-                """.trimIndent(),
-            ) as MimeTypedResult
+            val result =
+                exec(
+                    """
+                    %tsx
+                    import { foo, bar } from "@jupyter";
+                    interface IChildProps {
+                        text: string;
+                    }
+                    function Child(props: IChildProps) {
+                        return <div>{props.text}</div>
+                    }
+                    export default function App() {
+                        return <Child text={foo} />
+                    }
+                    """.trimIndent(),
+                ) as MimeTypedResult
             val html = (result[MimeTypes.HTML] as String)
             println(html)
             assertContains(html, "React.createElement")
@@ -121,15 +134,16 @@ class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
     @Test
     fun `should handle import source mapping`() {
         withLibrary(KotlinKernelJsMagicSupport()) {
-            val result = exec(
-                """
-                %tsx
-                // ts will auto tree shaking
-                import * as echarts from "echarts";
-                import * as graph3d from "vis-graph3d";
-                console.log(echarts, graph3d)
-                """.trimIndent(),
-            ) as MimeTypedResult
+            val result =
+                exec(
+                    """
+                    %tsx
+                    // ts will auto tree shaking
+                    import * as echarts from "echarts";
+                    import * as graph3d from "vis-graph3d";
+                    console.log(echarts, graph3d)
+                    """.trimIndent(),
+                ) as MimeTypedResult
 
             val html = (result[MimeTypes.HTML] as String)
             println(html)
@@ -141,12 +155,47 @@ class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
     @Test
     fun `should execute ECharts example`() {
         withLibrary(KotlinKernelJsMagicSupport()) {
+            // Export data from Kotlin world
             exec(""" val dataArray = arrayOf(150, 230, 224, 218, 135, 147, 260) """)
-            val result = exec("") as MimeTypedResult
+            exec(""" jsExport("dataArray", dataArray) """)
+
+            // Execute ECharts JavaScript code
+            val result =
+                exec(
+                    """
+                    %js
+                    import { dataArray } from "@jupyter";
+                    import * as echarts from "echarts";
+
+                    var chartDom = getContainer();
+                    chartDom.style.width = "100%";
+                    chartDom.style.height = "400px";
+                    var myChart = echarts.init(chartDom);
+                    var option = {
+                      xAxis: {
+                        type: 'category',
+                        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+                      },
+                      yAxis: {
+                        type: 'value'
+                      },
+                      series: [
+                        {
+                          data: dataArray,
+                          type: 'line'
+                        }
+                      ]
+                    };
+                    myChart.setOption(option);
+                    """.trimIndent(),
+                ) as MimeTypedResult
+
             val html = (result[MimeTypes.HTML] as String)
-            println(html)
+            // Verify ECharts library is included
             assertContains(html, LibsMapping.default["echarts"]!!.mainSource)
-            assertContains(html, LibsMapping.default["vis-graph3d"]!!.mainSource)
+            // Verify dataArray is correctly imported
+            assertContains(html, "const dataArray")
+            assertContains(html, "[150,230,224,218,135,147,260]")
         }
     }
 
@@ -171,7 +220,7 @@ class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
 
                 type EChartsOption = echarts.EChartsOption;
 
-                var chartDom = getCellRoot();
+                var chartDom = getContainer();
                 var myChart = echarts.init(chartDom);
                 var option: EChartsOption;
 
@@ -202,13 +251,14 @@ class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
     @Test
     fun `should import external packages`() {
         withLibrary(KotlinKernelJsMagicSupport()) {
-            val result = exec(
-                """
+            val result =
+                exec(
+                    """
             %js
 
             import highcharts from "highcharts";
             """,
-            ) as MimeTypedResult
+                ) as MimeTypedResult
             val html = (result[MimeTypes.HTML] as String)
             assertTrue(html.contains("import highcharts from \"https://code.highcharts.com/es-modules/masters/highcharts.src.js\";"))
             assertTrue(html.contains("https://code.highcharts.com/es-modules/masters/modules/export-data.src.js"))
@@ -235,13 +285,14 @@ class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
                 """.trimIndent(),
             )
 
-            val result = exec(
-                """
-                %js
-                import { complexMap } from "@jupyter";
-                getCellRoot().innerHTML = `<h1>$\{JSON.stringify(complexMap, null, 2)}</h1>`
-                """.trimIndent(),
-            ) as MimeTypedResult
+            val result =
+                exec(
+                    """
+                    %js
+                    import { complexMap } from "@jupyter";
+                    getContainer().innerHTML = `<h1>$\{JSON.stringify(complexMap, null, 2)}</h1>`
+                    """.trimIndent(),
+                ) as MimeTypedResult
 
             val html = (result[MimeTypes.HTML] as String)
             assertTrue(html.contains("\"int\":1,"))
@@ -275,14 +326,15 @@ class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
                     """.trimIndent(),
                 )
 
-                val result = exec(
-                    """
-                    %js
-                    import { foo, bar } from '@jupyter';
-                    
-                    console.log(foo == bar);
-                    """.trimIndent(),
-                ) as MimeTypedResult
+                val result =
+                    exec(
+                        """
+                        %js
+                        import { foo, bar } from '@jupyter';
+                        
+                        console.log(foo == bar);
+                        """.trimIndent(),
+                    ) as MimeTypedResult
 
                 val html = (result[MimeTypes.HTML] as String)
                 assertContains(html, "const foo = \"string\"")
@@ -303,13 +355,14 @@ class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
                 """.trimIndent(),
             )
 
-            val result = exec(
-                """
-                %js
-                import { md } from '@jupyter';
-                console.log(md);
-                """.trimIndent(),
-            ) as MimeTypedResult
+            val result =
+                exec(
+                    """
+                    %js
+                    import { md } from '@jupyter';
+                    console.log(md);
+                    """.trimIndent(),
+                ) as MimeTypedResult
 
             val html = (result[MimeTypes.HTML] as String)
             assertContains(html, "not support in in Kotlin Jupyter JS")
@@ -337,9 +390,10 @@ class KotlinKernelJsMagicSupportTest : JupyterReplTestCase(
     fun `should correctly handle JavaScript template string escaping`() {
         try {
             withLibrary(KotlinKernelJsMagicSupport()) {
-                val result = exec(
-                    "%js\nconsole.log(`js variable \${foo}`)",
-                ) as MimeTypedResult
+                val result =
+                    exec(
+                        "%js\nconsole.log(`js variable \${foo}`)",
+                    ) as MimeTypedResult
 
                 val html = (result[MimeTypes.HTML] as String)
                 assertContains(html, "\${foo")

@@ -1,13 +1,14 @@
+@file:Suppress("ktlint:standard:no-wildcard-imports")
+
 package dev.yidafu.jupyter.processor
 
-import dev.yidafu.jupyter.LibsMapping
-import dev.yidafu.swc.generated.dsl.createImportDeclaration
-import dev.yidafu.swc.generated.dsl.stringLiteral
+import dev.yidafu.jupyter.libmapping.LibMappingManager
 import dev.yidafu.swc.emptySpan
-import org.jetbrains.kotlin.backend.common.push
-
 import dev.yidafu.swc.generated.*
 import dev.yidafu.swc.generated.dsl.*
+import dev.yidafu.swc.generated.dsl.createImportDeclaration
+import dev.yidafu.swc.generated.dsl.stringLiteral
+import org.jetbrains.kotlin.backend.common.push
 
 /**
  * Import source mapping processor
@@ -16,7 +17,7 @@ import dev.yidafu.swc.generated.dsl.*
  * with actual CDN URLs (e.g., `import React from 'https://esm.sh/react@18.2.0'`)
  *
  * Mapping sources:
- * 1. Runtime configuration (ConfigManager, higher priority)
+ * 1. Runtime configuration (LibMappingManager, higher priority)
  * 2. Static configuration (libs-mapping.json)
  *
  * Transformation example:
@@ -53,8 +54,8 @@ class ImportSourceMappingProcessor : JavaScriptProcessor {
                 newBodyList.push(moduleItem)
                 if (moduleItem is ImportDeclaration) {
                     val originSource = moduleItem.source?.value
-                    if (!originSource.isNullOrEmpty() && LibsMapping.default.containsKey(originSource)) {
-                        val jsPackage = LibsMapping.default[originSource]
+                    if (!originSource.isNullOrEmpty()) {
+                        val jsPackage = LibMappingManager.getMapping(originSource)
                         if (jsPackage != null) {
                             moduleItem.source!!.value = jsPackage.mainSource
                             moduleItem.source!!.raw = "\"${jsPackage.mainSource}\""

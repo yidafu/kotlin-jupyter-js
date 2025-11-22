@@ -51,7 +51,7 @@ inline fun <T : JupyterIntegration> JupyterReplTestCase.withLibrary(
     // Initialize library through USE block
     // Library initialization logic is defined in JupyterIntegration.onLoaded()
     // Use addCodePreprocessor to register code preprocessors
-        this.execEx(
+    this.execEx(
         """
         USE {
             addCodePreprocessor(dev.yidafu.jupyter.JavaScriptMagicCodeProcessor(this.notebook));
@@ -59,14 +59,7 @@ inline fun <T : JupyterIntegration> JupyterReplTestCase.withLibrary(
         """.trimIndent(),
     )
 
-    try {
-        // Execute test code block, this refers to JupyterReplTestCase instance
-        // In the code block, methods like exec, execEx can be accessed
-        block()
-    } finally {
-        // Optional: cleanup operations (if needed)
-        // Note: JupyterReplTestCase creates a new REPL instance after each test
-        // So manual cleanup is usually not needed
-    }
+    // Execute test code block, this refers to JupyterReplTestCase instance
+    // In the code block, methods like exec, execEx can be accessed
+    block()
 }
-

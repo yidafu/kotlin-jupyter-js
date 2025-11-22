@@ -39,6 +39,10 @@ class KotlinKernelJsMagicSupport : JupyterIntegration() {
         import(
             "dev.yidafu.jupyter.jsExport",
         )
+        // Import jsConfig function to Notebook global scope
+        import(
+            "dev.yidafu.jupyter.libmapping.jsConfig",
+        )
         // Clear JavaScript variable store each time Notebook loads
         onLoaded {
             JavaScriptVariableStore.clear()

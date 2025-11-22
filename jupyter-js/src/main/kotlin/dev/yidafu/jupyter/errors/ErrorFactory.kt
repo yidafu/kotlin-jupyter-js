@@ -1,4 +1,4 @@
-package dev.yidafu.jupyper.errors
+package dev.yidafu.jupyter.errors
 
 import java.io.FileNotFoundException
 import java.net.ConnectException
@@ -15,79 +15,91 @@ object ErrorFactory {
     fun fromException(
         exception: Throwable,
         context: Map<String, String> = emptyMap(),
-    ): JupyterJsError {
-        return when (exception) {
-            is JupyterJsError -> exception
+    ): JupyterJsError =
+        when (exception) {
+            is JupyterJsError -> {
+                exception
+            }
 
-            is UnknownHostException ->
+            is UnknownHostException -> {
                 JupyterJsError.NetworkError(
                     url = context["url"] ?: "unknown",
                     message = "Cannot resolve hostname: ${exception.message}",
                     suggestion = "Please check network connection and URL",
                 )
+            }
 
-            is SocketTimeoutException ->
+            is SocketTimeoutException -> {
                 JupyterJsError.NetworkError(
                     url = context["url"] ?: "unknown",
                     message = "Network request timeout: ${exception.message}",
                     suggestion = "Please check network connection or try again later",
                 )
+            }
 
-            is ConnectException ->
+            is ConnectException -> {
                 JupyterJsError.NetworkError(
                     url = context["url"] ?: "unknown",
                     message = "Connection refused: ${exception.message}",
                     suggestion = "Please check if the server is running",
                 )
+            }
 
-            is FileNotFoundException ->
+            is FileNotFoundException -> {
                 JupyterJsError.ConfigurationError(
                     configKey = "file",
                     configValue = exception.message,
                     message = "File not found: ${exception.message}",
                     suggestion = "Please check if the file path is correct",
                 )
+            }
 
             is IllegalStateException -> {
                 val message = exception.message ?: "Unknown state error"
                 when {
-                    message.contains("serialize") ->
+                    message.contains("serialize") -> {
                         JupyterJsError.TypeError(
                             expectedType = "Serializable type",
                             actualType = "Unknown type",
                             message = "Variable serialization failed: $message",
                             suggestion = "Please ensure the variable implements DisplayResult interface or use basic types",
                         )
-                    message.contains("circular dependency") ->
+                    }
+
+                    message.contains("circular dependency") -> {
                         JupyterJsError.ConfigurationError(
                             configKey = "dependency",
                             message = "Circular dependency detected: $message",
                             suggestion = "Please check if imported modules have circular references",
                         )
-                    else ->
+                    }
+
+                    else -> {
                         JupyterJsError.UnknownError(
                             originalException = message,
                             message = "State error: $message",
                             suggestion = "Please check if the code logic is correct",
                         )
+                    }
                 }
             }
 
-            is IllegalArgumentException ->
+            is IllegalArgumentException -> {
                 JupyterJsError.ConfigurationError(
                     configKey = "argument",
                     message = "Invalid argument: ${exception.message}",
                     suggestion = "Please check if the provided arguments meet the requirements",
                 )
+            }
 
-            else ->
+            else -> {
                 JupyterJsError.UnknownError(
                     originalException = exception.javaClass.simpleName,
                     message = "Unhandled error: ${exception.message ?: "Unknown error"}",
                     suggestion = "Please check detailed error information or contact the developer",
                 )
+            }
         }
-    }
 
     /**
      * Create syntax error
@@ -98,15 +110,14 @@ object ErrorFactory {
         column: Int? = null,
         source: String? = null,
         suggestion: String? = null,
-    ): JupyterJsError.SyntaxError {
-        return JupyterJsError.SyntaxError(
+    ): JupyterJsError.SyntaxError =
+        JupyterJsError.SyntaxError(
             line = line,
             column = column,
             source = source,
             message = message,
             suggestion = suggestion,
         )
-    }
 
     /**
      * Create type error
@@ -117,15 +128,14 @@ object ErrorFactory {
         variableName: String? = null,
         message: String? = null,
         suggestion: String? = null,
-    ): JupyterJsError.TypeError {
-        return JupyterJsError.TypeError(
+    ): JupyterJsError.TypeError =
+        JupyterJsError.TypeError(
             expectedType = expectedType,
             actualType = actualType,
             variableName = variableName,
             message = message ?: "Type mismatch: expected $expectedType, got $actualType",
             suggestion = suggestion,
         )
-    }
 
     /**
      * Create network error
@@ -136,15 +146,14 @@ object ErrorFactory {
         reason: String? = null,
         message: String? = null,
         suggestion: String? = null,
-    ): JupyterJsError.NetworkError {
-        return JupyterJsError.NetworkError(
+    ): JupyterJsError.NetworkError =
+        JupyterJsError.NetworkError(
             url = url,
             statusCode = statusCode,
             reason = reason,
             message = message ?: "Network request failed: $url",
             suggestion = suggestion,
         )
-    }
 
     /**
      * Create variable not found error
@@ -178,12 +187,11 @@ object ErrorFactory {
         details: String? = null,
         message: String? = null,
         suggestion: String? = null,
-    ): JupyterJsError.CompilationError {
-        return JupyterJsError.CompilationError(
+    ): JupyterJsError.CompilationError =
+        JupyterJsError.CompilationError(
             language = language,
             details = details,
             message = message ?: "$language compilation failed",
             suggestion = suggestion ?: "Please check if the $language syntax is correct",
         )
-    }
 }

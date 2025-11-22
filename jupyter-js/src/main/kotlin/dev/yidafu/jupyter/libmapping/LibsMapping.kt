@@ -1,5 +1,7 @@
-package dev.yidafu.jupyter
+package dev.yidafu.jupyter.libmapping
 
+import dev.yidafu.jupyter.JavaScriptPackage
+import dev.yidafu.jupyter.LIBS_MAPPING_JSON_FILE_NAME
 import dev.yidafu.jupyter.processor.ImportSourceMappingProcessor
 import kotlinx.serialization.json.Json
 
@@ -39,9 +41,10 @@ class LibsMapping(
      * @param filepath Resource file path (relative to resources directory)
      * @return File content, returns empty string if file doesn't exist
      */
-    internal fun getResourceFile(filepath: String): String {
-        return ImportSourceMappingProcessor::class.java.classLoader.getResource(filepath)?.readText() ?: ""
-    }
+    internal fun getResourceFile(filepath: String): String =
+        ImportSourceMappingProcessor::class.java.classLoader
+            .getResource(filepath)
+            ?.readText() ?: ""
 
     /**
      * Gets configuration for specified library name
@@ -49,9 +52,7 @@ class LibsMapping(
      * @param key Library name (e.g., "react", "lodash")
      * @return JavaScriptPackage configuration, returns null if not found
      */
-    override operator fun get(key: String): JavaScriptPackage? {
-        return mLibsMapping[key]
-    }
+    override operator fun get(key: String): JavaScriptPackage? = mLibsMapping[key]
 
     /**
      * Loads library mapping table from JSON file
@@ -61,7 +62,7 @@ class LibsMapping(
     internal fun getLibMapping(): Map<String, JavaScriptPackage> {
         val libsMappingText = getResourceFile(mappingPath)
         return if (libsMappingText.isNotEmpty()) {
-            Json.decodeFromString<Map<String, JavaScriptPackage>>(libsMappingText)
+            Json.Default.decodeFromString<Map<String, JavaScriptPackage>>(libsMappingText)
         } else {
             emptyMap()
         }

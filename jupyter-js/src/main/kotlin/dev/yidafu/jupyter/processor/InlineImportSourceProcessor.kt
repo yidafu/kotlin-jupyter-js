@@ -1,14 +1,14 @@
+@file:Suppress("ktlint:standard:no-wildcard-imports")
+
 package dev.yidafu.jupyter.processor
 
 import dev.yidafu.jupyter.LanguageType
 import dev.yidafu.jupyter.swc.forEachImportDeclaration
 import dev.yidafu.jupyter.swc.getValue
 import dev.yidafu.jupyter.swc.replace
-import dev.yidafu.swc.generated.dsl.*
 import dev.yidafu.swc.emptySpan
 import dev.yidafu.swc.generated.*
 import dev.yidafu.swc.generated.dsl.*
-
 import org.slf4j.LoggerFactory
 import java.io.File
 import java.net.URI
@@ -52,6 +52,16 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
             program.forEachImportDeclaration { declaration ->
                 val originSource = declaration.source?.value
                 if (!originSource.isNullOrEmpty()) {
+                    // Skip CDN URLs that don't have ?inline parameter
+                    // These are library imports (e.g., react, lodash) that have been mapped by ImportSourceMappingProcessor
+                    if (
+                        (originSource.startsWith("http://") || originSource.startsWith("https://")) &&
+                        !originSource.substringAfter("?").contains("inline")
+                    ) {
+                        // This is a CDN library import, skip inline processing
+                        return@forEachImportDeclaration
+                    }
+
                     // relative path, absolute path
                     val inlineContext =
                         if (
@@ -88,9 +98,13 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                                 val inlineProgram =
                                     when (langType) {
                                         LanguageType.JS -> context.processor.parseJsCode(inlineContext, context)
+
                                         LanguageType.TS -> context.processor.transformTsCode(inlineContext, context)
+
                                         LanguageType.JSX -> context.processor.transformJsxCode(inlineContext, context)
+
                                         LanguageType.TSX -> context.processor.transformTsxCode(inlineContext, context)
+
                                         // unreachable
                                         else -> throw IllegalStateException("Jupyter Js only support .js/.ts/.jsx/.tsx")
                                     }
@@ -112,6 +126,7 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                                                 "default",
                                             )
                                         }
+
                                         // import { foo } from 'foo.js';
                                         is NamedImportSpecifier -> {
                                             val variableName = specifier.local?.value!!
@@ -121,6 +136,7 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                                                 variableName,
                                             )
                                         }
+
                                         // import * as foo from 'foo.js'
                                         is ImportNamespaceSpecifier -> {
                                             createImportVariableDeclaration(
@@ -136,7 +152,9 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                                             )
                                         }
 
-                                        else -> null
+                                        else -> {
+                                            null
+                                        }
                                     }
                                 } ?: emptyList()
                             replacements.addAll(variableDeclarations)
@@ -153,7 +171,12 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
 
     private fun url2LanguageType(url: String): LanguageType {
         val path = URI(url).path
-        val ext = path.substring(path.lastIndexOf("."))
+        val lastDotIndex = path.lastIndexOf(".")
+        if (lastDotIndex == -1) {
+            // 没有文件扩展名，默认为 JavaScript
+            return LanguageType.JS
+        }
+        val ext = path.substring(lastDotIndex)
         return when (ext) {
             ".mjs" -> LanguageType.JS
             ".js" -> LanguageType.JS
@@ -167,8 +190,8 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
     private fun createImportStatement(
         var1: String,
         var2: String,
-    ): VariableDeclaration {
-        return createVariableDeclaration {
+    ): VariableDeclaration =
+        createVariableDeclaration {
             span = emptySpan()
             kind = VariableDeclarationKind.CONST
             declarations =
@@ -189,13 +212,12 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                     },
                 )
         }
-    }
 
     private fun toIIFE(
         varName: String,
         module: Module,
-    ): VariableDeclaration {
-        return createVariableDeclaration {
+    ): VariableDeclaration =
+        createVariableDeclaration {
             span = emptySpan()
             kind = VariableDeclarationKind.CONST
             declarations =
@@ -272,7 +294,6 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                     },
                 )
         }
-    }
 
     /**
      * https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/export
@@ -302,21 +323,22 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                                             if (i is Identifier) {
                                                 val objName = i.value
                                                 id.properties?.forEach { prop ->
-                                                    fun createRightExpr(propName: String): MemberExpression {
-                                                        return createMemberExpression {
+                                                    fun createRightExpr(propName: String): MemberExpression =
+                                                        createMemberExpression {
                                                             span = emptySpan()
-                                                            `object` = identifier {
-                                                                span = emptySpan()
-                                                                value = objName
-                                                                optional = false
-                                                            }
-                                                            property = identifier {
-                                                                span = emptySpan()
-                                                                value = propName
-                                                                optional = false
-                                                            }
+                                                            `object` =
+                                                                identifier {
+                                                                    span = emptySpan()
+                                                                    value = objName
+                                                                    optional = false
+                                                                }
+                                                            property =
+                                                                identifier {
+                                                                    span = emptySpan()
+                                                                    value = propName
+                                                                    optional = false
+                                                                }
                                                         }
-                                                    }
                                                     when (prop) {
                                                         is AssignmentPatternProperty -> {
                                                             val propName = prop.key?.value
@@ -379,7 +401,8 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                             is TsEnumDeclaration,
                             is TsInterfaceDeclaration,
                             is TsModuleDeclaration,
-                            is TsTypeAliasDeclaration -> {
+                            is TsTypeAliasDeclaration,
+                            -> {
                                 // TypeScript declarations, skip export assignment
                             }
 
@@ -389,17 +412,20 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                         }
                     }
                 }
+
                 // export default function foo () { };
                 is ExportDefaultDeclaration -> {
                     val defaultExpr = it.decl as Expression
                     newStats.add(createExportAssignmentExpression("default", defaultExpr))
                 }
+
                 // export default "expression";
                 is ExportDefaultExpression -> {
                     if (it.expression != null) {
                         newStats.add(createExportAssignmentExpression("default", it.expression!!))
                     }
                 }
+
                 // export { foo, bar as "name", baz as name2 }
                 is ExportNamedDeclaration -> {
                     it.specifiers?.forEach { specifier ->
@@ -429,7 +455,8 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                 is ImportDeclaration,
                 is TsExportAssignment,
                 is TsImportEqualsDeclaration,
-                is TsNamespaceExportDeclaration -> {
+                is TsNamespaceExportDeclaration,
+                -> {
                     // Other export/import types, skip
                 }
 
@@ -445,8 +472,8 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
         varName: String,
         jsObjName: String,
         propName: String,
-    ): VariableDeclaration {
-        return createImportVariableDeclaration(
+    ): VariableDeclaration =
+        createImportVariableDeclaration(
             createIdentifier {
                 span = emptySpan()
                 value = varName
@@ -463,14 +490,13 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                 optional = false
             },
         )
-    }
 
     private fun createImportVariableDeclaration(
         name: Identifier,
         jsObj: Identifier,
         prop: Identifier,
-    ): VariableDeclaration {
-        return createImportVariableDeclaration(
+    ): VariableDeclaration =
+        createImportVariableDeclaration(
             name,
             createMemberExpression {
                 span = emptySpan()
@@ -478,13 +504,12 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                 property = prop
             },
         )
-    }
 
     private fun createImportVariableDeclaration(
         varName: Identifier,
         initExpr: Expression,
-    ): VariableDeclaration {
-        return createVariableDeclaration {
+    ): VariableDeclaration =
+        createVariableDeclaration {
             span = emptySpan()
             kind = VariableDeclarationKind.CONST
             declarations =
@@ -496,7 +521,6 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                     },
                 )
         }
-    }
 
     private fun createExportAssignmentExpression(
         leftName: String,
@@ -521,8 +545,8 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
     private fun createExportAssignmentExpression(
         leftName: String,
         expr: Expression,
-    ): ExpressionStatement {
-        return createExportAssignmentExpression(
+    ): ExpressionStatement =
+        createExportAssignmentExpression(
             createIdentifier {
                 span = emptySpan()
                 value = leftName
@@ -530,13 +554,12 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
             },
             expr,
         )
-    }
 
     private fun createExportAssignmentExpression(
         prop: Expression,
         expr: Expression,
-    ): ExpressionStatement {
-        return createAssignmentExpression(
+    ): ExpressionStatement =
+        createAssignmentExpression(
             createIdentifier {
                 span = emptySpan()
                 value = "exports"
@@ -545,14 +568,13 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
             prop,
             expr,
         )
-    }
 
     private fun createAssignmentExpression(
         jsObj: Expression,
         prop: Expression,
         rightExpr: Expression,
-    ): ExpressionStatement {
-        return createExpressionStatement {
+    ): ExpressionStatement =
+        createExpressionStatement {
             span = emptySpan()
             expression =
                 assignmentExpression {
@@ -567,5 +589,4 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                     right = rightExpr
                 }
         }
-    }
 }

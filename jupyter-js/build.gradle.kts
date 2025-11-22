@@ -50,14 +50,14 @@ dependencies {
 
     // Kotlin Jupyter 测试依赖
     testImplementation(libs.jupyter.test.kit)
-    
+
     // Kotest 测试框架
     testImplementation(libs.bundles.kotest)
     testImplementation(libs.mockk)
-    
+
     // JUnit Jupiter (Kotlin Jupyter Test Kit 需要)
     testImplementation(libs.junit.jupiter)
-    
+
     // 强制使用正确的 Kotlin 编译器版本
     testRuntimeOnly("org.jetbrains.kotlin:kotlin-compiler-embeddable:2.2.20")
     testRuntimeOnly("org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:2.2.20")
@@ -123,6 +123,6 @@ tasks.withType<Test>().configureEach {
 // Optionally configure plugin
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
     debug.set(true)
-    version.set("1.1.1")
-    disabledRules.set(setOf("standard:no-wildcard-imports", "standard:filename"))
+    version.set("1.8.0")
+//    disabledRules.set(setOf("standard:no-wildcard-imports", "standard:filename"))
 }

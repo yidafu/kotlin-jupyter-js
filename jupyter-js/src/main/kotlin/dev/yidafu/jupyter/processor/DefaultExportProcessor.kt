@@ -3,12 +3,12 @@
 package dev.yidafu.jupyter.processor
 
 import dev.yidafu.jupyter.JSX_DEFAULT_EXPORT_VARIABLE_NAME
-import dev.yidafu.swc.generated.dsl.createVariableDeclaration
-import dev.yidafu.swc.generated.dsl.identifier
-import dev.yidafu.swc.generated.dsl.variableDeclarator
 import dev.yidafu.swc.emptySpan
 import dev.yidafu.swc.generated.*
 import dev.yidafu.swc.generated.dsl.*
+import dev.yidafu.swc.generated.dsl.createVariableDeclaration
+import dev.yidafu.swc.generated.dsl.identifier
+import dev.yidafu.swc.generated.dsl.variableDeclarator
 
 /**
  * process JSX default export to variable declaration
@@ -61,5 +61,4 @@ class DefaultExportProcessor : JavaScriptProcessor {
             }
         }
     }
-
 }

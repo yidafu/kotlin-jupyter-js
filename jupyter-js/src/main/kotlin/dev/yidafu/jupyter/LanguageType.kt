@@ -8,12 +8,16 @@ package dev.yidafu.jupyter
 enum class LanguageType {
     /** JavaScript code */
     JS,
+
     /** JSX code (React) */
     JSX,
+
     /** TypeScript code */
     TS,
+
     /** TSX code (TypeScript + React) */
     TSX,
+
     /** Kotlin code (default) */
     Kotlin,
     ;

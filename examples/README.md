@@ -1,40 +1,40 @@
-# Kotlin Jupyter JS 示例
+# Kotlin Jupyter JS Examples
 
-这个目录包含了 Kotlin Jupyter JS 的各种示例和测试文件。
+This directory contains various examples and test files for Kotlin Jupyter JS, focusing on **getting data from Kotlin and rendering it in JavaScript**.
 
-## 🔧 本地调试版本说明
+## 🔧 Local Debug Version
 
-**当前版本**: 0.8.0 (本地调试版本)
+**Current Version**: 0.8.0 (Local debug version)
 
-### 调试准备步骤
+### Setup Steps
 
-1. **构建本地版本**:
+1. **Build local version**:
    ```bash
-   # 在项目根目录运行
+   # Run in project root directory
    ./gradlew publishToMavenLocal
    ```
    
-   **注意**: 如果遇到签名错误，项目已配置为禁用签名，应该能正常构建。
+   **Note**: If you encounter signature errors, the project is configured to disable signing and should build normally.
 
-2. **验证本地版本**:
+2. **Verify local version**:
    ```bash
-   # 检查 Maven 本地仓库
+   # Check Maven local repository
    ls ~/.m2/repository/dev/yidafu/jupyter/jupyter-js/0.8.0/
    ```
    
-   应该看到以下文件：
+   You should see the following files:
    - `jupyter-js-0.8.0.jar`
    - `jupyter-js-0.8.0-sources.jar`
    - `jupyter-js-0.8.0-javadoc.jar`
    - `jupyter-js-0.8.0.pom`
    - `jupyter-js-0.8.0.module`
 
-3. **使用本地版本**:
-   - 所有示例文件都已配置为使用 `USE` 块，明确指定 `mavenLocal()` 仓库
-   - 这会优先从 Maven 本地仓库（`~/.m2/repository`）加载最新构建的版本
-   - 如果本地仓库没有找到，会从 `mavenCentral()` 下载
-   - 确保 Maven 本地仓库包含最新构建的版本
-   - 配置示例：
+3. **Use local version**:
+   - All example files are configured to use `USE` blocks with `mavenLocal()` repository
+   - This prioritizes loading from Maven local repository (`~/.m2/repository`)
+   - Falls back to `mavenCentral()` if not found locally
+   - Ensure Maven local repository contains the latest built version
+   - Configuration example:
      ```kotlin
      USE {
          repositories {
@@ -47,100 +47,142 @@
      }
      ```
 
-## 🚀 快速开始
+## 🚀 Quick Start
 
-### 方法 1: 使用启动脚本（推荐）
+### Method 1: Use Startup Script (Recommended)
 
 ```bash
 ./start_jupyter.sh
 ```
 
-### 方法 2: 手动启动
+### Method 2: Manual Start
 
 ```bash
-# 激活虚拟环境
+# Activate virtual environment
 source venv/bin/activate
 
-# 启动 Jupyter Notebook
+# Start Jupyter Notebook
 jupyter notebook
 ```
 
-## 📁 示例文件
+## 📁 Example Files
 
-- `01-statistical-charts.ipynb` - Chart.js 统计图表示例（柱状图、折线图、饼图、散点图）
-- `config-dsl-basic.ipynb` - jsConfig DSL 配置示例
-- `d3-visualization.ipynb` - D3.js 自定义可视化示例
-- `echarts-basic-charts.ipynb` - ECharts 图表示例（线图、柱状图、饼图）
-- `kotlin-js-data-exchange.ipynb` - Kotlin 与 JavaScript 数据交换示例
-- `lodash-utilities.ipynb` - Lodash 工具库示例
+The examples are organized by difficulty level, progressing from basic to advanced:
 
-## 🔧 环境信息
+### Learning Path (Progressive Difficulty)
 
-- **Python 版本**: 3.14.0
+1. **`01-basic-data-rendering.ipynb`** ⭐☆☆☆☆
+   - Basic data types and simple HTML rendering
+   - Learn `jsExport()` and `import from '@jupyter'`
+   - DOM manipulation basics
+
+2. **`02-table-data-rendering.ipynb`** ⭐☆☆☆☆
+   - Structured data and table display
+   - Data classes and collections
+   - HTML table rendering with styling
+
+3. **`03-chartjs-basic-charts.ipynb`** ⭐⭐☆☆☆
+   - Chart.js statistical charts
+   - Bar charts, line charts, pie charts
+   - Library configuration with `jsConfig`
+
+4. **`04-echarts-advanced-charts.ipynb`** ⭐⭐⭐☆☆
+   - ECharts rich visualizations
+   - Combination charts, radar charts, gauge charts
+   - Interactive features and data drill-down
+
+5. **`05-d3-custom-visualization.ipynb`** ⭐⭐⭐⭐☆
+   - D3.js custom visualizations
+   - Data binding and transformations
+   - Custom SVG rendering with animations
+
+6. **`06-react-component-rendering.ipynb`** ⭐⭐⭐⭐☆
+   - React component-based rendering
+   - Component state management
+   - Interactive UI components
+
+7. **`07-multi-chart-dashboard.ipynb`** ⭐⭐⭐⭐⭐
+   - Multi-chart dashboard
+   - Combining multiple visualization libraries
+   - Responsive layouts and data integration
+
+### Core Concept
+
+All examples follow the same data flow pattern:
+
+```
+Kotlin generates data → jsExport() → JavaScript import → Rendering
+```
+
+Each example focuses on **getting data from Kotlin and rendering it in JavaScript**.
+
+## 🔧 Environment Information
+
+- **Python Version**: 3.14.0
 - **Jupyter Notebook**: 7.4.7
 - **Kotlin Kernel**: 0.15.0.598
-- **Kotlin Jupyter JS**: 0.8.0 (本地调试版本)
-- **虚拟环境**: `venv/`
+- **Kotlin Jupyter JS**: 0.8.0 (Local debug version)
+- **Virtual Environment**: `venv/`
 
-## 🐛 调试模式
+## 🐛 Debug Mode
 
-### 调试功能
-- ✅ JavaScript 魔法命令支持 (`%js`, `%javascript`)
-- ✅ TypeScript 支持 (`%ts`, `%typescript`)
-- ✅ JSX/TSX 组件渲染 (`%jsx`, `%tsx`)
-- ✅ 数据交换功能 (`jsExport`, `import from '@jupyter'`)
-- ✅ 外部库配置 (`jsConfig` DSL)
-- ✅ Console.log 重定向
+### Debug Features
+- ✅ JavaScript magic commands (`%js`, `%javascript`)
+- ✅ TypeScript support (`%ts`, `%typescript`)
+- ✅ JSX/TSX component rendering (`%jsx`, `%tsx`)
+- ✅ Data exchange (`jsExport`, `import from '@jupyter'`)
+- ✅ External library configuration (`jsConfig` DSL)
+- ✅ Console.log redirection
 
-### 调试注意事项
-- 本地调试版本需要手动构建和发布
-- 确保 Maven 本地仓库包含最新构建的版本
-- 调试时建议启用详细日志输出
-- 测试完成后记得清理调试代码
+### Debug Notes
+- Local debug version requires manual build and publish
+- Ensure Maven local repository contains the latest built version
+- Enable verbose logging during debugging
+- Clean up debug code after testing
 
-## 🎯 主要功能
+## 🎯 Key Features
 
-### Console.log 重定向
-JavaScript 的 `console.log` 输出会同时显示在：
-- 浏览器开发者控制台
-- Jupyter cell 下方的专用日志区域
+### Console.log Redirection
+JavaScript `console.log` output is displayed in both:
+- Browser developer console
+- Dedicated log area below Jupyter cells
 
-### 支持的魔法命令
-- `%js` - JavaScript 代码
-- `%javascript` - JavaScript 代码（别名）
-- `%ts` - TypeScript 代码
-- `%typescript` - TypeScript 代码（别名）
-- `%jsx` - JSX 代码
-- `%tsx` - TSX 代码
+### Supported Magic Commands
+- `%js` - JavaScript code
+- `%javascript` - JavaScript code (alias)
+- `%ts` - TypeScript code
+- `%typescript` - TypeScript code (alias)
+- `%jsx` - JSX code
+- `%tsx` - TSX code
 
-### 数据交换
-- 使用 `jsExport()` 将 Kotlin 变量导出到 JavaScript
-- 使用 `import { variable } from '@jupyter'` 在 JS 中导入 Kotlin 变量
+### Data Exchange
+- Use `jsExport()` to export Kotlin variables to JavaScript
+- Use `import { variable } from '@jupyter'` to import Kotlin variables in JS
 
-## 🛠️ 开发
+## 🛠️ Development
 
-如果你需要修改或扩展功能，请参考主项目的文档。
+If you need to modify or extend functionality, please refer to the main project documentation.
 
-### 本地开发流程
+### Local Development Workflow
 
-1. **修改代码**: 在项目根目录修改源代码
-2. **构建本地版本**: 运行 `./gradlew publishToMavenLocal`
-3. **测试示例**: 在 `examples/` 目录中运行相关示例
-4. **验证功能**: 确保所有功能正常工作
-5. **提交更改**: 完成测试后提交代码
+1. **Modify code**: Edit source code in project root directory
+2. **Build local version**: Run `./gradlew publishToMavenLocal`
+3. **Test examples**: Run relevant examples in `examples/` directory
+4. **Verify functionality**: Ensure all features work correctly
+5. **Commit changes**: Submit code after testing
 
-### 调试技巧
+### Debugging Tips
 
-- 使用浏览器开发者工具查看 JavaScript 错误
-- 检查 Jupyter 控制台输出
-- 验证 Maven 本地仓库中的版本
-- 使用 `console.log` 进行 JavaScript 调试
+- Use browser developer tools to check JavaScript errors
+- Check Jupyter console output
+- Verify version in Maven local repository
+- Use `console.log` for JavaScript debugging
 
-## 📝 注意事项
+## 📝 Notes
 
-- 确保在运行示例前激活虚拟环境
-- 某些示例可能需要网络连接来加载外部库
-- 如果遇到问题，请检查浏览器控制台的错误信息
-- **调试模式**: 所有示例都配置为使用 `USE` 块，明确指定 `mavenLocal()` 优先从本地 Maven 仓库加载
-- **版本管理**: 确保本地 Maven 仓库包含最新构建的版本，运行 `./gradlew publishToMavenLocal` 更新本地版本
-- **仓库配置**: 使用 `mavenLocal()` 确保优先使用本地构建的版本，`mavenCentral()` 作为备用仓库
+- Ensure virtual environment is activated before running examples
+- Some examples may require network connection to load external libraries
+- If you encounter issues, check browser console error messages
+- **Debug mode**: All examples are configured to use `USE` blocks with `mavenLocal()` to prioritize loading from local Maven repository
+- **Version management**: Ensure Maven local repository contains the latest built version, run `./gradlew publishToMavenLocal` to update local version
+- **Repository configuration**: Use `mavenLocal()` to prioritize local builds, `mavenCentral()` as fallback repository

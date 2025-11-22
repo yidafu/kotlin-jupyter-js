@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:standard:no-wildcard-imports")
+
 package dev.yidafu.jupyter.processor
 
 import dev.yidafu.jupyter.LanguageType
@@ -24,7 +26,9 @@ import org.slf4j.LoggerFactory
  *
  * @param notebook Current Notebook instance for accessing variable state
  */
-class DefaultJavaScriptProcessor(private val notebook: Notebook) {
+class DefaultJavaScriptProcessor(
+    private val notebook: Notebook,
+) {
     private val log = LoggerFactory.getLogger(DefaultJavaScriptProcessor::class.java)
 
     /**
@@ -44,7 +48,6 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
                 comments = false
                 topLevelAwait = true
                 nullishCoalescing = true
-
             }
 
     /**
@@ -68,10 +71,10 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
     private val jsPrintOpt
         get() =
             options {
-//                jsc =
-//                    jscConfig {
-//                        target = JscTarget.ES2020
-//                    }
+                jsc =
+                    jscConfig {
+                        target = JscTarget.ES2020
+                    }
             }
 
     /**
@@ -196,7 +199,6 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
         val program: Program = parseJsCode(source, context)
         log.warn("processJsCode ${context.globalImports.size}")
         program.addFirst(context.globalImports)
-        println("before print printSync \n\n${SwcJson.astTreeToString(program as Module)}")
         val output =
             swcCompiler.printSync(
                 program,
@@ -327,7 +329,13 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
 
         executeJsxProcessor(program, context)
         program.addFirst(context.globalImports)
-        val output = swcCompiler.printSync(program, jsPrintOpt)
+        val output =
+            try {
+                swcCompiler.printSync(program, jsPrintOpt)
+            } catch (e: Exception) {
+                log.error("printSync failed for JSX code", e)
+                throw e
+            }
 
         return "dev.yidafu.jupyter.JsxCodeResult(\"\"\" $context\n ${output.code} \"\"\")"
     }
@@ -353,11 +361,10 @@ class DefaultJavaScriptProcessor(private val notebook: Notebook) {
                         jscConfig {
                             parser = tsxParseOpt
                             target = JscTarget.ES2020
-                            transform = transformConfig {
-
-                            }
+                            transform =
+                                transformConfig {
+                                }
                         }
-
                 },
             )
 

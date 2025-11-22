@@ -3,7 +3,8 @@ package dev.yidafu.jupyter.processor
 import dev.yidafu.jupyter.CircularDependencyException
 import dev.yidafu.swc.generated.VariableDeclaration
 import org.slf4j.LoggerFactory
-import java.util.*
+import java.util.Deque
+import java.util.LinkedList
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
@@ -12,13 +13,9 @@ data class DependenceNode(
     val parent: DependenceNode? = null,
     val children: MutableList<DependenceNode> = mutableListOf(),
 ) {
-    private fun hasChildren(source: String): Boolean {
-        return children.any { it.source == source }
-    }
+    private fun hasChildren(source: String): Boolean = children.any { it.source == source }
 
-    private fun getChildren(source: String): DependenceNode? {
-        return children.find { it.source == source }
-    }
+    private fun getChildren(source: String): DependenceNode? = children.find { it.source == source }
 
     private fun detectCircularDependency(child: String) {
         var node = parent
@@ -46,9 +43,7 @@ data class DependenceNode(
 internal fun url2VarName(
     url: String,
     global: Boolean = true,
-): String {
-    return (if (global) "global_" else "inline_") + Base64.encode(url.toByteArray()).replace("=", "")
-}
+): String = (if (global) "global_" else "inline_") + Base64.encode(url.toByteArray()).replace("=", "")
 
 /**
  * save variable name / it's json string value, declare by `@jupyter` virtual package.
@@ -84,9 +79,7 @@ class JavascriptProcessContext(
         globalImportStat[varName] = stat
     }
 
-    fun hasImport(varName: String): Boolean {
-        return importQueue.contains(varName)
-    }
+    fun hasImport(varName: String): Boolean = importQueue.contains(varName)
 
     val globalImports: List<VariableDeclaration>
         get() {
@@ -115,9 +108,8 @@ class JavascriptProcessContext(
         importedVariables.add(pair)
     }
 
-    override fun toString(): String {
-        return importedVariables.joinToString(";\n") {
+    override fun toString(): String =
+        importedVariables.joinToString(";\n") {
             """const ${it.first} = ${it.second} """
         }
-    }
 }

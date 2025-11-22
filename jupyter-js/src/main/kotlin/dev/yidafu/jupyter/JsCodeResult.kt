@@ -16,7 +16,9 @@ import java.util.UUID
  * @param jsCode JavaScript code to execute (imports and dependencies already processed)
  */
 @Serializable
-class JsCodeResult(private val jsCode: String) : Renderable {
+class JsCodeResult(
+    private val jsCode: String,
+) : Renderable {
     /**
      * Unique identifier
      * Used to create unique container element in HTML, avoiding conflicts between multiple cells
@@ -31,19 +33,19 @@ class JsCodeResult(private val jsCode: String) : Renderable {
      * Contains:
      * 1. A div container for JavaScript code output
      * 2. A script module containing:
-     *    - getCellRoot() function: Gets root element of current cell with customizable width/height
+     *    - getContainer() function: Gets container element of current cell with customizable width/height
      *    - User-written JavaScript code
      */
     private val jsCodeScriptModule: String
-        get() = """
-<div id="$uuid" style="width:100%;min-height:100px"></div>
+        get() = $$"""
+<div id="$$uuid" style="width:100%;min-height:100px"></div>
 <script type="module">
-function getCellRoot(width = "100%", height = "100px") {
-    var cellRoot = document.getElementById("$uuid");
-    cellRoot.style = `width: ${'$'}{width};height: ${'$'}{height}`
+function getContainer(width = "100%", height = "100px") {
+    var cellRoot = document.getElementById("$$uuid");
+    cellRoot.style = `width: ${width};height: ${height}`
     return cellRoot;
 }
-$jsCode
+$$jsCode
 </script>
 """
 
@@ -55,7 +57,5 @@ $jsCode
      * @param notebook Current Notebook instance
      * @return HTML formatted display result
      */
-    override fun render(notebook: Notebook): DisplayResult {
-        return htmlResult(jsCodeScriptModule)
-    }
+    override fun render(notebook: Notebook): DisplayResult = htmlResult(jsCodeScriptModule)
 }

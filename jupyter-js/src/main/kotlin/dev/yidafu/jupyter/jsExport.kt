@@ -1,3 +1,5 @@
+@file:Suppress("ktlint:standard:filename")
+
 package dev.yidafu.jupyter
 
 import kotlinx.serialization.encodeToString
@@ -52,12 +54,13 @@ inline fun <reified T : Any> jsExport(
     varName: String,
     variable: T,
 ) {
-    val valueStr = try {
-        json.encodeToString<T>(variable)
-    } catch (e: kotlinx.serialization.SerializationException) {
-        // If the type is not serializable, use the toJsonElement method
-        variable.toJsonElement().toString()
-    }
+    val valueStr =
+        try {
+            json.encodeToString<T>(variable)
+        } catch (e: kotlinx.serialization.SerializationException) {
+            // If the type is not serializable, use the toJsonElement method
+            variable.toJsonElement().toString()
+        }
 
     JavaScriptVariableStore[varName] = valueStr
 }

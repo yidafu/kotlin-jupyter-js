@@ -1,4 +1,4 @@
-package dev.yidafu.jupyper.config
+package dev.yidafu.jupyter.libmapping
 
 import dev.yidafu.jupyter.JavaScriptPackage
 
@@ -70,7 +70,7 @@ class JsConfigBuilder {
      */
     internal fun apply() {
         mappings.forEach { (name, config) ->
-            ConfigManager.setLibraryMapping(name, config)
+            LibMappingManager.set(name, config)
         }
     }
 
@@ -101,20 +101,9 @@ fun jsConfig(block: JsConfigBuilder.() -> Unit) {
 /**
  * Get current configuration information
  */
-fun getJsConfig(): Map<String, JavaScriptPackage> {
-    return ConfigManager.getAllLibraryMappings()
-}
+fun getJsConfig(): Map<String, JavaScriptPackage> = LibMappingManager.getAll()
 
 /**
  * Check if library is configured
  */
-fun hasJsLibrary(libraryName: String): Boolean {
-    return ConfigManager.hasLibraryMapping(libraryName)
-}
-
-/**
- * Get configuration statistics
- */
-fun getJsConfigStats(): ConfigStats {
-    return ConfigManager.getConfigStats()
-}
+fun hasJsLibrary(libraryName: String): Boolean = LibMappingManager.has(libraryName)

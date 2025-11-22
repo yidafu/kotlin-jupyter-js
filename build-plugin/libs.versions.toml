@@ -2,7 +2,7 @@
 kotlin = "2.2.20"
 jupyter = "0.16.0-726"
 ksp = "2.2.20-2.0.4"
-ktlint = "12.1.0"
+ktlint = "14.0.1"
 dokka = "1.8.20"
 publisher = "1.8.10-dev-43"
 kover = "0.7.5"
@@ -12,7 +12,7 @@ junit-jupiter = "5.9.2"
 
 [libraries]
 # gradle plugins
-kotlin-test =  { module = "org.jetbrains.kotlin:kotlin-test", version.ref ="kotlin"}
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-publish-plugin = { module = "org.jetbrains.kotlin:kotlin-libs-publisher", version = "1.8.10-dev-43" }
 
 kotlin_jvm_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -20,10 +20,10 @@ plugin-jupyter = { module = "org.jetbrains.kotlin:kotlin-jupyter-api-gradle-plug
 
 ksp_api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
 
-dokka_plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version = "1.8.20"}
-ktlint_plugin = { module = "org.jlleitschuh.gradle:ktlint-gradle", version = "11.6.1" }
-kotlin_serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.6.0"}
-slf4j_api = { module = "org.slf4j:slf4j-api", version = "2.0.9"}
+dokka_plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version = "1.8.20" }
+ktlint_plugin = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlint" }
+kotlin_serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.6.0" }
+slf4j_api = { module = "org.slf4j:slf4j-api", version = "2.0.9" }
 swc_binding = { module = "dev.yidafu.swc:swc-binding", version = "0.7.0" }
 
 # Dokka
@@ -41,7 +41,7 @@ junit_jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "jun
 [bundles]
 allGradlePlugins = [
     "kotlin_jvm_plugin",
-#    "plugin-jupyter",
+    #    "plugin-jupyter",
     "kotlin-publish-plugin",
     "dokka_plugin",
     "ktlint_plugin",
@@ -55,13 +55,13 @@ kotest = [
 ]
 
 [plugins]
-jvm = { id= "org.jetbrains.kotlin.jvm", version.ref = "kotlin"}
+jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 jupyter = { id = "org.jetbrains.kotlin.jupyter.api", version.ref = "jupyter" }
-publisher = { id = "org.jetbrains.kotlin.libs.publisher", version.ref= "publisher"}
-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka"}
-ktlint = {id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint"}
+publisher = { id = "org.jetbrains.kotlin.libs.publisher", version.ref = "publisher" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 kotlin_serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 signing = { id = "org.gradle.signing" }
-mavenPublish = { id = "org.gradle.maven-publish"}
+mavenPublish = { id = "org.gradle.maven-publish" }

@@ -1,13 +1,18 @@
 package dev.yidafu.jupyter
 
-import kotlinx.serialization.*
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.descriptors.*
+import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.encoding.encodeStructure
-import kotlinx.serialization.json.*
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonDecoder
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 
 /**
  * JavaScript package configuration
@@ -38,9 +43,7 @@ data class JavaScriptPackage(
     val mainSource: String,
     val extraSources: List<String>? = null,
 ) {
-    override fun toString(): String {
-        return mainSource
-    }
+    override fun toString(): String = mainSource
 }
 
 /**
@@ -57,8 +60,8 @@ class JavaScriptPackageSerializer : KSerializer<JavaScriptPackage> {
         buildClassSerialDescriptor(
             "JavaScriptPackage",
         ) {
-            element<String>("main")
-            element<List<String>>("extra")
+            element("main", String.serializer().descriptor)
+            element("extra", ListSerializer(String.serializer()).descriptor)
         }
 
     override fun deserialize(decoder: Decoder): JavaScriptPackage {
@@ -71,6 +74,7 @@ class JavaScriptPackageSerializer : KSerializer<JavaScriptPackage> {
                     throw IllegalStateException("package url must be string")
                 }
             }
+
             is JsonObject -> {
                 val importSource =
                     when (val default = obj["main"]) {
@@ -81,13 +85,14 @@ class JavaScriptPackageSerializer : KSerializer<JavaScriptPackage> {
                                 throw IllegalStateException("main field must be string")
                             }
                         }
+
                         else -> {
                             throw IllegalStateException("main field must be string")
                         }
                     }
                 val extraSources =
                     when (val extra = obj["extra"]) {
-                        is JsonArray ->
+                        is JsonArray -> {
                             extra.map {
                                 if (it is JsonPrimitive && it.isString) {
                                     it.content
@@ -95,6 +100,8 @@ class JavaScriptPackageSerializer : KSerializer<JavaScriptPackage> {
                                     throw IllegalStateException("extra field must be Array<string>")
                                 }
                             }
+                        }
+
                         else -> {
                             throw IllegalStateException("extra field must be Array")
                         }
