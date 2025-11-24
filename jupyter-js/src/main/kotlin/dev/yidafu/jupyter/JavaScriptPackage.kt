@@ -92,7 +92,11 @@ class JavaScriptPackageSerializer : KSerializer<JavaScriptPackage> {
                     }
                 val extraSources =
                     when (val extra = obj["extra"]) {
-                        null -> null  // extra field is optional
+                        null -> {
+                            null
+                        }
+
+                        // extra field is optional
                         is JsonArray -> {
                             extra.map {
                                 if (it is JsonPrimitive && it.isString) {

@@ -34,8 +34,16 @@ class JsxCodeResult(
     /**
      * Detects if React is already imported in code
      * Used to avoid duplicate imports
+     * Matches:
+     * - import React from 'react'
+     * - import React from "react"
+     * - import React, { ... } from 'react'
+     * - import React from 'https://esm.sh/react@...'
+     * - import React, { ... } from "https://esm.sh/react@..."
+     * Does not match commented imports (// ...)
      */
-    private val pattern: Regex = """from\s+['"]react['"]""".toRegex()
+    private val pattern: Regex =
+        """^\s*import\s+React[,\s\{].*?from\s+['"](?:https?://[^'"]*?/)?react(?:@[^'"]*)?['"]""".toRegex(RegexOption.MULTILINE)
 
     /**
      * React import statement

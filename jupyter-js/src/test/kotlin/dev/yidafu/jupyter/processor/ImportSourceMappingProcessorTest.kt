@@ -355,7 +355,7 @@ class ImportSourceMappingProcessorTest :
                         """.trimMargin(),
                     )
                 val processor = ImportSourceMappingProcessor()
-                
+
                 if (program is Module) {
                     val importDecl = program.body?.get(0)
                     if (importDecl is ImportDeclaration) {

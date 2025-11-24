@@ -32,10 +32,11 @@ class JsConfigDslTest :
             should("add dependency with main URL and extra URLs") {
                 val builder = JsConfigBuilder()
                 val mainUrl = "https://cdn.jsdelivr.net/npm/echarts@5"
-                val extraUrls = listOf(
-                    "https://cdn.jsdelivr.net/npm/echarts-gl@2",
-                    "https://cdn.jsdelivr.net/npm/echarts-liquidfill@3",
-                )
+                val extraUrls =
+                    listOf(
+                        "https://cdn.jsdelivr.net/npm/echarts-gl@2",
+                        "https://cdn.jsdelivr.net/npm/echarts-liquidfill@3",
+                    )
 
                 builder.dependencies("echarts", mainUrl, extraUrls)
 
@@ -387,4 +388,3 @@ class JsConfigDslTest :
             }
         }
     })
-

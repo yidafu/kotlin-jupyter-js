@@ -9,6 +9,7 @@ kover = "0.7.5"
 kotest = "5.8.0"
 mockk = "1.13.9"
 junit-jupiter = "5.9.2"
+nmcp = "0.0.8"
 
 [libraries]
 # gradle plugins
@@ -24,7 +25,7 @@ dokka_plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version = "
 ktlint_plugin = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlint" }
 kotlin_serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version = "1.6.0" }
 slf4j_api = { module = "org.slf4j:slf4j-api", version = "2.0.9" }
-swc_binding = { module = "dev.yidafu.swc:swc-binding", version = "0.7.0" }
+swc_binding = { module = "dev.yidafu.swc:swc-binding", version = "0.8.0" }
 
 # Dokka
 dokka_analysis_compiler = { module = "org.jetbrains.dokka:kotlin-analysis-compiler", version.ref = "dokka" }
@@ -65,3 +66,4 @@ kotlin_serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 signing = { id = "org.gradle.signing" }
 mavenPublish = { id = "org.gradle.maven-publish" }
+nmcp = { id = "com.gradleup.nmcp", version.ref = "nmcp" }

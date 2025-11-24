@@ -139,16 +139,19 @@ class AnyToJsonElementTest :
                 }
             }
 
-            should("should throw IllegalStateException with correct message and SerializationException cause when Json.encodeToJsonElement fails") {
+            should(
+                "should throw IllegalStateException with correct message and SerializationException cause when Json.encodeToJsonElement fails",
+            ) {
                 // 创建一个没有 @Serializable 注解的类，确保会抛出 SerializationException
                 class NonSerializableClass(
                     val name: String,
                     val age: Int,
                 )
 
-                val exception = shouldThrow<IllegalStateException> {
-                    NonSerializableClass("test", 123).toJsonElement()
-                }
+                val exception =
+                    shouldThrow<IllegalStateException> {
+                        NonSerializableClass("test", 123).toJsonElement()
+                    }
 
                 // 验证异常消息
                 exception.message shouldContain "Can't serialize class"

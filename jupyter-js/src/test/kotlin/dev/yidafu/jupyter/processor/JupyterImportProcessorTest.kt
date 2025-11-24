@@ -9,11 +9,11 @@ import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import io.mockk.*
-import kotlin.reflect.full.memberProperties
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.buildJsonObject
 import org.jetbrains.kotlinx.jupyter.api.*
+import kotlin.reflect.full.memberProperties
 
 /**
  * Mock Renderable implementation
@@ -327,7 +327,7 @@ class JupyterImportProcessorTest :
 
                 val program = processTestScript("import { bar } from \"@jupyter\" ")
                 val processor = JupyterImportProcessor(notebookMock)
-                
+
                 if (program is Module) {
                     val importDecl = program.body?.get(0) as? ImportDeclaration
                     val specifier = importDecl?.specifiers?.get(0) as? NamedImportSpecifier
@@ -338,7 +338,7 @@ class JupyterImportProcessorTest :
                         processor.process(program, contextMock)
                         // Restore for cleanup
                         specifier.imported = originalImported
-                        
+
                         // Should use local name when imported is null
                         verify(exactly = 1) { contextMock.addKotlinValue("bar" to "\"world\"") }
                     }
@@ -351,7 +351,7 @@ class JupyterImportProcessorTest :
 
                 val program = processTestScript("import { bar } from \"@jupyter\" ")
                 val processor = JupyterImportProcessor(notebookMock)
-                
+
                 if (program is Module) {
                     val importDecl = program.body?.get(0) as? ImportDeclaration
                     val specifier = importDecl?.specifiers?.get(0) as? NamedImportSpecifier
@@ -359,7 +359,7 @@ class JupyterImportProcessorTest :
                         // The imported field is already an Identifier in normal cases
                         // We'll test the case where it's not an Identifier by checking the code path
                         processor.process(program, contextMock)
-                        
+
                         // Should still work correctly
                         verify(exactly = 1) { contextMock.addKotlinValue("bar" to "\"world\"") }
                     }
@@ -387,20 +387,21 @@ class JupyterImportProcessorTest :
                 val contextMock: JavascriptProcessContext = mockk(relaxed = true)
 
                 // Create a mock variable with unsupported MIME type
-                val unsupportedResult = object : DisplayResult {
-                    override fun toJson(
-                        additionalMetadata: JsonObject,
-                        overrideId: String?,
-                    ): JsonObject =
-                        buildJsonObject {
-                            put(
-                                "data",
-                                buildJsonObject {
-                                    put("application/xml", JsonPrimitive("<xml></xml>"))
-                                },
-                            )
-                        }
-                }
+                val unsupportedResult =
+                    object : DisplayResult {
+                        override fun toJson(
+                            additionalMetadata: JsonObject,
+                            overrideId: String?,
+                        ): JsonObject =
+                            buildJsonObject {
+                                put(
+                                    "data",
+                                    buildJsonObject {
+                                        put("application/xml", JsonPrimitive("<xml></xml>"))
+                                    },
+                                )
+                            }
+                    }
 
                 val properties = MockScriptInstance::class.memberProperties.associateBy { it.name }
                 every { notebookMock.variablesState } returns
@@ -438,22 +439,23 @@ class JupyterImportProcessorTest :
                 // The only way to trigger InvalidMimeTypeResult is if objKeys.contains() returns true
                 // but data[MimeTypes.JSON] somehow returns null, which shouldn't happen normally
                 // Let's test a realistic scenario: when JSON key doesn't exist, it goes to else and throws NotSupportMimeTypeException
-                val invalidResult = object : DisplayResult {
-                    override fun toJson(
-                        additionalMetadata: JsonObject,
-                        overrideId: String?,
-                    ): JsonObject =
-                        buildJsonObject {
-                            put(
-                                "data",
-                                buildJsonObject {
-                                    // Missing JSON key - will check JSON first, not found, go to else
-                                    // Actually, if no supported keys exist, will throw NotSupportMimeTypeException
-                                    put("unsupported/mime", JsonPrimitive("value"))
-                                },
-                            )
-                        }
-                }
+                val invalidResult =
+                    object : DisplayResult {
+                        override fun toJson(
+                            additionalMetadata: JsonObject,
+                            overrideId: String?,
+                        ): JsonObject =
+                            buildJsonObject {
+                                put(
+                                    "data",
+                                    buildJsonObject {
+                                        // Missing JSON key - will check JSON first, not found, go to else
+                                        // Actually, if no supported keys exist, will throw NotSupportMimeTypeException
+                                        put("unsupported/mime", JsonPrimitive("value"))
+                                    },
+                                )
+                            }
+                    }
 
                 val properties = MockScriptInstance::class.memberProperties.associateBy { it.name }
                 every { notebookMock.variablesState } returns
@@ -495,22 +497,23 @@ class JupyterImportProcessorTest :
                 // Actually, this is hard to test because buildJsonObject won't allow null values
                 // So let's test the case where JSON doesn't exist, which will check PLAIN_TEXT next
                 // But if PLAIN_TEXT also doesn't exist, it will go to else and throw NotSupportMimeTypeException
-                val invalidResult = object : DisplayResult {
-                    override fun toJson(
-                        additionalMetadata: JsonObject,
-                        overrideId: String?,
-                    ): JsonObject =
-                        buildJsonObject {
-                            put(
-                                "data",
-                                buildJsonObject {
-                                    // Missing JSON, will check PLAIN_TEXT next, but PLAIN_TEXT also missing
-                                    // So will go to else and throw NotSupportMimeTypeException
-                                    put(MimeTypes.HTML, JsonPrimitive("<div></div>"))
-                                },
-                            )
-                        }
-                }
+                val invalidResult =
+                    object : DisplayResult {
+                        override fun toJson(
+                            additionalMetadata: JsonObject,
+                            overrideId: String?,
+                        ): JsonObject =
+                            buildJsonObject {
+                                put(
+                                    "data",
+                                    buildJsonObject {
+                                        // Missing JSON, will check PLAIN_TEXT next, but PLAIN_TEXT also missing
+                                        // So will go to else and throw NotSupportMimeTypeException
+                                        put(MimeTypes.HTML, JsonPrimitive("<div></div>"))
+                                    },
+                                )
+                            }
+                    }
 
                 val properties = MockScriptInstance::class.memberProperties.associateBy { it.name }
                 every { notebookMock.variablesState } returns
@@ -538,21 +541,22 @@ class JupyterImportProcessorTest :
                 val contextMock: JavascriptProcessContext = mockk(relaxed = true)
 
                 // Create a mock variable with PNG that is not JsonPrimitive
-                val invalidResult = object : DisplayResult {
-                    override fun toJson(
-                        additionalMetadata: JsonObject,
-                        overrideId: String?,
-                    ): JsonObject =
-                        buildJsonObject {
-                            put(
-                                "data",
-                                buildJsonObject {
-                                    // PNG exists but is not JsonPrimitive (it's a JsonObject)
-                                    put(MimeTypes.PNG, buildJsonObject { put("data", JsonPrimitive("test")) })
-                                },
-                            )
-                        }
-                }
+                val invalidResult =
+                    object : DisplayResult {
+                        override fun toJson(
+                            additionalMetadata: JsonObject,
+                            overrideId: String?,
+                        ): JsonObject =
+                            buildJsonObject {
+                                put(
+                                    "data",
+                                    buildJsonObject {
+                                        // PNG exists but is not JsonPrimitive (it's a JsonObject)
+                                        put(MimeTypes.PNG, buildJsonObject { put("data", JsonPrimitive("test")) })
+                                    },
+                                )
+                            }
+                    }
 
                 val properties = MockScriptInstance::class.memberProperties.associateBy { it.name }
                 every { notebookMock.variablesState } returns

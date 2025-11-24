@@ -69,7 +69,7 @@ class JavaScriptMagicIntegrationTest :
             // TypeScript类型注解应该被移除
             assertContains(html, "function add")
             assertContains(html, "return a + b")
-            assertContains(html, "var result = add(5, 3)")
+            assertContains(html, "const result = add(5, 3)")
             // 验证TypeScript类型注解已被移除
             assertTrue(!html.contains(": number"))
         }

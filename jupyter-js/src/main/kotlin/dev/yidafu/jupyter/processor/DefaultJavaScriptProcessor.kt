@@ -6,6 +6,7 @@ import dev.yidafu.jupyter.LanguageType
 import dev.yidafu.jupyter.swc.addFirst
 import dev.yidafu.swc.SwcJson
 import dev.yidafu.swc.SwcNative
+import dev.yidafu.swc.Union
 import dev.yidafu.swc.generated.*
 import dev.yidafu.swc.generated.dsl.*
 import org.jetbrains.kotlin.backend.common.phaser.transform
@@ -88,6 +89,7 @@ class DefaultJavaScriptProcessor(
                 script = false
                 comments = false
             }
+
     /**
      * TSX parse options
      * Configured for ES2020 target with TypeScript + JSX syntax support
@@ -214,7 +216,13 @@ class DefaultJavaScriptProcessor(
                     jsc =
                         jscConfig {
                             parser = tsParseOpt
-                            tsxParseOpt
+                            externalHelpers = false
+                            transform =
+                                transformConfig {
+                                    target = JscTarget.ES2020
+                                }
+                            target = JscTarget.ES2020
+                            isModule = Union.U2.ofA(true)
                         }
                 },
             )
@@ -279,6 +287,13 @@ class DefaultJavaScriptProcessor(
                     jsc =
                         jscConfig {
                             parser = jsxParseOpt
+                            transform =
+                                transformConfig {
+                                    target = JscTarget.ES2020
+                                }
+                            externalHelpers = false
+                            target = JscTarget.ES2020
+                            isModule = Union.U2.ofA(true)
                         }
                 },
             )
@@ -289,6 +304,7 @@ class DefaultJavaScriptProcessor(
                 transformOutput.code,
                 esParseOptions {
                     target = JscTarget.ES2020
+                    jsx = true
                     comments = false
                     topLevelAwait = true
                     nullishCoalescing = true
@@ -349,7 +365,10 @@ class DefaultJavaScriptProcessor(
                             target = JscTarget.ES2020
                             transform =
                                 transformConfig {
+                                    target = JscTarget.ES2020
                                 }
+                            externalHelpers = false
+                            isModule = Union.U2.ofA(true)
                         }
                 },
             )

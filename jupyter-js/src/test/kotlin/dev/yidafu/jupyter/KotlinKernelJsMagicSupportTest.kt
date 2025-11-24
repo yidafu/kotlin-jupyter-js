@@ -603,4 +603,37 @@ class KotlinKernelJsMagicSupportTest :
             assertContains(html, "Employee Directory")
         }
     }
+
+    @Test
+    fun `should handle simple JSX function component`() {
+        withLibrary(KotlinKernelJsMagicSupport()) {
+            val result =
+                exec(
+                    """
+                    %jsx
+                    function App() {
+                      return <div></div>
+                    }
+
+                    export default App
+                    """.trimIndent(),
+                ) as MimeTypedResult
+
+            val html = (result[MimeTypes.HTML] as String)
+            println(html)
+
+            // Verify JSX is transformed to React.createElement
+            assertContains(html, "React.createElement")
+            // Verify the function component structure is maintained
+            assertContains(html, "function App()")
+            // Verify the default export variable is created
+            assertContains(html, "__JupyterCellDefaultExportVariable__")
+            // Verify the default export assignment
+            assertContains(html, "const __JupyterCellDefaultExportVariable__ = App")
+            // Verify the div element is created
+            assertContains(html, "\"div\"")
+            // Code should execute successfully
+            assertTrue(result is MimeTypedResult)
+        }
+    }
 }

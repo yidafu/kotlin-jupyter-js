@@ -398,6 +398,7 @@ class InlineImportSourceProcessor : JavaScriptProcessor {
                                     newStats.add(createExportAssignmentExpression(iName, iName))
                                 }
                             }
+
                             // never reach case below, because TypeScript will transform to JavaScript at beginning
                             // is TsEnumDeclaration,
                             // is TsInterfaceDeclaration,

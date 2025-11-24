@@ -249,6 +249,37 @@ class DefaultJavaScriptProcessorTest :
                 result.shouldNotContain("<div>")
             }
 
+            should("process JSX with separate export default statement") {
+                val notebook = getMockNotebook()
+                val processor = DefaultJavaScriptProcessor(notebook)
+
+                val result =
+                    processor.process(
+                        LanguageType.JSX,
+                        """
+                        function App() {
+                          return <div></div>
+                        }
+
+                        export default App
+                        """.trimIndent(),
+                    )
+
+                result.shouldContain("JsxCodeResult")
+                // 验证 JSX 被转换为 React.createElement
+                result.shouldContain("React.createElement")
+                // 验证函数声明被保留
+                result.shouldContain("function App()")
+                // 验证默认导出变量被创建
+                result.shouldContain("__JupyterCellDefaultExportVariable__")
+                // 验证默认导出被正确转换为 const 赋值
+                result.shouldContain("const __JupyterCellDefaultExportVariable__ = App")
+                // 验证 div 元素被创建
+                result.shouldContain("\"div\"")
+                // 验证原始 JSX 语法被移除
+                result.shouldNotContain("<div></div>")
+            }
+
             should("process JSX code with component") {
                 val notebook = getMockNotebook()
                 val processor = DefaultJavaScriptProcessor(notebook)
@@ -272,6 +303,129 @@ class DefaultJavaScriptProcessorTest :
                 // 验证 JSX 表达式被转换
                 result.shouldContain("name")
                 result.shouldContain("Hello")
+            }
+
+            should("process JSX component with export default") {
+                val notebook = getMockNotebook()
+                val processor = DefaultJavaScriptProcessor(notebook)
+
+                val result =
+                    processor.process(
+                        LanguageType.JSX,
+                        """
+                        function Greeting({ name }) {
+                            return <h1>Hello, {name}!</h1>;
+                        }
+
+                        export default Greeting;
+                        """.trimIndent(),
+                    )
+
+                result.shouldContain("JsxCodeResult")
+                // 验证函数声明被保留
+                result.shouldContain("function Greeting")
+                // 验证 JSX 语法被转换
+                result.shouldNotContain("<h1>")
+                result.shouldNotContain("</h1>")
+                // 验证默认导出被转换为 const 赋值
+                result.shouldContain("const __JupyterCellDefaultExportVariable__ = Greeting")
+                // 验证变量名被保留
+                result.shouldContain("name")
+                result.shouldContain("Hello")
+            }
+
+            should("process JSX arrow function with export default") {
+                val notebook = getMockNotebook()
+                val processor = DefaultJavaScriptProcessor(notebook)
+
+                val result =
+                    processor.process(
+                        LanguageType.JSX,
+                        """
+                        const App = () => <button>Click me</button>;
+                        export default App;
+                        """.trimIndent(),
+                    )
+
+                result.shouldContain("JsxCodeResult")
+                // 验证 JSX 被转换
+                result.shouldContain("React.createElement")
+                // 验证按钮元素
+                result.shouldContain("\"button\"")
+                result.shouldContain("Click me")
+                // 验证默认导出被正确处理
+                result.shouldContain("const __JupyterCellDefaultExportVariable__ = App")
+                result.shouldNotContain("<button>")
+            }
+
+            should("process JSX without export default") {
+                val notebook = getMockNotebook()
+                val processor = DefaultJavaScriptProcessor(notebook)
+
+                val result =
+                    processor.process(
+                        LanguageType.JSX,
+                        """
+                        function SimpleComponent() {
+                            return <span>Just JSX, no export</span>;
+                        }
+                        """.trimIndent(),
+                    )
+
+                result.shouldContain("JsxCodeResult")
+                // 验证 JSX 被转换
+                result.shouldContain("React.createElement")
+                // 验证 span 元素
+                result.shouldContain("\"span\"")
+                result.shouldContain("Just JSX, no export")
+                // 验证没有默认导出变量
+                result.shouldNotContain("__JupyterCellDefaultExportVariable__")
+                result.shouldNotContain("<span>")
+            }
+
+            should("process JSX with multiple statements and export default") {
+                val notebook = getMockNotebook()
+                val processor = DefaultJavaScriptProcessor(notebook)
+
+                val result =
+                    processor.process(
+                        LanguageType.JSX,
+                        """
+                        import React from 'react';
+
+                        const data = { message: "Hello World" };
+
+                        function ComplexComponent() {
+                            return (
+                                <div>
+                                    <h1>Title</h1>
+                                    <p>{data.message}</p>
+                                    <button>Action</button>
+                                </div>
+                            );
+                        }
+
+                        export default ComplexComponent;
+                        """.trimIndent(),
+                    )
+
+                result.shouldContain("JsxCodeResult")
+                // 验证多个 JSX 元素被转换
+                result.shouldContain("React.createElement")
+                // 验证各种元素
+                result.shouldContain("\"div\"")
+                result.shouldContain("\"h1\"")
+                result.shouldContain("\"p\"")
+                result.shouldContain("\"button\"")
+                // 验证内容
+                result.shouldContain("Title")
+                result.shouldContain("Hello World")
+                result.shouldContain("Action")
+                // 验证默认导出被处理
+                result.shouldContain("const __JupyterCellDefaultExportVariable__ = ComplexComponent")
+                // 验证原始 JSX 被移除
+                result.shouldNotContain("<div>")
+                result.shouldNotContain("</div>")
             }
         }
 

@@ -1,10 +1,10 @@
 package dev.yidafu.jupyter.processor
 
 import dev.yidafu.jupyter.CircularDependencyException
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.ShouldSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
-import io.kotest.assertions.throwables.shouldThrow
 
 class DependenceNodeTest :
     ShouldSpec({
@@ -91,9 +91,10 @@ class DependenceNodeTest :
                 val child1 = root.addChildren("child1")
                 val child2 = child1.addChildren("child2")
 
-                val exception = shouldThrow<CircularDependencyException> {
-                    child2.addChildren("child1")
-                }
+                val exception =
+                    shouldThrow<CircularDependencyException> {
+                        child2.addChildren("child1")
+                    }
 
                 exception.message shouldBe "Jupyter JS not support circular dependency:\nchild1\n|    ^\nV    |\nchild1"
             }
@@ -198,4 +199,3 @@ class DependenceNodeTest :
             }
         }
     })
-
