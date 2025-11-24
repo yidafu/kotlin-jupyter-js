@@ -1,6 +1,9 @@
-[![Kotlin beta stability](https://img.shields.io/badge/project-beta-kotlin.svg?colorA=555555&colorB=AC29EC&label=&logo=kotlin&logoColor=ffffff&logoWidth=10)](https://kotlinlang.org/docs/components-stability.html)
-[![Maven Central](https://img.shields.io/maven-metadata/v.svg?color=blue&label=Maven%20artifacts&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fdev%2Fyidafu%2Fjupyter%2Fjupyter-js%2Fmaven-metadata.xml)](https://search.maven.org/search?q=kotlin-jupyter)
-[![GitHub](https://img.shields.io/github/license/yidafu/kotlin-jupyter-js)](https://www.apache.org/licenses/LICENSE-2.0)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.2.0-7F52FF?logo=kotlin&logoColor=ffffff)](https://kotlinlang.org/)
+[![Jupyter Kernel](https://img.shields.io/badge/Jupyter%20Kernel-0.16.0-F37626?logo=jupyter&logoColor=ffffff)](https://github.com/Kotlin/kotlin-jupyter)
+[![Maven Central](https://img.shields.io/maven-central/v/dev.yidafu.jupyter/jupyter-js?color=blue&label=Maven%20Central)](https://search.maven.org/artifact/dev.yidafu.jupyter/jupyter-js)
+[![GitHub release](https://img.shields.io/github/v/release/yidafu/kotlin-jupyter-js?sort=semver)](https://github.com/yidafu/kotlin-jupyter-js/releases)
+[![GitHub License](https://img.shields.io/github/license/yidafu/kotlin-jupyter-js)](https://www.apache.org/licenses/LICENSE-2.0)
+[![GitHub stars](https://img.shields.io/github/stars/yidafu/kotlin-jupyter-js?style=social)](https://github.com/yidafu/kotlin-jupyter-js/stargazers)
 
 
 <div style="display:flex;margin: 24px">
@@ -87,7 +90,7 @@ val kNumber = 233
 // using `kNumber` in js workd
 import { kNumber } from '@jupyter'
 
-getCellRoot().innerHTML = `<h1>${kNumber}</h1>`
+getContainer().innerHTML = `<h1>${kNumber}</h1>`
 ```
 
 ##### screenshot
@@ -362,6 +365,10 @@ Errors are automatically formatted and displayed in the notebook output.
 ## Articles
 
 [How Kotlin Jupyter JS works? (English Translation)](./docs/how-kotlin-jupyter-work.md) - [中文原文](./docs/how-kotlin-jupyter-work.zh-CN.md)
+
+## Release Notes
+
+For detailed information about changes in each version, see the [CHANGELOG.md](./CHANGELOG.md).
 
 ## Documentation
 
