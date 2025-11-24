@@ -1,31 +1,67 @@
 package dev.yidafu.jupyter
 
-import kotlinx.serialization.*
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
-import kotlinx.serialization.descriptors.*
+import kotlinx.serialization.descriptors.buildClassSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.encoding.encodeStructure
-import kotlinx.serialization.json.*
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonDecoder
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 
+/**
+ * JavaScript package configuration
+ *
+ * Represents configuration information for a JavaScript library, including main source and extra dependency sources
+ *
+ * @param mainSource Main source URL (required), usually the main entry file of the library
+ * @param extraSources List of extra dependency sources (optional), used to load additional dependencies
+ *
+ * Serialization format supports two types:
+ * 1. Simple string format: `"https://cdn.jsdelivr.net/npm/react@18"`
+ * 2. Object format: `{ "main": "https://...", "extra": ["https://..."] }`
+ *
+ * Example:
+ * ```kotlin
+ * // Simple configuration
+ * JavaScriptPackage("https://cdn.jsdelivr.net/npm/react@18")
+ *
+ * // Configuration with extra dependencies
+ * JavaScriptPackage(
+ *     mainSource = "https://cdn.jsdelivr.net/npm/echarts@5",
+ *     extraSources = listOf("https://cdn.jsdelivr.net/npm/echarts-gl@2")
+ * )
+ * ```
+ */
 @Serializable(JavaScriptPackageSerializer::class)
 data class JavaScriptPackage(
     val mainSource: String,
     val extraSources: List<String>? = null,
 ) {
-    override fun toString(): String {
-        return mainSource
-    }
+    override fun toString(): String = mainSource
 }
 
+/**
+ * Custom serializer for JavaScriptPackage
+ *
+ * Supports two serialization formats:
+ * 1. String format: Serializes directly as mainSource
+ * 2. Object format: Serializes as { main: string, extra: string[] }
+ *
+ * When deserializing, uses string format if only main source exists; uses object format if extra dependencies exist
+ */
 class JavaScriptPackageSerializer : KSerializer<JavaScriptPackage> {
     override val descriptor =
         buildClassSerialDescriptor(
             "JavaScriptPackage",
         ) {
-            element<String>("main")
-            element<List<String>>("extra")
+            element("main", String.serializer().descriptor)
+            element("extra", ListSerializer(String.serializer()).descriptor)
         }
 
     override fun deserialize(decoder: Decoder): JavaScriptPackage {
@@ -38,6 +74,7 @@ class JavaScriptPackageSerializer : KSerializer<JavaScriptPackage> {
                     throw IllegalStateException("package url must be string")
                 }
             }
+
             is JsonObject -> {
                 val importSource =
                     when (val default = obj["main"]) {
@@ -48,13 +85,19 @@ class JavaScriptPackageSerializer : KSerializer<JavaScriptPackage> {
                                 throw IllegalStateException("main field must be string")
                             }
                         }
+
                         else -> {
                             throw IllegalStateException("main field must be string")
                         }
                     }
                 val extraSources =
                     when (val extra = obj["extra"]) {
-                        is JsonArray ->
+                        null -> {
+                            null
+                        }
+
+                        // extra field is optional
+                        is JsonArray -> {
                             extra.map {
                                 if (it is JsonPrimitive && it.isString) {
                                     it.content
@@ -62,6 +105,8 @@ class JavaScriptPackageSerializer : KSerializer<JavaScriptPackage> {
                                     throw IllegalStateException("extra field must be Array<string>")
                                 }
                             }
+                        }
+
                         else -> {
                             throw IllegalStateException("extra field must be Array")
                         }

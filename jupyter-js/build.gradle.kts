@@ -7,6 +7,8 @@
  * This project uses @Incubating APIs which are subject to change.
  */
 
+import java.util.Properties
+
 plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
     id("dev.yidafu.library")
@@ -15,45 +17,128 @@ plugins {
     alias(libs.plugins.ksp)
 //    alias(libs.plugins.publisher)
     alias(libs.plugins.kotlin.serialization)
-    id("org.jetbrains.kotlinx.kover") version "0.7.5"
+    alias(libs.plugins.kover)
+    alias(libs.plugins.dokka)
+    alias(libs.plugins.nmcp)
 
     `maven-publish`
+    signing
+}
+
+// Load local.properties
+val localPropertiesFile = project.file("local.properties")
+val localProperties = Properties()
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use { localProperties.load(it) }
+}
+
+kotlin {
+    jvmToolchain(19)
 }
 
 kotlinJupyter {
     addApiDependency()
-    addScannerDependency()
+    // addScannerDependency() - Removed in Kotlin Jupyter API 0.16.0+
+}
+
+// Creates the metadata needed for the library integration to be detected automatically.
+tasks.processJupyterApiResources {
+    libraryProducers = listOf("dev.yidafu.jupyter.KotlinKernelJsMagicSupport")
 }
 
 group = "dev.yidafu.jupyter"
-version = "0.7.0"
+version = "0.8.0"
 
 dependencies {
-    implementation("org.jetbrains.dokka:kotlin-analysis-compiler:1.8.20")
+    implementation(libs.dokka.analysis.compiler) {
+        // 排除可能冲突的 Kotlin 编译器依赖
+        exclude(group = "org.jetbrains.kotlin", module = "kotlin-compiler")
+        exclude(group = "org.jetbrains.kotlin", module = "kotlin-compiler-embeddable")
+    }
     testImplementation(kotlin("test"))
     implementation(libs.slf4j.api)
     implementation(libs.kotlin.serialization.json)
-//    implementation(project(":swc-binding"))
     implementation(libs.swc.binding)
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+    // Kotlin Jupyter 测试依赖
+    testImplementation(libs.jupyter.test.kit)
 
-    testImplementation("io.mockk:mockk:1.13.9")
-    testImplementation("io.kotest:kotest-runner-junit5:5.8.0")
-    testImplementation("io.kotest:kotest-assertions-core:5.8.0")
-    testImplementation("io.kotest:kotest-property:5.8.0")
-    testImplementation("io.kotest:kotest-assertions-json:5.8.0")
+    // Kotest 测试框架
+    testImplementation(libs.bundles.kotest)
+    testImplementation(libs.mockk)
+
+    // JUnit Jupiter (Kotlin Jupyter Test Kit 需要)
+    testImplementation(libs.junit.jupiter)
+
+    // 强制使用正确的 Kotlin 编译器版本
+    testRuntimeOnly("org.jetbrains.kotlin:kotlin-compiler-embeddable:2.2.20")
+    testRuntimeOnly("org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:2.2.20")
 }
 
 repositories {
+    mavenLocal()
     maven("https://mirrors.cloud.tencent.com/nexus/repository/maven-public")
     maven("https://s01.oss.sonatype.org/content/groups/public/")
     mavenCentral()
 }
 
-publishMan {
-    name.set("Kotlin Jupyter JS Support")
-    description.set("Kotlin Jupyter JS Support")
+val kotlinSourcesJar = project.tasks.findByName("kotlinSourcesJar") as org.gradle.jvm.tasks.Jar
+val dokkaJavadocJar = project.tasks.register<org.gradle.jvm.tasks.Jar>("dokkaJavadocJar") {
+//    dependsOn("dokkaGenerate")
+    from(project.layout.buildDirectory.dir("dokka/html"))
+    archiveClassifier.set("javadoc")
+}
+
+// Maven Publishing 配置 - POM metadata for all publications
+// NMCP plugin automatically uses these publications for uploading to Central Portal
+publishing {
+    publications {
+        create<MavenPublication>("sonatype") {
+            // Create empty Javadoc JAR to satisfy Central Portal requirements
+            // Dokka HTML is available separately via dokkaHtml task
+
+            from(project.components["java"])
+            artifact(kotlinSourcesJar)
+            artifact(dokkaJavadocJar)
+            versionMapping {
+                usage("java-api") {
+                    fromResolutionOf("runtimeClasspath")
+                }
+                usage("java-runtime") {
+                    fromResolutionResult()
+                }
+            }
+
+            pom {
+                name.set("Kotlin Jupyter JS Support")
+                description.set(
+                    "Kotlin Jupyter Kernel extension that adds support for JavaScript/TypeScript/React (JSX/TSX) magic commands",
+                )
+                url.set("https://github.com/yidafu/kotlin-jupyter-js")
+
+                licenses {
+                    license {
+                        name.set("The Apache License, Version 2.0")
+                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                    }
+                }
+
+                developers {
+                    developer {
+                        id.set("dovyih")
+                        name.set("Dov Yih")
+                        email.set("public@yidafu.dev")
+                    }
+                }
+
+                scm {
+                    connection.set("scm:git:git://github.com:yidafu/kotlin-jupyter-js.git")
+                    developerConnection.set("scm:git:ssh://github.com:yidafu/kotlin-jupyter-js.git")
+                    url.set("https://github.com:yidafu/kotlin-jupyter-js")
+                }
+            }
+        }
+    }
 }
 
 tasks.withType<Test>().configureEach {
@@ -63,6 +148,51 @@ tasks.withType<Test>().configureEach {
 // Optionally configure plugin
 configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
     debug.set(true)
-    version.set("1.1.1")
-    disabledRules.set(setOf("standard:no-wildcard-imports", "standard:filename"))
+    version.set("1.8.0")
+//    disabledRules.set(setOf("standard:no-wildcard-imports", "standard:filename"))
 }
+
+// NMCP Plugin 配置 - Modern plugin for Central Portal
+// See: https://github.com/GradleUp/nmcp
+nmcp {
+    // Publish to Central Portal
+    // Note: Central Portal does NOT support SNAPSHOT versions
+    // All versions must be release versions
+    publishAllPublications {
+        // Central Portal credentials (Portal user token)
+        username.set(
+            localProperties.getProperty("centralUsername")
+                ?: project.findProperty("centralUsername") as String?
+                ?: System.getenv("CENTRAL_USERNAME"),
+        )
+        password.set(
+            localProperties.getProperty("centralPassword")
+                ?: project.findProperty("centralPassword") as String?
+                ?: System.getenv("CENTRAL_PASSWORD"),
+        )
+
+        // Publication type: USER_MANAGED requires manual approval in Portal UI
+        // AUTOMATIC would auto-publish, but requires namespace verification
+        publicationType.set("USER_MANAGED")
+    }
+}
+
+// Signing configuration for Maven Central
+val signingKey = localProperties.getProperty("signing.key")
+    ?: System.getenv("SIGNING_KEY")
+val signingPassword = localProperties.getProperty("signing.password")
+    ?: System.getenv("SIGNING_PASSWORD")
+val signingKeyId = localProperties.getProperty("signing.keyId")
+    ?: System.getenv("SIGNING_KEY_ID")
+
+// Enable signing only when credentials are available
+signing {
+    // Use the GPG key from local properties or environment
+    if (signingKey != null && signingPassword != null) {
+        useInMemoryPgpKeys(signingKey.trim(), signingPassword)
+    }
+    sign(publishing.publications)
+    isRequired = true
+
+}
+

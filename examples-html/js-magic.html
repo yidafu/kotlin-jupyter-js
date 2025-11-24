@@ -15180,7 +15180,7 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 <span class="c1">// using `kNumber` in js workd</span>
 <span class="k">import</span><span class="w"> </span><span class="nn">{</span><span class="w"> </span><span class="n">kNumber</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="n">from</span><span class="w"> </span><span class="err">&#39;</span><span class="nd">@jupyter</span><span class="err">&#39;</span>
 
-<span class="n">getCellRoot</span><span class="p">().</span><span class="na">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">`</span><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="err">$</span><span class="p">{</span><span class="n">kNumber</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span><span class="err">`</span>
+<span class="n">getContainer</span><span class="p">().</span><span class="na">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">`</span><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="err">$</span><span class="p">{</span><span class="n">kNumber</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span><span class="err">`</span>
 </pre></div>
 
      </div>
@@ -15204,13 +15204,13 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 
 <div id="db9e6523-46bc-418a-afab-ea0d7812a8a7" style="width:100%;min-height:100px"></div>
 <script type="module">
-function getCellRoot(width = "100%", height = "100px") {
+function getContainer(width = "100%", height = "100px") {
     var cellRoot = document.getElementById("db9e6523-46bc-418a-afab-ea0d7812a8a7");
     cellRoot.style = `width: ${width};height: ${height}`
     return cellRoot;
 }
  const kNumber = 233 
- getCellRoot().innerHTML = `<h1>${kNumber}</h1>`;
+ getContainer().innerHTML = `<h1>${kNumber}</h1>`;
  
 </script>
 
@@ -15289,7 +15289,7 @@ function getCellRoot(width = "100%", height = "100px") {
 
 <div id="41414f1d-9a2b-4cd1-a702-928c97c8de55" style="width:100%;min-height:100px"></div>
 <script type="module">
-function getCellRoot(width = "100%", height = "100px") {
+function getContainer(width = "100%", height = "100px") {
     var cellRoot = document.getElementById("41414f1d-9a2b-4cd1-a702-928c97c8de55");
     cellRoot.style = `width: $\{width};height: $\{height}`
     return cellRoot;
@@ -15302,7 +15302,7 @@ import React from "https://esm.sh/react@18.2.0";
     return React.createElement("h1", null, foo);
 };
  
-const root = createRoot(getCellRoot());
+const root = createRoot(getContainer());
 root.render(React.createElement(__JupyterCellDefaultExportVariable__))
 </script>
 
@@ -15370,7 +15370,7 @@ root.render(React.createElement(__JupyterCellDefaultExportVariable__))
 
 <span class="n">type</span><span class="w"> </span><span class="n">EChartsOption</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">echarts</span><span class="p">.</span><span class="na">EChartsOption</span><span class="p">;</span>
 
-<span class="kd">var</span><span class="w"> </span><span class="nv">chartDom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getCellRoot</span><span class="p">();</span>
+<span class="kd">var</span><span class="w"> </span><span class="nv">chartDom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getContainer</span><span class="p">();</span>
 
 <span class="n">chartDom</span><span class="p">.</span><span class="na">style</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;width:300px; height: 300px&quot;</span>
 
@@ -15417,14 +15417,14 @@ root.render(React.createElement(__JupyterCellDefaultExportVariable__))
 
 <div id="6561bf91-77d4-4e25-a596-37e7d67d90af" style="width:100%;min-height:100px"></div>
 <script type="module">
-function getCellRoot(width = "100%", height = "100px") {
+function getContainer(width = "100%", height = "100px") {
     var cellRoot = document.getElementById("6561bf91-77d4-4e25-a596-37e7d67d90af");
     cellRoot.style = `width: ${width};height: ${height}`
     return cellRoot;
 }
  const dataArray = [150,230,224,218,135,147,260] 
  import * as echarts from "https://cdn.jsdelivr.net/gh/yidafu/echarts-gl-esm@1.0.1/esm/echarts.js";
-var chartDom = getCellRoot();
+var chartDom = getContainer();
 chartDom.style = "width:300px; height: 300px";
 var myChart = echarts.init(chartDom);
 var option;
@@ -15489,7 +15489,7 @@ option && myChart.setOption(option);
 <span class="k">import</span><span class="w"> </span><span class="nn">{</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="n">from</span><span class="w">  </span><span class="s">&quot;./local.js&quot;</span>
 
 
-<span class="n">getCellRoot</span><span class="p">().</span><span class="na">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">`</span><span class="o">&lt;</span><span class="n">div</span><span class="o">&gt;</span>
+<span class="n">getContainer</span><span class="p">().</span><span class="na">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">`</span><span class="o">&lt;</span><span class="n">div</span><span class="o">&gt;</span>
 <span class="w">   </span><span class="o">&lt;</span><span class="n">h3</span><span class="o">&gt;</span><span class="err">$</span><span class="p">{</span><span class="n">foo</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">h3</span><span class="o">&gt;</span>
 <span class="w">   </span><span class="o">&lt;</span><span class="n">h6</span><span class="o">&gt;</span><span class="err">$</span><span class="p">{</span><span class="n">a</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">h6</span><span class="o">&gt;</span>
 <span class="w">   </span><span class="o">&lt;</span><span class="n">h6</span><span class="o">&gt;</span><span class="err">$</span><span class="p">{</span><span class="n">c</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">h6</span><span class="o">&gt;</span>
@@ -15517,7 +15517,7 @@ option && myChart.setOption(option);
 
 <div id="d1c7b134-40d6-4b40-aa9a-3a91269cd333" style="width:100%;min-height:100px"></div>
 <script type="module">
-function getCellRoot(width = "100%", height = "100px") {
+function getContainer(width = "100%", height = "100px") {
     var cellRoot = document.getElementById("d1c7b134-40d6-4b40-aa9a-3a91269cd333");
     cellRoot.style = `width: ${width};height: ${height}`
     return cellRoot;
@@ -15551,7 +15551,7 @@ function getCellRoot(width = "100%", height = "100px") {
 const foo = inline_Li9sb2NhbC5qcw.foo;
 const a = inline_Li9sb2NhbC5qcw.a;
 const c = inline_Li9sb2NhbC5qcw.c;
-getCellRoot().innerHTML = `<div>
+getContainer().innerHTML = `<div>
    <h3>${foo}</h3>
    <h6>${a}</h6>
    <h6>${c}</h6>
@@ -15591,7 +15591,7 @@ getCellRoot().innerHTML = `<div>
 
 <span class="k">import</span><span class="w"> </span><span class="nn">{</span><span class="w"> </span><span class="n">foo</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="n">from</span><span class="w">  </span><span class="s">&quot;https://cdn.jsdelivr.net/gh/yidafu/kotlin-jupyter-js@main/examples/local.js?inline&quot;</span>
 
-<span class="n">getCellRoot</span><span class="p">().</span><span class="na">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">`</span><span class="o">&lt;</span><span class="n">div</span><span class="o">&gt;</span>
+<span class="n">getContainer</span><span class="p">().</span><span class="na">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">`</span><span class="o">&lt;</span><span class="n">div</span><span class="o">&gt;</span>
 <span class="w">   </span><span class="o">&lt;</span><span class="n">h3</span><span class="o">&gt;</span><span class="err">$</span><span class="p">{</span><span class="n">foo</span><span class="p">}</span><span class="o">&lt;/</span><span class="n">h3</span><span class="o">&gt;</span>
 <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span><span class="err">`</span>
 </pre></div>
@@ -15617,7 +15617,7 @@ getCellRoot().innerHTML = `<div>
 
 <div id="44ca9514-4aa4-44c8-94bb-46553cff0d6c" style="width:100%;min-height:100px"></div>
 <script type="module">
-function getCellRoot(width = "100%", height = "100px") {
+function getContainer(width = "100%", height = "100px") {
     var cellRoot = document.getElementById("44ca9514-4aa4-44c8-94bb-46553cff0d6c");
     cellRoot.style = `width: ${width};height: ${height}`
     return cellRoot;
@@ -15649,7 +15649,7 @@ function getCellRoot(width = "100%", height = "100px") {
     return exports;
 })();
 const foo = inline_aHR0cHM6Ly9jZG4uanNkZWxpdnIubmV0L2doL3lpZGFmdS9rb3RsaW4tanVweXRlci1qc0BtYWluL2V4YW1wbGVzL2xvY2FsLmpzP2lubGluZQ.foo;
-getCellRoot().innerHTML = `<div>
+getContainer().innerHTML = `<div>
    <h3>${foo}</h3>
 </div>`;
  

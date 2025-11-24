@@ -4,6 +4,10 @@ plugins {
     alias(libs.plugins.ktlint)
 }
 
+kotlin {
+    jvmToolchain(17)
+}
+
 gradlePlugin {
     plugins {
         create("yidafu-lib") {
