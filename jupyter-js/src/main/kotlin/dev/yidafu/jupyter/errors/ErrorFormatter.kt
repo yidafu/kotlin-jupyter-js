@@ -17,45 +17,45 @@ object ErrorFormatter {
         val errorColor = getErrorColor(error)
 
         return """
-                                                                                                                    <div style="
-                                                                                                                        border: 1px solid $errorColor;
-                                                                                                                        border-radius: 8px;
-                                                                                                                        padding: 16px;
-                                                                                                                        margin: 8px 0;
-                                                                                                                        background: linear-gradient(135deg, ${errorColor}15, ${errorColor}05);
-                                                                                                                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                                                                                                                    ">
-                                                                                                                        <div style="display: flex; align-items: center; margin-bottom: 12px;">
-                                                                                                                            <span style="font-size: 20px; margin-right: 8px;">$errorIcon</span>
-                                                                                                                            <h3 style="margin: 0; color: $errorColor; font-size: 16px;">
-                                                                                                                                $errorType
-                                                                                                                            </h3>
-                                                                                                                            <span style="
-                                                                                                                                margin-left: auto; 
-                                                                                                                                background: $errorColor; 
-                                                                                                                                color: white; 
-                                                                                                                                padding: 2px 8px; 
-                                                                                                                                border-radius: 12px; 
-                                                                                                                                font-size: 12px; 
-                                                                                                                                font-weight: bold;
-                                                                                                                            ">
-                                                                                                                                ${error.code}
-                                                                                                                            </span>
-                                                                                                                        </div>
-                                                                                                                        
-                                                                                                                        <div style="
-                                                                                                                            background: #f8f9fa; 
-                                                                                                                            border-left: 4px solid $errorColor; 
-                                                                                                                            padding: 12px; 
-                                                                                                                            margin: 8px 0; 
-                                                                                                                            border-radius: 0 4px 4px 0;
-                                                                                                                        ">
-                                                                                                                            <p style="margin: 0; font-weight: 500; color: #333;">
-                                                                                                                                ${error.message}
-                                                                                                                            </p>
-                                                                                                                        </div>
-                                                                                                                        
-                                                                                                                        ${if (error.suggestion != null) {
+                                                                                                                                <div style="
+                                                                                                                                    border: 1px solid $errorColor;
+                                                                                                                                    border-radius: 8px;
+                                                                                                                                    padding: 16px;
+                                                                                                                                    margin: 8px 0;
+                                                                                                                                    background: linear-gradient(135deg, ${errorColor}15, ${errorColor}05);
+                                                                                                                                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                                                                                                                                ">
+                                                                                                                                    <div style="display: flex; align-items: center; margin-bottom: 12px;">
+                                                                                                                                        <span style="font-size: 20px; margin-right: 8px;">$errorIcon</span>
+                                                                                                                                        <h3 style="margin: 0; color: $errorColor; font-size: 16px;">
+                                                                                                                                            $errorType
+                                                                                                                                        </h3>
+                                                                                                                                        <span style="
+                                                                                                                                            margin-left: auto; 
+                                                                                                                                            background: $errorColor; 
+                                                                                                                                            color: white; 
+                                                                                                                                            padding: 2px 8px; 
+                                                                                                                                            border-radius: 12px; 
+                                                                                                                                            font-size: 12px; 
+                                                                                                                                            font-weight: bold;
+                                                                                                                                        ">
+                                                                                                                                            ${error.code}
+                                                                                                                                        </span>
+                                                                                                                                    </div>
+                                                                                                                                    
+                                                                                                                                    <div style="
+                                                                                                                                        background: #f8f9fa; 
+                                                                                                                                        border-left: 4px solid $errorColor; 
+                                                                                                                                        padding: 12px; 
+                                                                                                                                        margin: 8px 0; 
+                                                                                                                                        border-radius: 0 4px 4px 0;
+                                                                                                                                    ">
+                                                                                                                                        <p style="margin: 0; font-weight: 500; color: #333;">
+                                                                                                                                            ${error.message}
+                                                                                                                                        </p>
+                                                                                                                                    </div>
+                                                                                                                                    
+                                                                                                                                    ${if (error.suggestion != null) {
             """
                 <div style="
                     background: #e3f2fd; 
@@ -73,8 +73,8 @@ object ErrorFormatter {
         } else {
             ""
         }}
-                                                                                                                        
-                                                                                                                        ${if (error.context
+                                                                                                                                    
+                                                                                                                                    ${if (error.context
                 .isNotEmpty()
         ) {
             """
@@ -100,7 +100,7 @@ object ErrorFormatter {
         } else {
             ""
         }}
-                                                                                                                    </div>
+                                                                                                                                </div>
             """.trimIndent()
     }
 

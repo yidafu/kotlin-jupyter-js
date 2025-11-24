@@ -38,7 +38,10 @@ class JsConfigBuilder {
     /**
      * Validate URL
      */
-    private fun validateUrl(url: String, paramName: String = "url") {
+    private fun validateUrl(
+        url: String,
+        paramName: String = "url",
+    ) {
         if (url.isBlank()) {
             throwConfigurationError(
                 configKey = paramName,
